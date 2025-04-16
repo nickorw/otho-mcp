@@ -20,6 +20,7 @@ Definições:
     - Uso de LangGraph como framework de agentes: LangGraph permite definição de workflows entre agentes bem definidos enquanto permitindo flexibilidade de customização e ampla comunidade e maturidade.
     - Uso de RDF/OWL como tecnologia para Knowledge Graphs: requerimento de interesse, uso de indústria.
     - Uso de Gemini Flash 2.0 como LLM: Disponibilidade para o pesquisador e performance
+    - Blazegraph as Triple Store DB (if needed)
 
 
 Etapas de projeto de pesquisa
@@ -42,3 +43,18 @@ Etapas de projeto de desenvolvimento
 
     7) Extra: Gerar ontologias OWL válidas utilizando LLM através de aplicação multi-agente LangGraph com contexto adicionado genérico de negócios
 
+Avaliação bi-modal
+A avaliação deve ser bi-modal, implementando avaliações automatizadas onde viável e utilizando Experts para avaliação qualitativa onde as opções automatizadas tem dificuldade. Avaliações automatizadas são importantes para a escalabilidade do processo avaliativo e enriquecimento dos resultados da pesquisa.
+
+Própria e técnica:
+    - Consistência Lógica: Automatizado?(e.g., HermiT, Pellet, FaCT++)
+    - Completeness : Recursão Agêntica? Ontologias ouro.
+    - Syntaxe RDF + OWL : Bibliotecas disponíveis para validação
+    - Frameworks? : OQuaRE (Ontology Quality Re-engineering) / OOPS! (Ontology Pitfall Scanner)
+    - Métricas avaliativas para sub-tarefas do framework em cima da datasets de benchmark : Precision, Recall, F1
+    - Profundidade e complexidade de estrutura : profundidade das hierarquias de classes, número de propriedades criadas, densidade das interconexões
+Externa e Qualitativa (por Experts) - Aproveitar e fazer um estudo comparativo entre role-playing agents versus experts humanos?:
+    - Precisão semântica :
+    - Escolhas de modelagem : 
+    - Usabilidade : 
+    - Completude em requisitos implicitos :     
