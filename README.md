@@ -58,3 +58,9 @@ Externa e Qualitativa (por Experts) - Aproveitar e fazer um estudo comparativo e
     - Escolhas de modelagem : 
     - Usabilidade : 
     - Completude em requisitos implicitos :     
+
+
+Github Saeedizade et al. ESWC 2024: https://github.com/LiUSemWeb/LLMs4OntologyDev-ESWC2024?tab=readme-ov-file
+
+
+
