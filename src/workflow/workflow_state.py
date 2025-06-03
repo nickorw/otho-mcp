@@ -1,0 +1,1 @@
+# Defines OntologyGenerationState for LangGraph

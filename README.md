@@ -41,4 +41,5 @@ Etapas de projeto de desenvolvimento
     6) Gerar através de aplicação LangGraph com prompt e documento de texto com contexto/Competency Questions(CQs)
 
     7) Extra: Gerar ontologias OWL válidas utilizando LLM através de aplicação multi-agente LangGraph com contexto adicionado genérico de negócios
+    8) Extra: Agentes colaborativos (role-playing)
 

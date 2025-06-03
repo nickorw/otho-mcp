@@ -1,0 +1,52 @@
+class PromptManager:
+    def __init__(self, prompts_file_path: Path = Path("config/prompts.yaml")):
+        self.prompts_file_path = prompts_file_path
+        self._prompts = self._load_prompts()
+
+    def _load_prompts(self) -> Dict[str, Any]:
+        try:
+            with open(self.prompts_file_path, 'r', encoding='utf-8') as f:
+                prompts_data = yaml.safe_load(f)
+            if not isinstance(prompts_data, dict):
+                raise ValueError(f"Prompts file {self.prompts_file_path} should be a YAML dictionary.")
+            return prompts_data
+        except FileNotFoundError:
+            print(f"Error: Prompts file not found at {self.prompts_file_path}")
+            raise
+        except yaml.YAMLError as e:
+            print(f"Error parsing YAML from {self.prompts_file_path}: {e}")
+            raise
+        except ValueError as e:
+            print(e)
+            raise
+
+
+    def get_prompt_template(self, prompt_name: str) -> str:
+        """
+        Retrieves a raw prompt template string.
+        Assumes simple key: value structure where value is the prompt string.
+        """
+        prompt_template = self._prompts.get(prompt_name)
+        if prompt_template is None:
+            raise KeyError(f"Prompt '{prompt_name}' not found in {self.prompts_file_path}")
+        if not isinstance(prompt_template, str):
+            raise ValueError(f"Prompt '{prompt_name}' is not a string. For structured prompts, use get_structured_prompt.")
+        return prompt_template
+
+    def get_structured_prompt(self, prompt_name: str) -> Dict[str, str]:
+        """
+        Retrieves a structured prompt (e.g., with 'system' and 'user_template' keys).
+        """
+        prompt_data = self._prompts.get(prompt_name)
+        if prompt_data is None:
+            raise KeyError(f"Prompt '{prompt_name}' not found in {self.prompts_file_path}")
+        if not isinstance(prompt_data, dict):
+            raise ValueError(f"Prompt '{prompt_name}' is not a dictionary. For simple string prompts, use get_prompt_template.")
+        return prompt_data
+
+    def format_prompt(self, prompt_name: str, **kwargs) -> str:
+        """
+        Retrieves a raw prompt template and formats it with provided keyword arguments.
+        """
+        template = self.get_prompt_template(prompt_name)
+        return template.format(**kwargs)
