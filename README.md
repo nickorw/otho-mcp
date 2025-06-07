@@ -65,3 +65,8 @@ Github Saeedizade et al. ESWC 2024: https://github.com/LiUSemWeb/LLMs4OntologyDe
 
 
 
+## Env Setup
+### OOps Pitfall Scanner
+1) docker run -p 80:8080 mpovedavillalon/oops:v1
+2) Download and mount Wordnet and run: docker run -v ./WordNet:/usr/local/tomcat/WordNet -p 80:8080 mpovedavillalon/oops:v1
+3) Then go to http://localhost/OOPS/
