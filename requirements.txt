@@ -4,3 +4,4 @@ pydantic
 pathlib
 langgraph
 rdflib
+google-genai

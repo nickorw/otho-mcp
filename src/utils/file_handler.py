@@ -14,3 +14,9 @@ def save_combined_owl_code(owl_code: str, story_id: int, output_dir: str) -> str
     with open(file_path, 'w', encoding='utf-8') as f:
         f.write(owl_code)
     return file_path
+
+def save_text_file(file_path: str, text: str) -> str:
+    os.makedirs(os.path.dirname(file_path), exist_ok=True)
+    with open(file_path, 'w', encoding='utf-8') as f:
+        f.write(text)
+    return file_path

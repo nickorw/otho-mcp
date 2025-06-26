@@ -67,6 +67,8 @@ otho_memless_cq_by_cq:
     It is common to forget to add relations that are related to reification: In RDF reification, achieving precise modeling is pivotal, especially when handling multifaceted scenarios where mere binary associations fall short. Take for instance the statement, "a user used a resource at a time". While it might initially seem to involve a direct link between a 'user' and a 'resource', it inherently embodies three entities: a 'user', a 'resource', and a 'time'. Directly connecting 'user' to both 'resource' and 'time' fails to capture the essence of the statement, as it obscures which resource was utilized by the user at a specific time. To address this, a more sophisticated modeling approach is needed, invoking a pivot class, Cl_usingResource. This pivot class acts as an intermediary, linking both Cl_user and Cl_resource. Furthermore, it integrates a time property to denote the exact instance of usage. By employing this method, we can coherently model the statement, ensuring that the user's interaction with a specific resource at a distinct time is unambiguously represented. This approach highlights the imperative of ontology design patterns and the necessity of intermediary nodes when modeling complex relationships involving multiple entities or a mix of entities and datatypes.
     Upon implementation of restrictions, feel free to use owl:equivalentClass [ rdf:type owl:Restriction ;  owl:onProperty :{{relation}} ;  owl:allValuesFrom :{{Class}} ] ; in this way, you can put restrictions for classes such as class Cl_C1 is the only class that uses the relation R. or you can put soft restrictions by using owl:someValuesFrom. Also, you can use general class axioms: [ rdf:type owl:Restriction ; owl:onProperty :R1 ; owl:someValuesFrom :Cl_1 ; rdfs:subClassOf :Cl_2 ] when you want to put restrictions on the definition of a class based on its relation and the definition is necessary but not enough (if it is enough it would be equivalent to owl:equivalentClass).
     
+    DO NOT ENCLOSE THE CODE IN A CODE BLOCK, JUST WRITE THE OUTPUT IN TURTLE SYNTAX.
+    
   prefixes: |
     These are the prefixes:
     @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
@@ -92,6 +94,7 @@ otho_memless_cq_by_cq:
     2- Forgetting to write pivot classes at the beginning before starting to code.
     3- You usually forget to write the name of the reification (pivot) that you want to create at the beginning of the output
     4- In reification, the reification node (pivot class) is connected to all related classes by object properties, not by the subclassof. it can be a subclass of something, but for reification, it needs object properties.
+    5- Enclosing the output in a code block. Do not do this, just write the output in turtle syntax.
     Common mistakes in extracting classes:
     1- Mistake: not extracting all classes and missing many of them. classes can be found in the story, or in the competency question number and restrictions.
     2- Returning empty answer
@@ -141,6 +144,7 @@ common_mistakes: |
   2- Forgetting to write pivot classes at the beginning before starting to code.
   3- You usually forget to write the name of the reification (pivot) that you want to create at the beginning of the output
   4- In reification, the reification node (pivot class) is connected to all related classes by object properties, not by the subclassof. it can be a subclass of something, but for reification, it needs object properties.
+  5- Enclosing the output in a code block. Do not do this, just write the output in turtle syntax.
   Common mistakes in extracting classes:
   1- Mistake: not extracting all classes and missing many of them. classes can be found in the story, or in the competency question number and restrictions.
   2- Returning empty answer
@@ -168,17 +172,21 @@ common_mistakes: |
 
 
 
-#### To me defined, using Lippolis et al. prompts as a base
-combine_owl_codes: |
-  System: You are an expert in OWL ontology engineering. You will be given several OWL code snippets, each generated for a specific aspect of a story. Your task is to combine these snippets into a single, coherent OWL ontology in RDF/XML or Turtle syntax. Ensure all necessary prefixes are defined, eliminate redundancy, ensure consistency, and create a logical structure. The final ontology should be able to address all aspects covered by the individual snippets based on the original story context.
-  User: Original Story:
-  {story}
+#### To be defined, using Lippolis et al. prompts as a base
 
-  Individual OWL Snippets to combine:
-  {snippets}
+combine_owl_codes: 
+    
+  user_template: |
+    You are an expert in OWL ontology engineering. You will be given several OWL code snippets, each generated for a specific aspect of a story. Your task is to combine these snippets into a single, coherent OWL ontology in Turtle syntax, there should be no more than one ontology in the final result called {story_id}. Ensure all necessary prefixes are defined, eliminate all redundancy, ensure consistency, and create a logical structure. The final ontology should be able to address all aspects covered by the individual snippets based on the original story context.
+    Keep your response concise and focused on the OWL ontology code. Do not include any explanations or comments in your output. Do not enclose the code in a code block, just write the output in Turtle syntax.
+  
+    Story:
+    {story}
 
-  Combined OWL Ontology Code:
+    Individual OWL Snippets to combine:
+    {snippets} 
 
+  
 # You could even structure them more, e.g., using LangChain's message structure:
 generate_owl_for_cq_structured:
   system: "You are an expert in OWL ontology engineering. Generate OWL code in RDF/XML syntax or Turtle syntax. Ensure all necessary prefixes (rdf, rdfs, owl, xsd, and a base prefix like : or ex:) are defined. The ontology should model the entities, relationships, and axioms needed to answer the competency question based on the provided story."

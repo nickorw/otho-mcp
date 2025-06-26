@@ -42,67 +42,13 @@ class TestOopsPitfallReviewer(unittest.TestCase):
             mock_review_content.assert_called_once_with(test_content, pitfalls=None, output_format="XML")
 
     def test_review_owl_content_real_api(self):
-        # Use a valid minimal OWL ontology
-        owl_content = '''<?xml version="1.0"?>
-<rdf:RDF
-    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
-    xmlns:owl="http://www.w3.org/2002/07/owl#"
-    xmlns:ex="http://www.example.org/testontology#"
-    xml:base="http://www.example.org/testontology">
+        
+        owl_file_path = "data/output/FestS_agent_combined_OWL2_XML"
 
-    <owl:Ontology rdf:about=""/>
-
-    <owl:Class rdf:ID="Person"/>
-    <owl:Class rdf:ID="Employee">
-        <rdfs:subClassOf rdf:resource="#Person"/>
-    </owl:Class>
-    <owl:Class rdf:ID="Manager">
-        <rdfs:subClassOf rdf:resource="#Employee"/>
-    </owl:Class>
-
-    <owl:Class rdf:ID="ExternalConsultant">
-        <rdfs:subClassOf rdf:resource="#Person"/>
-        <rdfs:subClassOf rdf:resource="#Organization"/>
-    </owl:Class>
-
-    <owl:DatatypeProperty rdf:ID="hasAge">
-        <rdfs:domain rdf:resource="#Person"/>
-        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
-    </owl:DatatypeProperty>
-
-    <owl:ObjectProperty rdf:ID="worksFor">
-        <rdfs:domain rdf:resource="#Employee"/>
-        <rdfs:range rdf:resource="http://www.example.org/testontology#Organization"/>
-    </owl:ObjectProperty>
-
-    <owl:Class rdf:ID="Organization"/>
-
-    <owl:ObjectProperty rdf:ID="hasComment"/>
-
-    <owl:DatatypeProperty rdf:ID="hasStatusMessage"/>
-
-    <Person rdf:ID="JohnDoe">
-        <ex:hasAge rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">30</ex:hasAge>
-        <ex:hasComment>John is a good team player.</ex:hasComment>
-    </Person>
-
-    <Employee rdf:ID="JaneSmith">
-        <ex:hasAge rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">45</ex:hasAge>
-        <ex:worksFor rdf:resource="#AcmeCorp"/>
-        <ex:hasStatusMessage rdf:datatype="http://www.w3.org/2001/XMLSchema#string">On vacation until next week.</ex:hasStatusMessage>
-    </Employee>
-
-    <Organization rdf:ID="AcmeCorp"/>
-
-    <ExternalConsultant rdf:ID="ConsultantX"/>
-
-    <Organization rdf:ID="GlobalSolutions">
-        <ex:hasComment>A key partner for innovation.</ex:hasComment>
-        <ex:hasStatusMessage rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Actively seeking new projects.</ex:hasStatusMessage>
-    </Organization>
-
-</rdf:RDF>'''
+        with open(owl_file_path, "r", encoding="utf-8") as f:
+            owl_content = f.read()
+ 
+       
         pitfalls = ['2,3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 19, 20, 21, 22, 24, 25, 25, 26, 27, 28, 29']
         # Act
         result = self.reviewer.review_owl_content(owl_content, pitfalls=pitfalls, output_format="XML")

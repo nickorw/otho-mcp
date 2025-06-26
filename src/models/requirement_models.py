@@ -2,15 +2,15 @@ from pydantic import BaseModel
 from typing import List, Optional
 
 class CompetencyQuestion(BaseModel):
-    id: int
+    id: str 
     question: str
-    related_story_id: int
+    related_story_id: str 
     
     def to_dict(self):
         return self.model_dump()
 
 class Story(BaseModel):
-    id: int
+    id: str  
     context: str
     competency_questions: Optional[List[CompetencyQuestion]] = None
     
