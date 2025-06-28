@@ -1,0 +1,81 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix : <http://example.org/ontology#> .
+
+# Classes
+:Cl_Entity rdf:type owl:Class ;
+    rdfs:comment "A superclass for all primary entities in the domain." .
+
+:Cl_CreativeWork rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Entity ;
+    rdfs:comment "A superclass for all creative works, such as productions, books, movies, etc." .
+
+:Cl_Production rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_CreativeWork ;
+    rdfs:comment "Represents a specific production, such as a play, film, or musical." .
+
+:Cl_Organization rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Entity ;
+    rdfs:comment "A superclass for any organization." .
+
+:Cl_Newspaper rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Organization ;
+    rdfs:comment "Represents a newspaper organization that provides reviews and ratings." .
+
+# Reification Class for the rating event
+:Cl_RatingEvent rdf:type owl:Class ;
+    rdfs:comment "A pivot class representing a specific instance of a newspaper giving a rating to a production." .
+
+# Properties
+
+# Data properties for basic entities
+:hasName rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Cl_Organization ;
+    rdfs:range xsd:string ;
+    rdfs:comment "Links an organization to its name." .
+
+:hasTitle rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Cl_CreativeWork ;
+    rdfs:range xsd:string ;
+    rdfs:comment "Links a creative work to its title." .
+
+# Properties for the reification class Cl_RatingEvent
+:reviewsProduction rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_RatingEvent ;
+    rdfs:range :Cl_Production ;
+    rdfs:comment "Links a specific rating event to the production that was reviewed." .
+
+:givenByNewspaper rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_RatingEvent ;
+    rdfs:range :Cl_Newspaper ;
+    rdfs:comment "Links a specific rating event to the newspaper that provided the rating." .
+
+:hasStarRatingValue rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Cl_RatingEvent ;
+    rdfs:range xsd:decimal ;
+    owl:functionalProperty true ; # A rating event should have one specific star rating value.
+    rdfs:comment "The numeric star rating value (e.g., 1.0 to 5.0) given by the newspaper for the production." .
+
+# General Class Axioms (Restrictions)
+# Ensure that a Cl_RatingEvent instance is always associated with a production it reviews.
+:Cl_RatingEvent rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :reviewsProduction ;
+    owl:someValuesFrom :Cl_Production
+] .
+
+# Ensure that a Cl_RatingEvent instance is always associated with a newspaper that gave the rating.
+:Cl_RatingEvent rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :givenByNewspaper ;
+    owl:someValuesFrom :Cl_Newspaper
+] .
+
+# Ensure that a Cl_RatingEvent instance always has a star rating value.
+:Cl_RatingEvent rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :hasStarRatingValue ;
+    owl:someValuesFrom xsd:decimal
+] .

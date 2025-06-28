@@ -142,10 +142,10 @@ def combine_owls_node(state: OntoAgentState) -> OntoAgentState:
         snippets=concatenated_owl,
     
     )
-    output_path = f"data/output/prompt_{story_id}_agent_combined_OWL2.txt"
-    save_text_file(output_path, combination_prompt)
+    print("Combinatining OWLs")
     combined_owl = call_gemini(combination_prompt)
-
+    print("Combinatined, saving OWLs file")
+    save_text_file(f"data/output/{story_id}_combined_turtle.owl", combined_owl)
     return {
         **state,
         "combined_owl": combined_owl
@@ -154,7 +154,11 @@ def combine_owls_node(state: OntoAgentState) -> OntoAgentState:
 def validate_combined_owl_node(state: OntoAgentState) -> OntoAgentState:
     reviewer = OopsPitfallReviewer()
     try:
-        print("Validating combined OWL for Story ID:", state["story_id"])            
+        print("Validating combined OWL for Story ID:", state["story_id"])
+        print("First 5 lines of combined OWL:")
+        for line in state["combined_owl"].splitlines()[:5]:
+            print(line)
+        save_text_file(f"data/output/{story_id}_combined_turtle.owl", state["combined_owl"])
         validation_result = reviewer.review_owl_content(state["combined_owl"])
         save_text_file(f"data/output/{state['story_id']}_combined_oops_result.xml", validation_result)
         return {

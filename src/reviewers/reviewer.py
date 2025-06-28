@@ -29,15 +29,25 @@ class OopsPitfallReviewer:
         try:
             print("Converting OWL content to RDF/XML format for OOPs! API...")
             g = Graph()
+            save_text_file(f"data/output/debug_owl_content_turtle_combined_owl.xml", owl_content)
             g.parse(data=owl_content, format="turtle")
+
             print("parsed graph")
+            print(g.print)
             owl_content_xml = g.serialize(format="xml").decode("utf-8") if isinstance(g.serialize(format="xml"), bytes) else g.serialize(format="xml")
             print("serialized graph")
+            # Print the first 5 lines of the serialized RDF/XML
+            owl_lines = owl_content_xml.splitlines()
+            print("First 5 lines of owl_content_xml:")
+            for line in owl_lines[:5]:
+                print(line)
         except Exception as e:
             print(f"Error converting Turtle to RDF/XML: {e}")
             raise ValueError(f"Failed to convert Turtle to RDF/XML: {e}")
+        
         print("Saving converted OWL content to file for debugging...")
-        save_text_file(f"data/output/{state['story_id']}_combined_owl.xml", owl_content_xml)
+        save_text_file(f"data/output/xml_combined_owl.xml", owl_content_xml)
+        
         print("post-save file, going to Oops API")
         pitfalls_str = ''
         if pitfalls:

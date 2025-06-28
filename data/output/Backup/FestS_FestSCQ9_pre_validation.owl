@@ -1,0 +1,98 @@
+@prefix : <http://www.example.org/ontology#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+:ontology rdf:type owl:Ontology ;
+    owl:versionIRI <http://www.example.org/ontology/1.0> ;
+    rdfs:comment "Ontology for literary works, specifically addressing the time period when plays were written, employing reification for the writing event." .
+
+# Classes
+# Hierarchy: Cl_Work -> Cl_LiteraryWork -> Cl_Play
+
+:Cl_Work rdf:type owl:Class ;
+    rdfs:label "Work" ;
+    rdfs:comment "A general class representing any intellectual or creative work." .
+
+:Cl_LiteraryWork rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Work ;
+    rdfs:label "Literary Work" ;
+    rdfs:comment "A type of work that is literary in nature, such as novels, poems, or plays." .
+
+:Cl_Play rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_LiteraryWork ;
+    rdfs:label "Play" ;
+    rdfs:comment "A specific type of literary work intended for theatrical performance." .
+
+:Cl_TimePeriod rdf:type owl:Class ;
+    rdfs:label "Time Period" ;
+    rdfs:comment "A defined duration of time, possibly with a start and end date." .
+
+# Reification Class for the Writing Event
+:Cl_WritingEvent rdf:type owl:Class ;
+    rdfs:label "Writing Event" ;
+    rdfs:comment "A reification class representing the specific event of a literary work being written. It connects the work itself to the time period of its creation, allowing for detailed attribute modeling of the writing process." .
+
+# Properties
+
+# Data Properties for Cl_TimePeriod
+:hasStartDate rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Cl_TimePeriod ;
+    rdfs:range xsd:date ;
+    rdfs:label "has start date" ;
+    rdfs:comment "The specific start date of a time period." .
+
+:hasEndDate rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Cl_TimePeriod ;
+    rdfs:range xsd:date ;
+    rdfs:label "has end date" ;
+    rdfs:comment "The specific end date of a time period." .
+
+# Object Properties related to Reification (Cl_WritingEvent)
+
+:concernsWork rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_WritingEvent ;
+    rdfs:range :Cl_LiteraryWork ;
+    rdfs:label "concerns work" ;
+    rdfs:comment "Connects a writing event to the literary work that was created or worked upon during that event." .
+
+:occursDuring rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_WritingEvent ;
+    rdfs:range :Cl_TimePeriod ;
+    rdfs:label "occurs during" ;
+    rdfs:comment "Connects a writing event to the time period in which it took place." .
+
+# Direct Object Property to answer the Competency Question
+
+:wasWrittenDuring rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_Play ;
+    rdfs:range :Cl_TimePeriod ;
+    rdfs:label "was written during" ;
+    rdfs:comment "Indicates the time period during which a play was written. This property can be understood as being reified by instances of Cl_WritingEvent." .
+
+# Auxiliary property to link Cl_Play directly to its Cl_WritingEvent
+:hasWritingEvent rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_Play ;
+    rdfs:range :Cl_WritingEvent ;
+    rdfs:label "has writing event" ;
+    rdfs:comment "Links a play to the specific event instance of its creation (writing)." .
+
+# Property Chain Axiom to relate the direct property to the reified event
+# This axiom states that if a Play (P) has a Writing Event (E), and that Writing Event (E) occurs during a Time Period (T),
+# then the Play (P) was written during that Time Period (T).
+:wasWrittenDuring owl:propertyChainAxiom ( :hasWritingEvent :occursDuring ) .
+
+# Restrictions
+# Every Cl_WritingEvent must concern a literary work and occur during a time period.
+:Cl_WritingEvent rdfs:subClassOf
+    [ rdf:type owl:Restriction ;
+      owl:onProperty :concernsWork ;
+      owl:someValuesFrom :Cl_LiteraryWork
+    ] .
+
+:Cl_WritingEvent rdfs:subClassOf
+    [ rdf:type owl:Restriction ;
+      owl:onProperty :occursDuring ;
+      owl:someValuesFrom :Cl_TimePeriod
+    ] .

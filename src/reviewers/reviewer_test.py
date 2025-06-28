@@ -1,6 +1,7 @@
 import unittest
 from unittest.mock import patch, Mock
 from .reviewer import OopsPitfallReviewer
+import os
 
 class TestOopsPitfallReviewer(unittest.TestCase):
     def setUp(self):
@@ -42,8 +43,8 @@ class TestOopsPitfallReviewer(unittest.TestCase):
             mock_review_content.assert_called_once_with(test_content, pitfalls=None, output_format="XML")
 
     def test_review_owl_content_real_api(self):
-        
-        owl_file_path = "data/output/FestS_agent_combined_OWL2_XML"
+        # python -m unittest src.reviewers.reviewer_test.TestOopsPitfallReviewer.test_review_owl_content_real_api
+        owl_file_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "data", "output", "FestS_combined_turtle.owl")
 
         with open(owl_file_path, "r", encoding="utf-8") as f:
             owl_content = f.read()
