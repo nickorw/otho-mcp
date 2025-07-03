@@ -1,0 +1,1012 @@
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix FestS: <http://fest.org/ontology/FestS#> .
+
+FestS:FestS a owl:Ontology ;
+    rdfs:label "Festival and Event Story Ontology" ;
+    rdfs:comment "A comprehensive OWL ontology combining various aspects related to individuals, organizations, academic achievements, employment, geographical locations, publications, and events, designed to address diverse competency questions from a story context." ;
+    owl:versionIRI <http://fest.org/ontology/FestS/1.0> .
+
+#################################################################
+#    Classes
+#################################################################
+
+# Top-Level Entities
+FestS:Cl_Entity a owl:Class ;
+    rdfs:label "Entity" ;
+    rdfs:comment "A top-level class for all entities in the ontology." .
+
+# Agents and Persons
+FestS:Cl_Agent a owl:Class ;
+    rdfs:subClassOf FestS:Cl_Entity ;
+    rdfs:label "Agent" ;
+    rdfs:comment "A superclass for entities that can perform actions or have roles." .
+
+FestS:Cl_Person a owl:Class ;
+    rdfs:subClassOf FestS:Cl_Agent ;
+    rdfs:label "Person" ;
+    rdfs:comment "Represents an individual human being." .
+
+FestS:Cl_Doctor a owl:Class ;
+    rdfs:subClassOf FestS:Cl_Person ;
+    rdfs:label "Doctor" .
+
+FestS:Cl_Employee a owl:Class ;
+    rdfs:subClassOf FestS:Cl_Person ;
+    rdfs:label "Employee" .
+
+# Credentials and Degrees
+FestS:Cl_Credential a owl:Class ;
+    rdfs:subClassOf FestS:Cl_Entity ;
+    rdfs:label "Credential" .
+
+FestS:Cl_AcademicCredential a owl:Class ;
+    rdfs:subClassOf FestS:Cl_Credential ;
+    rdfs:label "Academic Credential" .
+
+FestS:Cl_Degree a owl:Class ;
+    rdfs:subClassOf FestS:Cl_AcademicCredential ;
+    rdfs:label "Degree" ;
+    rdfs:comment "Represents an academic qualification or degree, serving as a superclass for specific degree types." .
+
+FestS:Cl_DegreeType a owl:Class ;
+    rdfs:subClassOf FestS:Cl_Degree ;
+    rdfs:label "Degree Type" ;
+    rdfs:comment "Represents a specific type of academic degree (e.g., MD, PhD, BS)." .
+
+FestS:Cl_MedicalDegreeType a owl:Class ;
+    rdfs:subClassOf FestS:Cl_DegreeType ;
+    rdfs:label "Medical Degree Type" .
+
+FestS:Cl_BachelorDegree a owl:Class ;
+    rdfs:subClassOf FestS:Cl_DegreeType ;
+    rdfs:label "Bachelor Degree" ;
+    rdfs:comment "A specific type of academic degree, typically an undergraduate degree." .
+
+FestS:Cl_MasterDegree a owl:Class ;
+    rdfs:subClassOf FestS:Cl_DegreeType ;
+    rdfs:label "Master Degree" ;
+    rdfs:comment "A specific type of academic degree, typically a postgraduate master's degree." .
+
+FestS:Cl_DoctoralDegree a owl:Class ;
+    rdfs:subClassOf FestS:Cl_DegreeType ;
+    rdfs:label "Doctoral Degree" ;
+    rdfs:comment "A specific type of academic degree, typically a postgraduate doctoral degree (e.g., PhD)." .
+
+# Events
+FestS:Cl_Event a owl:Class ;
+    rdfs:subClassOf FestS:Cl_Entity ;
+    rdfs:label "Event" ;
+    rdfs:comment "A general class representing any occurrence or happening over a period of time." .
+
+FestS:Cl_Activity a owl:Class ;
+    rdfs:subClassOf FestS:Cl_Entity ;
+    rdfs:label "Activity" ;
+    rdfs:comment "A general class representing an action or engagement." .
+
+FestS:Cl_ObtainmentEvent a owl:Class ;
+    rdfs:subClassOf FestS:Cl_Event ;
+    rdfs:label "Obtainment Event" .
+
+FestS:Cl_DegreeObtainment a owl:Class ;
+    rdfs:subClassOf FestS:Cl_ObtainmentEvent ;
+    rdfs:label "Degree Obtainment" ;
+    rdfs:comment "Reification class representing the event of a person obtaining a specific degree, including details like the type, awarding institution, and date." .
+
+FestS:Cl_EmploymentEvent a owl:Class ;
+    rdfs:subClassOf FestS:Cl_Event ;
+    rdfs:label "Employment Event" ;
+    rdfs:comment "A reification class representing a specific instance of a person's employment at a hospital, capturing the start date of this employment." .
+
+FestS:Cl_EvaluationEvent a owl:Class ;
+    rdfs:subClassOf FestS:Cl_Event ;
+    rdfs:label "Evaluation Event" ;
+    rdfs:comment "A pivot class representing an evaluation given by a doctor to an employee, including the statement itself." .
+
+FestS:Cl_AcademicEvent a owl:Class ;
+    rdfs:subClassOf FestS:Cl_Event ;
+    rdfs:label "Academic Event" ;
+    rdfs:comment "A specialized type of event pertaining to academic or educational activities." .
+
+FestS:Cl_Seminar a owl:Class ;
+    rdfs:subClassOf FestS:Cl_AcademicEvent ;
+    rdfs:label "Seminar" ;
+    rdfs:comment "A specific academic event, typically involving discussions or presentations on a particular topic." .
+
+FestS:Cl_SeminarOccurrence a owl:Class ;
+    rdfs:subClassOf FestS:Cl_AcademicEvent ;
+    rdfs:label "Seminar Occurrence" ;
+    rdfs:comment "A pivot class representing a specific instance or a single occurrence of a seminar, linking it to the exact time it takes place." .
+
+FestS:Cl_PresentationEvent a owl:Class ;
+    rdfs:subClassOf FestS:Cl_AcademicEvent, FestS:Cl_Activity ;
+    rdfs:label "Presentation Event" ;
+    rdfs:comment "A reification class representing the specific act of an article being presented, serving as an intermediary between an article and a seminar." .
+
+FestS:Cl_StudyEnrollment a owl:Class ;
+    rdfs:subClassOf FestS:Cl_AcademicEvent ;
+    rdfs:label "Study Enrollment" ;
+    rdfs:comment "Represents a specific instance of a person's enrollment and study for a degree during a particular time period." .
+
+FestS:Cl_CompositionEvent a owl:Class ;
+    rdfs:subClassOf FestS:Cl_Event ;
+    rdfs:label "Composition Event" ;
+    rdfs:comment "Represents the event or instance of an article being composed within a collection (book or CD), capturing details about its inclusion." .
+
+# Organizations
+FestS:Cl_Organization a owl:Class ;
+    rdfs:subClassOf FestS:Cl_Entity ;
+    rdfs:label "Organization" ;
+    rdfs:comment "A structured group of people with a particular purpose, such as a business, institution, or association." .
+
+FestS:Cl_Institution a owl:Class ;
+    rdfs:subClassOf FestS:Cl_Organization ;
+    rdfs:label "Institution" .
+
+FestS:Cl_University a owl:Class ;
+    rdfs:subClassOf FestS:Cl_Institution ;
+    rdfs:label "University" .
+
+FestS:Cl_MedicalSchool a owl:Class ;
+    rdfs:subClassOf FestS:Cl_University ;
+    rdfs:label "Medical School" .
+
+FestS:Cl_HealthcareProvider a owl:Class ;
+    rdfs:subClassOf FestS:Cl_Organization ;
+    rdfs:label "Healthcare Provider" ;
+    rdfs:comment "An organization primarily focused on delivering medical or health services." .
+
+FestS:Cl_Hospital a owl:Class ;
+    rdfs:subClassOf FestS:Cl_HealthcareProvider ;
+    rdfs:label "Hospital" ;
+    rdfs:comment "A medical institution specialized in providing inpatient and outpatient healthcare services." .
+
+FestS:Cl_Union a owl:Class ;
+    rdfs:subClassOf FestS:Cl_Organization ;
+    rdfs:label "Union" ;
+    rdfs:comment "A specific type of organization, typically formed by workers for collective bargaining." .
+
+# Documents and Publications
+FestS:Cl_Document a owl:Class ;
+    rdfs:subClassOf FestS:Cl_Entity ;
+    rdfs:label "Document" ;
+    rdfs:comment "A general class for any written or recorded piece of information or content unit." .
+
+FestS:Cl_Work a owl:Class ;
+    rdfs:subClassOf FestS:Cl_Document ;
+    rdfs:label "Work" ;
+    rdfs:comment "A general class for any intellectual or creative output." .
+
+FestS:Cl_AcademicWork a owl:Class ;
+    rdfs:subClassOf FestS:Cl_Work ;
+    rdfs:label "Academic Work" ;
+    rdfs:comment "A work produced within an academic context, such as research papers or theses." .
+
+FestS:Cl_Publication a owl:Class ;
+    rdfs:subClassOf FestS:Cl_AcademicWork ;
+    rdfs:label "Publication" ;
+    rdfs:comment "An academic work that has been formally published." .
+
+FestS:Cl_Article a owl:Class ;
+    rdfs:subClassOf FestS:Cl_Publication ;
+    rdfs:label "Article" ;
+    rdfs:comment "A written work, typically a research paper or report, that can be presented or part of a collection." .
+
+FestS:Cl_Collection a owl:Class ;
+    rdfs:subClassOf FestS:Cl_Publication ;
+    rdfs:label "Collection" ;
+    rdfs:comment "A general class for collections of content, such as books or CDs." .
+
+FestS:Cl_Book a owl:Class ;
+    rdfs:subClassOf FestS:Cl_Collection ;
+    rdfs:label "Book" ;
+    rdfs:comment "A printed or electronic publication consisting of a set of written, printed, illustrated, or blank pages." .
+
+FestS:Cl_CD a owl:Class ;
+    rdfs:subClassOf FestS:Cl_Collection ;
+    rdfs:label "CD" ;
+    rdfs:comment "A compact disc, especially one used for storing music or other data." .
+
+# Time
+FestS:Cl_TimePeriod a owl:Class ;
+    rdfs:subClassOf FestS:Cl_Entity ;
+    rdfs:label "Time Period" ;
+    rdfs:comment "Represents a defined duration of time with a distinct start and end." .
+
+# Places
+FestS:Cl_Place a owl:Class ;
+    rdfs:subClassOf FestS:Cl_Entity ;
+    rdfs:label "Place" ;
+    rdfs:comment "A geographical location or abstract concept of a place." .
+
+FestS:Cl_Location a owl:Class ;
+    rdfs:subClassOf FestS:Cl_Place ;
+    rdfs:label "Location" ;
+    rdfs:comment "A general class representing any specific location." .
+
+FestS:Cl_Building a owl:Class ;
+    rdfs:subClassOf FestS:Cl_Location ;
+    rdfs:label "Building" .
+
+FestS:Cl_Room a owl:Class ;
+    rdfs:subClassOf FestS:Cl_Location ;
+    rdfs:label "Room" .
+
+FestS:Cl_GeographicalFeature a owl:Class ;
+    rdfs:subClassOf FestS:Cl_Place ;
+    rdfs:label "Geographical Feature" ;
+    rdfs:comment "A specific type of place with distinct geographical characteristics." .
+
+FestS:Cl_City a owl:Class ;
+    rdfs:subClassOf FestS:Cl_GeographicalFeature ;
+    rdfs:label "City" ;
+    rdfs:comment "A densely populated urban area, typically with defined administrative boundaries." .
+
+FestS:Cl_Country a owl:Class ;
+    rdfs:subClassOf FestS:Cl_GeographicalFeature ;
+    rdfs:label "Country" ;
+    rdfs:comment "A sovereign state or nation." .
+
+# Roles
+FestS:Cl_Role a owl:Class ;
+    rdfs:subClassOf FestS:Cl_Entity ;
+    rdfs:label "Role" ;
+    rdfs:comment "Represents a specific function or position a person holds within an organization or context." .
+
+# Reification Classes (Assertions/Relationships as entities)
+FestS:Cl_LocationAssertion a owl:Class ;
+    rdfs:subClassOf FestS:Cl_Entity ;
+    rdfs:label "Location Assertion" ;
+    rdfs:comment "A pivot class that reifies the relationship of an entity being located at a particular place, allowing for additional attributes like coordinates or timeframes to be associated with that specific location instance." .
+
+FestS:Cl_GeographicalContainment a owl:Class ;
+    rdfs:subClassOf FestS:Cl_Entity ;
+    rdfs:label "Geographical Containment Fact" ;
+    rdfs:comment "Represents the fact or assertion that a specific geographical entity (a City) is contained within another (a Country)." .
+
+FestS:Cl_UnionMembership a owl:Class ;
+    rdfs:subClassOf FestS:Cl_Entity ;
+    rdfs:label "Union Membership" ;
+    rdfs:comment "A reified concept capturing the relationship between a Person, a Union, and the period during which the membership is valid." .
+
+FestS:Cl_UnionRoleAssignment a owl:Class ;
+    rdfs:subClassOf FestS:Cl_Entity ;
+    rdfs:label "Union Role Assignment" ;
+    rdfs:comment "A pivot class representing the instance of a specific role being assigned to a person within a union group at a particular point in time. This reifies the n-ary relationship between Person, Union, Role, and Time." .
+
+
+#################################################################
+#    Object Properties
+#################################################################
+
+# General/Top-level properties
+FestS:op_involves a owl:ObjectProperty ;
+    rdfs:label "involves" ;
+    rdfs:comment "A general property to link an event, situation, or assignment to an entity that participates in it." .
+
+# Properties for Degree Obtainment
+FestS:op_hasDegreeObtainment a owl:ObjectProperty ;
+    rdfs:domain FestS:Cl_Person ;
+    rdfs:range FestS:Cl_DegreeObtainment ;
+    rdfs:label "has degree obtainment" ;
+    rdfs:comment "Links a person to an instance of a degree obtainment event." .
+
+FestS:op_obtainedByPerson a owl:ObjectProperty ;
+    owl:inverseOf FestS:op_hasDegreeObtainment ;
+    rdfs:domain FestS:Cl_DegreeObtainment ;
+    rdfs:range FestS:Cl_Person ;
+    rdfs:label "obtained by person" ;
+    rdfs:comment "Links a degree obtainment event to the person who obtained the degree." .
+
+FestS:op_obtainedDegreeOfType a owl:ObjectProperty ;
+    rdfs:domain FestS:Cl_DegreeObtainment ;
+    rdfs:range FestS:Cl_DegreeType ;
+    rdfs:label "obtained degree of type" ;
+    rdfs:comment "Links a degree obtainment event to the specific type of medical degree obtained (e.g., MD, DO)." .
+
+FestS:op_awardedByInstitution a owl:ObjectProperty ;
+    rdfs:domain FestS:Cl_DegreeObtainment ;
+    rdfs:range FestS:Cl_Institution ;
+    rdfs:label "awarded by institution" ;
+    rdfs:comment "Links a degree obtainment event to the institution that awarded the degree." .
+
+# Properties for Study Enrollment
+FestS:hasStudent a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain FestS:Cl_StudyEnrollment ;
+    rdfs:range FestS:Cl_Person ;
+    rdfs:label "has student" ;
+    rdfs:comment "Connects a study enrollment instance to the specific person (student) involved." .
+
+FestS:hasDegree a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain FestS:Cl_StudyEnrollment ;
+    rdfs:range FestS:Cl_Degree ;
+    rdfs:label "has degree" ;
+    rdfs:comment "Connects a study enrollment instance to the specific academic degree being pursued." .
+
+FestS:duringPeriod a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain FestS:Cl_StudyEnrollment ;
+    rdfs:range FestS:Cl_TimePeriod ;
+    rdfs:label "during period" ;
+    rdfs:comment "Connects a study enrollment instance to the specific time period during which the study occurred." .
+
+# Properties for Employment
+FestS:relatesToPerson a owl:ObjectProperty ;
+    rdfs:domain FestS:Cl_EmploymentEvent ;
+    rdfs:range FestS:Cl_Person ;
+    rdfs:label "relates to person" ;
+    rdfs:comment "Links an employment event to the person involved in that event." .
+
+FestS:relatesToHospital a owl:ObjectProperty ;
+    rdfs:domain FestS:Cl_EmploymentEvent ;
+    rdfs:range FestS:Cl_Hospital ;
+    rdfs:label "relates to hospital" ;
+    rdfs:comment "Links an employment event to the hospital where the employment took place." .
+
+FestS:hasEmploymentEvent a owl:ObjectProperty ;
+    rdfs:domain FestS:Cl_Person ;
+    rdfs:range FestS:Cl_EmploymentEvent ;
+    rdfs:label "has employment event" ;
+    rdfs:comment "Links a person to an employment event they are involved in." ;
+    owl:inverseOf FestS:relatesToPerson .
+
+FestS:hostsEmploymentEvent a owl:ObjectProperty ;
+    rdfs:domain FestS:Cl_Hospital ;
+    rdfs:range FestS:Cl_EmploymentEvent ;
+    rdfs:label "hosts employment event" ;
+    rdfs:comment "Links a hospital to an employment event that occurred there." ;
+    owl:inverseOf FestS:relatesToHospital .
+
+# Properties for Evaluation
+FestS:hasEvaluator a owl:ObjectProperty ;
+    rdfs:domain FestS:Cl_EvaluationEvent ;
+    rdfs:range FestS:Cl_Doctor ;
+    rdfs:label "has Evaluator" ;
+    rdfs:comment "Connects an evaluation event to the doctor who performed the evaluation." .
+
+FestS:hasSubjectEmployee a owl:ObjectProperty ;
+    rdfs:domain FestS:Cl_EvaluationEvent ;
+    rdfs:range FestS:Cl_Employee ;
+    rdfs:label "has Subject Employee" ;
+    rdfs:comment "Connects an evaluation event to the employee who was evaluated." .
+
+# Properties for Hospital Location
+FestS:assertsLocation a owl:ObjectProperty ;
+    rdfs:domain FestS:Cl_Hospital ;
+    rdfs:range FestS:Cl_LocationAssertion ;
+    rdfs:label "asserts location" ;
+    rdfs:comment "Links a hospital to a specific assertion about its location, enabling the inclusion of detailed location attributes." .
+
+FestS:isLocationAssertionOf a owl:ObjectProperty , owl:FunctionalProperty ;
+    owl:inverseOf FestS:assertsLocation ;
+    rdfs:domain FestS:Cl_LocationAssertion ;
+    rdfs:range FestS:Cl_Hospital ;
+    rdfs:label "is location assertion of" ;
+    rdfs:comment "The inverse property of 'asserts location', indicating which hospital a particular location assertion refers to." .
+
+FestS:locatedInCity a owl:ObjectProperty ;
+    rdfs:domain FestS:Cl_LocationAssertion ;
+    rdfs:range FestS:Cl_City ;
+    rdfs:label "located in city" ;
+    rdfs:comment "Connects a location assertion instance to the specific city where the entity (e.g., hospital) is located." .
+
+# Properties for Geographical Containment
+FestS:describesContainmentOf a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain FestS:Cl_GeographicalContainment ;
+    rdfs:range FestS:Cl_City ;
+    rdfs:label "describes containment of" ;
+    rdfs:comment "Links a Geographical Containment Fact to the City that is being described as contained." .
+
+FestS:describesContainmentIn a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain FestS:Cl_GeographicalContainment ;
+    rdfs:range FestS:Cl_Country ;
+    rdfs:label "describes containment in" ;
+    rdfs:comment "Links a Geographical Containment Fact to the Country in which the City is described as being contained." .
+
+# Properties for Union Membership
+FestS:memberIs a owl:ObjectProperty ;
+    rdfs:domain FestS:Cl_UnionMembership ;
+    rdfs:range FestS:Cl_Person ;
+    rdfs:label "member is" ;
+    rdfs:comment "Connects a Union Membership event to the Person who is the member." .
+
+FestS:membershipOfUnion a owl:ObjectProperty ;
+    rdfs:domain FestS:Cl_UnionMembership ;
+    rdfs:range FestS:Cl_Union ;
+    rdfs:label "membership of union" ;
+    rdfs:comment "Connects a Union Membership event to the Union involved." .
+
+# Properties for Union Role Assignment
+FestS:op_assignedToPerson a owl:ObjectProperty ;
+    rdfs:subPropertyOf FestS:op_involves ;
+    rdfs:domain FestS:Cl_UnionRoleAssignment ;
+    rdfs:range FestS:Cl_Person ;
+    rdfs:label "assigned to person" ;
+    rdfs:comment "Links a Union Role Assignment instance to the specific Person who holds the role." .
+
+FestS:op_inUnionGroup a owl:ObjectProperty ;
+    rdfs:subPropertyOf FestS:op_involves ;
+    rdfs:domain FestS:Cl_UnionRoleAssignment ;
+    rdfs:range FestS:Cl_Union ;
+    rdfs:label "in union group" ;
+    rdfs:comment "Links a Union Role Assignment instance to the Union where the role is held." .
+
+FestS:op_hasRole a owl:ObjectProperty ;
+    rdfs:subPropertyOf FestS:op_involves ;
+    rdfs:domain FestS:Cl_UnionRoleAssignment ;
+    rdfs:range FestS:Cl_Role ;
+    rdfs:label "has role" ;
+    rdfs:comment "Links a Union Role Assignment instance to the specific Role that is assigned." .
+
+# Properties for Composition Event (Article in Collection)
+FestS:composedIn a owl:ObjectProperty ;
+    rdfs:domain FestS:Cl_CompositionEvent ;
+    rdfs:range FestS:Cl_Collection ;
+    rdfs:label "composed in" ;
+    rdfs:comment "Relates a composition event to the collection it is part of (e.g., a book or CD)." .
+
+FestS:composes a owl:ObjectProperty ;
+    rdfs:domain FestS:Cl_CompositionEvent ;
+    rdfs:range FestS:Cl_Article ;
+    rdfs:label "composes" ;
+    rdfs:comment "Relates a composition event to the specific article that is part of the collection." .
+
+FestS:hasCompositionEvent a owl:ObjectProperty ;
+    rdfs:domain FestS:Cl_Collection ;
+    rdfs:range FestS:Cl_CompositionEvent ;
+    owl:inverseOf FestS:composedIn ;
+    rdfs:label "has composition event" ;
+    rdfs:comment "Relates a collection to its specific composition events." .
+
+FestS:isComposedOfArticle a owl:ObjectProperty ;
+    rdfs:domain FestS:Cl_Collection ;
+    rdfs:range FestS:Cl_Article ;
+    rdfs:comment "Relates a collection to an article it is composed of, derived from composition events." ;
+    owl:propertyChainAxiom ( FestS:hasCompositionEvent FestS:composes ) .
+
+# Properties for Seminar Occurrence
+FestS:hasSeminarOccurrence a owl:ObjectProperty ;
+    rdfs:domain FestS:Cl_Seminar ;
+    rdfs:range FestS:Cl_SeminarOccurrence ;
+    rdfs:label "has seminar occurrence" ;
+    rdfs:comment "Connects a seminar to an instance representing one of its specific occurrences." .
+
+FestS:isOccurrenceOfSeminar a owl:ObjectProperty ;
+    owl:inverseOf FestS:hasSeminarOccurrence ;
+    rdfs:domain FestS:Cl_SeminarOccurrence ;
+    rdfs:range FestS:Cl_Seminar ;
+    rdfs:label "is occurrence of seminar" ;
+    rdfs:comment "Connects a seminar occurrence to the specific seminar it is an instance of." .
+
+# Properties for Presentation
+FestS:isPresentedInSeminar a owl:ObjectProperty ;
+    rdfs:domain FestS:Cl_PresentationEvent ;
+    rdfs:range FestS:Cl_Seminar ;
+    rdfs:label "is presented in seminar" ;
+    rdfs:comment "Connects a presentation to the seminar in which it takes place." .
+
+FestS:includesPresentation a owl:ObjectProperty ;
+    owl:inverseOf FestS:isPresentedInSeminar ;
+    rdfs:domain FestS:Cl_Seminar ;
+    rdfs:range FestS:Cl_PresentationEvent ;
+    rdfs:label "includes presentation" ;
+    rdfs:comment "Connects a seminar to the presentations that are part of it." .
+
+FestS:presentsArticle a owl:ObjectProperty ;
+    rdfs:domain FestS:Cl_PresentationEvent ;
+    rdfs:range FestS:Cl_Article ;
+    rdfs:label "presents article" ;
+    rdfs:comment "Connects a presentation to the article that is being presented." .
+
+FestS:isPresentedAs a owl:ObjectProperty ;
+    owl:inverseOf FestS:presentsArticle ;
+    rdfs:domain FestS:Cl_Article ;
+    rdfs:range FestS:Cl_PresentationEvent ;
+    rdfs:label "is presented as" ;
+    rdfs:comment "Connects an article to its presentation instance." .
+
+# Properties for Location
+FestS:hasLocation a owl:ObjectProperty ;
+    rdfs:domain FestS:Cl_Event ;
+    rdfs:range FestS:Cl_Location ;
+    rdfs:label "has location" ;
+    rdfs:comment "Indicates where an event (like a seminar) takes place." .
+
+FestS:locatedIn a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain FestS:Cl_Room ;
+    rdfs:range FestS:Cl_Building ;
+    rdfs:label "located in" ;
+    rdfs:comment "Specifies that a room is located within a building." .
+
+
+#################################################################
+#    Data Properties
+#################################################################
+
+# General Naming Properties
+FestS:hasName a owl:DatatypeProperty ;
+    rdfs:domain FestS:Cl_Entity ;
+    rdfs:range xsd:string ;
+    rdfs:label "has name" ;
+    rdfs:comment "A general property for the primary name of any entity." .
+
+FestS:hasPersonName a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:subPropertyOf FestS:hasName ;
+    rdfs:domain FestS:Cl_Person ;
+    rdfs:range xsd:string ;
+    rdfs:label "has person name" ;
+    rdfs:comment "The full name of the person." .
+
+FestS:hasOrganizationName a owl:DatatypeProperty ;
+    rdfs:subPropertyOf FestS:hasName ;
+    rdfs:domain FestS:Cl_Organization ;
+    rdfs:range xsd:string ;
+    rdfs:label "has organization name" ;
+    rdfs:comment "The name of an organization." .
+
+FestS:hasHospitalName a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:subPropertyOf FestS:hasOrganizationName ;
+    rdfs:domain FestS:Cl_Hospital ;
+    rdfs:range xsd:string ;
+    rdfs:label "has hospital name" ;
+    rdfs:comment "The official name of the hospital." .
+
+FestS:hasUnionName a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:subPropertyOf FestS:hasOrganizationName ;
+    rdfs:domain FestS:Cl_Union ;
+    rdfs:range xsd:string ;
+    rdfs:label "has union name" ;
+    rdfs:comment "The official name of the union." .
+
+FestS:hasPlaceName a owl:DatatypeProperty ;
+    rdfs:subPropertyOf FestS:hasName ;
+    rdfs:domain FestS:Cl_Place ;
+    rdfs:range xsd:string ;
+    rdfs:label "has place name" ;
+    rdfs:comment "The name of a geographical place or location." .
+
+FestS:hasCityName a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:subPropertyOf FestS:hasPlaceName ;
+    rdfs:domain FestS:Cl_City ;
+    rdfs:range xsd:string ;
+    rdfs:label "has city name" ;
+    rdfs:comment "The official or common name of the city." .
+
+FestS:hasBuildingName a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:subPropertyOf FestS:hasPlaceName ;
+    rdfs:domain FestS:Cl_Building ;
+    rdfs:range xsd:string ;
+    rdfs:label "has building name" ;
+    rdfs:comment "The name of the building." .
+
+FestS:hasDocumentTitle a owl:DatatypeProperty ;
+    rdfs:subPropertyOf FestS:hasName ;
+    rdfs:domain FestS:Cl_Document ;
+    rdfs:range xsd:string ;
+    rdfs:label "has document title" ;
+    rdfs:comment "The title of a document, article, or collection." .
+
+FestS:hasDegreeName a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:subPropertyOf FestS:hasName ;
+    rdfs:domain FestS:Cl_Degree ;
+    rdfs:range xsd:string ;
+    rdfs:label "has degree name" ;
+    rdfs:comment "The formal name of the degree (e.g., 'Bachelor of Science', 'Doctor of Medicine')." .
+
+FestS:hasRoleName a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:subPropertyOf FestS:hasName ;
+    rdfs:domain FestS:Cl_Role ;
+    rdfs:range xsd:string ;
+    rdfs:label "has role name" ;
+    rdfs:comment "The descriptive name of the role (e.g., 'President', 'Treasurer', 'Member')." .
+
+FestS:hasEventName a owl:DatatypeProperty ;
+    rdfs:subPropertyOf FestS:hasName ;
+    rdfs:domain FestS:Cl_Event ;
+    rdfs:range xsd:string ;
+    rdfs:label "has event name" ;
+    rdfs:comment "The name of an event, such as a seminar." .
+
+# Time-related Properties
+FestS:hasStartDate a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain [ owl:unionOf (FestS:Cl_TimePeriod FestS:Cl_EmploymentEvent FestS:Cl_UnionMembership) ; rdf:type owl:Class ] ;
+    rdfs:range xsd:date ;
+    rdfs:label "has start date" ;
+    rdfs:comment "The calendar start date of a time period, employment, or membership." .
+
+FestS:hasEndDate a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain [ owl:unionOf (FestS:Cl_TimePeriod FestS:Cl_UnionMembership) ; rdf:type owl:Class ] ;
+    rdfs:range xsd:date ;
+    rdfs:label "has end date" ;
+    rdfs:comment "The calendar end date of a time period or membership." .
+
+FestS:hasExactTime a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain [ owl:unionOf (FestS:Cl_UnionRoleAssignment FestS:Cl_SeminarOccurrence) ; rdf:type owl:Class ] ;
+    rdfs:range xsd:dateTime ;
+    rdfs:label "has exact time" ;
+    rdfs:comment "Specifies the exact point in time when an assignment or event occurrence is effective." .
+
+FestS:awardDate a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain FestS:Cl_DegreeObtainment ;
+    rdfs:range xsd:date ;
+    rdfs:label "award date" ;
+    rdfs:comment "The date on which the degree was officially awarded." .
+
+FestS:publicationYear a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain FestS:Cl_Collection ;
+    rdfs:range xsd:gYear ;
+    rdfs:label "publication year" ;
+    rdfs:comment "The year the collection was published." .
+
+FestS:publicationDate a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain FestS:Cl_Publication ;
+    rdfs:range xsd:date ;
+    rdfs:label "publication date" ;
+    rdfs:comment "Specifies the date when a publication item was first published." .
+
+# Other Data Properties
+FestS:degreeLevel a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain FestS:Cl_Degree ;
+    rdfs:range xsd:string ;
+    rdfs:label "degree level" ;
+    rdfs:comment "The general academic level of the degree (e.g., 'Undergraduate', 'Postgraduate', 'Doctorate')." .
+
+FestS:employeeID a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain FestS:Cl_Employee ;
+    rdfs:range xsd:string ;
+    rdfs:label "employee ID" ;
+    rdfs:comment "The unique identifier of the employee." .
+
+FestS:evaluationStatementText a owl:DatatypeProperty ;
+    rdfs:domain FestS:Cl_EvaluationEvent ;
+    rdfs:range xsd:string ;
+    rdfs:label "evaluation statement text" ;
+    rdfs:comment "The textual content of the evaluation statement." .
+
+FestS:hasLatitude a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain FestS:Cl_LocationAssertion ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "has latitude" ;
+    rdfs:comment "The geographical latitude coordinate associated with a specific location assertion." .
+
+FestS:hasLongitude a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain FestS:Cl_LocationAssertion ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "has longitude" ;
+    rdfs:comment "The geographical longitude coordinate associated with a specific location assertion." .
+
+FestS:trackNumber a owl:DatatypeProperty ;
+    rdfs:domain FestS:Cl_CompositionEvent ;
+    rdfs:range xsd:integer ;
+    rdfs:label "track number" ;
+    rdfs:comment "The track number of an article if it is part of a CD composition event." .
+
+FestS:startPage a owl:DatatypeProperty ;
+    rdfs:domain FestS:Cl_CompositionEvent ;
+    rdfs:range xsd:integer ;
+    rdfs:label "start page" ;
+    rdfs:comment "The starting page number of an article within a book composition event." .
+
+FestS:endPage a owl:DatatypeProperty ;
+    rdfs:domain FestS:Cl_CompositionEvent ;
+    rdfs:range xsd:integer ;
+    rdfs:label "end page" ;
+    rdfs:comment "The ending page number of an article within a book composition event." .
+
+FestS:hasPageCount a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain FestS:Cl_Book ;
+    rdfs:range xsd:integer ;
+    rdfs:label "has page count" ;
+    rdfs:comment "Indicates the number of pages a book contains." .
+
+FestS:hasRoomNumber a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain FestS:Cl_Room ;
+    rdfs:range xsd:string ;
+    rdfs:label "has room number" ;
+    rdfs:comment "The specific room number." .
+
+
+#################################################################
+#    Axioms and Restrictions
+#################################################################
+
+# Disjointness Axioms
+FestS:Cl_MedicalDegreeType owl:disjointWith FestS:Cl_BachelorDegree, FestS:Cl_MasterDegree, FestS:Cl_DoctoralDegree .
+FestS:Cl_BachelorDegree owl:disjointWith FestS:Cl_MasterDegree, FestS:Cl_DoctoralDegree .
+FestS:Cl_MasterDegree owl:disjointWith FestS:Cl_DoctoralDegree .
+FestS:Cl_Book owl:disjointWith FestS:Cl_CD .
+FestS:Cl_City owl:disjointWith FestS:Cl_Hospital .
+FestS:Cl_Organization owl:disjointWith FestS:Cl_GeographicalFeature .
+FestS:Cl_Country owl:disjointWith FestS:Cl_City .
+FestS:Cl_Building owl:disjointWith FestS:Cl_Room, FestS:Cl_Event .
+FestS:Cl_Room owl:disjointWith FestS:Cl_Event .
+FestS:Cl_Person owl:disjointWith FestS:Cl_Union, FestS:Cl_Role .
+FestS:Cl_Union owl:disjointWith FestS:Cl_Role .
+
+# General Axioms (Mandatory Properties)
+FestS:Cl_Person rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty FestS:hasPersonName ;
+    owl:someValuesFrom xsd:string ;
+    rdfs:comment "Every person must have a name."
+] .
+
+FestS:Cl_Degree rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty FestS:hasDegreeName ;
+    owl:someValuesFrom xsd:string ;
+    rdfs:comment "Every degree must have a name."
+] .
+
+FestS:Cl_Union rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty FestS:hasUnionName ;
+    owl:someValuesFrom xsd:string ;
+    rdfs:comment "Every union must have a name."
+] .
+
+FestS:Cl_Role rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty FestS:hasRoleName ;
+    owl:someValuesFrom xsd:string ;
+    rdfs:comment "Every role must have a name."
+] .
+
+FestS:Cl_Document rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty FestS:hasDocumentTitle ;
+    owl:someValuesFrom xsd:string ;
+    rdfs:comment "Every document must have a title."
+] .
+
+# Restrictions for Cl_DegreeType
+FestS:Cl_DegreeType rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty FestS:hasDegreeName ;
+    owl:cardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:comment "Every Degree Type must have exactly one name."
+] .
+
+# Restrictions for Cl_DegreeObtainment
+FestS:Cl_DegreeObtainment rdfs:subClassOf
+    [ rdf:type owl:Restriction ;
+      owl:onProperty FestS:op_obtainedByPerson ;
+      owl:someValuesFrom FestS:Cl_Person ;
+      rdfs:comment "Every Degree Obtainment event must be associated with a person who obtained the degree." ],
+    [ rdf:type owl:Restriction ;
+      owl:onProperty FestS:op_obtainedDegreeOfType ;
+      owl:someValuesFrom FestS:Cl_DegreeType ;
+      rdfs:comment "Every Degree Obtainment event must be for a specific Degree Type." ],
+    [ rdf:type owl:Restriction ;
+      owl:onProperty FestS:op_awardedByInstitution ;
+      owl:someValuesFrom FestS:Cl_Institution ;
+      rdfs:comment "Every Degree Obtainment event must indicate the institution that awarded the degree." ],
+    [ rdf:type owl:Restriction ;
+      owl:onProperty FestS:awardDate ;
+      owl:someValuesFrom xsd:date ;
+      rdfs:comment "Every Degree Obtainment event must specify the date of award." ] .
+
+# Restrictions for Cl_StudyEnrollment
+FestS:Cl_StudyEnrollment rdfs:subClassOf
+    [ rdf:type owl:Restriction ;
+      owl:onProperty FestS:hasStudent ;
+      owl:cardinality 1 ;
+      rdfs:comment "Each study enrollment must be associated with exactly one student." ],
+    [ rdf:type owl:Restriction ;
+      owl:onProperty FestS:hasDegree ;
+      owl:cardinality 1 ;
+      rdfs:comment "Each study enrollment must be associated with exactly one degree." ],
+    [ rdf:type owl:Restriction ;
+      owl:onProperty FestS:duringPeriod ;
+      owl:cardinality 1 ;
+      rdfs:comment "Each study enrollment must occur during exactly one time period." ] .
+
+# Restrictions for Cl_TimePeriod
+FestS:Cl_TimePeriod rdfs:subClassOf
+    [ rdf:type owl:Restriction ;
+      owl:onProperty FestS:hasStartDate ;
+      owl:someValuesFrom xsd:date ;
+      rdfs:comment "A time period must have a defined start date." ],
+    [ rdf:type owl:Restriction ;
+      owl:onProperty FestS:hasEndDate ;
+      owl:someValuesFrom xsd:date ;
+      rdfs:comment "A time period must have a defined end date." ] .
+
+# Restrictions for Cl_EmploymentEvent
+FestS:Cl_EmploymentEvent rdfs:subClassOf
+    [ rdf:type owl:Restriction ;
+      owl:onProperty FestS:relatesToPerson ;
+      owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+      owl:allValuesFrom FestS:Cl_Person
+    ] ,
+    [ rdf:type owl:Restriction ;
+      owl:onProperty FestS:relatesToHospital ;
+      owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+      owl:allValuesFrom FestS:Cl_Hospital
+    ] ,
+    [ rdf:type owl:Restriction ;
+      owl:onProperty FestS:hasStartDate ;
+      owl:cardinality "1"^^xsd:nonNegativeInteger ;
+      owl:allValuesFrom xsd:date
+    ] .
+
+# Restrictions for Cl_EvaluationEvent
+FestS:Cl_EvaluationEvent rdfs:subClassOf
+    [ rdf:type owl:Restriction ;
+      owl:onProperty FestS:hasEvaluator ;
+      owl:someValuesFrom FestS:Cl_Doctor
+    ] ,
+    [ rdf:type owl:Restriction ;
+      owl:onProperty FestS:hasSubjectEmployee ;
+      owl:someValuesFrom FestS:Cl_Employee
+    ] ,
+    [ rdf:type owl:Restriction ;
+      owl:onProperty FestS:evaluationStatementText ;
+      owl:someValuesFrom xsd:string
+    ] .
+
+# Restrictions for Cl_Hospital and Cl_LocationAssertion
+FestS:Cl_Hospital rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty FestS:assertsLocation ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:comment "Ensures that every instance of Cl_Hospital has at least one associated location assertion."
+] .
+
+FestS:Cl_LocationAssertion rdfs:subClassOf
+    [ rdf:type owl:Restriction ;
+      owl:onProperty FestS:isLocationAssertionOf ;
+      owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+      rdfs:comment "Ensures that every instance of Cl_LocationAssertion describes the location of at least one Cl_Hospital."
+    ] ,
+    [ rdf:type owl:Restriction ;
+      owl:onProperty FestS:locatedInCity ;
+      owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+      rdfs:comment "Ensures that every instance of Cl_LocationAssertion explicitly states the city where the entity is located."
+    ] .
+
+# Restrictions for Cl_GeographicalContainment
+FestS:Cl_GeographicalContainment rdfs:subClassOf
+    [ rdf:type owl:Restriction ;
+      owl:onProperty FestS:describesContainmentOf ;
+      owl:cardinality "1"^^xsd:nonNegativeInteger
+    ] ,
+    [ rdf:type owl:Restriction ;
+      owl:onProperty FestS:describesContainmentIn ;
+      owl:cardinality "1"^^xsd:nonNegativeInteger
+    ] .
+
+# Restrictions for Cl_UnionMembership
+FestS:Cl_UnionMembership rdfs:subClassOf
+    [ rdf:type owl:Restriction ;
+      owl:onProperty FestS:memberIs ;
+      owl:someValuesFrom FestS:Cl_Person
+    ] ,
+    [ rdf:type owl:Restriction ;
+      owl:onProperty FestS:membershipOfUnion ;
+      owl:someValuesFrom FestS:Cl_Union
+    ] .
+
+# Restrictions for Cl_UnionRoleAssignment
+FestS:Cl_UnionRoleAssignment rdfs:subClassOf
+    [ rdf:type owl:Restriction ;
+      owl:onProperty FestS:op_assignedToPerson ;
+      owl:cardinality "1"^^xsd:nonNegativeInteger ;
+      rdfs:comment "Ensures each Union Role Assignment links to exactly one Person."
+    ] ,
+    [ rdf:type owl:Restriction ;
+      owl:onProperty FestS:op_inUnionGroup ;
+      owl:cardinality "1"^^xsd:nonNegativeInteger ;
+      rdfs:comment "Ensures each Union Role Assignment links to exactly one Union."
+    ] ,
+    [ rdf:type owl:Restriction ;
+      owl:onProperty FestS:op_hasRole ;
+      owl:cardinality "1"^^xsd:nonNegativeInteger ;
+      rdfs:comment "Ensures each Union Role Assignment links to exactly one Role."
+    ] ,
+    [ rdf:type owl:Restriction ;
+      owl:onProperty FestS:hasExactTime ;
+      owl:cardinality "1"^^xsd:nonNegativeInteger ;
+      rdfs:comment "Ensures each Union Role Assignment has exactly one associated time point."
+    ] .
+
+# Restrictions for Cl_CompositionEvent
+FestS:Cl_CompositionEvent rdfs:subClassOf
+    [ rdf:type owl:Restriction ;
+      owl:onProperty FestS:composedIn ;
+      owl:someValuesFrom FestS:Cl_Collection
+    ] ,
+    [ rdf:type owl:Restriction ;
+      owl:onProperty FestS:composes ;
+      owl:someValuesFrom FestS:Cl_Article
+    ] ,
+    [ rdf:type owl:Restriction ; # If a CompositionEvent has a track number, its collection must be a CD.
+      owl:onProperty FestS:trackNumber ;
+      owl:someValuesFrom rdfs:Literal ;
+      rdfs:subClassOf [
+          rdf:type owl:Restriction ;
+          owl:onProperty FestS:composedIn ;
+          owl:allValuesFrom FestS:Cl_CD
+      ]
+    ] ,
+    [ rdf:type owl:Restriction ; # If a CompositionEvent has a start page, its collection must be a Book.
+      owl:onProperty FestS:startPage ;
+      owl:someValuesFrom rdfs:Literal ;
+      rdfs:subClassOf [
+          rdf:type owl:Restriction ;
+          owl:onProperty FestS:composedIn ;
+          owl:allValuesFrom FestS:Cl_Book
+      ]
+    ] ,
+    [ rdf:type owl:Restriction ; # If a CompositionEvent has an end page, its collection must be a Book.
+      owl:onProperty FestS:endPage ;
+      owl:someValuesFrom rdfs:Literal ;
+      rdfs:subClassOf [
+          rdf:type owl:Restriction ;
+          owl:onProperty FestS:composedIn ;
+          owl:allValuesFrom FestS:Cl_Book
+      ]
+    ] .
+
+# Restrictions for Cl_SeminarOccurrence
+FestS:Cl_SeminarOccurrence rdfs:subClassOf
+    [ rdf:type owl:Restriction ;
+      owl:onProperty FestS:isOccurrenceOfSeminar ;
+      owl:cardinality 1 ;
+      rdfs:comment "Each 'Cl_SeminarOccurrence' must be an occurrence of exactly one 'Cl_Seminar'."
+    ] ,
+    [ rdf:type owl:Restriction ;
+      owl:onProperty FestS:hasExactTime ;
+      owl:cardinality 1 ;
+      rdfs:comment "Each 'Cl_SeminarOccurrence' must have exactly one specific time of occurrence."
+    ] .
+
+# Restrictions for Cl_PresentationEvent
+FestS:Cl_PresentationEvent rdfs:subClassOf
+    [ rdf:type owl:Restriction ;
+      owl:onProperty FestS:presentsArticle ;
+      owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+      rdfs:comment "Every Presentation Event must present at least one article."
+    ] ,
+    [ rdf:type owl:Restriction ;
+      owl:onProperty FestS:isPresentedInSeminar ;
+      owl:someValuesFrom FestS:Cl_Seminar ;
+      rdfs:comment "Every Presentation Event must take place within a Seminar."
+    ] .
+
+# Restrictions for Cl_Seminar
+FestS:Cl_Seminar rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty FestS:hasLocation ;
+    owl:someValuesFrom FestS:Cl_Location ;
+    rdfs:comment "Every Seminar must have at least one location."
+] .
+
+# Competency Question Restriction for Seminar and Article
+FestS:Cl_Seminar rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty FestS:includesPresentation ;
+    owl:someValuesFrom [ # There exists at least one presentation event...
+        rdf:type owl:Restriction ;
+        owl:onProperty FestS:presentsArticle ;
+        owl:someValuesFrom FestS:Cl_Article # ...which presents at least one article.
+    ] ;
+    rdfs:comment "Competency Question Restriction: Ensures that every seminar must feature at least one presentation event, and each such presentation event must present at least one article."
+] .
+
+# Restrictions for Cl_Room
+FestS:Cl_Room rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty FestS:locatedIn ;
+    owl:someValuesFrom FestS:Cl_Building ;
+    rdfs:comment "Every Room must be located in at least one Building."
+] .
+
+# Restrictions for Cl_Publication
+FestS:Cl_Publication rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty FestS:publicationDate ;
+    owl:cardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:comment "Every publication must have exactly one publication date."
+] .

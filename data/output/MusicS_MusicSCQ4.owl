@@ -1,0 +1,126 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix : <http://www.example.org/music-ontology#> .
+
+# Classes
+# Hierarchy: Cl_TemporalEntity -> Cl_TimePeriod
+
+:Cl_Album a owl:Class ;
+    rdfs:label "Album" ;
+    rdfs:comment "Represents a musical album, a collection of audio recordings." .
+
+:Cl_TemporalEntity a owl:Class ;
+    rdfs:label "Temporal Entity" ;
+    rdfs:comment "A general class for concepts that exist over a period of time or represent a point in time." .
+
+:Cl_TimePeriod a owl:Class ;
+    rdfs:subClassOf :Cl_TemporalEntity ;
+    rdfs:label "Time Period" ;
+    rdfs:comment "Represents a specific duration, defined by a start and end date/time." .
+
+:Cl_RecordingEvent a owl:Class ;
+    rdfs:label "Recording Event" ;
+    rdfs:comment "A pivot class (reification) capturing the event of an album being recorded. It links an album to the specific time period during which its recording occurred." .
+
+# Properties
+
+# Object Properties (for reification and connecting classes)
+
+:hasRecordingEvent a owl:ObjectProperty ;
+    rdfs:domain :Cl_Album ;
+    rdfs:range :Cl_RecordingEvent ;
+    rdfs:label "has recording event" ;
+    rdfs:comment "Connects an album to a specific event where it was recorded." .
+
+:recordedAlbum a owl:ObjectProperty ;
+    rdfs:domain :Cl_RecordingEvent ;
+    rdfs:range :Cl_Album ;
+    owl:inverseOf :hasRecordingEvent ;
+    rdfs:label "recorded album" ;
+    rdfs:comment "Connects a recording event to the album that was the subject of the recording." .
+
+:occurredDuring a owl:ObjectProperty ;
+    rdfs:domain :Cl_RecordingEvent ;
+    rdfs:range :Cl_TimePeriod ;
+    rdfs:label "occurred during" ;
+    rdfs:comment "Connects a recording event to the time period during which it took place." .
+
+:isPeriodOfRecordingEvent a owl:ObjectProperty ;
+    rdfs:domain :Cl_TimePeriod ;
+    rdfs:range :Cl_RecordingEvent ;
+    owl:inverseOf :occurredDuring ;
+    rdfs:label "is period of recording event" ;
+    rdfs:comment "Connects a time period to a recording event that occurred within it." .
+
+# Data Properties (for connecting classes to literal values)
+
+:albumTitle a owl:DatatypeProperty ;
+    rdfs:domain :Cl_Album ;
+    rdfs:range xsd:string ;
+    rdfs:label "album title" ;
+    rdfs:comment "The primary title of the album." ;
+    a owl:FunctionalProperty . # An album typically has one main title.
+
+:hasStartDateTime a owl:DatatypeProperty ;
+    rdfs:domain :Cl_TimePeriod ;
+    rdfs:range xsd:dateTime ;
+    rdfs:label "has start date time" ;
+    rdfs:comment "The specific date and time when a time period begins." ;
+    a owl:FunctionalProperty . # A time period has one unique start time.
+
+:hasEndDateTime a owl:DatatypeProperty ;
+    rdfs:domain :Cl_TimePeriod ;
+    rdfs:range xsd:dateTime ;
+    rdfs:label "has end date time" ;
+    rdfs:comment "The specific date and time when a time period concludes." ;
+    a owl:FunctionalProperty . # A time period has one unique end time.
+
+:hasLabel a owl:DatatypeProperty ;
+    rdfs:domain :Cl_TemporalEntity ;
+    rdfs:range xsd:string ;
+    rdfs:label "has label" ;
+    rdfs:comment "A human-readable label or description for a temporal entity." .
+
+# General Class Axioms / Restrictions
+
+# Every Cl_RecordingEvent must involve an album.
+:Cl_RecordingEvent rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :recordedAlbum ;
+    owl:someValuesFrom :Cl_Album
+] ;
+rdfs:comment "A recording event must be associated with an album that was recorded." .
+
+# Every Cl_RecordingEvent must occur during a time period.
+:Cl_RecordingEvent rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :occurredDuring ;
+    owl:someValuesFrom :Cl_TimePeriod
+] ;
+rdfs:comment "A recording event must have a defined time period during which it took place." .
+
+# Every Cl_Album must have an album title.
+:Cl_Album rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :albumTitle ;
+    owl:someValuesFrom xsd:string
+] ;
+rdfs:comment "Every album entity must have an associated title." .
+
+# Every Cl_TimePeriod must have a start date/time.
+:Cl_TimePeriod rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :hasStartDateTime ;
+    owl:someValuesFrom xsd:dateTime
+] ;
+rdfs:comment "Every time period must specify its starting date and time." .
+
+# Every Cl_TimePeriod must have an end date/time.
+:Cl_TimePeriod rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :hasEndDateTime ;
+    owl:someValuesFrom xsd:dateTime
+] ;
+rdfs:comment "Every time period must specify its ending date and time." .

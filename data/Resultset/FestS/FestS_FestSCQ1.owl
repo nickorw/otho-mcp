@@ -1,0 +1,66 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix : <http://www.example.org/ontology#> .
+
+# Classes
+:Cl_Event rdf:type owl:Class ;
+    rdfs:comment "Represents any general event or happening." .
+
+:Cl_Festival rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Event ;
+    rdfs:comment "Represents a collection of events or performances, typically celebrated periodically." .
+
+:Cl_TheatreFestival rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Festival ;
+    rdfs:comment "Represents a specific type of festival focused on theatrical performances and related activities." .
+
+:Cl_FestivalOccurrence rdf:type owl:Class ;
+    rdfs:comment "A pivot class representing a specific instance or period during which a festival took place, used for reification to capture temporal details." .
+
+# Properties
+
+# Object Property: Linking a festival to its occurrence(s)
+:hasOccurrence rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_TheatreFestival ;
+    rdfs:range :Cl_FestivalOccurrence ;
+    rdfs:comment "Links a theatre festival (concept) to a specific instance of its taking place." .
+
+# Object Property: Linking an occurrence back to its festival
+:isOccurrenceOf rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_FestivalOccurrence ;
+    rdfs:range :Cl_TheatreFestival ;
+    owl:inverseOf :hasOccurrence ;
+    owl:functional true ; # Each specific occurrence belongs to one unique theatre festival concept.
+    rdfs:comment "Links a specific festival occurrence instance back to the theatre festival it represents." .
+
+# Data Property: Specifying the start date of an occurrence
+:hasStartDate rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Cl_FestivalOccurrence ;
+    rdfs:range xsd:date ;
+    owl:functional true ; # Each occurrence has exactly one start date.
+    rdfs:comment "Specifies the calendar start date of a festival occurrence." .
+
+# Data Property: Specifying the end date of an occurrence
+:hasEndDate rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Cl_FestivalOccurrence ;
+    rdfs:range xsd:date ;
+    owl:functional true ; # Each occurrence has exactly one end date.
+    rdfs:comment "Specifies the calendar end date of a festival occurrence." .
+
+# General Class Axioms (Restrictions)
+
+# Every Cl_FestivalOccurrence must be an occurrence of some Cl_TheatreFestival
+[ rdf:type owl:Restriction ;
+  owl:onProperty :isOccurrenceOf ;
+  owl:someValuesFrom :Cl_TheatreFestival ;
+  rdfs:subClassOf :Cl_FestivalOccurrence
+] .
+
+# Every Cl_FestivalOccurrence must have a start date
+[ rdf:type owl:Restriction ;
+  owl:onProperty :hasStartDate ;
+  owl:someValuesFrom xsd:date ;
+  rdfs:subClassOf :Cl_FestivalOccurrence
+] .

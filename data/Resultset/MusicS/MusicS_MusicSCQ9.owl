@@ -1,0 +1,122 @@
+@prefix : <http://example.org/record-review-ontology#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://example.org/record-review-ontology> rdf:type owl:Ontology ;
+    owl:versionIRI <http://example.org/record-review-ontology/1.0> ;
+    rdfs:comment "Ontology for representing record reviews by critics, addressing the competency question: 'What does a certain critic say about a certain record?'" .
+
+# Classes
+:Cl_CreativeWork rdf:type owl:Class ;
+    rdfs:label "Creative Work" ;
+    rdfs:comment "A general class for any creative production." .
+
+:Cl_Person rdf:type owl:Class ;
+    rdfs:label "Person" ;
+    rdfs:comment "A general class for any individual person." .
+
+:Cl_Record rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_CreativeWork ;
+    rdfs:label "Record" ;
+    rdfs:comment "Represents a musical record, album, or song." .
+
+:Cl_Critic rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Person ;
+    rdfs:label "Critic" ;
+    rdfs:comment "Represents a person who provides reviews." .
+
+# Pivot Class for Reification to capture the 'saying' relationship
+:Cl_Review rdf:type owl:Class ;
+    rdfs:label "Review" ;
+    rdfs:comment "Represents a specific review given by a critic about a record. This is a pivot class for reification." .
+
+# Disjointness Axioms for distinct classes
+:Cl_Critic owl:disjointWith :Cl_Record .
+:Cl_Review owl:disjointWith :Cl_Critic .
+:Cl_Review owl:disjointWith :Cl_Record .
+:Cl_Person owl:disjointWith :Cl_CreativeWork .
+
+# Properties
+
+# Object Properties (linking classes)
+:reviewByCritic rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_Review ;
+    rdfs:range :Cl_Critic ;
+    owl:inverseOf :hasReview ;
+    rdf:type owl:FunctionalProperty ; # A specific review is typically written by one critic.
+    rdfs:label "review by critic" ;
+    rdfs:comment "Connects a review to the critic who wrote it." .
+
+:reviewAboutRecord rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_Review ;
+    rdfs:range :Cl_Record ;
+    owl:inverseOf :isReviewedBy ;
+    rdf:type owl:FunctionalProperty ; # A specific review is typically about one record.
+    rdfs:label "review about record" ;
+    rdfs:comment "Connects a review to the record it is about." .
+
+:hasReview rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_Critic ;
+    rdfs:range :Cl_Review ;
+    rdfs:label "has review" ;
+    rdfs:comment "Connects a critic to a review they have written." .
+
+:isReviewedBy rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_Record ;
+    rdfs:range :Cl_Review ;
+    rdfs:label "is reviewed by" ;
+    rdfs:comment "Connects a record to a review about it." .
+
+# Data Properties (linking classes to data types)
+:criticName rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Cl_Critic ;
+    rdfs:range xsd:string ;
+    rdf:type owl:FunctionalProperty ;
+    rdfs:label "critic name" ;
+    rdfs:comment "The name of the critic." .
+
+:recordTitle rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Cl_Record ;
+    rdfs:range xsd:string ;
+    rdf:type owl:FunctionalProperty ;
+    rdfs:label "record title" ;
+    rdfs:comment "The title of the record." .
+
+:recordArtist rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Cl_Record ;
+    rdfs:range xsd:string ;
+    rdf:type owl:FunctionalProperty ;
+    rdfs:label "record artist" ;
+    rdfs:comment "The artist or band associated with the record." .
+
+:reviewContent rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Cl_Review ;
+    rdfs:range xsd:string ;
+    rdfs:label "review content" ;
+    rdfs:comment "The textual content or statement of the review." .
+
+:reviewRating rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Cl_Review ;
+    rdfs:range xsd:decimal ; # Allows for flexible rating scales (e.g., 1-10, 0-5 stars, percentage).
+    rdf:type owl:FunctionalProperty ;
+    rdfs:label "review rating" ;
+    rdfs:comment "The numerical rating given in the review." .
+
+# General Class Axioms / Restrictions
+# A Cl_Review must have a critic who wrote it.
+:Cl_Review rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :reviewByCritic ;
+    owl:someValuesFrom :Cl_Critic
+] ;
+rdfs:comment "Every review must be associated with at least one critic." .
+
+# A Cl_Review must be about a record.
+:Cl_Review rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :reviewAboutRecord ;
+    owl:someValuesFrom :Cl_Record
+] ;
+rdfs:comment "Every review must be about at least one record." .

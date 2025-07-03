@@ -1,0 +1,63 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix : <http://example.org/ontology#> .
+
+# Classes
+:Cl_CreativeWork rdf:type owl:Class ;
+    rdfs:comment "A general class representing any creative work." .
+
+:Cl_MusicalWork rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_CreativeWork ;
+    rdfs:comment "A specialized class for works that are musical in nature." .
+
+:Cl_Album rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_MusicalWork ;
+    rdfs:comment "A specific type of musical work, typically a collection of audio recordings released together." .
+
+# Reification Pivot Class
+:Cl_ReleaseEvent rdf:type owl:Class ;
+    rdfs:comment "Represents a specific event of an album's release, allowing for the capture of details pertaining to that event, such as the exact date." .
+
+# Object Properties
+:relatesToAlbum rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_ReleaseEvent ;
+    rdfs:range :Cl_Album ;
+    owl:functionalProperty true ;
+    rdfs:comment "Connects a specific release event to the album that was released during this event. This property is functional as each release event pertains to one specific album." .
+
+# Data Properties
+:hasReleaseDate rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Cl_ReleaseEvent ;
+    rdfs:range xsd:date ;
+    owl:functionalProperty true ;
+    rdfs:comment "Specifies the precise date on which a release event took place. This property is functional as a single release event instance has one specific date." .
+
+# General Class Axioms / Restrictions
+
+# Every Cl_ReleaseEvent must be related to some Cl_Album.
+:Cl_ReleaseEvent rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :relatesToAlbum ;
+    owl:someValuesFrom :Cl_Album
+] .
+
+# Every Cl_ReleaseEvent must have a Cl_hasReleaseDate.
+:Cl_ReleaseEvent rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :hasReleaseDate ;
+    owl:someValuesFrom xsd:date
+] .
+
+# An Cl_Album must have at least one Cl_ReleaseEvent.
+# This restriction asserts that for any instance of Cl_Album, there must be at least one Cl_ReleaseEvent
+# that relates to it via the inverse of :relatesToAlbum.
+:Cl_Album rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty [
+        owl:inverseOf :relatesToAlbum ;
+        rdf:type owl:ObjectProperty
+    ] ;
+    owl:someValuesFrom :Cl_ReleaseEvent
+] .

@@ -1,0 +1,107 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix : <http://example.org/union_ontology#> .
+
+# Classes
+# General class for any kind of organization
+:Cl_Organization rdf:type owl:Class ;
+    rdfs:label "Organization" ;
+    rdfs:comment "A broad category representing structured groups or institutions." .
+
+# Specific type of organization representing a union
+:Cl_Union rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Organization ;
+    rdfs:label "Union" ;
+    rdfs:comment "A specific type of organization, typically formed by workers for collective bargaining." .
+
+# General class for any individual entity
+:Cl_Individual rdf:type owl:Class ;
+    rdfs:label "Individual" ;
+    rdfs:comment "A broad category representing a single, distinct entity or person." .
+
+# Specific type of individual representing a human person
+:Cl_Person rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Individual ;
+    rdfs:label "Person" ;
+    rdfs:comment "A specific type of individual representing a human being." .
+
+# Pivot class for reification: Represents the act or state of a person's membership in a union over time.
+:Cl_UnionMembership rdf:type owl:Class ;
+    rdfs:label "Union Membership" ;
+    rdfs:comment "A reified concept capturing the relationship between a Person, a Union, and the period during which the membership is valid." .
+
+# Properties
+
+# Data Properties
+# Generic property for names
+:hasName rdf:type owl:DatatypeProperty ;
+    rdfs:label "has name" ;
+    rdfs:comment "A generic property to associate a name (string) with an entity." ;
+    rdfs:range xsd:string .
+
+# Specific property for the name of a union
+:hasUnionName rdf:type owl:DatatypeProperty ;
+    rdfs:subPropertyOf :hasName ;
+    rdfs:domain :Cl_Union ;
+    rdfs:label "has union name" ;
+    rdfs:comment "The official name of the union." .
+
+# Specific property for the name of a person
+:hasPersonName rdf:type owl:DatatypeProperty ;
+    rdfs:subPropertyOf :hasName ;
+    rdfs:domain :Cl_Person ;
+    rdfs:label "has person name" ;
+    rdfs:comment "The full name of the person." .
+
+# Date when a membership commenced
+:membershipStartDate rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Cl_UnionMembership ;
+    rdfs:range xsd:date ;
+    rdfs:label "membership start date" ;
+    rdfs:comment "The date on which a union membership began." .
+
+# Date when a membership concluded (optional, for current memberships)
+:membershipEndDate rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Cl_UnionMembership ;
+    rdfs:range xsd:date ;
+    rdfs:label "membership end date" ;
+    rdfs:comment "The date on which a union membership ended. This property may not be present for ongoing memberships." .
+
+# Object Properties
+# Links a Cl_UnionMembership instance to the specific Person who holds the membership.
+:memberIs rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_UnionMembership ;
+    rdfs:range :Cl_Person ;
+    rdfs:label "member is" ;
+    rdfs:comment "Connects a Union Membership event to the Person who is the member." .
+
+# Links a Cl_UnionMembership instance to the specific Union to which the person belongs.
+:membershipOfUnion rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_UnionMembership ;
+    rdfs:range :Cl_Union ;
+    rdfs:label "membership of union" ;
+    rdfs:comment "Connects a Union Membership event to the Union involved." .
+
+# Restrictions on Cl_UnionMembership to ensure data integrity for the reified relationship
+# Every Cl_UnionMembership instance must be associated with at least one Cl_Person.
+:Cl_UnionMembership rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :memberIs ;
+    owl:someValuesFrom :Cl_Person
+] .
+
+# Every Cl_UnionMembership instance must be associated with at least one Cl_Union.
+:Cl_UnionMembership rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :membershipOfUnion ;
+    owl:someValuesFrom :Cl_Union
+] .
+
+# Competency Question: "Who are the members of a certain union at a certain point in time?"
+# This question can be answered by querying instances of :Cl_UnionMembership.
+# One would filter these instances by the desired :membershipOfUnion and by checking
+# if the specified "point in time" falls between :membershipStartDate and :membershipEndDate (if present).
+# Then, for the matching :Cl_UnionMembership instances, retrieve the :memberIs (Cl_Person)
+# and their respective :hasPersonName.

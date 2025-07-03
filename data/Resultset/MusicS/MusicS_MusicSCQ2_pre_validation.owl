@@ -1,0 +1,95 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix : <http://example.org/ontology#> .
+
+# Classes
+:Cl_MusicalEntity rdf:type owl:Class ;
+    rdfs:comment "A general class for entities related to music, serving as a superclass for various musical concepts." .
+
+:Cl_Band rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_MusicalEntity ;
+    rdfs:comment "Represents a musical group or band." .
+
+:Cl_Person rdf:type owl:Class ;
+    rdfs:comment "Represents an individual person, who can be a member of a band." .
+
+# Reification Class for Band Membership
+# This pivot class captures the nuanced relationship of a person being a member of a band at a specific time.
+:Cl_BandMembership rdf:type owl:Class ;
+    rdfs:comment "Represents a specific instance or period of a person's membership in a band." ;
+    # Defining Cl_BandMembership by its essential characteristics using an intersection of restrictions.
+    owl:equivalentClass [
+        rdf:type owl:Class ;
+        owl:intersectionOf (
+            # A Cl_BandMembership must relate to exactly one Cl_Band.
+            [
+                rdf:type owl:Restriction ;
+                owl:onProperty :relatesToBand ;
+                owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+                owl:maxCardinality "1"^^xsd:nonNegativeInteger
+            ]
+            # A Cl_BandMembership must relate to exactly one Cl_Person.
+            [
+                rdf:type owl:Restriction ;
+                owl:onProperty :relatesToPerson ;
+                owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+                owl:maxCardinality "1"^^xsd:nonNegativeInteger
+            ]
+            # A Cl_BandMembership must have a start time.
+            [
+                rdf:type owl:Restriction ;
+                owl:onProperty :membershipStartTime ;
+                owl:minCardinality "1"^^xsd:nonNegativeInteger
+            ]
+        )
+    ] .
+
+# Properties
+
+# Data Properties
+:hasName rdf:type owl:DatatypeProperty ;
+    rdfs:domain [
+        owl:unionOf (:Cl_Band :Cl_Person)
+    ] ; # This property can be used for both Cl_Band and Cl_Person.
+    rdfs:range xsd:string ;
+    owl:functional true ; # Each band or person has a single name.
+    rdfs:comment "The proper name of a musical entity (like a band) or a person." .
+
+:membershipStartTime rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Cl_BandMembership ;
+    rdfs:range xsd:date ;
+    rdfs:comment "The date when a person's membership in a specific band began." .
+
+:membershipEndTime rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Cl_BandMembership ;
+    rdfs:range xsd:date ;
+    rdfs:comment "The date when a person's membership in a specific band ended. This property may be omitted if the membership is current." .
+
+# Object Properties
+# Properties linking from Cl_Band and Cl_Person to the reification class Cl_BandMembership.
+:hasMembershipPeriod rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_Band ;
+    rdfs:range :Cl_BandMembership ;
+    rdfs:comment "Connects a band to a specific period of a member's association with it." .
+
+:isMemberDuringPeriod rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_Person ;
+    rdfs:range :Cl_BandMembership ;
+    rdfs:comment "Connects a person to a specific period of their membership in a band." .
+
+# Properties from the reification class Cl_BandMembership to Cl_Band and Cl_Person.
+:relatesToBand rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_BandMembership ;
+    rdfs:range :Cl_Band ;
+    owl:inverseOf :hasMembershipPeriod ; # Establishes a reciprocal relationship.
+    owl:functional true ; # Each membership period relates to exactly one band.
+    rdfs:comment "Indicates the band associated with a particular band membership record." .
+
+:relatesToPerson rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_BandMembership ;
+    rdfs:range :Cl_Person ;
+    owl:inverseOf :isMemberDuringPeriod ; # Establishes a reciprocal relationship.
+    owl:functional true ; # Each membership period relates to exactly one person.
+    rdfs:comment "Indicates the person associated with a particular band membership record." .

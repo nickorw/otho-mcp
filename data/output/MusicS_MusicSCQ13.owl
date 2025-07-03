@@ -1,0 +1,47 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix : <http://www.example.org/ontology#> . # Base URI for the ontology
+
+# Ontology metadata (optional but good practice)
+:ontology rdf:type owl:Ontology ;
+    rdfs:comment "Ontology for geographical locations to answer the competency question 'In what region is a certain city located?'." .
+
+# Classes
+:Cl_GeographicalEntity rdf:type owl:Class ;
+    rdfs:comment "A top-level class representing any identifiable geographical entity." .
+
+:Cl_Location rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_GeographicalEntity ;
+    rdfs:comment "A class representing a general location, which is a type of geographical entity." .
+
+:Cl_City rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Location ;
+    rdfs:comment "A class representing a city, which is a specific type of location." .
+
+:Cl_Region rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Location ;
+    rdfs:comment "A class representing a geographical region, which can be an administrative division (e.g., state, country) or a larger geographical area (e.g., continent, mountain range)." .
+
+# General Class Axiom: Every city must be located in at least one region.
+# This ensures that instances of Cl_City will always have a relationship to Cl_Region via locatedInRegion.
+:Cl_City rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :locatedInRegion ;
+    owl:someValuesFrom :Cl_Region
+] .
+
+# Object Properties
+:locatedInRegion rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_City ;
+    rdfs:range :Cl_Region ;
+    rdf:type owl:AsymmetricProperty ; # If City A is in Region B, Region B is not in City A.
+    rdf:type owl:IrreflexiveProperty ; # A city cannot be located within itself.
+    rdfs:comment "Connects a city to the geographical region it is located in. This property directly answers the competency question 'In what region is a certain city located?'." .
+
+:isRegionOf rdf:type owl:ObjectProperty ;
+    owl:inverseOf :locatedInRegion ;
+    rdfs:domain :Cl_Region ;
+    rdfs:range :Cl_City ;
+    rdfs:comment "Connects a region to a city that is contained within it. This is the inverse of locatedInRegion." .

@@ -1,0 +1,74 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix : <http://www.example.org/ontology#> .
+
+# Classes
+:Cl_Occurrence a owl:Class ;
+    rdfs:label "Occurrence" .
+
+:Cl_Event a owl:Class ;
+    rdfs:subClassOf :Cl_Occurrence ;
+    rdfs:label "Event" .
+
+:Cl_Work a owl:Class ;
+    rdfs:label "Work" .
+
+:Cl_Production a owl:Class ;
+    rdfs:subClassOf :Cl_Work ;
+    rdfs:label "Production" .
+
+# Reification/Pivot Class for Premier event
+:Cl_Premier a owl:Class ;
+    rdfs:subClassOf :Cl_Event ;
+    rdfs:label "Premier" .
+
+# Properties
+
+# Object Properties
+:isPremierOf a owl:ObjectProperty ;
+    rdfs:domain :Cl_Premier ;
+    rdfs:range :Cl_Production ;
+    rdfs:label "is premier of" ;
+    owl:inverseOf :hasPremier .
+
+:hasPremier a owl:ObjectProperty ;
+    rdfs:domain :Cl_Production ;
+    rdfs:range :Cl_Premier ;
+    rdfs:label "has premier" ;
+    a owl:FunctionalProperty . # A production typically has one primary premier event.
+
+# Data Properties
+:premieredOnDate a owl:DatatypeProperty ;
+    rdfs:domain :Cl_Premier ;
+    rdfs:range xsd:date ;
+    rdfs:label "premiered on date" .
+
+:productionTitle a owl:DatatypeProperty ;
+    rdfs:domain :Cl_Production ;
+    rdfs:range xsd:string ;
+    rdfs:label "production title" .
+
+# Restrictions
+
+# Every Cl_Premier instance must be linked to a Cl_Production.
+[ rdf:type owl:Restriction ;
+  owl:onProperty :isPremierOf ;
+  owl:someValuesFrom :Cl_Production ;
+  rdfs:subClassOf :Cl_Premier
+] .
+
+# Every Cl_Premier instance must have a premieredOnDate.
+[ rdf:type owl:Restriction ;
+  owl:onProperty :premieredOnDate ;
+  owl:someValuesFrom xsd:date ;
+  rdfs:subClassOf :Cl_Premier
+] .
+
+# A Cl_Production must have at least one premier event.
+[ rdf:type owl:Restriction ;
+  owl:onProperty :hasPremier ;
+  owl:someValuesFrom :Cl_Premier ;
+  rdfs:subClassOf :Cl_Production
+] .

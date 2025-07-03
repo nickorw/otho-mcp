@@ -1,0 +1,957 @@
+@prefix : <http://example.org/FestS#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+:FestS rdf:type owl:Ontology ;
+    rdfs:comment "A comprehensive ontology for modeling musical events, entities, and their relationships, combining aspects of band membership, musical proficiency, album production, performances, compositions, and critic reviews." ;
+    owl:versionIRI <http://example.org/FestS/1.0> .
+
+#################################################################
+#    Classes
+#################################################################
+
+# Core Base Classes
+:Cl_Entity rdf:type owl:Class ;
+    rdfs:label "Entity" ;
+    rdfs:comment "The most general class representing anything in the domain." .
+
+# Agent Hierarchy
+:Cl_Agent rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Entity ;
+    rdfs:label "Agent" ;
+    rdfs:comment "Represents any agent, living or otherwise, capable of action." .
+
+:Cl_Person rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Agent ;
+    rdfs:label "Person" ;
+    rdfs:comment "Represents a human individual." .
+
+:Cl_Composer rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Person ;
+    rdfs:label "Composer" ;
+    rdfs:comment "Represents a person who creates musical compositions." .
+
+:Cl_Critic rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Person ;
+    rdfs:label "Critic" ;
+    rdfs:comment "An individual who professionally evaluates and reviews creative works, specifically records in this context." .
+
+:Cl_Organization rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Agent ;
+    rdfs:label "Organization" ;
+    rdfs:comment "Represents a structured group of people." .
+
+:Cl_MusicalGroup rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Organization ;
+    rdfs:label "Musical Group" ;
+    rdfs:comment "Represents any group formed for musical performance." .
+
+:Cl_Band rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_MusicalGroup ;
+    rdfs:label "Band" ;
+    rdfs:comment "Represents a specific type of musical group, typically playing contemporary music." .
+
+# Temporal Hierarchy
+:Cl_TemporalEntity rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Entity ;
+    rdfs:label "Temporal Entity" ;
+    rdfs:comment "A general class for concepts that exist over a period of time or represent a point in time." .
+
+:Cl_TimePoint rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_TemporalEntity ;
+    rdfs:label "Time Point" ;
+    rdfs:comment "Represents a specific, instantaneous point in time." .
+
+:Cl_TimePeriod rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_TemporalEntity ;
+    rdfs:label "Time Period" ;
+    rdfs:comment "Represents a specific duration, defined by a start and end date/time." .
+
+# Event/Activity Hierarchy
+:Cl_Event rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Entity ;
+    rdfs:label "Event" ;
+    rdfs:comment "A general class for activities or occurrences, serving as a superclass for reified relationships or actions." .
+
+:Cl_Activity rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Event ;
+    rdfs:label "Activity" ;
+    rdfs:comment "A general class for activities or events." .
+
+:Cl_MusicalProficiency rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Activity ;
+    rdfs:label "Musical Proficiency" ;
+    rdfs:comment "A reification class representing a person's skill or proficiency in playing a specific musical instrument. This pivot class captures the complex relationship involving a person (entity), an instrument (entity), and a skill level (datatype)." .
+
+:Cl_Performance rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Event ;
+    rdfs:label "Performance" ;
+    rdfs:comment "A specific instance of a live or recorded presentation of artistic work." .
+
+# Geographical Hierarchy
+:Cl_GeographicalEntity rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Entity ;
+    rdfs:label "Geographical Entity" ;
+    rdfs:comment "A top-level class representing any identifiable geographical entity." .
+
+:Cl_Location rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_GeographicalEntity ;
+    rdfs:label "Location" ;
+    rdfs:comment "A class representing a general geographical or physical place." .
+
+:Cl_Venue rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Location ;
+    rdfs:label "Venue" ;
+    rdfs:comment "Represents a specific place or building where events, especially performances, are held." .
+
+:Cl_City rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Location ;
+    rdfs:label "City" ;
+    rdfs:comment "A class representing a city, which is a specific type of location." .
+
+:Cl_Region rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Location ;
+    rdfs:label "Region" ;
+    rdfs:comment "Represents a distinct area or subdivision within a larger geographical entity, such as a country." .
+
+:Cl_Country rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Location ;
+    rdfs:label "Country" ;
+    rdfs:comment "Represents a sovereign state or nation." .
+
+# Creative Work & Manifestation Hierarchy
+:Cl_CreativeWork rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Entity ;
+    rdfs:label "Creative Work" ;
+    rdfs:comment "A product of human creativity or intellectual effort, an abstract creative work or intellectual creation." .
+
+:Cl_MusicalWork rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_CreativeWork ;
+    rdfs:label "Musical Work" ;
+    rdfs:comment "Represents an abstract musical composition." .
+
+:Cl_Song rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_MusicalWork ;
+    rdfs:label "Song" ;
+    rdfs:comment "Represents a distinct musical composition, typically with lyrics and melody." .
+
+:Cl_Manifestation rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Entity ;
+    rdfs:label "Manifestation" ;
+    rdfs:comment "Represents a physical or digital embodiment/manifestation of a creative work." .
+
+:Cl_AudioRecording rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Manifestation ;
+    rdfs:label "Audio Recording" ;
+    rdfs:comment "Represents any form of audio recording." .
+
+:Cl_Track rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_AudioRecording ;
+    rdfs:label "Track" ;
+    rdfs:comment "Represents a specific recorded audio item, often found on an album or release." .
+
+:Cl_Record rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_CreativeWork ;
+    rdfs:label "Record" ;
+    rdfs:comment "A sound recording, typically a music album, single, or EP, representing a released creative work." .
+
+:Cl_Album rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Record ;
+    rdfs:label "Album" ;
+    rdfs:comment "A collection of music tracks, typically released together as a cohesive body of work." .
+
+# Other Specific Classes
+:Cl_Instrument rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Entity ;
+    rdfs:label "Instrument" ;
+    rdfs:comment "Represents a musical instrument." .
+
+:Cl_Description rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Entity ;
+    rdfs:label "Description" ;
+    rdfs:comment "A general class for descriptive concepts like roles or attributes." .
+
+:Cl_Role rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Description ;
+    rdfs:label "Role" ;
+    rdfs:comment "Represents a specific function or part performed by someone." .
+
+# Reification Classes (Events/Interactions/Relationships)
+:Cl_BandMembership rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Event ;
+    rdfs:label "Band Membership" ;
+    rdfs:comment "A pivot class representing the specific event or state of a person being a member of a band at a particular point in time, holding a certain role." .
+
+:Cl_CompositionEvent rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Event ;
+    rdfs:label "Composition Event" ;
+    rdfs:comment "A pivot class representing the specific event of a song being composed, linking the song, the composer, and the date of composition." .
+
+:Cl_RecordingEvent rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Event ;
+    rdfs:label "Recording Event" ;
+    rdfs:comment "A pivot class capturing the event of an album being recorded. It links an album to the specific time period during which its recording occurred." .
+
+:Cl_ReleaseEvent rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Event ;
+    rdfs:label "Release Event" ;
+    rdfs:comment "Represents a specific event of an album's release, allowing for the capture of details pertaining to that event, such as the exact date." .
+
+:Cl_AlbumTrackInclusion rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Entity ;
+    rdfs:label "Album Track Inclusion" ;
+    rdfs:comment "A pivot class representing the specific event or instance of a track's inclusion within an album, allowing for additional details like its sequential position." .
+
+:Cl_ReviewInteraction rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Event ;
+    rdfs:label "Review Interaction" ;
+    rdfs:comment "A pivot class representing a specific instance of a critic reviewing a record. This class captures the nuanced relationship and associated details like review text and rating." .
+
+:Cl_PerformanceOccurrence rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Event ;
+    rdfs:label "Performance Occurrence" ;
+    rdfs:comment "Represents a specific occurrence of a performance, linking a performance with its time of occurrence." .
+
+:Cl_PerformanceEvent rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Event ;
+    rdfs:label "Performance of Song Event" ;
+    rdfs:comment "Represents the specific instance of a song being played during a performance." .
+
+
+#################################################################
+#    Disjoint Classes
+#################################################################
+
+:Cl_Person owl:disjointWith :Cl_Instrument, :Cl_Activity, :Cl_Band, :Cl_Role, :Cl_CreativeWork .
+:Cl_Instrument owl:disjointWith :Cl_Activity .
+:Cl_Band owl:disjointWith :Cl_Role .
+:Cl_BandMembership owl:disjointWith :Cl_Person, :Cl_Band, :Cl_Role .
+:Cl_Critic owl:disjointWith :Cl_Record, :Cl_ReviewInteraction .
+:Cl_Record owl:disjointWith :Cl_ReviewInteraction .
+:Cl_Country owl:disjointWith :Cl_Region .
+
+
+#################################################################
+#    Object Properties
+#################################################################
+
+# General / Hierarchical Properties
+:hasPart rdf:type owl:ObjectProperty ;
+    rdfs:label "has part" ;
+    rdfs:comment "A generic property relating a whole to its constituent parts." ;
+    rdfs:domain :Cl_CreativeWork ;
+    rdfs:range :Cl_CreativeWork .
+
+:isPart rdf:type owl:ObjectProperty ;
+    owl:inverseOf :hasPart ;
+    rdfs:label "is part of" ;
+    rdfs:comment "A generic property relating a part to its containing whole." ;
+    rdfs:domain :Cl_CreativeWork ;
+    rdfs:range :Cl_CreativeWork .
+
+:isLocatedIn rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_GeographicalEntity ;
+    rdfs:range :Cl_Location ;
+    rdfs:label "is located in" ;
+    rdfs:comment "A general property indicating that a geographical entity is situated within another location." .
+
+# Musical Proficiency Properties (Reification :Cl_MusicalProficiency)
+:hasProficiency rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_Person ;
+    rdfs:range :Cl_MusicalProficiency ;
+    rdfs:label "has proficiency" ;
+    rdfs:comment "Connects a person to an instance of their musical proficiency in an instrument." .
+
+:isProficiencyOf rdf:type owl:ObjectProperty ;
+    owl:inverseOf :hasProficiency ;
+    rdfs:domain :Cl_MusicalProficiency ;
+    rdfs:range :Cl_Person ;
+    owl:functional true ;
+    rdfs:label "is proficiency of" ;
+    rdfs:comment "The inverse of 'hasProficiency', connecting a musical proficiency instance back to the person who possesses it." .
+
+:skillForInstrument rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_MusicalProficiency ;
+    rdfs:range :Cl_Instrument ;
+    owl:functional true ;
+    rdfs:label "skill for instrument" ;
+    rdfs:comment "Connects a musical proficiency instance to the specific instrument it pertains to." .
+
+:isInstrumentOfSkill rdf:type owl:ObjectProperty ;
+    owl:inverseOf :skillForInstrument ;
+    rdfs:domain :Cl_Instrument ;
+    rdfs:range :Cl_MusicalProficiency ;
+    rdfs:label "is instrument of skill" ;
+    rdfs:comment "The inverse of 'skillForInstrument', connecting an instrument to a musical proficiency instance related to it." .
+
+# Band Membership Properties (Reification :Cl_BandMembership)
+:hasMember rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_BandMembership ;
+    rdfs:range :Cl_Person ;
+    rdfs:label "has member" ;
+    rdfs:comment "Links a band membership instance to the person who is a member." .
+
+:isMemberOfBand rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_BandMembership ;
+    rdfs:range :Cl_Band ;
+    rdfs:label "is member of band" ;
+    rdfs:comment "Links a membership entry to the band it pertains to." .
+
+:hasRole rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_BandMembership ;
+    rdfs:range :Cl_Role ;
+    rdfs:label "has role" ;
+    rdfs:comment "Links a band membership instance to the specific role the person holds in the band." .
+
+# Recording Event Properties (Reification :Cl_RecordingEvent)
+:hasRecordingEvent rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_Album ;
+    rdfs:range :Cl_RecordingEvent ;
+    rdfs:label "has recording event" ;
+    rdfs:comment "Connects an album to a specific event where it was recorded." .
+
+:recordedAlbum rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_RecordingEvent ;
+    rdfs:range :Cl_Album ;
+    owl:inverseOf :hasRecordingEvent ;
+    rdfs:label "recorded album" ;
+    rdfs:comment "Connects a recording event to the album that was the subject of the recording." .
+
+:occurredDuring rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_RecordingEvent ;
+    rdfs:range :Cl_TimePeriod ;
+    rdfs:label "occurred during" ;
+    rdfs:comment "Connects a recording event to the time period during which it took place." .
+
+:isPeriodOfRecordingEvent rdf:type owl:ObjectProperty ;
+    owl:inverseOf :occurredDuring ;
+    rdfs:domain :Cl_TimePeriod ;
+    rdfs:range :Cl_RecordingEvent ;
+    rdfs:label "is period of recording event" ;
+    rdfs:comment "Connects a time period to a recording event that occurred within it." .
+
+# Album Track Inclusion Properties (Reification :Cl_AlbumTrackInclusion)
+:includesTrackInclusion rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_Album ;
+    rdfs:range :Cl_AlbumTrackInclusion ;
+    rdfs:label "includes track inclusion" ;
+    rdfs:comment "Relates an album to a specific instance of a track's inclusion within that album." .
+
+:trackIncludedInAlbum rdf:type owl:ObjectProperty ;
+    owl:inverseOf :includesTrackInclusion ;
+    rdfs:domain :Cl_AlbumTrackInclusion ;
+    rdfs:range :Cl_Album ;
+    owl:functional true ;
+    rdfs:label "track included in album" ;
+    rdfs:comment "Relates a specific track inclusion instance back to the album it belongs to." .
+
+:relatesToTrack rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_AlbumTrackInclusion ;
+    rdfs:range :Cl_Track ;
+    owl:functional true ;
+    rdfs:label "relates to track" ;
+    rdfs:comment "Connects an album-track inclusion instance to the specific track being included." .
+
+:isIncludedVia rdf:type owl:ObjectProperty ;
+    owl:inverseOf :relatesToTrack ;
+    rdfs:domain :Cl_Track ;
+    rdfs:range :Cl_AlbumTrackInclusion ;
+    rdfs:label "is included via" ;
+    rdfs:comment "Relates a track to the specific inclusion instance that places it within an album." .
+
+:hasTrack rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_Record ;
+    rdfs:range :Cl_Track ;
+    rdfs:label "has track" ;
+    rdfs:comment "Relates a record to its constituent tracks." .
+
+# Release Event Properties (Reification :Cl_ReleaseEvent)
+:relatesToAlbum rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_ReleaseEvent ;
+    rdfs:range :Cl_Album ;
+    owl:functional true ;
+    rdfs:label "relates to album" ;
+    rdfs:comment "Connects a specific release event to the album that was released during this event." .
+
+# Track and Song Relationship
+:isRecordingOf rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_Track ;
+    rdfs:range :Cl_Song ;
+    owl:functional true ;
+    rdfs:label "is recording of" ;
+    rdfs:comment "Links an audio track to the abstract song (musical composition) it is a recording of." .
+
+# Composition Event Properties (Reification :Cl_CompositionEvent)
+:hasComposedMusicalWork rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_CompositionEvent ;
+    rdfs:range :Cl_Song ;
+    rdfs:label "has composed musical work" ;
+    rdfs:comment "Links a composition event to the specific song that was created during that event." .
+
+:hasComposerAgent rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_CompositionEvent ;
+    rdfs:range :Cl_Composer ;
+    rdfs:label "has composer agent" ;
+    rdfs:comment "Links a composition event to the composer who performed the act of composing." .
+
+# Critic Review Properties (Reification :Cl_ReviewInteraction)
+:hasCritic rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_ReviewInteraction ;
+    rdfs:range :Cl_Critic ;
+    owl:functional true ;
+    rdfs:label "has critic" ;
+    rdfs:comment "Links a review interaction to the specific critic who conducted it." .
+
+:reviewsRecord rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_ReviewInteraction ;
+    rdfs:range :Cl_Record ;
+    owl:functional true ;
+    rdfs:label "reviews record" ;
+    rdfs:comment "Links a review interaction to the specific record that was reviewed." .
+
+:isCriticOf rdf:type owl:ObjectProperty ;
+    owl:inverseOf :hasCritic ;
+    rdfs:domain :Cl_Critic ;
+    rdfs:range :Cl_ReviewInteraction ;
+    rdfs:label "is critic of" ;
+    rdfs:comment "The inverse property of 'hasCritic', linking a critic to the review interactions they performed." .
+
+:isReviewedByInteraction rdf:type owl:ObjectProperty ;
+    owl:inverseOf :reviewsRecord ;
+    rdfs:domain :Cl_Record ;
+    rdfs:range :Cl_ReviewInteraction ;
+    rdfs:label "is reviewed by interaction" ;
+    rdfs:comment "The inverse property of 'reviewsRecord', linking a record to the review interactions it is part of." .
+
+# Performance Occurrence Properties (Reification :Cl_PerformanceOccurrence)
+:occursForPerformance rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_PerformanceOccurrence ;
+    rdfs:range :Cl_Performance ;
+    rdfs:label "occurs for performance" ;
+    rdfs:comment "Links a Performance Occurrence to the specific Performance it refers to." .
+
+:hasPerformanceOccurrence rdf:type owl:ObjectProperty ;
+    owl:inverseOf :occursForPerformance ;
+    rdfs:domain :Cl_Performance ;
+    rdfs:range :Cl_PerformanceOccurrence ;
+    rdfs:label "has performance occurrence" ;
+    rdfs:comment "Links a Performance to its specific Performance Occurrence(s)." .
+
+# Performance of Song Event Properties (Reification :Cl_PerformanceEvent)
+:occursInPerformance rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_PerformanceEvent ;
+    rdfs:range :Cl_Performance ;
+    owl:functional true ;
+    rdfs:label "occurs in performance" ;
+    rdfs:comment "Links a specific PerformanceEvent instance to the Performance it is part of. A specific instance of a song being played (a PerformanceEvent) can only occur in one particular Performance." .
+
+:playsSong rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_PerformanceEvent ;
+    rdfs:range :Cl_Song ;
+    owl:functional true ;
+    rdfs:label "plays song" ;
+    rdfs:comment "Links a specific PerformanceEvent instance to the Song that was played during that instance. A specific instance of a song being played (a PerformanceEvent) only plays one particular Song." .
+
+# Performance Location Properties
+:takesPlaceAt rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_Performance ;
+    rdfs:range :Cl_Venue ;
+    owl:functional true ;
+    rdfs:label "takes place at" ;
+    rdfs:comment "Links a performance to the specific venue where it occurs. A particular performance takes place at exactly one primary venue." .
+
+# Geographical Location Properties
+:locatedInRegion rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_City ;
+    rdfs:range :Cl_Region ;
+    rdf:type owl:AsymmetricProperty ;
+    rdf:type owl:IrreflexiveProperty ;
+    rdfs:label "located in region" ;
+    rdfs:comment "Connects a city to the geographical region it is located in." .
+
+:isRegionOf rdf:type owl:ObjectProperty ;
+    owl:inverseOf :locatedInRegion ;
+    rdfs:domain :Cl_Region ;
+    rdfs:range :Cl_City ;
+    rdfs:label "is region of" ;
+    rdfs:comment "Connects a region to a city that is contained within it." .
+
+:isLocatedInCountry rdf:type owl:ObjectProperty ;
+    rdfs:subPropertyOf :isLocatedIn ;
+    rdfs:domain :Cl_Region ;
+    rdfs:range :Cl_Country ;
+    owl:functional true ;
+    rdfs:label "is located in country" ;
+    rdfs:comment "Relates a geographical region to the specific country it is part of." .
+
+#################################################################
+#    Data Properties
+#################################################################
+
+:hasName rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Cl_Entity ;
+    rdfs:range xsd:string ;
+    rdfs:label "has name" ;
+    rdfs:comment "A generic property to assign a name to an entity." .
+
+:hasTitle rdf:type owl:DatatypeProperty ;
+    rdfs:subPropertyOf :hasName ;
+    rdfs:domain :Cl_CreativeWork ;
+    rdfs:range xsd:string ;
+    owl:functional true ;
+    rdfs:label "has title" ;
+    rdfs:comment "The primary title of a creative work, musical work, song, album, or record." .
+
+:personName rdf:type owl:DatatypeProperty ;
+    rdfs:subPropertyOf :hasName ;
+    rdfs:domain :Cl_Person ;
+    rdfs:range xsd:string ;
+    owl:functional true ;
+    rdfs:label "person name" ;
+    rdfs:comment "The name of a person." .
+
+:instrumentName rdf:type owl:DatatypeProperty ;
+    rdfs:subPropertyOf :hasName ;
+    rdfs:domain :Cl_Instrument ;
+    rdfs:range xsd:string ;
+    owl:functional true ;
+    rdfs:label "instrument name" ;
+    rdfs:comment "The name of a musical instrument." .
+
+:bandName rdf:type owl:DatatypeProperty ;
+    rdfs:subPropertyOf :hasName ;
+    rdfs:domain :Cl_Band ;
+    rdfs:range xsd:string ;
+    owl:functional true ;
+    rdfs:label "band name" ;
+    rdfs:comment "The official name of the band." .
+
+:roleName rdf:type owl:DatatypeProperty ;
+    rdfs:subPropertyOf :hasName ;
+    rdfs:domain :Cl_Role ;
+    rdfs:range xsd:string ;
+    rdfs:label "role name" ;
+    rdfs:comment "The name or description of a role (e.g., 'Vocalist', 'Guitarist')." .
+
+:criticName rdf:type owl:DatatypeProperty ;
+    rdfs:subPropertyOf :hasName ;
+    rdfs:domain :Cl_Critic ;
+    rdfs:range xsd:string ;
+    owl:functional true ;
+    rdfs:label "critic name" ;
+    rdfs:comment "The full name of the critic." .
+
+:hasPerformanceName rdf:type owl:DatatypeProperty ;
+    rdfs:subPropertyOf :hasName ;
+    rdfs:domain :Cl_Performance ;
+    rdfs:range xsd:string ;
+    rdfs:label "has performance name" ;
+    rdfs:comment "The name or title given to a performance." .
+
+:hasLocationName rdf:type owl:DatatypeProperty ;
+    rdfs:subPropertyOf :hasName ;
+    rdfs:domain :Cl_Location ;
+    rdfs:range xsd:string ;
+    rdfs:label "has location name" ;
+    rdfs:comment "The general name of any location." .
+
+:hasVenueName rdf:type owl:DatatypeProperty ;
+    rdfs:subPropertyOf :hasLocationName ;
+    rdfs:domain :Cl_Venue ;
+    rdfs:range xsd:string ;
+    rdfs:label "has venue name" ;
+    rdfs:comment "The specific name of a venue." .
+
+:artistName rdf:type owl:DatatypeProperty ;
+    rdfs:subPropertyOf :hasName ;
+    rdfs:domain :Cl_Record ;
+    rdfs:range xsd:string ;
+    rdfs:label "artist name" ;
+    rdfs:comment "The name of the artist or band who created the record." .
+
+# Time-related Data Properties
+:hasDateTimeValue rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Cl_TemporalEntity ;
+    rdfs:range xsd:dateTime ;
+    owl:functional true ;
+    rdfs:label "has date time value" ;
+    rdfs:comment "The precise date and time value for a temporal entity instance." .
+
+:hasStartDateTime rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Cl_TimePeriod ;
+    rdfs:range xsd:dateTime ;
+    owl:functional true ;
+    rdfs:label "has start date time" ;
+    rdfs:comment "The specific date and time when a time period begins." .
+
+:hasEndDateTime rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Cl_TimePeriod ;
+    rdfs:range xsd:dateTime ;
+    owl:functional true ;
+    rdfs:label "has end date time" ;
+    rdfs:comment "The specific date and time when a time period concludes." .
+
+:hasDate rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Cl_Event ;
+    rdfs:range xsd:date ;
+    owl:functional true ;
+    rdfs:label "has date" ;
+    rdfs:comment "The specific date on which an event took place." .
+
+# Other Specific Data Properties
+:hasSkillLevel rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Cl_MusicalProficiency ;
+    rdfs:range xsd:string ;
+    owl:functional true ;
+    rdfs:label "has skill level" ;
+    rdfs:comment "The level of skill a person has with a particular instrument (e.g., 'Beginner', 'Intermediate', 'Expert')." .
+
+:hasDuration rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Cl_Track ;
+    rdfs:range xsd:integer ;
+    rdfs:label "has duration" ;
+    rdfs:comment "The temporal length of a track, typically expressed in seconds." .
+
+:trackNumber rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Cl_AlbumTrackInclusion ;
+    rdfs:range xsd:integer ;
+    owl:functional true ;
+    rdfs:label "track number" ;
+    rdfs:comment "The sequential position of a track within an album, specified as part of its inclusion relationship." .
+
+:reviewText rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Cl_ReviewInteraction ;
+    rdfs:range xsd:string ;
+    rdfs:label "review text" ;
+    rdfs:comment "The complete text content of the critic's review." .
+
+:hasRatingValue rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Cl_ReviewInteraction ;
+    rdfs:range xsd:decimal ;
+    owl:functional true ;
+    rdfs:label "has rating value" ;
+    rdfs:comment "The numerical rating or score given in the review." .
+
+:hasAddress rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Cl_Venue ;
+    rdfs:range xsd:string ;
+    rdfs:label "has address" ;
+    rdfs:comment "The physical street address of the venue." .
+
+#################################################################
+#    Axioms / Restrictions
+#################################################################
+
+# Musical Proficiency Axioms
+:Cl_MusicalProficiency rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :isProficiencyOf ;
+    owl:cardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:comment "Ensures that every instance of MusicalProficiency is linked to exactly one Person."
+] ;
+rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :skillForInstrument ;
+    owl:cardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:comment "Ensures that every instance of MusicalProficiency is associated with exactly one Instrument."
+] ;
+rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :hasSkillLevel ;
+    owl:cardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:comment "Ensures that every instance of MusicalProficiency has exactly one defined skill level."
+] .
+
+:Cl_Person rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :hasProficiency ;
+    owl:someValuesFrom :Cl_MusicalProficiency ;
+    rdfs:comment "Specifies that a Person can have at least one musical proficiency recorded, if they have any."
+] .
+
+# Band Membership Axioms
+:Cl_BandMembership rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :hasMember ;
+    owl:cardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:comment "Each band membership involves exactly one person."
+] ;
+rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :isMemberOfBand ;
+    owl:cardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:comment "Each band membership involves exactly one band."
+] ;
+rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :hasRole ;
+    owl:cardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:comment "Each band membership involves exactly one role."
+] ;
+rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :hasDateTimeValue ;
+    owl:cardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:comment "Each band membership is valid at exactly one point in time."
+] .
+
+:Cl_Person rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty [owl:inverseOf :hasMember] ;
+    owl:someValuesFrom :Cl_BandMembership ;
+    rdfs:comment "A person is associated with at least one band membership (inversely, they are 'a member of' a BandMembership instance)."
+] .
+
+:Cl_Band rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty [owl:inverseOf :isMemberOfBand] ;
+    owl:someValuesFrom :Cl_BandMembership ;
+    rdfs:comment "A band is associated with at least one band membership (inversely, it 'has membership' instances)."
+] .
+
+:Cl_Role rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty [owl:inverseOf :hasRole] ;
+    owl:someValuesFrom :Cl_BandMembership ;
+    rdfs:comment "A role is associated with at least one band membership (inversely, it 'is a role in' a BandMembership instance)."
+] .
+
+# Recording Event Axioms
+:Cl_RecordingEvent rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :recordedAlbum ;
+    owl:someValuesFrom :Cl_Album ;
+    rdfs:comment "A recording event must be associated with an album that was recorded."
+] ;
+rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :occurredDuring ;
+    owl:someValuesFrom :Cl_TimePeriod ;
+    rdfs:comment "A recording event must have a defined time period during which it took place."
+] .
+
+# Album and Track Axioms
+:Cl_Album rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :hasTitle ;
+    owl:someValuesFrom xsd:string ;
+    rdfs:comment "Every album entity must have an associated title."
+] ;
+rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :includesTrackInclusion ;
+    owl:someValuesFrom :Cl_AlbumTrackInclusion ;
+    rdfs:comment "An Album must have at least one AlbumTrackInclusion to be considered an album containing tracks."
+] ;
+rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty [
+        owl:inverseOf :relatesToAlbum ;
+        rdf:type owl:ObjectProperty
+    ] ;
+    owl:someValuesFrom :Cl_ReleaseEvent ;
+    rdfs:comment "An Album must have at least one Release Event."
+] .
+
+:Cl_TimePeriod rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :hasStartDateTime ;
+    owl:someValuesFrom xsd:dateTime ;
+    rdfs:comment "Every time period must specify its starting date and time."
+] ;
+rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :hasEndDateTime ;
+    owl:someValuesFrom xsd:dateTime ;
+    rdfs:comment "Every time period must specify its ending date and time."
+] .
+
+:Cl_AlbumTrackInclusion rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :trackIncludedInAlbum ;
+    owl:cardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:comment "Every AlbumTrackInclusion instance must relate to exactly one album."
+] ;
+rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :relatesToTrack ;
+    owl:cardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:comment "Every AlbumTrackInclusion instance must relate to exactly one track."
+] ;
+rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :trackNumber ;
+    owl:cardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:comment "Every AlbumTrackInclusion instance must have exactly one track number defined."
+] .
+
+:Cl_Record rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :hasTrack ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:comment "Every record must have at least one track."
+] .
+
+# Release Event Axioms
+:Cl_ReleaseEvent rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :relatesToAlbum ;
+    owl:someValuesFrom :Cl_Album ;
+    rdfs:comment "Every ReleaseEvent must be related to some Album."
+] ;
+rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :hasDate ;
+    owl:someValuesFrom xsd:date ;
+    rdfs:comment "Every ReleaseEvent must have a release date."
+] .
+
+# Track and Song Axioms
+:Cl_Track rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :isRecordingOf ;
+    owl:cardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:comment "Every Cl_Track must be a recording of exactly one Cl_Song."
+] ;
+rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :hasTitle ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:comment "Every Cl_Track must have at least one title."
+] ;
+rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :hasDuration ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:comment "Every Cl_Track must have a duration."
+] .
+
+:Cl_Song rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :hasTitle ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:comment "Every Cl_Song must have at least one title."
+] .
+
+# Composition Event Axioms
+:Cl_CompositionEvent rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :hasComposedMusicalWork ;
+    owl:someValuesFrom :Cl_Song ;
+    rdfs:comment "Every CompositionEvent must involve at least one song."
+] ;
+rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :hasComposerAgent ;
+    owl:someValuesFrom :Cl_Composer ;
+    rdfs:comment "Every CompositionEvent must involve at least one composer."
+] ;
+rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :hasDate ;
+    owl:cardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:comment "A single composition event has one specific composition date."
+] .
+
+# Review Interaction Axioms
+:Cl_ReviewInteraction rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :hasCritic ;
+    owl:someValuesFrom :Cl_Critic ;
+    rdfs:comment "A review interaction must involve a critic."
+] ;
+rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :reviewsRecord ;
+    owl:someValuesFrom :Cl_Record ;
+    rdfs:comment "A review interaction must involve a record."
+] ;
+rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :hasCritic ;
+    owl:cardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:comment "A single review interaction is performed by exactly one critic."
+] ;
+rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :reviewsRecord ;
+    owl:cardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:comment "A single review interaction focuses on exactly one record."
+] ;
+rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :hasRatingValue ;
+    owl:someValuesFrom xsd:decimal ;
+    rdfs:comment "Every review interaction must have a rating value."
+] ;
+rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :hasDate ;
+    owl:cardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:comment "A single review interaction has one specific review date."
+] .
+
+# Performance Occurrence Axioms
+:Cl_PerformanceOccurrence rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :occursForPerformance ;
+    owl:someValuesFrom :Cl_Performance ;
+    rdfs:comment "A PerformanceOccurrence must refer to a Performance."
+] ;
+rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :hasDateTimeValue ;
+    owl:someValuesFrom xsd:dateTime ;
+    rdfs:comment "A PerformanceOccurrence must have a DateTime."
+] .
+
+# Performance of Song Event Axioms
+:Cl_PerformanceEvent rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :occursInPerformance ;
+    owl:cardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:comment "Each instance of a PerformanceEvent must be associated with exactly one Performance."
+] ;
+rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :playsSong ;
+    owl:cardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:comment "Each instance of a PerformanceEvent must be associated with exactly one Song."
+] .
+
+# Performance Location Axioms
+:Cl_Performance rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :takesPlaceAt ;
+    owl:someValuesFrom :Cl_Venue ;
+    rdfs:comment "Every performance must take place at some venue."
+] ;
+rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :hasDate ;
+    owl:someValuesFrom xsd:date ;
+    rdfs:comment "Every performance must have a specific date."
+] ;
+rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :hasLocationName ;
+    owl:someValuesFrom xsd:string ;
+    rdfs:comment "Every performance must have a location."
+] .
+
+# Geographical Location Axioms
+:Cl_City rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :locatedInRegion ;
+    owl:someValuesFrom :Cl_Region ;
+    rdfs:comment "Every city must be located in at least one region."
+] .
+
+:Cl_Region rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :isLocatedInCountry ;
+    owl:someValuesFrom :Cl_Country ;
+    rdfs:comment "Every Cl_Region must be located in some Cl_Country."
+] .

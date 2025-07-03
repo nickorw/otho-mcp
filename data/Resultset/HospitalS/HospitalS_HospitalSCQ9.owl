@@ -1,0 +1,124 @@
+@prefix : <http://www.semanticweb.org/myontology#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://www.semanticweb.org/myontology> rdf:type owl:Ontology ;
+                                       owl:versionIRI <http://www.semanticweb.org/myontology/1.0.0> .
+
+# Classes
+:Cl_ContentUnit rdf:type owl:Class ;
+                rdfs:comment "A generic unit of content." .
+
+:Cl_Article rdf:type owl:Class ;
+            rdfs:subClassOf :Cl_ContentUnit ;
+            rdfs:comment "A specific piece of content, typically found within a larger collection." .
+
+:Cl_Collection rdf:type owl:Class ;
+               rdfs:comment "A general class for collections of content, such as books or CDs." .
+
+:Cl_Book rdf:type owl:Class ;
+         rdfs:subClassOf :Cl_Collection ;
+         owl:disjointWith :Cl_CD ;
+         rdfs:comment "A printed or electronic publication consisting of a set of written, printed, illustrated, or blank pages." .
+
+:Cl_CD rdf:type owl:Class ;
+       rdfs:subClassOf :Cl_Collection ;
+       rdfs:comment "A compact disc, especially one used for storing music or other data." .
+
+# Pivot Class for Reification
+:Cl_CompositionEvent rdf:type owl:Class ;
+                    rdfs:comment "Represents the event or instance of an article being composed within a collection (book or CD), capturing details about its inclusion." ;
+                    # General class axioms to ensure a CompositionEvent always involves a Collection and an Article
+                    rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                      owl:onProperty :composedIn ;
+                                      owl:someValuesFrom :Cl_Collection
+                                    ] ;
+                    rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                      owl:onProperty :composes ;
+                                      owl:someValuesFrom :Cl_Article
+                                    ] .
+
+# Object Properties
+:composedIn rdf:type owl:ObjectProperty ;
+            rdfs:domain :Cl_CompositionEvent ;
+            rdfs:range :Cl_Collection ;
+            rdfs:comment "Relates a composition event to the collection it is part of (e.g., a book or CD)." .
+
+:composes rdf:type owl:ObjectProperty ;
+          rdfs:domain :Cl_CompositionEvent ;
+          rdfs:range :Cl_Article ;
+          rdfs:comment "Relates a composition event to the specific article that is part of the collection." .
+
+:hasCompositionEvent rdf:type owl:ObjectProperty ;
+                     rdfs:domain :Cl_Collection ;
+                     rdfs:range :Cl_CompositionEvent ;
+                     owl:inverseOf :composedIn ;
+                     rdfs:comment "Relates a collection to its specific composition events." .
+
+# Property Chain Axiom to directly answer the competency question using the reification structure
+:isComposedOfArticle rdf:type owl:ObjectProperty ;
+                     rdfs:domain :Cl_Collection ;
+                     rdfs:range :Cl_Article ;
+                     rdfs:comment "Relates a collection to an article it is composed of, derived from composition events. This property directly answers the competency question 'What articles is a specific book or CD composed of?'" ;
+                     owl:propertyChainAxiom ( :hasCompositionEvent :composes ) .
+
+# Data Properties
+:title rdf:type owl:DatatypeProperty ;
+       rdfs:domain [ owl:unionOf (:Cl_Collection :Cl_Article) ; rdf:type owl:Class ] ;
+       rdfs:range xsd:string ;
+       rdfs:comment "The title of a collection or an article." .
+
+:publicationYear rdf:type owl:DatatypeProperty ;
+                 rdfs:domain :Cl_Collection ;
+                 rdfs:range xsd:gYear ;
+                 rdfs:comment "The year the collection was published." .
+
+:trackNumber rdf:type owl:DatatypeProperty ;
+             rdfs:domain :Cl_CompositionEvent ;
+             rdfs:range xsd:integer ;
+             rdfs:comment "The track number of an article if it is part of a CD composition event." .
+# Restriction: If a Cl_CompositionEvent has a track number, then the collection it is composed in must be a Cl_CD.
+:Cl_CompositionEvent rdfs:subClassOf [
+                                      rdf:type owl:Restriction ;
+                                      owl:onProperty :trackNumber ;
+                                      owl:someValuesFrom rdfs:Literal ;
+                                      rdfs:subClassOf [
+                                                        rdf:type owl:Restriction ;
+                                                        owl:onProperty :composedIn ;
+                                                        owl:allValuesFrom :Cl_CD
+                                                      ]
+                                    ] .
+
+:startPage rdf:type owl:DatatypeProperty ;
+           rdfs:domain :Cl_CompositionEvent ;
+           rdfs:range xsd:integer ;
+           rdfs:comment "The starting page number of an article within a book composition event." .
+# Restriction: If a Cl_CompositionEvent has a starting page, then the collection it is composed in must be a Cl_Book.
+:Cl_CompositionEvent rdfs:subClassOf [
+                                      rdf:type owl:Restriction ;
+                                      owl:onProperty :startPage ;
+                                      owl:someValuesFrom rdfs:Literal ;
+                                      rdfs:subClassOf [
+                                                        rdf:type owl:Restriction ;
+                                                        owl:onProperty :composedIn ;
+                                                        owl:allValuesFrom :Cl_Book
+                                                      ]
+                                    ] .
+
+:endPage rdf:type owl:DatatypeProperty ;
+         rdfs:domain :Cl_CompositionEvent ;
+         rdfs:range xsd:integer ;
+         rdfs:comment "The ending page number of an article within a book composition event." .
+# Restriction: If a Cl_CompositionEvent has an ending page, then the collection it is composed in must be a Cl_Book.
+:Cl_CompositionEvent rdfs:subClassOf [
+                                      rdf:type owl:Restriction ;
+                                      owl:onProperty :endPage ;
+                                      owl:someValuesFrom rdfs:Literal ;
+                                      rdfs:subClassOf [
+                                                        rdf:type owl:Restriction ;
+                                                        owl:onProperty :composedIn ;
+                                                        owl:allValuesFrom :Cl_Book
+                                                      ]
+                                    ] .

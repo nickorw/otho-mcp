@@ -1,0 +1,79 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix : <http://www.example.org/ontology#> .
+
+# Classes
+:Cl_Event rdf:type owl:Class ;
+    rdfs:label "Event" ;
+    rdfs:comment "A general class representing any kind of event." .
+
+:Cl_Performance rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Event ;
+    rdfs:label "Performance" ;
+    rdfs:comment "A specific instance of a live or recorded presentation of artistic work." .
+
+:Cl_MusicalWork rdf:type owl:Class ;
+    rdfs:label "Musical Work" ;
+    rdfs:comment "A general class for any composed piece of music." .
+
+:Cl_Song rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_MusicalWork ;
+    rdfs:label "Song" ;
+    rdfs:comment "A specific type of musical work, typically with vocals." .
+
+# Reification Class: Cl_PerformanceEvent
+# This pivot class captures the specific instance of a song being played within a performance,
+# addressing the need to link a Song, a Performance, and the act of playing them together.
+:Cl_PerformanceEvent rdf:type owl:Class ;
+    rdfs:label "Performance Event" ;
+    rdfs:comment "Represents the specific instance of a song being played during a performance." .
+
+# Object Properties
+:occursInPerformance rdf:type owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:label "occurs in performance" ;
+    rdfs:domain :Cl_PerformanceEvent ;
+    rdfs:range :Cl_Performance ;
+    rdfs:comment "Links a specific PerformanceEvent instance to the Performance it is part of. Declared as Functional because a specific instance of a song being played (a PerformanceEvent) can only occur in one particular Performance." .
+
+:playsSong rdf:type owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:label "plays song" ;
+    rdfs:domain :Cl_PerformanceEvent ;
+    rdfs:range :Cl_Song ;
+    rdfs:comment "Links a specific PerformanceEvent instance to the Song that was played during that instance. Declared as Functional because a specific instance of a song being played (a PerformanceEvent) only plays one particular Song." .
+
+# Data Properties
+:hasTitle rdf:type owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:label "has title" ;
+    rdfs:domain :Cl_MusicalWork ;
+    rdfs:range xsd:string ;
+    rdfs:comment "The title of a musical work or song. Functional as a musical work typically has a single primary title." .
+
+:hasDate rdf:type owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:label "has date" ;
+    rdfs:domain :Cl_Performance ;
+    rdfs:range xsd:date ;
+    rdfs:comment "The specific date on which the performance took place. Functional as a performance occurs on one specific date." .
+
+:hasLocation rdf:type owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:label "has location" ;
+    rdfs:domain :Cl_Performance ;
+    rdfs:range xsd:string ;
+    rdfs:comment "The geographical location where the performance was held. Functional as a performance occurs at one specific location." .
+
+# General Class Axioms and Restrictions
+# A Cl_PerformanceEvent must always be linked to exactly one Cl_Performance and exactly one Cl_Song.
+:Cl_PerformanceEvent rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :occursInPerformance ;
+    owl:cardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:comment "Each instance of a PerformanceEvent must be associated with exactly one Performance."
+] .
+
+:Cl_PerformanceEvent rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :playsSong ;
+    owl:cardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:comment "Each instance of a PerformanceEvent must be associated with exactly one Song."
+] .

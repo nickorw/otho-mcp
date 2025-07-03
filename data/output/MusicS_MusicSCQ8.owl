@@ -1,0 +1,92 @@
+@prefix : <http://www.ontology.org/music-composition#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+owl:Ontology rdf:type owl:Ontology ;
+    rdfs:comment "Ontology for music composition, designed to answer the competency question 'When was a certain song composed?' using reification." .
+
+# --- Class Hierarchies ---
+
+# Base Class for creative works
+:Cl_CreativeWork rdf:type owl:Class ;
+    rdfs:comment "Represents any original creation or intellectual work." .
+
+# Musical Works Hierarchy
+:Cl_MusicalWork rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_CreativeWork ;
+    rdfs:comment "Represents any creation in the domain of music." .
+
+:Cl_Song rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_MusicalWork ;
+    rdfs:comment "Represents a specific musical piece, typically characterized by melody and lyrics." .
+
+# Agent Hierarchy (for entities performing actions)
+:Cl_Agent rdf:type owl:Class ;
+    rdfs:comment "Represents an entity that can perform an action, such as a person or an organization." .
+
+:Cl_Person rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Agent ;
+    rdfs:comment "Represents an individual human being." .
+
+:Cl_Composer rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Person ;
+    rdfs:comment "Represents a person who creates musical compositions." .
+
+# Event Hierarchy
+:Cl_Event rdf:type owl:Class ;
+    rdfs:comment "Represents a happening or an occurrence in time." .
+
+# Reification Class for Composition Event
+:Cl_CompositionEvent rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Event ;
+    rdfs:comment "A pivot class representing the specific event of a song being composed, linking the song, the composer, and the date of composition." .
+
+# --- Properties ---
+
+# Object Properties for Cl_CompositionEvent (Reification)
+:hasComposedMusicalWork rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_CompositionEvent ;
+    rdfs:range :Cl_Song ;
+    rdfs:comment "Links a composition event to the specific song that was created during that event." .
+
+:hasComposerAgent rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_CompositionEvent ;
+    rdfs:range :Cl_Composer ;
+    rdfs:comment "Links a composition event to the composer who performed the act of composing." .
+
+# Data Properties
+:hasCompositionDate rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Cl_CompositionEvent ;
+    rdfs:range xsd:date ;
+    rdfs:comment "Indicates the specific date when a composition event occurred." ;
+    owl:functionalProperty true . # A single composition event has one specific composition date.
+
+:hasTitle rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Cl_MusicalWork ;
+    rdfs:range xsd:string ;
+    rdfs:comment "The primary title of a musical work." ;
+    owl:functionalProperty true . # A musical work typically has one main title.
+
+:hasName rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Cl_Agent ;
+    rdfs:range xsd:string ;
+    rdfs:comment "The name of an agent (e.g., person's full name, organization's name)." ;
+    owl:functionalProperty true . # An agent typically has one primary name.
+
+# --- Restrictions / General Class Axioms ---
+
+# Every CompositionEvent must involve at least one song and one composer.
+# This ensures that a Cl_CompositionEvent instance is meaningful.
+:Cl_CompositionEvent owl:equivalentClass [
+    rdf:type owl:Restriction ;
+    owl:onProperty :hasComposedMusicalWork ;
+    owl:someValuesFrom :Cl_Song
+] .
+
+:Cl_CompositionEvent owl:equivalentClass [
+    rdf:type owl:Restriction ;
+    owl:onProperty :hasComposerAgent ;
+    owl:someValuesFrom :Cl_Composer
+] .

@@ -1,29 +1,36 @@
-import dotenv
+########################################################################################
+############ Sandbox for testing various functionalities in the Otho project ###########
+########################################################################################
+
 import os
+import traceback
+from pathlib import Path
+
+import dotenv
 from google import genai
 from google.genai import types
-from src.utils.excel_processor import get_story_by_id
-from src.prompts.prompt_manager import PromptManager
 
-from src.utils.file_handler import save_text_file
+from src.prompts.prompt_manager import PromptManager
 from src.reviewers.reviewer import OopsPitfallReviewer, RDFSyntaxReviewer
-import traceback
+from src.utils.excel_processor import get_story_by_id
+from src.utils.file_handler import save_text_file
 
 dotenv.load_dotenv()
 
+# Initialize Gemini client with API key from environment variable
 gemini_client = genai.Client()
-prompt_manager = PromptManager(prompts_file_path="src/prompts/prompts.yaml")
+
+prompt_manager = PromptManager(prompts_file_path=Path("src/prompts/prompts.yaml"))
+
 
 def call_gemini(prompt: str) -> str:
-    
     response = gemini_client.models.generate_content(
         model="gemini-2.5-flash",
         contents=prompt,
     )
 
+    return response.text or ""
 
-
-    return response.text
 
 if __name__ == "__main__":
     # Get story by ID, populating into Story object
@@ -36,11 +43,10 @@ if __name__ == "__main__":
     # if story.competency_questions:
     #     for cq in story.competency_questions:
     #         print(f"{cq.id}: {cq.question}")
-        
-        
-    #################################### Prompt manager test            
+
+    #################################### Prompt manager test
     # if story.competency_questions:
-        
+
     #     structured_prompt = prompt_manager.get_structured_prompt("otho_memless_cq_by_cq")
     #     # Use the 'task' field as the main prompt template
     #     prompt = structured_prompt['task'].format(
@@ -56,13 +62,15 @@ if __name__ == "__main__":
     #     print(f"LLM response saved to {output_path}")
 
     ####################################  Path to the OWL file to validate
-    owl_file_path = "data/output/FestS_combined.owl"
+    # owl_file_path = "data/output/FestS_combined.owl"
 
-    with open(owl_file_path, "r", encoding="utf-8") as f:
-        owl_content = f.read()
+    # with open(owl_file_path, "r", encoding="utf-8") as f:
+    #     owl_content = f.read()
 
     #################################### OWL Syntax Validator instantiation
-    reviewer = RDFSyntaxReviewer(format="turtle")  # Use "xml" for RDF/XML, "turtle" for Turtle, etc.
+    reviewer = RDFSyntaxReviewer(
+        format="turtle"
+    )  # Use "xml" for RDF/XML, "turtle" for Turtle, etc.
 
     #################################### OWL Syntax Validation Test
     # try:
@@ -79,7 +87,7 @@ if __name__ == "__main__":
     #     story_id="FestS",
     #     story="",
     #     snippets=owl_content,
-    
+
     # )
     # output_path = f"data/output/prompt_{story_id}_agent_combined_OWL2.txt"
     # save_text_file(output_path, prompt)
@@ -87,16 +95,35 @@ if __name__ == "__main__":
     # # Save LLM response to a text file in data/output
     # output_path = f"data/output/{story_id}_agent_combined_OWL2.txt"
     # save_text_file(output_path, llm_response)
-    
 
     #################################### Syntax Check File #################################
     # reviewer = RDFSyntaxReviewer()
     # try:
     #     syntax_review_result = reviewer.review_owl_content(owl_content)
-    #     validation_successful = syntax_review_result == "OK" 
+    #     validation_successful = syntax_review_result == "OK"
     #     print("Validation successful: ", validation_successful)
-        
+
     # except Exception as e:
     #     print(f"Exception during RDF validation: {e}")
-        
-   
+
+
+############## Node test for validation of OWL
+def validate_combined_owl_node():
+    reviewer = OopsPitfallReviewer()
+    try:
+        with open(
+            "data/output/backup/FestS_combined_turtle.owl", "r", encoding="utf-8"
+        ) as f:
+            combined_owl = f.read()
+        validation_result = reviewer.review_owl_content(combined_owl)
+        save_text_file(
+            f"data/output/debug_FestS_combined_oops_result.xml", validation_result
+        )
+        print("Combined OWL validation result:", validation_result)
+        print("Combined OWL validation ran successfully")
+
+    except Exception as e:
+        print("Validation failed, result: ", str(e))
+
+
+validate_combined_owl_node()

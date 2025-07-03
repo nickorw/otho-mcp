@@ -1,0 +1,171 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix : <http://www.example.org/union_ontology#> .
+
+# Ontology Declaration
+:unionOntology rdf:type owl:Ontology ;
+    owl:versionIRI <http://www.example.org/union_ontology/1.0> ;
+    rdfs:comment "Ontology for modeling roles of people within union groups over time." .
+
+# 1. Classes
+Cl_Entity rdf:type owl:Class ;
+    rdfs:label "Entity" ;
+    rdfs:comment "A general class for all entities in the ontology." .
+
+Cl_Agent rdf:type owl:Class ;
+    rdfs:subClassOf Cl_Entity ;
+    rdfs:label "Agent" ;
+    rdfs:comment "A superclass for entities that can perform actions or have roles." .
+
+Cl_Organization rdf:type owl:Class ;
+    rdfs:subClassOf Cl_Entity ;
+    rdfs:label "Organization" ;
+    rdfs:comment "A superclass for organized groups of people." .
+
+Cl_TimePoint rdf:type owl:Class ;
+    rdfs:subClassOf Cl_Entity ;
+    rdfs:label "Time Point" ;
+    rdfs:comment "Represents a specific point in time." .
+
+Cl_Person rdf:type owl:Class ;
+    rdfs:subClassOf Cl_Agent ;
+    rdfs:label "Person" ;
+    rdfs:comment "Represents an individual human being." .
+
+Cl_UnionGroup rdf:type owl:Class ;
+    rdfs:subClassOf Cl_Organization ;
+    rdfs:label "Union Group" ;
+    rdfs:comment "Represents a collective organization of workers or employees." .
+
+Cl_Role rdf:type owl:Class ;
+    rdfs:subClassOf Cl_Entity ;
+    rdfs:label "Role" ;
+    rdfs:comment "Represents a specific function or position a person holds within an organization or context." .
+
+# Reification Class (Pivot Class) for the Competency Question
+Cl_UnionRoleAssignment rdf:type owl:Class ;
+    rdfs:subClassOf Cl_Entity ;
+    rdfs:label "Union Role Assignment" ;
+    rdfs:comment "A pivot class representing the instance of a specific role being assigned to a person within a union group at a particular point in time. This reifies the n-ary relationship between Person, UnionGroup, Role, and Time, allowing the ontology to answer 'What role does a certain person have within a certain union group at a certain point in time?'" .
+
+# 2. Properties
+
+# Object Properties
+op_involves rdf:type owl:ObjectProperty ;
+    rdfs:label "involves" ;
+    rdfs:comment "A general property to link an event, situation, or assignment to an entity that participates in it." .
+
+op_assignedToPerson rdf:type owl:ObjectProperty ;
+    rdfs:subPropertyOf op_involves ;
+    rdfs:domain Cl_UnionRoleAssignment ;
+    rdfs:range Cl_Person ;
+    rdfs:label "assigned to person" ;
+    rdfs:comment "Links a Union Role Assignment instance to the specific Person who holds the role." .
+
+op_inUnionGroup rdf:type owl:ObjectProperty ;
+    rdfs:subPropertyOf op_involves ;
+    rdfs:domain Cl_UnionRoleAssignment ;
+    rdfs:range Cl_UnionGroup ;
+    rdfs:label "in union group" ;
+    rdfs:comment "Links a Union Role Assignment instance to the Union Group where the role is held." .
+
+op_hasRole rdf:type owl:ObjectProperty ;
+    rdfs:subPropertyOf op_involves ;
+    rdfs:domain Cl_UnionRoleAssignment ;
+    rdfs:range Cl_Role ;
+    rdfs:label "has role" ;
+    rdfs:comment "Links a Union Role Assignment instance to the specific Role that is assigned." .
+
+# Data Properties
+dp_atTime rdf:type owl:DatatypeProperty ;
+    rdfs:domain Cl_UnionRoleAssignment ;
+    rdfs:range xsd:dateTime ;
+    rdfs:label "at time" ;
+    rdfs:comment "Specifies the exact point in time when the Union Role Assignment is effective or when it occurred." .
+
+dp_personName rdf:type owl:DatatypeProperty ;
+    rdf:type owl:FunctionalProperty ;
+    rdfs:domain Cl_Person ;
+    rdfs:range xsd:string ;
+    rdfs:label "person name" ;
+    rdfs:comment "The full name of the person." .
+
+dp_unionName rdf:type owl:DatatypeProperty ;
+    rdf:type owl:FunctionalProperty ;
+    rdfs:domain Cl_UnionGroup ;
+    rdfs:range xsd:string ;
+    rdfs:label "union name" ;
+    rdfs:comment "The official name of the union group." .
+
+dp_roleName rdf:type owl:DatatypeProperty ;
+    rdf:type owl:FunctionalProperty ;
+    rdfs:domain Cl_Role ;
+    rdfs:range xsd:string ;
+    rdfs:label "role name" ;
+    rdfs:comment "The descriptive name of the role (e.g., 'President', 'Treasurer', 'Member')." .
+
+# 3. Restrictions and General Class Axioms
+
+# Every UnionRoleAssignment must be assigned to exactly one person.
+Cl_UnionRoleAssignment rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :op_assignedToPerson ;
+    owl:cardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:comment "Ensures each Union Role Assignment links to exactly one Person."
+] .
+
+# Every UnionRoleAssignment must be in exactly one union group.
+Cl_UnionRoleAssignment rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :op_inUnionGroup ;
+    owl:cardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:comment "Ensures each Union Role Assignment links to exactly one Union Group."
+] .
+
+# Every UnionRoleAssignment must have exactly one role.
+Cl_UnionRoleAssignment rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :op_hasRole ;
+    owl:cardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:comment "Ensures each Union Role Assignment links to exactly one Role."
+] .
+
+# Every UnionRoleAssignment must have a specified time.
+Cl_UnionRoleAssignment rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :dp_atTime ;
+    owl:cardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:comment "Ensures each Union Role Assignment has exactly one associated time point."
+] .
+
+# Disjointness Axioms to ensure clear separation of core classes
+Cl_Person owl:disjointWith Cl_UnionGroup ;
+    owl:disjointWith Cl_Role .
+Cl_UnionGroup owl:disjointWith Cl_Role .
+
+# General Class Axioms for mandatory properties (soft restrictions using someValuesFrom)
+# A person must have a name
+Cl_Person rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :dp_personName ;
+    owl:someValuesFrom xsd:string ;
+    rdfs:comment "Every person entity must have at least one name."
+] .
+
+# A union group must have a name
+Cl_UnionGroup rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :dp_unionName ;
+    owl:someValuesFrom xsd:string ;
+    rdfs:comment "Every union group entity must have at least one name."
+] .
+
+# A role must have a name
+Cl_Role rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :dp_roleName ;
+    owl:someValuesFrom xsd:string ;
+    rdfs:comment "Every role entity must have at least one name."
+] .

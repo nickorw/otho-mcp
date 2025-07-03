@@ -1,0 +1,127 @@
+@prefix : <http://www.ontology.org/my_ontology#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+#################################################################
+#    Classes
+#################################################################
+
+:Cl_Thing rdf:type owl:Class ;
+    rdfs:label "Thing" .
+
+:Cl_Being rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Thing ;
+    rdfs:label "Being" .
+
+:Cl_Person rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Being ;
+    rdfs:label "Person" .
+
+:Cl_Object rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Thing ;
+    rdfs:label "Object" .
+
+:Cl_Instrument rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Object ;
+    rdfs:label "Instrument" .
+
+:Cl_Activity rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Thing ;
+    rdfs:label "Activity" .
+
+:Cl_PlayingActivity rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Activity ;
+    rdfs:label "Playing Activity" ;
+    rdfs:comment "A reified class representing the act of a person playing an instrument, allowing for additional details about the activity itself." .
+
+#################################################################
+#    Object Properties
+#################################################################
+
+:performerOf rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_PlayingActivity ;
+    rdfs:range :Cl_Person ;
+    rdfs:label "performer of" ;
+    rdfs:comment "Links a playing activity to the person who performs this activity." .
+
+:instrumentUsed rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_PlayingActivity ;
+    rdfs:range :Cl_Instrument ;
+    rdfs:label "instrument used" ;
+    rdfs:comment "Links a playing activity to the instrument that is used in this activity." .
+
+:hasPlayingActivity rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_Person ;
+    rdfs:range :Cl_PlayingActivity ;
+    rdfs:label "has playing activity" ;
+    rdfs:comment "Links a person to a specific playing activity they are involved in." ;
+    owl:inverseOf :performerOf .
+
+:isInstrumentInActivity rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_Instrument ;
+    rdfs:range :Cl_PlayingActivity ;
+    rdfs:label "is instrument in activity" ;
+    rdfs:comment "Links an instrument to a specific playing activity where it is used." ;
+    owl:inverseOf :instrumentUsed .
+
+#################################################################
+#    Data Properties
+#################################################################
+
+:hasName rdf:type owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain :Cl_Person ;
+    rdfs:range xsd:string ;
+    rdfs:label "has name" ;
+    rdfs:comment "The given name of a person." .
+
+:instrumentName rdf:type owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain :Cl_Instrument ;
+    rdfs:range xsd:string ;
+    rdfs:label "instrument name" ;
+    rdfs:comment "The name of a musical instrument." .
+
+:activityId rdf:type owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain :Cl_PlayingActivity ;
+    rdfs:range xsd:string ;
+    rdfs:label "activity ID" ;
+    rdfs:comment "A unique identifier for an instance of a playing activity." .
+
+:hasSkillLevel rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Cl_PlayingActivity ;
+    rdfs:range xsd:string ;
+    rdfs:label "has skill level" ;
+    rdfs:comment "Describes the skill level of the performer for this specific playing activity (e.g., 'beginner', 'intermediate', 'expert')." .
+
+#################################################################
+#    General Class Axioms / Restrictions
+#################################################################
+
+# A PlayingActivity must always have a person performing it.
+[ rdf:type owl:Restriction ;
+  owl:onProperty :performerOf ;
+  owl:someValuesFrom :Cl_Person ;
+  rdfs:subClassOf :Cl_PlayingActivity
+] .
+
+# A PlayingActivity must always involve an instrument.
+[ rdf:type owl:Restriction ;
+  owl:onProperty :instrumentUsed ;
+  owl:someValuesFrom :Cl_Instrument ;
+  rdfs:subClassOf :Cl_PlayingActivity
+] .
+
+# Every Person must have at least one name.
+[ rdf:type owl:Restriction ;
+  owl:onProperty :hasName ;
+  owl:someValuesFrom xsd:string ;
+  rdfs:subClassOf :Cl_Person
+] .
+
+# Every Instrument must have at least one name.
+[ rdf:type owl:Restriction ;
+  owl:onProperty :instrumentName ;
+  owl:someValuesFrom xsd:string ;
+  rdfs:subClassOf :Cl_Instrument
+] .

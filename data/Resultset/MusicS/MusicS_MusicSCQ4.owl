@@ -1,0 +1,71 @@
+@prefix : <http://example.org/ontology#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# Classes
+:Cl_Album rdf:type owl:Class ;
+    rdfs:comment "Represents a musical album, a collection of audio recordings released together." .
+
+:Cl_RecordingEvent rdf:type owl:Class ;
+    rdfs:comment "A reification class representing the specific event or session during which an album or part of an album was recorded. This pivot class captures the relationship between an album and its recording time period." .
+
+# Properties
+
+# Object Properties
+:hasRecordingEvent rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_Album ;
+    rdfs:range :Cl_RecordingEvent ;
+    rdfs:comment "Links an album to a specific recording event or session that contributed to its creation." .
+
+:isRecordingOf rdf:type owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain :Cl_RecordingEvent ;
+    rdfs:range :Cl_Album ;
+    owl:inverseOf :hasRecordingEvent ;
+    rdfs:comment "Links a recording event to the specific album that was recorded during that event. A single recording event is functionally tied to one album (i.e., it doesn't record multiple distinct albums simultaneously)." .
+
+# Data Properties
+:recordedStartTime rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Cl_RecordingEvent ;
+    rdfs:range xsd:dateTime ;
+    rdfs:comment "Specifies the precise start date and time when the recording event began." .
+
+:recordedEndTime rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Cl_RecordingEvent ;
+    rdfs:range xsd:dateTime ;
+    rdfs:comment "Specifies the precise end date and time when the recording event concluded." .
+
+# General Class Axioms and Restrictions
+
+# Every album must be associated with at least one recording event.
+:Cl_Album rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :hasRecordingEvent ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:comment "Ensures that every instance of Cl_Album is linked to at least one Cl_RecordingEvent."
+] .
+
+# Every recording event must be associated with exactly one album.
+:Cl_RecordingEvent rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :isRecordingOf ;
+    owl:cardinality "1"^^xsd:nonNegativeInteger ; # This implies minCardinality 1 and maxCardinality 1, consistent with owl:FunctionalProperty.
+    rdfs:comment "Ensures that every instance of Cl_RecordingEvent is linked to exactly one Cl_Album."
+] .
+
+# Every recording event must have a specified start time.
+:Cl_RecordingEvent rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :recordedStartTime ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:comment "Ensures that every Cl_RecordingEvent has a defined recordedStartTime."
+] .
+
+# Every recording event must have a specified end time.
+:Cl_RecordingEvent rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :recordedEndTime ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:comment "Ensures that every Cl_RecordingEvent has a defined recordedEndTime."
+] .

@@ -1,0 +1,106 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix : <http://example.org/ontology#> .
+
+#################################################################
+#    Classes
+#################################################################
+
+:Cl_Event rdf:type owl:Class ;
+    rdfs:label "Event" ;
+    rdfs:comment "A general class for any event that occurs at a specific time or duration." .
+
+:Cl_Seminar rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Event ;
+    rdfs:label "Seminar" ;
+    rdfs:comment "A specific type of event, typically for academic or professional discussions, often involving presentations." .
+
+:Cl_Document rdf:type owl:Class ;
+    rdfs:label "Document" ;
+    rdfs:comment "A general class for any written or recorded piece of information." .
+
+:Cl_Article rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Document ;
+    rdfs:label "Article" ;
+    rdfs:comment "A written work, typically a research paper or report, that can be presented." .
+
+:Cl_Activity rdf:type owl:Class ;
+    rdfs:label "Activity" ;
+    rdfs:comment "A general class representing an action or engagement." .
+
+:Cl_Presentation rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Activity, :Cl_Event ; # A presentation is both an activity and an event instance.
+    rdfs:label "Presentation" ;
+    rdfs:comment "A specific instance of an article being presented, acting as a pivot between an article and a seminar." .
+
+#################################################################
+#    Object Properties
+#################################################################
+
+:isPresentedInSeminar rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_Presentation ;
+    rdfs:range :Cl_Seminar ;
+    rdfs:label "is presented in seminar" ;
+    rdfs:comment "Connects a presentation to the seminar in which it takes place." .
+
+:includesPresentation rdf:type owl:ObjectProperty ;
+    owl:inverseOf :isPresentedInSeminar ;
+    rdfs:domain :Cl_Seminar ;
+    rdfs:range :Cl_Presentation ;
+    rdfs:label "includes presentation" ;
+    rdfs:comment "Connects a seminar to the presentations that are part of it." .
+
+:presentsArticle rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_Presentation ;
+    rdfs:range :Cl_Article ;
+    rdfs:label "presents article" ;
+    rdfs:comment "Connects a presentation to the article that is being presented." .
+
+:isPresentedAs rdf:type owl:ObjectProperty ;
+    owl:inverseOf :presentsArticle ;
+    rdfs:domain :Cl_Article ;
+    rdfs:range :Cl_Presentation ;
+    rdfs:label "is presented as" ;
+    rdfs:comment "Connects an article to its presentation instance." .
+
+#################################################################
+#    Data Properties
+#################################################################
+
+:hasTitle rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Cl_Document ;
+    rdfs:range xsd:string ;
+    rdfs:label "has title" ;
+    rdfs:comment "The title of a document, such as an article." .
+
+:hasName rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Cl_Event ;
+    rdfs:range xsd:string ;
+    rdfs:label "has name" ;
+    rdfs:comment "The name of an event, such as a seminar." .
+
+:hasDate rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Cl_Event ;
+    rdfs:range xsd:date ;
+    rdfs:label "has date" ;
+    rdfs:comment "The date on which an event occurs." .
+
+#################################################################
+#    Axioms and Restrictions
+#################################################################
+
+# Every Presentation must be associated with an Article.
+:Cl_Presentation rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :presentsArticle ;
+    owl:someValuesFrom :Cl_Article
+] .
+
+# Every Presentation must take place within a Seminar.
+:Cl_Presentation rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :isPresentedInSeminar ;
+    owl:someValuesFrom :Cl_Seminar
+] .

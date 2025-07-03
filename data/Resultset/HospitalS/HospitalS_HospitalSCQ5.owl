@@ -1,0 +1,82 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix : <http://www.example.org/ontology#> .
+
+# Ontology Metadata
+:ontology rdf:type owl:Ontology ;
+    rdfs:label "Geographical Location Ontology" ;
+    owl:versionIRI <http://www.example.org/ontology/1.0> ;
+    rdfs:comment "Ontology for representing geographical entities and their containment relationships, with reification applied to the location fact." .
+
+# Classes
+:Cl_Location rdf:type owl:Class ;
+    rdfs:label "Location" ;
+    rdfs:comment "A general class representing any location." .
+
+:Cl_GeographicalEntity rdf:type owl:Class ;
+    rdfs:label "Geographical Entity" ;
+    rdfs:subClassOf :Cl_Location ;
+    rdfs:comment "A specific type of location that represents a real-world geographical area or point." .
+
+:Cl_Country rdf:type owl:Class ;
+    rdfs:label "Country" ;
+    rdfs:subClassOf :Cl_GeographicalEntity ;
+    rdfs:comment "A sovereign state or nation." .
+
+:Cl_City rdf:type owl:Class ;
+    rdfs:label "City" ;
+    rdfs:subClassOf :Cl_GeographicalEntity ;
+    rdfs:comment "A large human settlement, typically larger than a town or village." .
+
+# Disjointness Axiom
+# Ensures that an entity cannot be both a Country and a City simultaneously.
+:Cl_Country owl:disjointWith :Cl_City .
+
+# Reification Class for the location fact
+# Cl_GeographicalContainment represents the asserted fact or relationship that a City is contained within a Country.
+# This reifies the binary 'located in' relationship into an entity itself, allowing for potential future attributes
+# (e.g., date of assertion, source of information) if the scenario became more complex.
+:Cl_GeographicalContainment rdf:type owl:Class ;
+    rdfs:label "Geographical Containment Fact" ;
+    rdfs:comment "Represents the fact or assertion that a specific geographical entity (a City) is contained within another (a Country)." ;
+    # Restrictions: Each instance of Cl_GeographicalContainment must describe exactly one city and exactly one country.
+    rdfs:subClassOf [
+        rdf:type owl:Restriction ;
+        owl:onProperty :describesContainmentOf ;
+        owl:cardinality "1"^^xsd:nonNegativeInteger
+    ] ;
+    rdfs:subClassOf [
+        rdf:type owl:Restriction ;
+        owl:onProperty :describesContainmentIn ;
+        owl:cardinality "1"^^xsd:nonNegativeInteger
+    ] .
+
+# Properties
+
+# Data Property: hasName
+# Used for giving names to geographical entities.
+:hasName rdf:type owl:DatatypeProperty ;
+    rdfs:label "has name" ;
+    rdfs:domain :Cl_GeographicalEntity ;
+    rdfs:range xsd:string ;
+    owl:maxCardinality "1"^^xsd:nonNegativeInteger ; # Assuming one primary name per entity
+    rdfs:comment "The primary name of a geographical entity." .
+
+# Object Properties for Reification
+# These properties link the Cl_GeographicalContainment fact to the specific City and Country involved.
+
+:describesContainmentOf rdf:type owl:ObjectProperty ;
+    rdfs:label "describes containment of" ;
+    rdfs:domain :Cl_GeographicalContainment ;
+    rdfs:range :Cl_City ;
+    owl:functional true ; # Each containment fact describes one specific city.
+    rdfs:comment "Links a Geographical Containment Fact to the City that is being described as contained." .
+
+:describesContainmentIn rdf:type owl:ObjectProperty ;
+    rdfs:label "describes containment in" ;
+    rdfs:domain :Cl_GeographicalContainment ;
+    rdfs:range :Cl_Country ;
+    owl:functional true ; # Each containment fact describes containment in one specific country.
+    rdfs:comment "Links a Geographical Containment Fact to the Country in which the City is described as being contained." .

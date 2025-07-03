@@ -1,40 +1,60 @@
+from typing import Any, List, Optional
+
 import requests
-from typing import Any, Optional, List
 from rdflib import Graph
+
 from src.utils.file_handler import save_text_file
+
 
 class OopsPitfallReviewer:
     """
-    Reviewer class that uses the OOPs! Pitfall Scanner web service to analyze OWL ontologies.
+    Reviewer class that uses the OOPs! Pitfall Scanner service to analyze OWL ontologies.
     """
-    def __init__(self, endpoint: str = "http://localhost/OOPS/rest" ):
+
+    def __init__(self, endpoint: str = "http://localhost/OOPS/rest"):
         self.endpoint = endpoint
 
-    def review_owl_file(self, owl_file_path: str, pitfalls: Optional[List[str]] = None, output_format: str = "XML") -> str:
+    def review_owl_file(
+        self,
+        owl_file_path: str,
+        pitfalls: Optional[List[str]] = None,
+        output_format: str = "XML",
+    ) -> str:
         """
-        Analyze the given OWL file and return the OOPs! pitfall report as XML.
+        Analyzes the given OWL file and returns the OOPs! pitfall report as XML.
         """
-        with open(owl_file_path, 'r', encoding='utf-8') as f:
+        with open(owl_file_path, "r", encoding="utf-8") as f:
             owl_content = f.read()
-        return self.review_owl_content(owl_content, pitfalls=pitfalls, output_format=output_format)
+        return self.review_owl_content(
+            owl_content, pitfalls=pitfalls, output_format=output_format
+        )
 
-    def review_owl_content(self, owl_content: str, pitfalls: Optional[List[str]] = None, output_format: str = "XML") -> str:
+    def review_owl_content(
+        self,
+        owl_content: str,
+        pitfalls: Optional[List[str]] = None,
+        output_format: str = "XML",
+    ) -> str:
         """
-        Analyze the given OWL content string and return the OOPs! pitfall report as XML.
+        Analyzes the given OWL content string and returns the OOPs! pitfall report as XML.
         Converts received OWL in turtle to RDF-XML as pre-req for Oops! API.
         """
 
-        
-        # Convert Turtle to RDF/XML to use in Oops! 
+        # Convert Turtle to RDF/XML to use in Oops!
         try:
             print("Converting OWL content to RDF/XML format for OOPs! API...")
             g = Graph()
-            save_text_file(f"data/output/debug_owl_content_turtle_combined_owl.xml", owl_content)
+            save_text_file(
+                f"data/output/debug_owl_content_turtle_combined_owl.xml", owl_content
+            )
             g.parse(data=owl_content, format="turtle")
 
             print("parsed graph")
             print(g.print)
-            owl_content_xml = g.serialize(format="xml").decode("utf-8") if isinstance(g.serialize(format="xml"), bytes) else g.serialize(format="xml")
+            ## HERE .... HOW TO DECODE THIS TO REMOVE ' and \n'?
+            owl_content_xml_brute = g.serialize(format="xml")
+            owl_content_xml = owl_content_xml_brute.replace("'", "").replace("\n", "")
+
             print("serialized graph")
             # Print the first 5 lines of the serialized RDF/XML
             owl_lines = owl_content_xml.splitlines()
@@ -44,37 +64,43 @@ class OopsPitfallReviewer:
         except Exception as e:
             print(f"Error converting Turtle to RDF/XML: {e}")
             raise ValueError(f"Failed to convert Turtle to RDF/XML: {e}")
-        
+
         print("Saving converted OWL content to file for debugging...")
         save_text_file(f"data/output/xml_combined_owl.xml", owl_content_xml)
-        
+
+        with open("data/output/xml_combined_owl.xml", "r", encoding="utf-8") as f:
+            owl_content_xml_final = f.read()
         print("post-save file, going to Oops API")
-        pitfalls_str = ''
+        pitfalls_str = ""
         if pitfalls:
-            pitfalls_str = ','.join(pitfalls)
-        xml_body = f'''<?xml version="1.0" encoding="UTF-8"?>
+            pitfalls_str = ",".join(pitfalls)
+        xml_body = f"""<?xml version="1.0" encoding="UTF-8"?>
                     <OOPSRequest>
                     <OntologyURI>http://www.example.org/testontology</OntologyURI>
-                    <OntologyContent><![CDATA[{owl_content_xml}]]></OntologyContent>
+                    <OntologyContent><![CDATA[{owl_content_xml_final}]]></OntologyContent>
                     <Pitfalls>{pitfalls_str}</Pitfalls>
                     <OutputFormat>{output_format}</OutputFormat>
-                    </OOPSRequest>'''
-        headers = {'Content-Type': 'application/xml'}
-        response = requests.post(self.endpoint, data=xml_body.encode('utf-8'), headers=headers)
+                    </OOPSRequest>"""
+        headers = {"Content-Type": "application/xml"}
+        response = requests.post(
+            self.endpoint, data=xml_body.encode("utf-8"), headers=headers
+        )
         response.raise_for_status()
         return response.text
+
 
 class RDFSyntaxReviewer:
     """
     Reviewer class that uses rdflib to validate RDF/OWL/RDFS syntax.
     """
+
     def __init__(self, format: str = "turtle"):
         self.format = format  # e.g., 'xml', 'turtle', 'n3', etc.
 
     def review_owl_content(self, owl_content: str) -> str:
         """
         Validate the given OWL/RDF content string for syntax errors.
-        Returns 'OK' if valid, otherwise raises an exception with the error message.
+        Returns 'OK' if valid, else raises an exception with the error message.
         """
         g = Graph()
         try:

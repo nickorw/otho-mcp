@@ -1,0 +1,109 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix : <http://www.example.org/band-ontology#> .
+
+# Classes
+:Cl_Entity a owl:Class ;
+    rdfs:comment "The most general class for all entities in this ontology." .
+
+:Cl_Person a owl:Class ;
+    rdfs:subClassOf :Cl_Entity ;
+    rdfs:comment "Represents a human individual." .
+
+:Cl_Band a owl:Class ;
+    rdfs:subClassOf :Cl_Entity ;
+    rdfs:comment "Represents a musical group or ensemble." .
+
+:Cl_Role a owl:Class ;
+    rdfs:subClassOf :Cl_Entity ;
+    rdfs:comment "Represents a specific function or position within a band (e.g., 'Vocalist', 'Guitarist', 'Drummer')." .
+
+# Reification Class: Cl_BandRoleAssignment
+# This class acts as a pivot to capture the complex relationship: A Person having a specific Role in a specific Band at a specific Point in Time.
+:Cl_BandRoleAssignment a owl:Class ;
+    rdfs:subClassOf :Cl_Entity ;
+    rdfs:comment "Represents a specific instance of a person holding a role in a band at a particular point in time." ;
+    # Restrictions to ensure that every Cl_BandRoleAssignment instance is fully defined
+    owl:equivalentClass [
+        rdf:type owl:Restriction ;
+        owl:onProperty :assignedPerson ;
+        owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+        owl:allValuesFrom :Cl_Person
+    ] ;
+    owl:equivalentClass [
+        rdf:type owl:Restriction ;
+        owl:onProperty :assignedToBand ;
+        owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+        owl:allValuesFrom :Cl_Band
+    ] ;
+    owl:equivalentClass [
+        rdf:type owl:Restriction ;
+        owl:onProperty :hasRole ;
+        owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+        owl:allValuesFrom :Cl_Role
+    ] ;
+    owl:equivalentClass [
+        rdf:type owl:Restriction ;
+        owl:onProperty :atTime ;
+        owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+        owl:allValuesFrom xsd:dateTime
+    ] .
+
+# Object Properties
+:assignedPerson a owl:ObjectProperty ;
+    rdfs:domain :Cl_BandRoleAssignment ;
+    rdfs:range :Cl_Person ;
+    rdfs:comment "Connects a band role assignment to the person who holds the role." .
+
+:assignedToBand a owl:ObjectProperty ;
+    rdfs:domain :Cl_BandRoleAssignment ;
+    rdfs:range :Cl_Band ;
+    rdfs:comment "Connects a band role assignment to the band in which the role is held." .
+
+:hasRole a owl:ObjectProperty ;
+    rdfs:domain :Cl_BandRoleAssignment ;
+    rdfs:range :Cl_Role ;
+    rdfs:comment "Connects a band role assignment to the specific role (e.g., 'Vocalist') that is being assigned." .
+
+# Inverse properties for easier traversal
+:hasBandRoleAssignment a owl:ObjectProperty ;
+    rdfs:domain :Cl_Person ;
+    rdfs:range :Cl_BandRoleAssignment ;
+    owl:inverseOf :assignedPerson ;
+    rdfs:comment "Connects a person to their specific band role assignments." .
+
+:includesRoleAssignment a owl:ObjectProperty ;
+    rdfs:domain :Cl_Band ;
+    rdfs:range :Cl_BandRoleAssignment ;
+    owl:inverseOf :assignedToBand ;
+    rdfs:comment "Connects a band to the specific role assignments made within it." .
+
+:roleIsAssignedIn a owl:ObjectProperty ;
+    rdfs:domain :Cl_Role ;
+    rdfs:range :Cl_BandRoleAssignment ;
+    owl:inverseOf :hasRole ;
+    rdfs:comment "Connects a role to the specific band role assignments where it is utilized." .
+
+# Data Properties
+:personName a owl:DatatypeProperty ;
+    rdfs:domain :Cl_Person ;
+    rdfs:range xsd:string ;
+    rdfs:comment "The common name of a person." .
+
+:bandName a owl:DatatypeProperty ;
+    rdfs:domain :Cl_Band ;
+    rdfs:range xsd:string ;
+    rdfs:comment "The official name of a band." .
+
+:roleTitle a owl:DatatypeProperty ;
+    rdfs:domain :Cl_Role ;
+    rdfs:range xsd:string ;
+    rdfs:comment "The descriptive title of a role (e.g., 'Lead Guitarist')." .
+
+:atTime a owl:DatatypeProperty ;
+    rdfs:domain :Cl_BandRoleAssignment ;
+    rdfs:range xsd:dateTime ;
+    owl:functionalProperty true ;
+    rdfs:comment "The specific date and/or time when a band role assignment was effective or recorded." .

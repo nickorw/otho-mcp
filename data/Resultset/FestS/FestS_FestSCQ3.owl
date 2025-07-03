@@ -1,0 +1,179 @@
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix : <http://www.example.org/theatre_ontology#> .
+
+# Classes
+:Cl_Event rdf:type owl:Class ;
+    rdfs:label "Event" ;
+    rdfs:comment "A general category for any organized occurrence or happening." .
+
+:Cl_Festival rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Event ;
+    rdfs:label "Festival" ;
+    rdfs:comment "A specific type of event, often recurring annually, celebrating a particular theme." .
+
+:Cl_TheatreFestival rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Festival ;
+    rdfs:label "Theatre Festival" ;
+    rdfs:comment "A festival specifically dedicated to theatrical performances." .
+
+:Cl_ArtisticWork rdf:type owl:Class ;
+    rdfs:label "Artistic Work" ;
+    rdfs:comment "A creative product or endeavor." .
+
+:Cl_Performance rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_ArtisticWork ;
+    rdfs:label "Performance" ;
+    rdfs:comment "An artistic work that is presented or acted out." .
+
+:Cl_Play rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Performance ;
+    rdfs:label "Play" ;
+    rdfs:comment "A dramatic work for the stage." .
+
+:Cl_Location rdf:type owl:Class ;
+    rdfs:label "Location" ;
+    rdfs:comment "A specific place or venue where events or performances occur." .
+
+# Reification Class for 'What plays could be seen during a certain theatre festival?'
+# This class acts as a pivot to link a specific play with a specific festival instance,
+# capturing the nuanced relationship of a play being presented/seen as part of a festival.
+:Cl_FestivalPerformance rdf:type owl:Class ;
+    rdfs:label "Festival Performance" ;
+    rdfs:comment "Represents a specific instance of a play being performed as part of a theatre festival, capturing the relationship between a play and a festival at a particular time or event slot." .
+
+# Object Properties
+:hasPart rdf:type owl:ObjectProperty ;
+    rdfs:label "has part" ;
+    rdfs:comment "A general property indicating that one entity is composed of or contains another." .
+
+:includesPerformance rdf:type owl:ObjectProperty ;
+    rdfs:subPropertyOf :hasPart ;
+    rdfs:domain :Cl_TheatreFestival ;
+    rdfs:range :Cl_FestivalPerformance ;
+    rdfs:label "includes performance" ;
+    rdfs:comment "Connects a theatre festival to a specific performance instance within it." ;
+    owl:inverseOf :isPerformanceIncludedIn .
+
+:isPerformanceIncludedIn rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_FestivalPerformance ;
+    rdfs:range :Cl_TheatreFestival ;
+    rdfs:label "is performance included in" ;
+    rdfs:comment "The inverse property of 'includes performance'." .
+
+:refersToPlay rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_FestivalPerformance ;
+    rdfs:range :Cl_Play ;
+    rdfs:label "refers to play" ;
+    rdfs:comment "Links a festival performance instance to the specific play that is being performed." ;
+    owl:inverseOf :isSubjectOfPerformance .
+
+:isSubjectOfPerformance rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_Play ;
+    rdfs:range :Cl_FestivalPerformance ;
+    rdfs:label "is subject of performance" ;
+    rdfs:comment "The inverse property of 'refers to play'." .
+
+:occursDuringFestival rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_FestivalPerformance ;
+    rdfs:range :Cl_TheatreFestival ;
+    rdfs:label "occurs during festival" ;
+    rdfs:comment "Connects a specific performance at a festival to the theatre festival it belongs to." ;
+    owl:inverseOf :hostsPerformance .
+
+:hostsPerformance rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_TheatreFestival ;
+    rdfs:range :Cl_FestivalPerformance ;
+    rdfs:label "hosts performance" ;
+    rdfs:comment "The inverse property of 'occurs during festival'." .
+
+:takesPlaceAt rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_Event ;
+    rdfs:range :Cl_Location ;
+    rdfs:label "takes place at" ;
+    rdfs:comment "Indicates the physical location where an event or performance occurs." .
+
+# Data Properties
+:festivalName rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Cl_Festival ;
+    rdfs:range xsd:string ;
+    rdfs:label "festival name" ;
+    rdfs:comment "The official name of the festival." ;
+    owl:functionalProperty true .
+
+:festivalStartDate rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Cl_Festival ;
+    rdfs:range xsd:date ;
+    rdfs:label "festival start date" ;
+    rdfs:comment "The date when the festival begins." ;
+    owl:functionalProperty true .
+
+:festivalEndDate rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Cl_Festival ;
+    rdfs:range xsd:date ;
+    rdfs:label "festival end date" ;
+    rdfs:comment "The date when the festival concludes." ;
+    owl:functionalProperty true .
+
+:playTitle rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Cl_Play ;
+    rdfs:range xsd:string ;
+    rdfs:label "play title" ;
+    rdfs:comment "The title of the play." ;
+    owl:functionalProperty true .
+
+:playDuration rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Cl_Play ;
+    rdfs:range xsd:duration ;
+    rdfs:label "play duration" ;
+    rdfs:comment "The typical running time of the play." .
+
+:locationName rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Cl_Location ;
+    rdfs:range xsd:string ;
+    rdfs:label "location name" ;
+    rdfs:comment "The name of the location or venue." ;
+    owl:functionalProperty true .
+
+:performanceDate rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Cl_FestivalPerformance ;
+    rdfs:range xsd:date ;
+    rdfs:label "performance date" ;
+    rdfs:comment "The specific date on which a play is performed at the festival." .
+
+:performanceTime rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Cl_FestivalPerformance ;
+    rdfs:range xsd:time ;
+    rdfs:label "performance time" ;
+    rdfs:comment "The specific time at which a play performance begins at the festival." .
+
+# General Class Axioms / Restrictions
+# Every TheatreFestival must have a name
+:Cl_TheatreFestival rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :festivalName ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger
+] .
+
+# Every Play must have a title
+:Cl_Play rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :playTitle ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger
+] .
+
+# A FestivalPerformance must always refer to a specific Play
+:Cl_FestivalPerformance rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :refersToPlay ;
+    owl:someValuesFrom :Cl_Play
+] .
+
+# A FestivalPerformance must always occur during a specific TheatreFestival
+:Cl_FestivalPerformance rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :occursDuringFestival ;
+    owl:someValuesFrom :Cl_TheatreFestival
+] .

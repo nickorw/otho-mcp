@@ -1,0 +1,86 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix : <http://example.org/ontology#> .
+
+owl:Ontology rdf:type owl:Ontology ;
+    rdfs:comment "Ontology for music tracks and songs to answer 'What song is a specific track a recording of?'" .
+
+# Class Definitions
+:Cl_Entity rdf:type owl:Class ;
+    rdfs:comment "The most general class representing anything in the domain." .
+
+:Cl_CreativeWork rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Entity ;
+    rdfs:comment "Represents an abstract creative work or intellectual creation." .
+
+:Cl_MusicalWork rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_CreativeWork ;
+    rdfs:comment "Represents an abstract musical composition." .
+
+:Cl_Song rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_MusicalWork ;
+    rdfs:comment "Represents a distinct musical composition, typically with lyrics and melody." .
+
+:Cl_Manifestation rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Entity ;
+    rdfs:comment "Represents a physical or digital embodiment/manifestation of a creative work." .
+
+:Cl_AudioRecording rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Manifestation ;
+    rdfs:comment "Represents any form of audio recording." .
+
+:Cl_Track rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_AudioRecording ;
+    rdfs:comment "Represents a specific recorded audio item, often found on an album or release." .
+
+# Property Definitions
+:Pr_isRecordingOf rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_Track ;
+    rdfs:range :Cl_Song ;
+    rdf:type owl:FunctionalProperty ; # A specific track is a recording of exactly one song.
+    rdfs:comment "Links an audio track to the abstract song (musical composition) it is a recording of." .
+
+:Pr_hasTitle rdf:type owl:DatatypeProperty ;
+    rdfs:domain rdfs:Resource ; # Can be applied to various resources like songs and tracks
+    rdfs:range xsd:string ;
+    rdfs:comment "Provides the title or name of an entity." .
+
+:Pr_hasDuration rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Cl_Track ;
+    rdfs:range xsd:decimal ; # Duration typically in seconds
+    rdfs:comment "Specifies the duration of an audio track, measured in seconds." .
+
+# Class Axioms and Restrictions
+# A Cl_Track must be a recording of exactly one Cl_Song.
+:Cl_Track rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :Pr_isRecordingOf ;
+    owl:cardinality 1 ;
+    rdfs:comment "Every Cl_Track must be a recording of exactly one Cl_Song."
+] .
+
+# Every Cl_Song must have at least one title.
+:Cl_Song rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :Pr_hasTitle ;
+    owl:minCardinality 1 ;
+    rdfs:comment "Every Cl_Song must have at least one title."
+] .
+
+# Every Cl_Track must have at least one title.
+:Cl_Track rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :Pr_hasTitle ;
+    owl:minCardinality 1 ;
+    rdfs:comment "Every Cl_Track must have at least one title."
+] .
+
+# Every Cl_Track must have a duration.
+:Cl_Track rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :Pr_hasDuration ;
+    owl:minCardinality 1 ;
+    rdfs:comment "Every Cl_Track must have a duration."
+] .

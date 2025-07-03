@@ -1,0 +1,123 @@
+@prefix : <http://example.com/ontology#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+:ontology rdf:type owl:Ontology ;
+    owl:versionIRI <http://example.com/ontology/1.0> ;
+    rdfs:comment "Ontology for theatrical works, focusing on plays and acts, with reification to model the composition and order of acts within a play. Designed to answer the competency question: 'How many acts does a particular play contain?'." .
+
+# Classes
+# Top-level general classes to establish hierarchies
+:Cl_Entity rdf:type owl:Class ;
+    rdfs:label "Entity" ;
+    rdfs:comment "The most general class for anything that exists or is conceptualized in the ontology." .
+
+:Cl_AbstractConcept rdf:type owl:Class ;
+    rdfs:label "Abstract Concept" ;
+    rdfs:subClassOf :Cl_Entity ;
+    rdfs:comment "A class for concepts that are not physical objects, such as creative works or relationships." .
+
+:Cl_CreativeWork rdf:type owl:Class ;
+    rdfs:label "Creative Work" ;
+    rdfs:subClassOf :Cl_AbstractConcept ;
+    rdfs:comment "Represents any form of creative intellectual work, such as literature, music, or art." .
+
+:Cl_Component rdf:type owl:Class ;
+    rdfs:label "Component" ;
+    rdfs:subClassOf :Cl_Entity ;
+    rdfs:comment "A general class for any distinguishable part or element of a larger whole." .
+
+:Cl_RelationshipEvent rdf:type owl:Class ;
+    rdfs:label "Relationship Event" ;
+    rdfs:subClassOf :Cl_AbstractConcept ;
+    rdfs:comment "A general class for reification instances that capture complex relationships or events involving multiple entities and/or datatypes." .
+
+# Specific classes within the hierarchy
+:Cl_Play rdf:type owl:Class ;
+    rdfs:label "Play" ;
+    rdfs:subClassOf :Cl_CreativeWork ;
+    rdfs:comment "A dramatic work written for performance by actors, typically on a stage." .
+
+:Cl_Act rdf:type owl:Class ;
+    rdfs:label "Act" ;
+    rdfs:subClassOf :Cl_Component ;
+    rdfs:comment "A major division or unit of a play or opera, usually comprising several scenes." .
+
+# Reification/Pivot Class for "How many acts does a particular play contain?"
+# This class captures the specific instance of an Act being part of a Play and its order.
+:Cl_PlayActComposition rdf:type owl:Class ;
+    rdfs:label "Play Act Composition" ;
+    rdfs:subClassOf :Cl_RelationshipEvent ;
+    rdfs:comment "A pivot class representing the specific instance of an Act being composed within a Play, capturing its sequential order." .
+
+# Class Axioms/Restrictions
+# Every Play must have at least one composition entry for an Act, ensuring it's not an empty play in terms of acts.
+:Cl_Play rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :hasCompositionEntry ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:comment "Every Play must have at least one PlayActComposition entry, indicating it contains at least one act."
+] .
+
+# Properties
+
+# Data Properties
+:hasTitle rdf:type owl:DatatypeProperty ;
+    rdfs:label "has title" ;
+    rdfs:domain :Cl_CreativeWork ;
+    rdfs:range xsd:string ;
+    rdfs:comment "The title or name of a creative work." .
+
+:hasActOrder rdf:type owl:DatatypeProperty ;
+    rdfs:label "has act order" ;
+    rdfs:domain :Cl_PlayActComposition ;
+    rdfs:range xsd:integer ;
+    owl:functionalProperty true ; # Each composition entry has a unique order number within its play
+    rdfs:comment "The sequential order (e.g., 1 for Act I, 2 for Act II) of an Act within a specific Play composition." .
+
+# Object Properties
+
+# General Part-Whole Relationship Properties (for hierarchy)
+:hasPart rdf:type owl:ObjectProperty ;
+    rdfs:label "has part" ;
+    rdfs:domain :Cl_Entity ;
+    rdfs:range :Cl_Component ;
+    rdfs:comment "A general property indicating that an entity comprises a component part." .
+
+:isPartOf rdf:type owl:ObjectProperty ;
+    rdfs:label "is part of" ;
+    rdfs:domain :Cl_Component ;
+    rdfs:range :Cl_Entity ;
+    owl:inverseOf :hasPart ;
+    rdfs:comment "A general property indicating that a component is part of a larger entity." .
+
+# Properties related to reification for Play-Act relationship
+:hasCompositionEntry rdf:type owl:ObjectProperty ;
+    rdfs:label "has composition entry" ;
+    rdfs:domain :Cl_Play ;
+    rdfs:range :Cl_PlayActComposition ;
+    rdfs:subPropertyOf :hasPart ; # A Play has a PlayActComposition entry as part of its structure
+    rdfs:comment "Relates a Play to an instance of its PlayActComposition, detailing how an Act is included and ordered." .
+
+:composesAct rdf:type owl:ObjectProperty ;
+    rdfs:label "composes act" ;
+    rdfs:domain :Cl_PlayActComposition ;
+    rdfs:range :Cl_Act ;
+    rdfs:comment "Relates a PlayActComposition entry to the specific Act (e.g., Act I, Act II) it describes." .
+
+:isCompositionEntryForPlay rdf:type owl:ObjectProperty ;
+    rdfs:label "is composition entry for play" ;
+    rdfs:domain :Cl_PlayActComposition ;
+    rdfs:range :Cl_Play ;
+    owl:inverseOf :hasCompositionEntry ;
+    rdfs:subPropertyOf :isPartOf ; # A PlayActComposition entry is part of a Play
+    rdfs:comment "The inverse property of :hasCompositionEntry, linking a PlayActComposition entry back to its parent Play." .
+
+:isComposedInPlayActComposition rdf:type owl:ObjectProperty ;
+    rdfs:label "is composed in play act composition" ;
+    rdfs:domain :Cl_Act ;
+    rdfs:range :Cl_PlayActComposition ;
+    owl:inverseOf :composesAct ;
+    rdfs:comment "The inverse property of :composesAct, linking an Act to the PlayActComposition entry where it is specifically detailed." .

@@ -1,0 +1,1482 @@
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix : <http://www.ontology.org/medical_degrees#> .
+
+# Classes
+:Cl_Entity a owl:Class ;
+    rdfs:label "Entity" .
+
+:Cl_Agent a owl:Class ;
+    rdfs:subClassOf :Cl_Entity ;
+    rdfs:label "Agent" .
+
+:Cl_Person a owl:Class ;
+    rdfs:subClassOf :Cl_Agent ;
+    rdfs:label "Person" .
+
+:Cl_Credential a owl:Class ;
+    rdfs:subClassOf :Cl_Entity ;
+    rdfs:label "Credential" .
+
+:Cl_AcademicCredential a owl:Class ;
+    rdfs:subClassOf :Cl_Credential ;
+    rdfs:label "Academic Credential" .
+
+:Cl_DegreeType a owl:Class ;
+    rdfs:subClassOf :Cl_AcademicCredential ;
+    rdfs:label "Degree Type" .
+
+:Cl_MedicalDegreeType a owl:Class ;
+    rdfs:subClassOf :Cl_DegreeType ;
+    rdfs:label "Medical Degree Type" .
+
+:Cl_Event a owl:Class ;
+    rdfs:subClassOf :Cl_Entity ;
+    rdfs:label "Event" .
+
+:Cl_ObtainmentEvent a owl:Class ;
+    rdfs:subClassOf :Cl_Event ;
+    rdfs:label "Obtainment Event" .
+
+:Cl_DegreeObtainment a owl:Class ;
+    rdfs:subClassOf :Cl_ObtainmentEvent ;
+    rdfs:label "Degree Obtainment" ;
+    rdfs:comment "Reification class representing the event of a person obtaining a specific degree, including details like the type, awarding institution, and date." .
+
+:Cl_Organization a owl:Class ;
+    rdfs:subClassOf :Cl_Entity ;
+    rdfs:label "Organization" .
+
+:Cl_Institution a owl:Class ;
+    rdfs:subClassOf :Cl_Organization ;
+    rdfs:label "Institution" .
+
+:Cl_University a owl:Class ;
+    rdfs:subClassOf :Cl_Institution ;
+    rdfs:label "University" .
+
+:Cl_MedicalSchool a owl:Class ;
+    rdfs:subClassOf :Cl_University ;
+    rdfs:label "Medical School" .
+
+# Object Properties
+:op_hasDegreeObtainment a owl:ObjectProperty ;
+    rdfs:domain :Cl_Person ;
+    rdfs:range :Cl_DegreeObtainment ;
+    rdfs:label "has degree obtainment" ;
+    rdfs:comment "Links a person to an instance of a degree obtainment event." .
+
+:op_obtainedByPerson a owl:ObjectProperty ;
+    owl:inverseOf :op_hasDegreeObtainment ;
+    rdfs:domain :Cl_DegreeObtainment ;
+    rdfs:range :Cl_Person ;
+    rdfs:label "obtained by person" ;
+    rdfs:comment "Links a degree obtainment event to the person who obtained the degree." .
+
+:op_obtainedDegreeOfType a owl:ObjectProperty ;
+    rdfs:domain :Cl_DegreeObtainment ;
+    rdfs:range :Cl_MedicalDegreeType ;
+    rdfs:label "obtained degree of type" ;
+    rdfs:comment "Links a degree obtainment event to the specific type of medical degree obtained (e.g., MD, DO)." .
+
+:op_awardedByInstitution a owl:ObjectProperty ;
+    rdfs:domain :Cl_DegreeObtainment ;
+    rdfs:range :Cl_Institution ;
+    rdfs:label "awarded by institution" ;
+    rdfs:comment "Links a degree obtainment event to the institution that awarded the degree." .
+
+# Data Properties
+:dp_degreeTypeName a owl:DatatypeProperty ;
+    rdfs:domain :Cl_DegreeType ;
+    rdfs:range xsd:string ;
+    rdfs:label "degree type name" ;
+    rdfs:comment "The formal name or abbreviation of the degree type (e.g., 'MD', 'Doctor of Medicine')." .
+
+:dp_awardDate a owl:DatatypeProperty ;
+    rdfs:domain :Cl_DegreeObtainment ;
+    rdfs:range xsd:date ;
+    rdfs:label "award date" ;
+    rdfs:comment "The date on which the degree was officially awarded." .
+
+# General Class Axioms and Restrictions
+:Cl_MedicalDegreeType rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :dp_degreeTypeName ;
+    owl:cardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:comment "Every Medical Degree Type must have exactly one name."
+] .
+
+:Cl_DegreeObtainment rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :op_obtainedByPerson ;
+    owl:someValuesFrom :Cl_Person ;
+    rdfs:comment "Every Degree Obtainment event must be associated with a person who obtained the degree."
+] .
+
+:Cl_DegreeObtainment rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :op_obtainedDegreeOfType ;
+    owl:someValuesFrom :Cl_MedicalDegreeType ;
+    rdfs:comment "Every Degree Obtainment event must be for a specific Medical Degree Type."
+] .
+
+:Cl_DegreeObtainment rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :op_awardedByInstitution ;
+    owl:someValuesFrom :Cl_Institution ;
+    rdfs:comment "Every Degree Obtainment event must indicate the institution that awarded the degree."
+] .
+
+:Cl_DegreeObtainment rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :dp_awardDate ;
+    owl:someValuesFrom xsd:date ;
+    rdfs:comment "Every Degree Obtainment event must specify the date of award."
+] .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix owl: <http://www.w3.org/2002/07/owl#>.
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix : <http://www.example.org/ontology#>.
+
+# Ontology Metadata (Optional, but good practice)
+:universityStudyOntology rdf:type owl:Ontology ;
+    rdfs:comment "An ontology for representing study periods of individuals pursuing degrees, addressing the competency question: 'During what time period did a certain person study for a specific degree?'" ;
+    owl:versionIRI <http://www.example.org/ontology/1.0> .
+
+# Classes
+:Cl_Entity rdf:type owl:Class ;
+    rdfs:comment "A top-level class for all entities in the ontology, providing a common superclass." .
+
+:Cl_Person rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Entity ;
+    rdfs:comment "Represents a person, typically a student who undertakes study." .
+
+:Cl_Degree rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Entity ;
+    rdfs:comment "Represents an academic qualification or degree." .
+
+:Cl_BachelorDegree rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Degree ;
+    rdfs:comment "A specific type of academic degree, typically an undergraduate degree." .
+
+:Cl_MasterDegree rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Degree ;
+    rdfs:comment "A specific type of academic degree, typically a postgraduate master's degree." .
+
+:Cl_DoctoralDegree rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Degree ;
+    rdfs:comment "A specific type of academic degree, typically a postgraduate doctoral degree (e.g., PhD)." .
+
+:Cl_TimePeriod rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Entity ;
+    rdfs:comment "Represents a defined duration of time with a distinct start and end." .
+
+# Reification Class: Cl_StudyEnrollment
+# This pivot class captures the complex relationship between a person, a degree, and the time period of study.
+:Cl_StudyEnrollment rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Entity ;
+    rdfs:comment "Represents a specific instance of a person's enrollment and study for a degree during a particular time period. This class is crucial for answering the competency question by linking the person, degree, and time." .
+
+# Properties
+
+# Object Properties (connecting classes)
+
+# Properties for Reification (linking Cl_StudyEnrollment to other core classes)
+:hasStudent rdf:type owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain :Cl_StudyEnrollment ;
+    rdfs:range :Cl_Person ;
+    rdfs:comment "Connects a study enrollment instance to the specific person (student) involved." .
+
+:hasDegree rdf:type owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain :Cl_StudyEnrollment ;
+    rdfs:range :Cl_Degree ;
+    rdfs:comment "Connects a study enrollment instance to the specific academic degree being pursued." .
+
+:duringPeriod rdf:type owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain :Cl_StudyEnrollment ;
+    rdfs:range :Cl_TimePeriod ;
+    rdfs:comment "Connects a study enrollment instance to the specific time period during which the study occurred." .
+
+# Data Properties (connecting classes to literal values)
+
+:personName rdf:type owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain :Cl_Person ;
+    rdfs:range xsd:string ;
+    rdfs:comment "The full name of the person." .
+
+:degreeName rdf:type owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain :Cl_Degree ;
+    rdfs:range xsd:string ;
+    rdfs:comment "The formal name of the degree (e.g., 'Bachelor of Science in Computer Science'). This property is inherited by all subclasses of Cl_Degree." .
+
+:degreeLevel rdf:type owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain :Cl_Degree ;
+    rdfs:range xsd:string ;
+    rdfs:comment "The general academic level of the degree (e.g., 'Undergraduate', 'Postgraduate', 'Doctorate')." .
+
+:startDate rdf:type owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain :Cl_TimePeriod ;
+    rdfs:range xsd:date ;
+    rdfs:comment "The calendar start date of the time period." .
+
+:endDate rdf:type owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain :Cl_TimePeriod ;
+    rdfs:range xsd:date ;
+    rdfs:comment "The calendar end date of the time period." .
+
+# Restrictions and General Class Axioms
+
+# Every Cl_StudyEnrollment must be fully defined by having exactly one student, one degree, and one time period.
+:Cl_StudyEnrollment rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :hasStudent ;
+    owl:cardinality 1 ;
+    rdfs:comment "Each study enrollment must be associated with exactly one student."
+] .
+
+:Cl_StudyEnrollment rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :hasDegree ;
+    owl:cardinality 1 ;
+    rdfs:comment "Each study enrollment must be associated with exactly one degree."
+] .
+
+:Cl_StudyEnrollment rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :duringPeriod ;
+    owl:cardinality 1 ;
+    rdfs:comment "Each study enrollment must occur during exactly one time period."
+] .
+
+# Every Cl_TimePeriod must have both a start and an end date defined.
+:Cl_TimePeriod rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :startDate ;
+    owl:someValuesFrom xsd:date ;
+    rdfs:comment "A time period must have a defined start date."
+] .
+
+:Cl_TimePeriod rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :endDate ;
+    owl:someValuesFrom xsd:date ;
+    rdfs:comment "A time period must have a defined end date."
+] .
+
+# General axiom: All instances of Cl_Person must have a name.
+[ rdf:type owl:Restriction ;
+  owl:onProperty :personName ;
+  owl:someValuesFrom xsd:string ;
+  rdfs:subClassOf :Cl_Person ;
+  rdfs:comment "It is a requirement that every person in the ontology has a name."
+] .
+
+# General axiom: All instances of Cl_Degree must have a name.
+[ rdf:type owl:Restriction ;
+  owl:onProperty :degreeName ;
+  owl:someValuesFrom xsd:string ;
+  rdfs:subClassOf :Cl_Degree ;
+  rdfs:comment "It is a requirement that every degree in the ontology has a name."
+] .
+@prefix : <http://example.org/hospital-ontology#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+:Cl_Person rdf:type owl:Class ;
+    rdfs:label "Person" ;
+    rdfs:comment "Represents an individual person." .
+
+:Cl_Organization rdf:type owl:Class ;
+    rdfs:label "Organization" ;
+    rdfs:comment "Represents a general organization." .
+
+:Cl_Hospital rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Organization ;
+    rdfs:label "Hospital" ;
+    rdfs:comment "Represents a specific type of organization, a hospital." .
+
+:Cl_EmploymentEvent rdf:type owl:Class ;
+    rdfs:label "Employment Event" ;
+    rdfs:comment "A reification class representing a specific instance of a person's employment at a hospital, capturing the start date of this employment." ;
+    # Restrictions to ensure an Employment Event always has a person, a hospital, and a start date
+    rdfs:subClassOf
+        [ rdf:type owl:Restriction ;
+            owl:onProperty :relatesToPerson ;
+            owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+            owl:allValuesFrom :Cl_Person
+        ] ,
+        [ rdf:type owl:Restriction ;
+            owl:onProperty :relatesToHospital ;
+            owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+            owl:allValuesFrom :Cl_Hospital
+        ] ,
+        [ rdf:type owl:Restriction ;
+            owl:onProperty :employmentStartDate ;
+            owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+            owl:maxCardinality "1"^^xsd:nonNegativeInteger ;
+            owl:allValuesFrom xsd:date
+        ] .
+
+:relatesToPerson rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_EmploymentEvent ;
+    rdfs:range :Cl_Person ;
+    rdfs:label "relates to person" ;
+    rdfs:comment "Links an employment event to the person involved in that event." .
+
+:relatesToHospital rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_EmploymentEvent ;
+    rdfs:range :Cl_Hospital ;
+    rdfs:label "relates to hospital" ;
+    rdfs:comment "Links an employment event to the hospital where the employment took place." .
+
+:hasEmploymentEvent rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_Person ;
+    rdfs:range :Cl_EmploymentEvent ;
+    rdfs:label "has employment event" ;
+    rdfs:comment "Links a person to an employment event they are involved in." ;
+    owl:inverseOf :relatesToPerson .
+
+:hostsEmploymentEvent rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_Hospital ;
+    rdfs:range :Cl_EmploymentEvent ;
+    rdfs:label "hosts employment event" ;
+    rdfs:comment "Links a hospital to an employment event that occurred there." ;
+    owl:inverseOf :relatesToHospital .
+
+:personName rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Cl_Person ;
+    rdfs:range xsd:string ;
+    rdfs:label "person name" ;
+    rdfs:comment "The full name of the person." .
+
+:hospitalName rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Cl_Hospital ;
+    rdfs:range xsd:string ;
+    rdfs:label "hospital name" ;
+    rdfs:comment "The official name of the hospital." .
+
+:employmentStartDate rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Cl_EmploymentEvent ;
+    rdfs:range xsd:date ;
+    rdfs:label "employment start date" ;
+    rdfs:comment "The date when the employment relationship for a specific event began." .
+@prefix : <http://example.org/hospital-ontology#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+:hospital-ontology a owl:Ontology ;
+    rdfs:comment "Ontology for representing hospital locations, designed to answer the competency question 'In what city is a certain hospital located?' using reification." ;
+    owl:versionIRI <http://example.org/hospital-ontology/1.0> .
+
+# Classes
+:Cl_Thing a owl:Class ;
+    rdfs:label "Thing" ;
+    rdfs:comment "The most general class representing anything in the domain." .
+
+:Cl_Place a owl:Class ;
+    rdfs:label "Place" ;
+    rdfs:subClassOf :Cl_Thing ;
+    rdfs:comment "A geographical location or abstract concept of a place." .
+
+:Cl_GeographicalFeature a owl:Class ;
+    rdfs:label "Geographical Feature" ;
+    rdfs:subClassOf :Cl_Place ;
+    rdfs:comment "A specific type of place with distinct geographical characteristics." .
+
+:Cl_City a owl:Class ;
+    rdfs:label "City" ;
+    rdfs:subClassOf :Cl_GeographicalFeature ;
+    rdfs:comment "A densely populated urban area, typically with defined administrative boundaries." .
+
+:Cl_Organization a owl:Class ;
+    rdfs:label "Organization" ;
+    rdfs:subClassOf :Cl_Thing ;
+    rdfs:comment "A structured group of people with a particular purpose, such as a business, institution, or association." .
+
+:Cl_HealthcareProvider a owl:Class ;
+    rdfs:label "Healthcare Provider" ;
+    rdfs:subClassOf :Cl_Organization ;
+    rdfs:comment "An organization primarily focused on delivering medical or health services." .
+
+:Cl_Hospital a owl:Class ;
+    rdfs:label "Hospital" ;
+    rdfs:subClassOf :Cl_HealthcareProvider ;
+    rdfs:comment "A medical institution specialized in providing inpatient and outpatient healthcare services, typically equipped with advanced medical facilities and staff." .
+
+# Reification Pivot Class
+:Cl_LocationAssertion a owl:Class ;
+    rdfs:label "Location Assertion" ;
+    rdfs:subClassOf :Cl_Thing ;
+    rdfs:comment "A pivot class that reifies the relationship of an entity being located at a particular place, allowing for additional attributes like coordinates or timeframes to be associated with that specific location instance." .
+
+# Disjoint Classes
+:Cl_City owl:disjointWith :Cl_Hospital ;
+    rdfs:comment "A City cannot be a Hospital, and vice-versa." .
+
+:Cl_Organization owl:disjointWith :Cl_GeographicalFeature ;
+    rdfs:comment "An Organization cannot be a Geographical Feature, and vice-versa." .
+
+# Properties
+
+# Object Properties
+:hasRelationship a owl:ObjectProperty ;
+    rdfs:label "has relationship" ;
+    rdfs:comment "A general property indicating a relationship between two entities." .
+
+:assertsLocation a owl:ObjectProperty ;
+    rdfs:label "asserts location" ;
+    rdfs:subPropertyOf :hasRelationship ;
+    rdfs:domain :Cl_Hospital ;
+    rdfs:range :Cl_LocationAssertion ;
+    rdfs:comment "Links a hospital to a specific assertion about its location, enabling the inclusion of detailed location attributes." .
+
+:isLocationAssertionOf a owl:ObjectProperty ;
+    rdfs:label "is location assertion of" ;
+    owl:inverseOf :assertsLocation ;
+    rdfs:domain :Cl_LocationAssertion ;
+    rdfs:range :Cl_Hospital ;
+    a owl:FunctionalProperty ; # A specific location assertion pertains to one hospital.
+    rdfs:comment "The inverse property of 'asserts location', indicating which hospital a particular location assertion refers to." .
+
+:locatedInCity a owl:ObjectProperty ;
+    rdfs:label "located in city" ;
+    rdfs:domain :Cl_LocationAssertion ;
+    rdfs:range :Cl_City ;
+    rdfs:comment "Connects a location assertion instance to the specific city where the entity (e.g., hospital) is located." .
+
+# Data Properties
+:hasName a owl:DatatypeProperty ;
+    rdfs:label "has name" ;
+    rdfs:domain :Cl_Thing ;
+    rdfs:range xsd:string ;
+    rdfs:comment "A general property for the primary name of any entity." .
+
+:hasCityName a owl:DatatypeProperty ;
+    rdfs:label "has city name" ;
+    rdfs:subPropertyOf :hasName ;
+    rdfs:domain :Cl_City ;
+    rdfs:range xsd:string ;
+    a owl:FunctionalProperty ; # A city typically has one primary name.
+    rdfs:comment "The official or common name of the city." .
+
+:hasLatitude a owl:DatatypeProperty ;
+    rdfs:label "has latitude" ;
+    rdfs:domain :Cl_LocationAssertion ;
+    rdfs:range xsd:decimal ;
+    rdfs:comment "The geographical latitude coordinate associated with a specific location assertion." .
+
+:hasLongitude a owl:DatatypeProperty ;
+    rdfs:label "has longitude" ;
+    rdfs:domain :Cl_LocationAssertion ;
+    rdfs:range xsd:decimal ;
+    rdfs:comment "The geographical longitude coordinate associated with a specific location assertion." .
+
+# General Class Axioms / Restrictions
+# Every Hospital must have at least one location assertion.
+:Cl_Hospital rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :assertsLocation ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:comment "Ensures that every instance of Cl_Hospital has at least one associated location assertion."
+] .
+
+# Every Location Assertion must be associated with a Hospital.
+:Cl_LocationAssertion rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :isLocationAssertionOf ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:comment "Ensures that every instance of Cl_LocationAssertion describes the location of at least one Cl_Hospital."
+] .
+
+# Every Location Assertion must specify the city it is located in.
+:Cl_LocationAssertion rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :locatedInCity ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:comment "Ensures that every instance of Cl_LocationAssertion explicitly states the city where the entity is located."
+] .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix : <http://www.example.org/ontology#> .
+
+# Ontology Metadata
+:ontology rdf:type owl:Ontology ;
+    rdfs:label "Geographical Location Ontology" ;
+    owl:versionIRI <http://www.example.org/ontology/1.0> ;
+    rdfs:comment "Ontology for representing geographical entities and their containment relationships, with reification applied to the location fact." .
+
+# Classes
+:Cl_Location rdf:type owl:Class ;
+    rdfs:label "Location" ;
+    rdfs:comment "A general class representing any location." .
+
+:Cl_GeographicalEntity rdf:type owl:Class ;
+    rdfs:label "Geographical Entity" ;
+    rdfs:subClassOf :Cl_Location ;
+    rdfs:comment "A specific type of location that represents a real-world geographical area or point." .
+
+:Cl_Country rdf:type owl:Class ;
+    rdfs:label "Country" ;
+    rdfs:subClassOf :Cl_GeographicalEntity ;
+    rdfs:comment "A sovereign state or nation." .
+
+:Cl_City rdf:type owl:Class ;
+    rdfs:label "City" ;
+    rdfs:subClassOf :Cl_GeographicalEntity ;
+    rdfs:comment "A large human settlement, typically larger than a town or village." .
+
+# Disjointness Axiom
+# Ensures that an entity cannot be both a Country and a City simultaneously.
+:Cl_Country owl:disjointWith :Cl_City .
+
+# Reification Class for the location fact
+# Cl_GeographicalContainment represents the asserted fact or relationship that a City is contained within a Country.
+# This reifies the binary 'located in' relationship into an entity itself, allowing for potential future attributes
+# (e.g., date of assertion, source of information) if the scenario became more complex.
+:Cl_GeographicalContainment rdf:type owl:Class ;
+    rdfs:label "Geographical Containment Fact" ;
+    rdfs:comment "Represents the fact or assertion that a specific geographical entity (a City) is contained within another (a Country)." ;
+    # Restrictions: Each instance of Cl_GeographicalContainment must describe exactly one city and exactly one country.
+    rdfs:subClassOf [
+        rdf:type owl:Restriction ;
+        owl:onProperty :describesContainmentOf ;
+        owl:cardinality "1"^^xsd:nonNegativeInteger
+    ] ;
+    rdfs:subClassOf [
+        rdf:type owl:Restriction ;
+        owl:onProperty :describesContainmentIn ;
+        owl:cardinality "1"^^xsd:nonNegativeInteger
+    ] .
+
+# Properties
+
+# Data Property: hasName
+# Used for giving names to geographical entities.
+:hasName rdf:type owl:DatatypeProperty ;
+    rdfs:label "has name" ;
+    rdfs:domain :Cl_GeographicalEntity ;
+    rdfs:range xsd:string ;
+    owl:maxCardinality "1"^^xsd:nonNegativeInteger ; # Assuming one primary name per entity
+    rdfs:comment "The primary name of a geographical entity." .
+
+# Object Properties for Reification
+# These properties link the Cl_GeographicalContainment fact to the specific City and Country involved.
+
+:describesContainmentOf rdf:type owl:ObjectProperty ;
+    rdfs:label "describes containment of" ;
+    rdfs:domain :Cl_GeographicalContainment ;
+    rdfs:range :Cl_City ;
+    owl:functional true ; # Each containment fact describes one specific city.
+    rdfs:comment "Links a Geographical Containment Fact to the City that is being described as contained." .
+
+:describesContainmentIn rdf:type owl:ObjectProperty ;
+    rdfs:label "describes containment in" ;
+    rdfs:domain :Cl_GeographicalContainment ;
+    rdfs:range :Cl_Country ;
+    owl:functional true ; # Each containment fact describes containment in one specific country.
+    rdfs:comment "Links a Geographical Containment Fact to the Country in which the City is described as being contained." .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix : <http://example.org/union_ontology#> .
+
+# Classes
+# General class for any kind of organization
+:Cl_Organization rdf:type owl:Class ;
+    rdfs:label "Organization" ;
+    rdfs:comment "A broad category representing structured groups or institutions." .
+
+# Specific type of organization representing a union
+:Cl_Union rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Organization ;
+    rdfs:label "Union" ;
+    rdfs:comment "A specific type of organization, typically formed by workers for collective bargaining." .
+
+# General class for any individual entity
+:Cl_Individual rdf:type owl:Class ;
+    rdfs:label "Individual" ;
+    rdfs:comment "A broad category representing a single, distinct entity or person." .
+
+# Specific type of individual representing a human person
+:Cl_Person rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Individual ;
+    rdfs:label "Person" ;
+    rdfs:comment "A specific type of individual representing a human being." .
+
+# Pivot class for reification: Represents the act or state of a person's membership in a union over time.
+:Cl_UnionMembership rdf:type owl:Class ;
+    rdfs:label "Union Membership" ;
+    rdfs:comment "A reified concept capturing the relationship between a Person, a Union, and the period during which the membership is valid." .
+
+# Properties
+
+# Data Properties
+# Generic property for names
+:hasName rdf:type owl:DatatypeProperty ;
+    rdfs:label "has name" ;
+    rdfs:comment "A generic property to associate a name (string) with an entity." ;
+    rdfs:range xsd:string .
+
+# Specific property for the name of a union
+:hasUnionName rdf:type owl:DatatypeProperty ;
+    rdfs:subPropertyOf :hasName ;
+    rdfs:domain :Cl_Union ;
+    rdfs:label "has union name" ;
+    rdfs:comment "The official name of the union." .
+
+# Specific property for the name of a person
+:hasPersonName rdf:type owl:DatatypeProperty ;
+    rdfs:subPropertyOf :hasName ;
+    rdfs:domain :Cl_Person ;
+    rdfs:label "has person name" ;
+    rdfs:comment "The full name of the person." .
+
+# Date when a membership commenced
+:membershipStartDate rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Cl_UnionMembership ;
+    rdfs:range xsd:date ;
+    rdfs:label "membership start date" ;
+    rdfs:comment "The date on which a union membership began." .
+
+# Date when a membership concluded (optional, for current memberships)
+:membershipEndDate rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Cl_UnionMembership ;
+    rdfs:range xsd:date ;
+    rdfs:label "membership end date" ;
+    rdfs:comment "The date on which a union membership ended. This property may not be present for ongoing memberships." .
+
+# Object Properties
+# Links a Cl_UnionMembership instance to the specific Person who holds the membership.
+:memberIs rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_UnionMembership ;
+    rdfs:range :Cl_Person ;
+    rdfs:label "member is" ;
+    rdfs:comment "Connects a Union Membership event to the Person who is the member." .
+
+# Links a Cl_UnionMembership instance to the specific Union to which the person belongs.
+:membershipOfUnion rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_UnionMembership ;
+    rdfs:range :Cl_Union ;
+    rdfs:label "membership of union" ;
+    rdfs:comment "Connects a Union Membership event to the Union involved." .
+
+# Restrictions on Cl_UnionMembership to ensure data integrity for the reified relationship
+# Every Cl_UnionMembership instance must be associated with at least one Cl_Person.
+:Cl_UnionMembership rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :memberIs ;
+    owl:someValuesFrom :Cl_Person
+] .
+
+# Every Cl_UnionMembership instance must be associated with at least one Cl_Union.
+:Cl_UnionMembership rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :membershipOfUnion ;
+    owl:someValuesFrom :Cl_Union
+] .
+
+# Competency Question: "Who are the members of a certain union at a certain point in time?"
+# This question can be answered by querying instances of :Cl_UnionMembership.
+# One would filter these instances by the desired :membershipOfUnion and by checking
+# if the specified "point in time" falls between :membershipStartDate and :membershipEndDate (if present).
+# Then, for the matching :Cl_UnionMembership instances, retrieve the :memberIs (Cl_Person)
+# and their respective :hasPersonName.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix : <http://www.example.org/union_ontology#> .
+
+# Ontology Declaration
+:unionOntology rdf:type owl:Ontology ;
+    owl:versionIRI <http://www.example.org/union_ontology/1.0> ;
+    rdfs:comment "Ontology for modeling roles of people within union groups over time, designed to answer 'What role does a certain person have within a certain union group at a certain point in time?'" .
+
+# 1. Classes
+:Cl_Entity rdf:type owl:Class ;
+    rdfs:label "Entity" ;
+    rdfs:comment "A general class for all entities in the ontology." .
+
+:Cl_Agent rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Entity ;
+    rdfs:label "Agent" ;
+    rdfs:comment "A superclass for entities that can perform actions or have roles." .
+
+:Cl_Organization rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Entity ;
+    rdfs:label "Organization" ;
+    rdfs:comment "A superclass for organized groups of people." .
+
+:Cl_TimePoint rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Entity ;
+    rdfs:label "Time Point" ;
+    rdfs:comment "Represents a specific point in time or a time interval. While dp_atTime uses xsd:dateTime for a specific point, this class can be used for more complex time modeling if needed." .
+
+:Cl_Person rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Agent ;
+    rdfs:label "Person" ;
+    rdfs:comment "Represents an individual human being." .
+
+:Cl_UnionGroup rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Organization ;
+    rdfs:label "Union Group" ;
+    rdfs:comment "Represents a collective organization of workers or employees." .
+
+:Cl_Role rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Entity ;
+    rdfs:label "Role" ;
+    rdfs:comment "Represents a specific function or position a person holds within an organization or context." .
+
+# Reification Class (Pivot Class) for the Competency Question
+:Cl_UnionRoleAssignment rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Entity ;
+    rdfs:label "Union Role Assignment" ;
+    rdfs:comment "A pivot class representing the instance of a specific role being assigned to a person within a union group at a particular point in time. This reifies the n-ary relationship between Person, UnionGroup, Role, and Time, allowing the ontology to answer 'What role does a certain person have within a certain union group at a certain point in time?'" .
+
+# 2. Properties
+
+# Object Properties
+:op_involves rdf:type owl:ObjectProperty ;
+    rdfs:label "involves" ;
+    rdfs:comment "A general property to link an event, situation, or assignment to an entity that participates in it." .
+
+:op_assignedToPerson rdf:type owl:ObjectProperty ;
+    rdfs:subPropertyOf :op_involves ;
+    rdfs:domain :Cl_UnionRoleAssignment ;
+    rdfs:range :Cl_Person ;
+    rdfs:label "assigned to person" ;
+    rdfs:comment "Links a Union Role Assignment instance to the specific Person who holds the role." .
+
+:op_inUnionGroup rdf:type owl:ObjectProperty ;
+    rdfs:subPropertyOf :op_involves ;
+    rdfs:domain :Cl_UnionRoleAssignment ;
+    rdfs:range :Cl_UnionGroup ;
+    rdfs:label "in union group" ;
+    rdfs:comment "Links a Union Role Assignment instance to the Union Group where the role is held." .
+
+:op_hasRole rdf:type owl:ObjectProperty ;
+    rdfs:subPropertyOf :op_involves ;
+    rdfs:domain :Cl_UnionRoleAssignment ;
+    rdfs:range :Cl_Role ;
+    rdfs:label "has role" ;
+    rdfs:comment "Links a Union Role Assignment instance to the specific Role that is assigned." .
+
+# Data Properties
+:dp_atTime rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Cl_UnionRoleAssignment ;
+    rdfs:range xsd:dateTime ;
+    rdfs:label "at time" ;
+    rdfs:comment "Specifies the exact point in time when the Union Role Assignment is effective or when it occurred." .
+
+:dp_personName rdf:type owl:DatatypeProperty ;
+    rdf:type owl:FunctionalProperty ;
+    rdfs:domain :Cl_Person ;
+    rdfs:range xsd:string ;
+    rdfs:label "person name" ;
+    rdfs:comment "The full name of the person." .
+
+:dp_unionName rdf:type owl:DatatypeProperty ;
+    rdf:type owl:FunctionalProperty ;
+    rdfs:domain :Cl_UnionGroup ;
+    rdfs:range xsd:string ;
+    rdfs:label "union name" ;
+    rdfs:comment "The official name of the union group." .
+
+:dp_roleName rdf:type owl:DatatypeProperty ;
+    rdf:type owl:FunctionalProperty ;
+    rdfs:domain :Cl_Role ;
+    rdfs:range xsd:string ;
+    rdfs:label "role name" ;
+    rdfs:comment "The descriptive name of the role (e.g., 'President', 'Treasurer', 'Member')." .
+
+# 3. Restrictions and General Class Axioms
+
+# Every UnionRoleAssignment must be assigned to exactly one person.
+:Cl_UnionRoleAssignment rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :op_assignedToPerson ;
+    owl:cardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:comment "Ensures each Union Role Assignment links to exactly one Person."
+] .
+
+# Every UnionRoleAssignment must be in exactly one union group.
+:Cl_UnionRoleAssignment rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :op_inUnionGroup ;
+    owl:cardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:comment "Ensures each Union Role Assignment links to exactly one Union Group."
+] .
+
+# Every UnionRoleAssignment must have exactly one role.
+:Cl_UnionRoleAssignment rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :op_hasRole ;
+    owl:cardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:comment "Ensures each Union Role Assignment links to exactly one Role."
+] .
+
+# Every UnionRoleAssignment must have a specified time.
+:Cl_UnionRoleAssignment rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :dp_atTime ;
+    owl:cardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:comment "Ensures each Union Role Assignment has exactly one associated time point."
+] .
+
+# Disjointness Axioms to ensure clear separation of core classes
+:Cl_Person owl:disjointWith :Cl_UnionGroup ;
+    owl:disjointWith :Cl_Role .
+:Cl_UnionGroup owl:disjointWith :Cl_Role .
+
+# General Class Axioms for mandatory properties (soft restrictions using someValuesFrom)
+# A person must have a name
+:Cl_Person rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :dp_personName ;
+    owl:someValuesFrom xsd:string ;
+    rdfs:comment "Every person entity must have at least one name."
+] .
+
+# A union group must have a name
+:Cl_UnionGroup rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :dp_unionName ;
+    owl:someValuesFrom xsd:string ;
+    rdfs:comment "Every union group entity must have at least one name."
+] .
+
+# A role must have a name
+:Cl_Role rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :dp_roleName ;
+    owl:someValuesFrom xsd:string ;
+    rdfs:comment "Every role entity must have at least one name."
+] .
+@prefix : <http://www.example.org/ontology#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# Classes
+:Cl_Person rdf:type owl:Class ;
+    rdfs:label "Person" .
+
+:Cl_Doctor rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Person ;
+    rdfs:label "Doctor" .
+
+:Cl_Employee rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Person ;
+    rdfs:label "Employee" .
+
+# Reification Class for the evaluation event
+:Cl_EvaluationEvent rdf:type owl:Class ;
+    rdfs:label "Evaluation Event" ;
+    rdfs:comment "A pivot class representing an evaluation given by a doctor to an employee, including the statement itself." .
+
+# Properties
+
+# Object Properties
+:hasEvaluator rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_EvaluationEvent ;
+    rdfs:range :Cl_Doctor ;
+    rdfs:label "has Evaluator" ;
+    rdfs:comment "Connects an evaluation event to the doctor who performed the evaluation." .
+
+:hasSubjectEmployee rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_EvaluationEvent ;
+    rdfs:range :Cl_Employee ;
+    rdfs:label "has Subject Employee" ;
+    rdfs:comment "Connects an evaluation event to the employee who was evaluated." .
+
+# Data Properties
+:doctorName rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Cl_Doctor ;
+    rdfs:range xsd:string ;
+    rdfs:label "doctor Name" ;
+    owl:functionalProperty true ;
+    rdfs:comment "The name of the doctor." .
+
+:employeeName rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Cl_Employee ;
+    rdfs:range xsd:string ;
+    rdfs:label "employee Name" ;
+    owl:functionalProperty true ;
+    rdfs:comment "The name of the employee." .
+
+:employeeID rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Cl_Employee ;
+    rdfs:range xsd:string ; # Using xsd:string to allow for alphanumeric IDs
+    rdfs:label "employee ID" ;
+    owl:functionalProperty true ;
+    rdfs:comment "The unique identifier of the employee." .
+
+:evaluationStatementText rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Cl_EvaluationEvent ;
+    rdfs:range xsd:string ;
+    rdfs:label "evaluation Statement Text" ;
+    rdfs:comment "The textual content of the evaluation statement." .
+
+# General Class Axioms / Restrictions
+# An EvaluationEvent must have an evaluator (a doctor).
+:Cl_EvaluationEvent rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :hasEvaluator ;
+    owl:someValuesFrom :Cl_Doctor
+] .
+
+# An EvaluationEvent must have a subject employee.
+:Cl_EvaluationEvent rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :hasSubjectEmployee ;
+    owl:someValuesFrom :Cl_Employee
+] .
+
+# An EvaluationEvent must have an evaluation statement text.
+:Cl_EvaluationEvent rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :evaluationStatementText ;
+    owl:someValuesFrom xsd:string
+] .
+@prefix : <http://www.semanticweb.org/myontology#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://www.semanticweb.org/myontology> rdf:type owl:Ontology ;
+                                       owl:versionIRI <http://www.semanticweb.org/myontology/1.0.0> .
+
+# Classes
+:Cl_ContentUnit rdf:type owl:Class ;
+                rdfs:comment "A generic unit of content." .
+
+:Cl_Article rdf:type owl:Class ;
+            rdfs:subClassOf :Cl_ContentUnit ;
+            rdfs:comment "A specific piece of content, typically found within a larger collection." .
+
+:Cl_Collection rdf:type owl:Class ;
+               rdfs:comment "A general class for collections of content, such as books or CDs." .
+
+:Cl_Book rdf:type owl:Class ;
+         rdfs:subClassOf :Cl_Collection ;
+         owl:disjointWith :Cl_CD ;
+         rdfs:comment "A printed or electronic publication consisting of a set of written, printed, illustrated, or blank pages." .
+
+:Cl_CD rdf:type owl:Class ;
+       rdfs:subClassOf :Cl_Collection ;
+       rdfs:comment "A compact disc, especially one used for storing music or other data." .
+
+# Pivot Class for Reification
+:Cl_CompositionEvent rdf:type owl:Class ;
+                    rdfs:comment "Represents the event or instance of an article being composed within a collection (book or CD), capturing details about its inclusion." ;
+                    # General class axioms to ensure a CompositionEvent always involves a Collection and an Article
+                    rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                      owl:onProperty :composedIn ;
+                                      owl:someValuesFrom :Cl_Collection
+                                    ] ;
+                    rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                      owl:onProperty :composes ;
+                                      owl:someValuesFrom :Cl_Article
+                                    ] .
+
+# Object Properties
+:composedIn rdf:type owl:ObjectProperty ;
+            rdfs:domain :Cl_CompositionEvent ;
+            rdfs:range :Cl_Collection ;
+            rdfs:comment "Relates a composition event to the collection it is part of (e.g., a book or CD)." .
+
+:composes rdf:type owl:ObjectProperty ;
+          rdfs:domain :Cl_CompositionEvent ;
+          rdfs:range :Cl_Article ;
+          rdfs:comment "Relates a composition event to the specific article that is part of the collection." .
+
+:hasCompositionEvent rdf:type owl:ObjectProperty ;
+                     rdfs:domain :Cl_Collection ;
+                     rdfs:range :Cl_CompositionEvent ;
+                     owl:inverseOf :composedIn ;
+                     rdfs:comment "Relates a collection to its specific composition events." .
+
+# Property Chain Axiom to directly answer the competency question using the reification structure
+:isComposedOfArticle rdf:type owl:ObjectProperty ;
+                     rdfs:domain :Cl_Collection ;
+                     rdfs:range :Cl_Article ;
+                     rdfs:comment "Relates a collection to an article it is composed of, derived from composition events. This property directly answers the competency question 'What articles is a specific book or CD composed of?'" ;
+                     owl:propertyChainAxiom ( :hasCompositionEvent :composes ) .
+
+# Data Properties
+:title rdf:type owl:DatatypeProperty ;
+       rdfs:domain [ owl:unionOf (:Cl_Collection :Cl_Article) ; rdf:type owl:Class ] ;
+       rdfs:range xsd:string ;
+       rdfs:comment "The title of a collection or an article." .
+
+:publicationYear rdf:type owl:DatatypeProperty ;
+                 rdfs:domain :Cl_Collection ;
+                 rdfs:range xsd:gYear ;
+                 rdfs:comment "The year the collection was published." .
+
+:trackNumber rdf:type owl:DatatypeProperty ;
+             rdfs:domain :Cl_CompositionEvent ;
+             rdfs:range xsd:integer ;
+             rdfs:comment "The track number of an article if it is part of a CD composition event." .
+# Restriction: If a Cl_CompositionEvent has a track number, then the collection it is composed in must be a Cl_CD.
+:Cl_CompositionEvent rdfs:subClassOf [
+                                      rdf:type owl:Restriction ;
+                                      owl:onProperty :trackNumber ;
+                                      owl:someValuesFrom rdfs:Literal ;
+                                      rdfs:subClassOf [
+                                                        rdf:type owl:Restriction ;
+                                                        owl:onProperty :composedIn ;
+                                                        owl:allValuesFrom :Cl_CD
+                                                      ]
+                                    ] .
+
+:startPage rdf:type owl:DatatypeProperty ;
+           rdfs:domain :Cl_CompositionEvent ;
+           rdfs:range xsd:integer ;
+           rdfs:comment "The starting page number of an article within a book composition event." .
+# Restriction: If a Cl_CompositionEvent has a starting page, then the collection it is composed in must be a Cl_Book.
+:Cl_CompositionEvent rdfs:subClassOf [
+                                      rdf:type owl:Restriction ;
+                                      owl:onProperty :startPage ;
+                                      owl:someValuesFrom rdfs:Literal ;
+                                      rdfs:subClassOf [
+                                                        rdf:type owl:Restriction ;
+                                                        owl:onProperty :composedIn ;
+                                                        owl:allValuesFrom :Cl_Book
+                                                      ]
+                                    ] .
+
+:endPage rdf:type owl:DatatypeProperty ;
+         rdfs:domain :Cl_CompositionEvent ;
+         rdfs:range xsd:integer ;
+         rdfs:comment "The ending page number of an article within a book composition event." .
+# Restriction: If a Cl_CompositionEvent has an ending page, then the collection it is composed in must be a Cl_Book.
+:Cl_CompositionEvent rdfs:subClassOf [
+                                      rdf:type owl:Restriction ;
+                                      owl:onProperty :endPage ;
+                                      owl:someValuesFrom rdfs:Literal ;
+                                      rdfs:subClassOf [
+                                                        rdf:type owl:Restriction ;
+                                                        owl:onProperty :composedIn ;
+                                                        owl:allValuesFrom :Cl_Book
+                                                      ]
+                                    ] .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix : <http://example.org/book-ontology#> .
+
+# Classes
+:Cl_Document rdf:type owl:Class ;
+    rdfs:label "Document" .
+
+:Cl_Publication rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Document ;
+    rdfs:label "Publication" .
+
+:Cl_Book rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Publication ;
+    rdfs:label "Book" .
+
+# Properties
+:hasPageCount rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Cl_Book ;
+    rdfs:range xsd:integer ;
+    owl:functional true ;
+    rdfs:label "has page count" ;
+    rdfs:comment "Indicates the number of pages a book contains." .
+@prefix : <http://www.ontology.org/example#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+:ontology rdf:type owl:Ontology .
+
+#################################################################
+#    Classes
+#################################################################
+
+:Cl_Publication rdf:type owl:Class ;
+    rdfs:comment "Represents any item that can be published, serving as a superclass for various types of published works." .
+
+:Cl_Book rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Publication ;
+    rdfs:comment "Represents a physical or digital book." .
+
+:Cl_CD rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Publication ;
+    rdfs:comment "Represents a Compact Disc, typically for music or data." .
+
+#################################################################
+#    Properties
+#################################################################
+
+:Pr_hasPublicationDate rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Cl_Publication ;
+    rdfs:range xsd:date ;
+    rdfs:comment "Specifies the date when a publication item was first published." .
+
+#################################################################
+#    Restrictions (Optional, but good for completeness)
+#################################################################
+
+# All Cl_Publication instances must have a publication date
+:Cl_Publication rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :Pr_hasPublicationDate ;
+    owl:cardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:comment "Every publication must have exactly one publication date."
+] .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix : <http://www.example.org/ontology#> .
+
+# Classes
+:Cl_Event rdf:type owl:Class ;
+    rdfs:label "Event" ;
+    rdfs:comment "A general class representing any type of event." .
+
+:Cl_Seminar rdf:type owl:Class ;
+    rdfs:label "Seminar" ;
+    rdfs:comment "A specific type of event, typically an academic or professional presentation." ;
+    rdfs:subClassOf :Cl_Event .
+
+# Reification/Pivot Class for Seminar Occurrence
+# This class is introduced to capture the specific instance of a seminar taking place at a particular time,
+# addressing the complex scenario of linking a seminar to its temporal information.
+:Cl_SeminarOccurrence rdf:type owl:Class ;
+    rdfs:label "Seminar Occurrence" ;
+    rdfs:comment "A pivot class representing a specific instance or a single occurrence of a seminar, linking it to the exact time it takes place." .
+
+# Properties
+
+# Object Property: Links a seminar to its specific occurrences.
+:hasSeminarOccurrence rdf:type owl:ObjectProperty ;
+    rdfs:label "has seminar occurrence" ;
+    rdfs:domain :Cl_Seminar ;
+    rdfs:range :Cl_SeminarOccurrence ;
+    rdfs:comment "Connects a seminar to an instance representing one of its specific occurrences." .
+
+# Object Property: Links a seminar occurrence back to the seminar it belongs to.
+:isOccurrenceOfSeminar rdf:type owl:ObjectProperty ;
+    rdfs:label "is occurrence of seminar" ;
+    rdfs:domain :Cl_SeminarOccurrence ;
+    rdfs:range :Cl_Seminar ;
+    owl:inverseOf :hasSeminarOccurrence ;
+    rdfs:comment "Connects a seminar occurrence to the specific seminar it is an instance of." .
+
+# Data Property: Specifies the exact date and time of a seminar occurrence.
+:hasTimeOfOccurrence rdf:type owl:DatatypeProperty ;
+    rdfs:label "has time of occurrence" ;
+    rdfs:domain :Cl_SeminarOccurrence ;
+    rdfs:range xsd:dateTime ;
+    rdfs:comment "Records the precise date and time when a seminar occurrence happened." .
+
+# Restrictions
+# Every SeminarOccurrence must be an occurrence of exactly one Cl_Seminar.
+:Cl_SeminarOccurrence rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :isOccurrenceOfSeminar ;
+    owl:cardinality 1 ;
+    rdfs:comment "Each 'Cl_SeminarOccurrence' must be an occurrence of exactly one 'Cl_Seminar'."
+] .
+
+# Every SeminarOccurrence must have exactly one time of occurrence.
+:Cl_SeminarOccurrence rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :hasTimeOfOccurrence ;
+    owl:cardinality 1 ;
+    rdfs:comment "Each 'Cl_SeminarOccurrence' must have exactly one specific time of occurrence."
+] .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix : <http://example.org/ontology#> .
+
+#################################################################
+#    Classes
+#################################################################
+
+:Cl_Event rdf:type owl:Class ;
+    rdfs:label "Event" ;
+    rdfs:comment "A general class for any event that occurs at a specific time or duration." .
+
+:Cl_Seminar rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Event ;
+    rdfs:label "Seminar" ;
+    rdfs:comment "A specific type of event, typically for academic or professional discussions, often involving presentations." .
+
+:Cl_Document rdf:type owl:Class ;
+    rdfs:label "Document" ;
+    rdfs:comment "A general class for any written or recorded piece of information." .
+
+:Cl_Article rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Document ;
+    rdfs:label "Article" ;
+    rdfs:comment "A written work, typically a research paper or report, that can be presented." .
+
+:Cl_Activity rdf:type owl:Class ;
+    rdfs:label "Activity" ;
+    rdfs:comment "A general class representing an action or engagement." .
+
+:Cl_Presentation rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Activity, :Cl_Event ; # A presentation is both an activity and an event instance.
+    rdfs:label "Presentation" ;
+    rdfs:comment "A specific instance of an article being presented, acting as a pivot between an article and a seminar." .
+
+#################################################################
+#    Object Properties
+#################################################################
+
+:isPresentedInSeminar rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_Presentation ;
+    rdfs:range :Cl_Seminar ;
+    rdfs:label "is presented in seminar" ;
+    rdfs:comment "Connects a presentation to the seminar in which it takes place." .
+
+:includesPresentation rdf:type owl:ObjectProperty ;
+    owl:inverseOf :isPresentedInSeminar ;
+    rdfs:domain :Cl_Seminar ;
+    rdfs:range :Cl_Presentation ;
+    rdfs:label "includes presentation" ;
+    rdfs:comment "Connects a seminar to the presentations that are part of it." .
+
+:presentsArticle rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_Presentation ;
+    rdfs:range :Cl_Article ;
+    rdfs:label "presents article" ;
+    rdfs:comment "Connects a presentation to the article that is being presented." .
+
+:isPresentedAs rdf:type owl:ObjectProperty ;
+    owl:inverseOf :presentsArticle ;
+    rdfs:domain :Cl_Article ;
+    rdfs:range :Cl_Presentation ;
+    rdfs:label "is presented as" ;
+    rdfs:comment "Connects an article to its presentation instance." .
+
+#################################################################
+#    Data Properties
+#################################################################
+
+:hasTitle rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Cl_Document ;
+    rdfs:range xsd:string ;
+    rdfs:label "has title" ;
+    rdfs:comment "The title of a document, such as an article." .
+
+:hasName rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Cl_Event ;
+    rdfs:range xsd:string ;
+    rdfs:label "has name" ;
+    rdfs:comment "The name of an event, such as a seminar." .
+
+:hasDate rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Cl_Event ;
+    rdfs:range xsd:date ;
+    rdfs:label "has date" ;
+    rdfs:comment "The date on which an event occurs." .
+
+#################################################################
+#    Axioms and Restrictions
+#################################################################
+
+# Every Presentation must be associated with an Article.
+:Cl_Presentation rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :presentsArticle ;
+    owl:someValuesFrom :Cl_Article
+] .
+
+# Every Presentation must take place within a Seminar.
+:Cl_Presentation rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :isPresentedInSeminar ;
+    owl:someValuesFrom :Cl_Seminar
+] .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix : <http://example.org/ontology#> .
+
+# Ontology Declaration
+<http://example.org/ontology> rdf:type owl:Ontology ;
+    rdfs:comment "Ontology designed to answer the competency question 'Where did a certain seminar take place?'" ;
+    owl:versionIRI <http://example.org/ontology/1.0> .
+
+# Classes
+:Cl_Place rdf:type owl:Class ;
+    rdfs:label "Place" .
+
+:Cl_Location rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Place ;
+    rdfs:label "Location" .
+
+:Cl_Building rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Location ;
+    rdfs:label "Building" .
+
+:Cl_Room rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Location ;
+    rdfs:label "Room" .
+
+:Cl_Event rdf:type owl:Class ;
+    rdfs:label "Event" .
+
+:Cl_Seminar rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Event ;
+    rdfs:label "Seminar" .
+
+# General Class Axioms / Disjointness
+:Cl_Building owl:disjointWith :Cl_Room ;
+    owl:disjointWith :Cl_Event .
+
+:Cl_Room owl:disjointWith :Cl_Event .
+
+# Properties
+
+# Object Property: Indicates where an event (like a seminar) takes place.
+:hasLocation rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_Event ;
+    rdfs:range :Cl_Location ;
+    rdfs:label "has location" .
+
+# Object Property: Specifies that a room is located within a building.
+:locatedIn rdf:type owl:ObjectProperty , owl:FunctionalProperty ; # A room is typically located in exactly one building.
+    rdfs:domain :Cl_Room ;
+    rdfs:range :Cl_Building ;
+    rdfs:label "located in" .
+
+# Data Property: Represents the specific room number.
+:hasRoomNumber rdf:type owl:DatatypeProperty , owl:FunctionalProperty ; # A room has one specific identifier/number.
+    rdfs:domain :Cl_Room ;
+    rdfs:range xsd:string ; # Room numbers can be alphanumeric (e.g., "101A", "B205").
+    rdfs:label "has room number" .
+
+# Data Property: Represents the name of the building.
+:hasBuildingName rdf:type owl:DatatypeProperty , owl:FunctionalProperty ; # A building has one official name.
+    rdfs:domain :Cl_Building ;
+    rdfs:range xsd:string ;
+    rdfs:label "has building name" .
+
+# Restrictions
+# Every Seminar must have at least one location.
+:Cl_Seminar rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :hasLocation ;
+    owl:someValuesFrom :Cl_Location
+] .
+
+# Every Room must be located in at least one Building.
+:Cl_Room rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :locatedIn ;
+    owl:someValuesFrom :Cl_Building
+] .
+@prefix : <http://example.com/ontology#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+:ontology a owl:Ontology ;
+    rdfs:comment "Ontology for seminars and articles, specifically addressing the competency question: 'At least one article is always presented at each seminar.'" .
+
+# Classes
+# Hierarchy for Events
+:Cl_Event a owl:Class ;
+    rdfs:label "Event" ;
+    rdfs:comment "A general class representing any occurrence or happening over a period of time." .
+
+:Cl_AcademicEvent a owl:Class ;
+    rdfs:label "Academic Event" ;
+    rdfs:subClassOf :Cl_Event ;
+    rdfs:comment "A specialized type of event pertaining to academic or educational activities." .
+
+:Cl_Seminar a owl:Class ;
+    rdfs:label "Seminar" ;
+    rdfs:subClassOf :Cl_AcademicEvent ;
+    rdfs:comment "A specific academic event, typically involving discussions or presentations on a particular topic." .
+
+# Hierarchy for Works/Publications
+:Cl_Work a owl:Class ;
+    rdfs:label "Work" ;
+    rdfs:comment "A general class for any intellectual or creative output." .
+
+:Cl_AcademicWork a owl:Class ;
+    rdfs:label "Academic Work" ;
+    rdfs:subClassOf :Cl_Work ;
+    rdfs:comment "A work produced within an academic context, such as research papers or theses." .
+
+:Cl_Publication a owl:Class ;
+    rdfs:label "Publication" ;
+    rdfs:subClassOf :Cl_AcademicWork ;
+    rdfs:comment "An academic work that has been formally published." .
+
+:Cl_Article a owl:Class ;
+    rdfs:label "Article" ;
+    rdfs:subClassOf :Cl_Publication ;
+    rdfs:comment "A written work, typically a short piece published in a journal, magazine, or other collection." .
+
+# Reification Class (Pivot Class for "Presentation")
+:Cl_PresentationEvent a owl:Class ;
+    rdfs:label "Presentation Event" ;
+    rdfs:subClassOf :Cl_AcademicEvent ; # A presentation is also an academic event
+    rdfs:comment "A reification class representing the specific act of an article being presented, serving as an intermediary between a seminar and the article itself." .
+
+# Properties
+
+# Object Properties
+:p_featuresPresentation a owl:ObjectProperty ;
+    rdfs:label "features presentation" ;
+    rdfs:domain :Cl_Seminar ;
+    rdfs:range :Cl_PresentationEvent ;
+    rdfs:comment "Connects a seminar to a presentation event that occurs within that seminar." .
+
+:p_presentsArticle a owl:ObjectProperty ;
+    rdfs:label "presents article" ;
+    rdfs:domain :Cl_PresentationEvent ;
+    rdfs:range :Cl_Article ;
+    rdfs:comment "Connects a presentation event to the specific article that is being presented." .
+
+# Restrictions for Competency Question: "At least one article is always presented at each seminar."
+
+# This restriction ensures that every instance of Cl_Seminar must be associated
+# with at least one Cl_Article through a Cl_PresentationEvent.
+:Cl_Seminar rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :p_featuresPresentation ;
+    owl:someValuesFrom [ # There exists at least one presentation event...
+        rdf:type owl:Restriction ;
+        owl:onProperty :p_presentsArticle ;
+        owl:someValuesFrom :Cl_Article # ...which presents at least one article.
+    ]
+] ;
+rdfs:comment "Competency Question Restriction: Ensures that every seminar must feature at least one presentation event, and each such presentation event must present at least one article." .
+
+# Additional restriction to ensure the integrity of the Cl_PresentationEvent class itself.
+# Every instance of Cl_PresentationEvent must inherently present at least one article.
+:Cl_PresentationEvent rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :p_presentsArticle ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger
+] ;
+rdfs:comment "Integrity Constraint: Ensures that every instance of a Presentation Event must be associated with at least one Article being presented." .

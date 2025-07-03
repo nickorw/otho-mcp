@@ -1,0 +1,87 @@
+@prefix : <http://www.example.org/ontology#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# Classes
+:Cl_Person rdf:type owl:Class ;
+    rdfs:label "Person" .
+
+:Cl_Doctor rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Person ;
+    rdfs:label "Doctor" .
+
+:Cl_Employee rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Person ;
+    rdfs:label "Employee" .
+
+# Reification Class for the evaluation event
+:Cl_EvaluationEvent rdf:type owl:Class ;
+    rdfs:label "Evaluation Event" ;
+    rdfs:comment "A pivot class representing an evaluation given by a doctor to an employee, including the statement itself." .
+
+# Properties
+
+# Object Properties
+:hasEvaluator rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_EvaluationEvent ;
+    rdfs:range :Cl_Doctor ;
+    rdfs:label "has Evaluator" ;
+    rdfs:comment "Connects an evaluation event to the doctor who performed the evaluation." .
+
+:hasSubjectEmployee rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_EvaluationEvent ;
+    rdfs:range :Cl_Employee ;
+    rdfs:label "has Subject Employee" ;
+    rdfs:comment "Connects an evaluation event to the employee who was evaluated." .
+
+# Data Properties
+:doctorName rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Cl_Doctor ;
+    rdfs:range xsd:string ;
+    rdfs:label "doctor Name" ;
+    owl:functionalProperty true ;
+    rdfs:comment "The name of the doctor." .
+
+:employeeName rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Cl_Employee ;
+    rdfs:range xsd:string ;
+    rdfs:label "employee Name" ;
+    owl:functionalProperty true ;
+    rdfs:comment "The name of the employee." .
+
+:employeeID rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Cl_Employee ;
+    rdfs:range xsd:string ; # Using xsd:string to allow for alphanumeric IDs
+    rdfs:label "employee ID" ;
+    owl:functionalProperty true ;
+    rdfs:comment "The unique identifier of the employee." .
+
+:evaluationStatementText rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Cl_EvaluationEvent ;
+    rdfs:range xsd:string ;
+    rdfs:label "evaluation Statement Text" ;
+    rdfs:comment "The textual content of the evaluation statement." .
+
+# General Class Axioms / Restrictions
+# An EvaluationEvent must have an evaluator (a doctor).
+:Cl_EvaluationEvent rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :hasEvaluator ;
+    owl:someValuesFrom :Cl_Doctor
+] .
+
+# An EvaluationEvent must have a subject employee.
+:Cl_EvaluationEvent rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :hasSubjectEmployee ;
+    owl:someValuesFrom :Cl_Employee
+] .
+
+# An EvaluationEvent must have an evaluation statement text.
+:Cl_EvaluationEvent rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :evaluationStatementText ;
+    owl:someValuesFrom xsd:string
+] .

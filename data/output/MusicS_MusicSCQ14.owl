@@ -1,0 +1,58 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix : <http://www.example.org/geography#> .
+
+:geographyOntology a owl:Ontology ;
+    rdfs:comment "An ontology for geographical entities, focusing on the location of regions within countries to answer competency questions." .
+
+# Classes
+####################################################################################
+
+:Cl_GeographicalEntity a owl:Class ;
+    rdfs:comment "The top-level class for any entity that has a geographical existence." .
+
+:Cl_Location a owl:Class ;
+    rdfs:subClassOf :Cl_GeographicalEntity ;
+    rdfs:comment "Represents a specific point or area in space." .
+
+:Cl_Country a owl:Class ;
+    rdfs:subClassOf :Cl_Location ;
+    rdfs:comment "Represents a sovereign state or nation." .
+
+:Cl_Region a owl:Class ;
+    rdfs:subClassOf :Cl_Location ;
+    rdfs:comment "Represents a distinct area or subdivision within a larger geographical entity, such as a country." .
+
+# Class Axioms / Restrictions
+####################################################################################
+
+:Cl_Country owl:disjointWith :Cl_Region ;
+    rdfs:comment "A Country cannot also be a Region, and vice-versa." .
+
+# Properties
+####################################################################################
+
+:isLocatedIn a owl:ObjectProperty ;
+    rdfs:domain :Cl_GeographicalEntity ;
+    rdfs:range :Cl_Location ;
+    rdfs:comment "A general property indicating that a geographical entity is situated within another location." .
+
+:isLocatedInCountry a owl:ObjectProperty ;
+    rdfs:subPropertyOf :isLocatedIn ;
+    rdfs:domain :Cl_Region ;
+    rdfs:range :Cl_Country ;
+    owl:functional true ; # A region is typically located in exactly one country
+    rdfs:comment "Relates a geographical region to the specific country it is part of." .
+
+# Property Restrictions
+####################################################################################
+
+# Every Cl_Region must be located in some Cl_Country
+:Cl_Region rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :isLocatedInCountry ;
+    owl:someValuesFrom :Cl_Country
+] ;
+rdfs:comment "This restriction ensures that every instance of Cl_Region is asserted to be located in at least one Cl_Country." .
