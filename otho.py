@@ -226,9 +226,6 @@ def validate_combined_owl_node(state: OntoAgentState) -> OntoAgentState:
             g = Graph()
             g.parse(data=combined_owl, format="turtle")
 
-            print("parsed graph")
-            print(g.print)
-
             owl_content_xml_brute = g.serialize(format="xml")
             owl_content_xml = owl_content_xml_brute.replace("'", "").replace("\n", "")
 
