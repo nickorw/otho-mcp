@@ -5,3 +5,6 @@ pathlib
 langgraph
 rdflib
 google-genai
+requests
+unittest
+pytest
