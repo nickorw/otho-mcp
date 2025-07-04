@@ -6,3 +6,4 @@ implStrat.md
 old/
 ~$*
 .DS_Store
+.env

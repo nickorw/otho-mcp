@@ -1,16 +1,15 @@
 import os
 from pathlib import Path
-from typing import Any, Dict, List, TypedDict
+from typing import Any, List, TypedDict
 
 import dotenv
-import langgraph
-from google import genai
-from langgraph.graph import END, StateGraph
+from gen_ai_hub.proxy.langchain import init_llm
+from langgraph.graph import StateGraph
 from rdflib import Graph
 
 from src.models.requirement_models import CompetencyQuestion, Story
 from src.prompts.prompt_manager import PromptManager
-from src.reviewers.reviewer import OopsPitfallReviewer, RDFSyntaxReviewer
+from src.reviewers.reviewer import RDFSyntaxReviewer
 from src.utils.excel_processor import get_story_by_id
 from src.utils.file_handler import save_text_file
 
@@ -21,17 +20,46 @@ from src.utils.file_handler import save_text_file
 ########### Load environment variables ###########
 dotenv.load_dotenv()
 
+
+llm = init_llm("gpt-4o", max_tokens=4096)
+
 ########### LLM Initialization ###########
-llm = genai.Client()
+# llm = genai.Client()
 
 
 ########### LLM Call Function ###########
 def call_gemini(prompt: str) -> str:
-    response = llm.models.generate_content(
-        model="gemini-2.5-flash",
-        contents=prompt,
-    )
-    return response.text or ""
+    response = llm.invoke(prompt)
+    # Robustly extract string content from response
+    text = None
+    if isinstance(response, str):
+        text = response
+    elif hasattr(response, "text"):
+        t = response.text
+        if callable(t):
+            text = t()
+        else:
+            text = t
+    elif hasattr(response, "content"):
+        text = response.content
+    else:
+        text = str(response)
+    # Ensure text is a string
+    if not isinstance(text, str):
+        text = str(text)
+    # Remove code block markers if present
+    stripped = text.strip()
+    if stripped.startswith("```"):
+        lines = stripped.splitlines()
+        # Remove the first and last line if they are code block markers
+        if lines[0].startswith("```"):
+            lines = lines[1:]
+        if lines and lines[-1].startswith("```"):
+            lines = lines[:-1]
+        text = "\n".join(lines)
+    else:
+        text = stripped
+    return text.strip()
 
 
 ########### Prompt Manager Initialization ###########
@@ -101,7 +129,8 @@ def generate_owl_node(state: OntoAgentState) -> OntoAgentState:
             "task"
         ].format(story=story_object.context, CQ=unprocessed_cqs[0].question)
     llm_response = call_gemini(prompt)
-    owl_code = getattr(llm_response, "text", llm_response)
+    print("LLM Response:", llm_response)
+    owl_code = llm_response
     # Determine a unique filename to avoid overwriting
     story_id = state.get("story_id", "")
     base_path = f"data/output/{story_id}_{unprocessed_cqs[0].id}_pre_validation"
