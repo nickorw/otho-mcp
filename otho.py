@@ -139,7 +139,7 @@ def validate_and_store_owl_node(state: OntoAgentState) -> OntoAgentState:
         validation_result = reviewer.review_owl_content(owl_code)
         validation_successful = validation_result == "OK"
         if not validation_successful:
-            print("Validation error for", cq.id, ":", validation_result)
+            # print("Validation error for", cq.id, ":", validation_result)
             return {
                 **state,
                 "current_validation": validation_result,
@@ -199,9 +199,9 @@ def combine_owls_node(state: OntoAgentState) -> OntoAgentState:
 
 ##### Node to validate the combined OWL for the story
 def validate_combined_owl_node(state: OntoAgentState) -> OntoAgentState:
-    ## Substituting for simple RDF validation to remove automatic Oops validation while issues around XML formatting are being resolved
-    # reviewer = OopsPitfallReviewer()
-    reviewer = RDFSyntaxReviewer()
+    pitfall_reviewer = OopsPitfallReviewer()
+    syntax_reviewer = RDFSyntaxReviewer()
+
     try:
         print("Validating combined OWL for Story ID:", state.get("story_id", ""))
 
@@ -216,21 +216,19 @@ def validate_combined_owl_node(state: OntoAgentState) -> OntoAgentState:
         # story_id = state.get("story_id", "")
         # save_text_file(f"data/output/{story_id}_combined_turtle.owl", combined_owl)
 
-        validation_result = reviewer.review_owl_content(combined_owl)
+        syntax_validation_result = syntax_reviewer.review_owl_content(combined_owl)
 
-        print("Combined OWL validation result:", validation_result)
-
+        
+        print("Syntax Validation Result:", syntax_validation_result)
+        
+        
         # Convert Turtle to RDF/XML to use in Oops! (Usually insider reviewer.py, but here while Oops! API issues are being resolved)
         try:
             print("Converting OWL content to RDF/XML format for OOPs! API.")
             g = Graph()
             g.parse(data=combined_owl, format="turtle")
-
-            print("parsed graph")
-            print(g.print)
-
-            owl_content_xml_brute = g.serialize(format="xml")
-            owl_content_xml = owl_content_xml_brute.replace("'", "").replace("\n", "")
+            owl_content_xml = g.serialize(format="xml")
+            
 
         except Exception as e:
             raise ValueError(f"Failed to convert Turtle to RDF/XML: {e}")
@@ -238,11 +236,24 @@ def validate_combined_owl_node(state: OntoAgentState) -> OntoAgentState:
         print("Saving XML OWL")
         save_text_file("data/output/xml_combined_owl.xml", owl_content_xml)
 
-        # Commented while troubleshooting Oops! API issues with XML formatting
-        # save_text_file(
-        #     f"data/output/{story_id}_combined_oops_result.xml", validation_result
-        # )
+        # Validate Pitfalls using XML file
+        owl_file_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "data", "output", "xml_combined_owl.xml")
+        pitfall_validation_result = pitfall_reviewer.review_owl_file(
+            owl_file_path=owl_file_path,
+            output_format="XML",
+        )
+        print("Pitfall Validation Result:", pitfall_validation_result)
 
+        # Commented while troubleshooting Oops! API issues with XML formatting
+      
+
+        validation_result = f"Syntax Check: {syntax_validation_result}\nPitfall Check: {pitfall_validation_result}"
+        print("Combined OWL validation result:", validation_result)
+        
+        # Validation result save for auditing
+        save_text_file(
+            f"data/output/{story_id}_combined_oops_result.xml", validation_result
+        )
         return {
             **state,
             "combined_validation": validation_result,
@@ -250,7 +261,7 @@ def validate_combined_owl_node(state: OntoAgentState) -> OntoAgentState:
         }
 
     except Exception as e:
-        print("Combined OWL validation result:", validation_result)
+        print("Combined OWL validation exception:",str(e))
         return {**state, "combined_validation": str(e), "combined_validation_ok": False}
 
 
@@ -258,6 +269,7 @@ def end_node(state: OntoAgentState) -> OntoAgentState:
     print(f"Workflow complete for story {state.get('story_id', '')}")
     return state
 
+########### Branches ###########
 
 def validate_and_store_owl_branch(state: OntoAgentState) -> str:
     unprocessed_cqs = state.get("unprocessed_cqs", [])
@@ -299,15 +311,18 @@ graph.set_finish_point("end")
 
 if __name__ == "__main__":
     # Requesting which Story to process from user
-    story_id = input(
-        "Please enter the Story ID to process (e.g., FestS, MusicS or HospitalS): "
-    )
+    # story_id = input(
+    #     "Please enter the Story ID to process (e.g., FestS, MusicS or HospitalS): "
+    # )
 
     # Test code to speed up testing
-    # story_id = "MusicS"  # Example story ID for testing
+    story_id = "MusicS"  # Example story ID for testing
 
     print(f"Starting ontology workflow for Story ID: {story_id}\n")
     initial_state: OntoAgentState = {"story_id": story_id}
     app = graph.compile()
 
+
+    
+    # Alternate startup with recursion limit. TODO: Streamline workflow to reduce recursions.
     app.invoke(initial_state, config={"recursion_limit": 125})

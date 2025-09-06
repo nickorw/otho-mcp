@@ -1,0 +1,105 @@
+%%{init: { 'flowchart': { 'curve': 'cardinal', 'htmlLabels': true, 'nodeSpacing': 60, 'rankSpacing': 60 }, 'themeVariables': { 'background': '#fff' } } }%%
+%% Otho Agentic Workflow Architecture
+flowchart LR
+
+    %% User Section
+    subgraph User["<b>User Interface</b>"]
+        direction TB
+        U1(["<b>User</b><br><i>Initiates workflow</i>"]):::user
+    end
+
+    %% Data Section
+    subgraph Data["<b>Data Sources & Artifacts</b>"]
+        direction TB
+        D1[("<b>OthoDataset.xlsx</b><br><i>Excel Dataset</i>")]:::data
+        D2[("<b>Input/Output OWL Files</b>")]:::data
+    end
+
+    %% Core Section
+    subgraph Core["<b>Core Agentic Workflow</b>"]
+        direction TB
+        PM(["<b>PromptManager</b><br><i>Handles prompt templates</i>"]):::pm
+        LLM(["<b>Gemini LLM</b><br><i>Language Model</i>"]):::llm
+        OG(["<b>LangGraph Workflow</b><br><i>Orchestrates process</i>"]):::og
+        S(["<b>OntoAgentState</b><br><i>Session state</i>"]):::state
+        CQ(["<b>CompetencyQuestion/Story Models</b>"]):::cq
+    end
+
+    %% Reviewers Section
+    subgraph Reviewers["<b>Validation Reviewers</b>"]
+        direction TB
+        subgraph Syntax["<b>Syntax & Pitfall Reviewers</b>"]
+            direction TB
+            OOPS(["<b>OopsPitfallReviewer</b><br><i>Checks pitfalls</i>"]):::oops
+            RDF(["<b>RDFSyntaxReviewer</b><br><i>Checks RDF syntax</i>"]):::rdf
+        end
+    end
+
+    %% Subgraph border styles (different blue)
+    style User stroke:#1976d2,stroke-width:3px;
+    style Data stroke:#1976d2,stroke-width:3px;
+    style Core stroke:#1976d2,stroke-width:3px;
+    style Reviewers stroke:#1976d2,stroke-width:3px;
+    style Syntax stroke:#1976d2,stroke-width:3px;
+
+    %% Edges with labels
+    U1 -- "provides Story ID" --> OG
+    OG -- "loads story & CQs" --> D1
+    OG -- "manages state" --> S
+    OG -- "uses models" --> CQ
+    OG -- "uses prompts" --> PM
+    OG -- "calls LLM for OWL gen" --> LLM
+    OG -- "saves/loads OWL" --> D2
+    OG -- "validates OWL" --> OOPS
+    OG -- "validates syntax" --> RDF
+    OOPS -- "returns validation" --> OG
+    RDF -- "returns syntax result" --> OG
+    OG -- "stores results" --> D2
+    U1 -- "receives results" --> OG
+    PM -- "loads templates" --> D1
+    LLM -- "uses prompts" --> PM
+    CQ -- "loaded from" --> D1
+
+    %% Improved Styles for Contrast and Readability
+    classDef user fill:#222e50,stroke:#fff,stroke-width:3px,color:#fff,font-size:16px,font-weight:bold,shadow:0 2px 8px #222e50;
+    classDef data fill:#f9a602,stroke:#222e50,stroke-width:3px,color:#222e50,font-size:15px;
+    classDef og fill:#00bfae,stroke:#222e50,stroke-width:4px,color:#fff,font-size:15px;
+    classDef llm fill:#f44336,stroke:#fff,stroke-width:3px,color:#fff,font-size:15px;
+    classDef oops fill:#e53935,stroke:#fff,stroke-width:3px,color:#fff,font-size:15px;
+    classDef rdf fill:#43a047,stroke:#fff,stroke-width:3px,color:#fff,font-size:15px;
+    classDef pm fill:#3949ab,stroke:#fff,stroke-width:3px,color:#fff,font-size:15px;
+    classDef cq fill:#00bcd4,stroke:#fff,stroke-width:3px,color:#fff,font-size:15px;
+    classDef state fill:#bdbdbd,stroke:#222e50,stroke-width:2px,color:#222e50,font-size:15px;
+
+    %% Tooltips
+    click U1 "https://your-docs-link/user" "User documentation"
+    click D1 "https://your-docs-link/dataset" "Dataset details"
+    click D2 "https://your-docs-link/owl" "OWL file format"
+    click PM "https://your-docs-link/promptmanager" "PromptManager docs"
+    click LLM "https://your-docs-link/llm" "Gemini LLM docs"
+    click OG "https://your-docs-link/langgraph" "LangGraph Workflow docs"
+    click S "https://your-docs-link/state" "Agent State docs"
+    click CQ "https://your-docs-link/cq" "Competency Questions"
+    click OOPS "https://your-docs-link/oops" "OopsPitfallReviewer docs"
+    click RDF "https://your-docs-link/rdf" "RDFSyntaxReviewer docs"
+    classDef user fill:#222e50,stroke:#fff,stroke-width:3px,color:#fff;
+    classDef data fill:#f9a602,stroke:#222e50,stroke-width:3px,color:#222e50;
+    classDef og fill:#00bfae,stroke:#222e50,stroke-width:4px,color:#fff;
+    classDef llm fill:#f44336,stroke:#fff,stroke-width:3px,color:#fff;
+    classDef oops fill:#e53935,stroke:#fff,stroke-width:3px,color:#fff;
+    classDef rdf fill:#43a047,stroke:#fff,stroke-width:3px,color:#fff;
+    classDef pm fill:#3949ab,stroke:#fff,stroke-width:3px,color:#fff;
+    classDef cq fill:#00bcd4,stroke:#fff,stroke-width:3px,color:#fff;
+    classDef state fill:#bdbdbd,stroke:#222e50,stroke-width:2px,color:#222e50;
+
+    %% Tooltips
+    click U1 "https://your-docs-link/user" "User documentation"
+    click D1 "https://your-docs-link/dataset" "Dataset details"
+    click D2 "https://your-docs-link/owl" "OWL file format"
+    click PM "https://your-docs-link/promptmanager" "PromptManager docs"
+    click LLM "https://your-docs-link/llm" "Gemini LLM docs"
+    click OG "https://your-docs-link/langgraph" "LangGraph Workflow docs"
+    click S "https://your-docs-link/state" "Agent State docs"
+    click CQ "https://your-docs-link/cq" "Competency Questions"
+    click OOPS "https://your-docs-link/oops" "OopsPitfallReviewer docs"
+    click RDF "https://your-docs-link/rdf" "RDFSyntaxReviewer docs"

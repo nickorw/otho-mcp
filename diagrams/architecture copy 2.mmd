@@ -1,0 +1,66 @@
+%%{init: { 'themeVariables': { 'background': '#fff' } } }%%
+flowchart LR
+    %% User Section
+    subgraph User["User Interface"]
+        U1[User<br><i>Initiates workflow</i>]:::user
+    end
+
+    %% Data Section
+    subgraph Data["Data Sources & Artifacts"]
+        D1[Excel Dataset<br><b>OthoDataset.xlsx</b>]:::data
+        D2[Input/Output OWL Files]:::data
+    end
+
+    %% Core Section
+    subgraph Core["Core Agentic Workflow"]
+        PM[PromptManager<br><i>Handles prompt templates</i>]:::pm
+        LLM[Gemini LLM<br><i>Language Model</i>]:::llm
+        OG[LangGraph Workflow<br><i>Orchestrates process</i>]:::og
+        S[OntoAgentState<br><i>Session state</i>]:::state
+        CQ[CompetencyQuestion/Story Models]:::cq
+    end
+
+    %% Reviewers Section
+    subgraph Reviewers["Validation Reviewers"]
+        subgraph Syntax["Syntax & Pitfall Reviewers"]
+            OOPS[OopsPitfallReviewer<br><i>Checks pitfalls</i>]:::oops
+            RDF[RDFSyntaxReviewer<br><i>Checks RDF syntax</i>]:::rdf
+        end
+    end
+
+   %% Subgraph border styles (different blue)
+    style User stroke:#1976d2,stroke-width:3px;
+    style Data stroke:#1976d2,stroke-width:3px;
+    style Core stroke:#1976d2,stroke-width:3px;
+    style Reviewers stroke:#1976d2,stroke-width:3px;
+    style Syntax stroke:#1976d2,stroke-width:3px;
+    
+    %% Edges with labels
+    U1 -- "provides Story ID" --> OG
+    OG -- "loads story & CQs" --> D1
+    OG -- "manages state" --> S
+    OG -- "uses models" --> CQ
+    OG -- "uses prompts" --> PM
+    OG -- "calls LLM for OWL gen" --> LLM
+    OG -- "saves/loads OWL" --> D2
+    OG -- "validates OWL" --> OOPS
+    OG -- "validates syntax" --> RDF
+    OOPS -- "returns validation" --> OG
+    RDF -- "returns syntax result" --> OG
+    OG -- "stores results" --> D2
+    U1 -- "receives results" --> OG
+    PM -- "loads templates" --> D1
+    LLM -- "uses prompts" --> PM
+    CQ -- "loaded from" --> D1
+
+    %% Improved Styles for Contrast
+    classDef user fill:#222e50,stroke:#fff,stroke-width:3px,color:#fff;
+    classDef data fill:#f9a602,stroke:#222e50,stroke-width:3px,color:#222e50;
+    classDef og fill:#00bfae,stroke:#222e50,stroke-width:4px,color:#fff;
+    classDef llm fill:#f44336,stroke:#fff,stroke-width:3px,color:#fff;
+    classDef oops fill:#e53935,stroke:#fff,stroke-width:3px,color:#fff;
+    classDef rdf fill:#43a047,stroke:#fff,stroke-width:3px,color:#fff;
+    classDef pm fill:#3949ab,stroke:#fff,stroke-width:3px,color:#fff;
+    classDef cq fill:#00bcd4,stroke:#fff,stroke-width:3px,color:#fff;
+    classDef state fill:#bdbdbd,stroke:#222e50,stroke-width:2px,color:#222e50;
+

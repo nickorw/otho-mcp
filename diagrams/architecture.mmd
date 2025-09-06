@@ -1,0 +1,49 @@
+---
+title: Otho Ontology Agent Architecture
+description: High-level architecture of the Otho ontology agentic workflow
+---
+flowchart TD
+    subgraph User
+        U1[User]
+    end
+    subgraph Data
+        D1[Excel Dataset: OthoDataset.xlsx]
+        D2[Input/Output OWL Files]
+    end
+    subgraph Core
+        PM[PromptManager]
+        LLM[Gemini LLM]
+        OG[LangGraph Workflow]
+        S[OntoAgentState]
+        CQ[CompetencyQuestion/Story Models]
+    end
+    subgraph Reviewers
+        OOPS[OopsPitfallReviewer]
+        RDF[RDFSyntaxReviewer]
+    end
+    U1-- provides Story ID -->OG
+    OG-- loads story & CQs -->D1
+    OG-- manages state -->S
+    OG-- uses models -->CQ
+    OG-- uses prompts -->PM
+    OG-- calls LLM for OWL gen -->LLM
+    OG-- saves/loads OWL -->D2
+    OG-- validates OWL -->OOPS
+    OG-- validates syntax -->RDF
+    OOPS-- returns validation -->OG
+    RDF-- returns syntax result -->OG
+    OG-- stores results -->D2
+    U1-- receives results -->OG
+    PM-- loads templates -->D1
+    LLM-- uses prompts -->PM
+    CQ-- loaded from -->D1
+    style OG fill:#e0eaff,stroke:#0366d6,stroke-width:2px
+    style LLM fill:#fff2cc,stroke:#e6b800,stroke-width:2px
+    style OOPS fill:#ffe0e0,stroke:#d63333,stroke-width:2px
+    style RDF fill:#e0ffe0,stroke:#33d633,stroke-width:2px
+    style PM fill:#f0e0ff,stroke:#a633d6,stroke-width:2px
+    style CQ fill:#e0f7fa,stroke:#0097a7,stroke-width:2px
+    style S fill:#f5f5f5,stroke:#888,stroke-width:1px
+    style D1 fill:#f9fbe7,stroke:#cddc39,stroke-width:2px
+    style D2 fill:#f9fbe7,stroke:#cddc39,stroke-width:2px
+    style U1 fill:#fff,stroke:#333,stroke-width:2px

@@ -44,7 +44,7 @@ class TestOopsPitfallReviewer(unittest.TestCase):
 
     def test_review_owl_content_real_api(self):
         # python -m unittest src.reviewers.reviewer_test.TestOopsPitfallReviewer.test_review_owl_content_real_api
-        owl_file_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "data", "output", "FestS_combined_turtle.owl")
+        owl_file_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "data", "output", "backup", "debug_owl_content_turtle_combined_owl.xml")
 
         with open(owl_file_path, "r", encoding="utf-8") as f:
             owl_content = f.read()
