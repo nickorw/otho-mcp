@@ -239,7 +239,7 @@ def validate_combined_owl_node(state: OntoAgentState) -> OntoAgentState:
         # Validate Pitfalls using XML file
         owl_file_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "data", "output", "xml_combined_owl.xml")
         pitfall_validation_result = pitfall_reviewer.review_owl_file(
-            owl_file_path=owl_file_path,
+            owl_file_path="data/output/xml_combined_owl.xml",
             output_format="XML",
         )
         print("Pitfall Validation Result:", pitfall_validation_result)
