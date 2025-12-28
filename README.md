@@ -1,5 +1,7 @@
 # Otho
 
+Complete Otho v1.1 - Automated improved MemorylessCQbyCQ with self-correction and improvement with syntax check(with rdflib) and pitfall semantic scanning(with OOPS!).
+
 Proposta de projeto - Otho
 
 Visão
