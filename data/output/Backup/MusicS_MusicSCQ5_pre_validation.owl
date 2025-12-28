@@ -1,0 +1,133 @@
+@prefix : <http://www.semanticweb.org/music-ontology#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+<http://www.semanticweb.org/music-ontology> rdf:type owl:Ontology ;
+    owl:versionIRI <http://www.semanticweb.org/music-ontology/1.0.0> ;
+    rdfs:comment "Ontology for representing musical albums and their tracks, designed to answer the competency question: 'How many tracks does a particular album contain?'" .
+
+#################################################################
+#    Classes
+#################################################################
+
+:Cl_Entity rdf:type owl:Class ;
+    rdfs:comment "A very general top-level class representing any conceptual entity within the ontology." .
+
+:Cl_CreativeWork rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Entity ;
+    rdfs:comment "A general class for intellectual or artistic creations, such as books, films, or music." .
+
+:Cl_MusicalWork rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_CreativeWork ;
+    rdfs:comment "A specific type of creative work related to music, encompassing compositions, recordings, and performances." .
+
+:Cl_Collection rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Entity ;
+    rdfs:comment "A generic class for any collection of items or entities." .
+
+:Cl_Album rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_MusicalWork , :Cl_Collection ;
+    rdfs:comment "Represents a distinct collection of musical recordings, typically released together as a single product." .
+
+:Cl_Item rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Entity ;
+    rdfs:comment "A generic class for an individual piece or component." .
+
+:Cl_Track rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_MusicalWork , :Cl_Item ;
+    rdfs:comment "Represents an individual musical recording or song, which can be part of an album or released independently." .
+
+:Cl_RelationshipEvent rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Entity ;
+    rdfs:comment "A general class for reified events or instances that represent a specific relationship or interaction between other entities." .
+
+:Cl_AlbumTrackInclusion rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_RelationshipEvent ;
+    rdfs:comment "A pivot class representing the specific instance of a track being included in a particular album, capturing details like its position within that album. This reifies the 'contains' relationship to allow for additional properties." .
+
+#################################################################
+#    Object Properties
+#################################################################
+
+:hasRelationshipEvent rdf:type owl:ObjectProperty ;
+    rdfs:comment "A generic property to link an entity to a relationship event it participates in." .
+
+:includesTrackPlacement rdf:type owl:ObjectProperty ;
+    rdfs:subPropertyOf :hasRelationshipEvent ;
+    rdfs:domain :Cl_Album ;
+    rdfs:range :Cl_AlbumTrackInclusion ;
+    rdfs:comment "Connects an album to an instance describing a track's inclusion within it." .
+
+:isPlacementForTrack rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_AlbumTrackInclusion ;
+    rdfs:range :Cl_Track ;
+    rdfs:comment "Connects an album track inclusion instance to the specific musical track that is being included." .
+
+:relatesToAlbum rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_AlbumTrackInclusion ;
+    rdfs:range :Cl_Album ;
+    rdfs:comment "Connects an album track inclusion instance back to the album it is part of." ;
+    owl:inverseOf :includesTrackPlacement .
+
+#################################################################
+#    Datatype Properties
+#################################################################
+
+:albumTitle rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Cl_Album ;
+    rdfs:range xsd:string ;
+    rdfs:comment "The primary textual title of an album." .
+
+:trackTitle rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Cl_Track ;
+    rdfs:range xsd:string ;
+    rdfs:comment "The primary textual title of an individual track." .
+
+:hasTrackNumber rdf:type owl:DatatypeProperty ;
+    rdf:type owl:FunctionalProperty ;
+    rdfs:domain :Cl_AlbumTrackInclusion ;
+    rdfs:range xsd:integer ;
+    rdfs:comment "The sequential number or position of a track within a specific album, as defined by the Cl_AlbumTrackInclusion instance." .
+
+#################################################################
+#    Restrictions
+#################################################################
+
+# An Album must have at least one track inclusion to be considered a 'musical album' in this context.
+:Cl_Album rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :includesTrackPlacement ;
+    owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+    owl:onClass :Cl_AlbumTrackInclusion ;
+    rdfs:comment "Every album must include at least one track placement."
+] .
+
+# Each Cl_AlbumTrackInclusion must refer to exactly one specific Cl_Track.
+:Cl_AlbumTrackInclusion rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :isPlacementForTrack ;
+    owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+    owl:onClass :Cl_Track ;
+    rdfs:comment "An album track inclusion event must specify exactly one track."
+] .
+
+# Each Cl_AlbumTrackInclusion must relate to exactly one Cl_Album.
+:Cl_AlbumTrackInclusion rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :relatesToAlbum ;
+    owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+    owl:onClass :Cl_Album ;
+    rdfs:comment "An album track inclusion event must relate to exactly one album."
+] .
+
+# Each Cl_AlbumTrackInclusion must have exactly one track number.
+:Cl_AlbumTrackInclusion rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :hasTrackNumber ;
+    owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+    owl:onDataRange xsd:integer ;
+    rdfs:comment "An album track inclusion event must have exactly one track number."
+] .

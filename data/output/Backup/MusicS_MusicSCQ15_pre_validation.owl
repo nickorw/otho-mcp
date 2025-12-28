@@ -1,0 +1,36 @@
+@prefix : <http://www.semanticweb.org/ontology/records#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://www.semanticweb.org/ontology/records> rdf:type owl:Ontology .
+
+#################################################################
+#    Classes
+#################################################################
+
+:Cl_Record rdf:type owl:Class ;
+    rdfs:comment "Represents a musical record or album." .
+
+:Cl_Track rdf:type owl:Class ;
+    rdfs:comment "Represents an individual track or song on a record." .
+
+#################################################################
+#    Object Properties
+#################################################################
+
+:hasTrack rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_Record ;
+    rdfs:range :Cl_Track ;
+    rdfs:comment "Connects a record to its constituent tracks." .
+
+#################################################################
+#    Restrictions
+#################################################################
+
+:Cl_Record rdfs:subClassOf [ rdf:type owl:Restriction ;
+                              owl:onProperty :hasTrack ;
+                              owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+                              rdfs:comment "A record must contain at least one track."
+                            ] .

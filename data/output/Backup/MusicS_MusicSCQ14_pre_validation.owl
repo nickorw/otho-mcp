@@ -1,0 +1,108 @@
+@prefix : <http://www.semanticweb.org/myontology#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+<http://www.semanticweb.org/myontology> rdf:type owl:Ontology ;
+    owl:versionIRI <http://www.semanticweb.org/myontology/1.0.0> ;
+    rdfs:comment "Ontology for geographical regions and countries to answer 'In what country is a certain region located?'" .
+
+#################################################################
+#    Classes
+#################################################################
+
+:Cl_GeographicalEntity rdf:type owl:Class ;
+    rdfs:label "Geographical Entity" ;
+    rdfs:comment "The most general class for any entity with a geographical presence." .
+
+:Cl_Location rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_GeographicalEntity ;
+    rdfs:label "Location" ;
+    rdfs:comment "A class representing any identifiable location or place." .
+
+:Cl_AdministrativeDivision rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Location ;
+    rdfs:label "Administrative Division" ;
+    rdfs:comment "A class representing an area of a country or other region delineated for the purpose of administration." .
+
+:Cl_Country rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_AdministrativeDivision ;
+    rdfs:label "Country" ;
+    rdfs:comment "A sovereign state or nation, often comprising several administrative divisions." .
+
+:Cl_Region rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_AdministrativeDivision ;
+    rdfs:label "Region" ;
+    rdfs:comment "A specific area within a country or larger geographical entity, often with distinct characteristics or administration." .
+
+#################################################################
+#    Object Properties
+#################################################################
+
+:hasAdministrativeDivision rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_Country ;
+    rdfs:range :Cl_AdministrativeDivision ;
+    rdfs:label "has administrative division" ;
+    rdfs:comment "Relates a country to its administrative divisions." .
+
+:isAdministrativeDivisionOf rdf:type owl:ObjectProperty ;
+    owl:inverseOf :hasAdministrativeDivision ;
+    rdfs:domain :Cl_AdministrativeDivision ;
+    rdfs:range :Cl_Country ;
+    rdfs:label "is administrative division of" ;
+    rdfs:comment "Relates an administrative division to its parent country." .
+
+:isLocatedInCountry rdf:type owl:ObjectProperty ;
+    rdfs:subPropertyOf :isAdministrativeDivisionOf ;
+    rdf:type owl:FunctionalProperty ; # A region is typically located in one country
+    rdfs:domain :Cl_Region ;
+    rdfs:range :Cl_Country ;
+    rdfs:label "is located in country" ;
+    rdfs:comment "Explicitly links a region to the country it is located within, answering the competency question." .
+
+#################################################################
+#    Data Properties
+#################################################################
+
+:hasName rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Cl_GeographicalEntity ;
+    rdfs:range xsd:string ;
+    rdfs:label "has name" ;
+    rdfs:comment "Provides the common name for a geographical entity." .
+
+:hasCode rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Cl_AdministrativeDivision ;
+    rdfs:range xsd:string ;
+    rdfs:label "has code" ;
+    rdfs:comment "Provides a short code or identifier for an administrative division (e.g., ISO code)." .
+
+#################################################################
+#    Restrictions and Axioms
+#################################################################
+
+# Every Cl_Region must be located in exactly one Cl_Country.
+:Cl_Region rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :isLocatedInCountry ;
+    owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+    owl:onClass :Cl_Country ;
+    rdfs:comment "Ensures that every region is associated with one and only one country."
+] .
+
+# A Cl_Country must have at least one name.
+:Cl_Country rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :hasName ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:comment "Ensures that every country has a name."
+] .
+
+# A Cl_Region must have at least one name.
+:Cl_Region rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :hasName ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:comment "Ensures that every region has a name."
+] .

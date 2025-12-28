@@ -1,10 +1,11 @@
+import argparse
 import os
+import sys
 from pathlib import Path
 from typing import Any, Dict, List, TypedDict
 
 import dotenv
 import langgraph
-from google import genai
 from langgraph.graph import END, StateGraph
 from rdflib import Graph
 
@@ -12,7 +13,9 @@ from src.models.requirement_models import CompetencyQuestion, Story
 from src.prompts.prompt_manager import PromptManager
 from src.reviewers.reviewer import OopsPitfallReviewer, RDFSyntaxReviewer
 from src.utils.excel_processor import get_story_by_id
-from src.utils.file_handler import save_text_file
+from src.utils.file_handler import load_existing_owl_files, save_text_file
+from src.utils.llm_manager import call_llm
+from src.utils.oops_parser import format_pitfalls_for_feedback, parse_oops_response
 
 ###########################################
 ########### Foundational Setup ############
@@ -21,17 +24,8 @@ from src.utils.file_handler import save_text_file
 ########### Load environment variables ###########
 dotenv.load_dotenv()
 
-########### LLM Initialization ###########
-llm = genai.Client()
-
-
-########### LLM Call Function ###########
-def call_gemini(prompt: str) -> str:
-    response = llm.models.generate_content(
-        model="gemini-2.5-flash",
-        contents=prompt,
-    )
-    return response.text or ""
+########### LLM Configuration ###########
+llm_type = "google"
 
 
 ########### Prompt Manager Initialization ###########
@@ -57,6 +51,8 @@ class OntoAgentState(TypedDict, total=False):
     combined_validation: Any
     combined_validation_ok: bool
     invalid_owl: str  # Added for error handling
+    pitfall_feedback: str  # Formatted pitfall feedback for LLM
+    retry_count: int  # Track correction attempts
 
 
 #############################
@@ -100,7 +96,7 @@ def generate_owl_node(state: OntoAgentState) -> OntoAgentState:
         prompt = prompt_manager.get_structured_prompt("otho_memless_cq_by_cq")[
             "task"
         ].format(story=story_object.context, CQ=unprocessed_cqs[0].question)
-    llm_response = call_gemini(prompt)
+    llm_response = call_llm(llm_type, prompt)
     owl_code = getattr(llm_response, "text", llm_response)
     # Determine a unique filename to avoid overwriting
     story_id = state.get("story_id", "")
@@ -190,7 +186,7 @@ def combine_owls_node(state: OntoAgentState) -> OntoAgentState:
         snippets=concatenated_owl,
     )
     print("Combining OWLs")
-    combined_owl = call_gemini(combination_prompt)
+    combined_owl = call_llm(llm_type, combination_prompt)
 
     print("Combined, saving OWLs file")
     save_text_file(f"data/output/{story_id}_combined_turtle.owl", combined_owl)
@@ -201,75 +197,140 @@ def combine_owls_node(state: OntoAgentState) -> OntoAgentState:
 def validate_combined_owl_node(state: OntoAgentState) -> OntoAgentState:
     pitfall_reviewer = OopsPitfallReviewer()
     syntax_reviewer = RDFSyntaxReviewer()
+    story_id = state.get("story_id", "")
 
     try:
-        print("Validating combined OWL for Story ID:", state.get("story_id", ""))
+        print("Validating combined OWL for Story ID:", story_id)
 
         combined_owl = state.get("combined_owl", "")
 
-        ## Print for troubleshooting
-        # print("First 5 lines of combined OWL:")
-        # for line in combined_owl.splitlines()[:5]:
-        #     print(line)
-
-        ## File save for troubleshooting
-        # story_id = state.get("story_id", "")
-        # save_text_file(f"data/output/{story_id}_combined_turtle.owl", combined_owl)
-
+        # Syntax validation
         syntax_validation_result = syntax_reviewer.review_owl_content(combined_owl)
-
-        
         print("Syntax Validation Result:", syntax_validation_result)
-        
-        
-        # Convert Turtle to RDF/XML to use in Oops! (Usually insider reviewer.py, but here while Oops! API issues are being resolved)
-        try:
-            print("Converting OWL content to RDF/XML format for OOPs! API.")
-            g = Graph()
-            g.parse(data=combined_owl, format="turtle")
-            owl_content_xml = g.serialize(format="xml")
-            
 
-        except Exception as e:
-            raise ValueError(f"Failed to convert Turtle to RDF/XML: {e}")
+        if syntax_validation_result != "OK":
+            print("Syntax validation failed!")
+            return {
+                **state,
+                "combined_validation": f"Syntax Error: {syntax_validation_result}",
+                "combined_validation_ok": False,
+                "pitfall_feedback": f"Syntax Error: {syntax_validation_result}",
+            }
 
-        print("Saving XML OWL")
-        save_text_file("data/output/xml_combined_owl.xml", owl_content_xml)
-
-        # Validate Pitfalls using XML file
-        owl_file_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "data", "output", "xml_combined_owl.xml")
+        # Validate Pitfalls using turtle file
+        owl_file_path = os.path.join(
+            "data", "output", f"{story_id}_combined_turtle.owl"
+        )
+        pitfalls = [
+            "2,3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 19, 20, 21, 22, 24, 25, 25, 26, 27, 28, 29"
+        ]
         pitfall_validation_result = pitfall_reviewer.review_owl_file(
-            owl_file_path="data/output/xml_combined_owl.xml",
+            owl_file_path=owl_file_path,
+            pitfalls=pitfalls,
             output_format="XML",
         )
-        print("Pitfall Validation Result:", pitfall_validation_result)
 
-        # Commented while troubleshooting Oops! API issues with XML formatting
-      
+        # Parse OOPS response
+        pitfall_data = parse_oops_response(pitfall_validation_result)
 
+        # Format pitfall feedback for potential correction
+        pitfall_feedback = format_pitfalls_for_feedback(pitfall_data)
+
+        # Determine if validation passed
+        has_pitfalls = pitfall_data.get("has_pitfalls", False)
+        validation_ok = not has_pitfalls
+
+        if has_pitfalls:
+            print(f"\nFound {pitfall_data['pitfall_count']} pitfall(s)")
+            print(pitfall_feedback)
+        else:
+            print("\n✓ No pitfalls detected!")
+
+        # Full validation result for auditing
         validation_result = f"Syntax Check: {syntax_validation_result}\nPitfall Check: {pitfall_validation_result}"
         print("Combined OWL validation result:", validation_result)
-        
-        # Validation result save for auditing
-        save_text_file(
-            f"data/output/{story_id}_combined_oops_result.xml", validation_result
-        )
+
+        # Validation result save for auditing with incremental numbering
+        retry_count = state.get("retry_count", 0)
+        if retry_count == 0:
+            # Initial validation (no corrections yet)
+            oops_result_file = f"data/output/{story_id}_combined_oops_result.xml"
+        else:
+            # After correction attempts
+            oops_result_file = (
+                f"data/output/{story_id}_combined_oops_result_{retry_count}.xml"
+            )
+
+        save_text_file(oops_result_file, validation_result)
+        print(f"Saved validation results to: {oops_result_file}")
+
         return {
             **state,
             "combined_validation": validation_result,
-            "combined_validation_ok": True,
+            "combined_validation_ok": validation_ok,
+            "pitfall_feedback": pitfall_feedback if has_pitfalls else "",
         }
 
     except Exception as e:
-        print("Combined OWL validation exception:",str(e))
-        return {**state, "combined_validation": str(e), "combined_validation_ok": False}
+        print("Combined OWL validation exception:", str(e))
+        return {
+            **state,
+            "combined_validation": str(e),
+            "combined_validation_ok": False,
+            "pitfall_feedback": f"Validation exception: {str(e)}",
+        }
+
+
+##### Node to correct OWL based on pitfall feedback
+def correct_owl_pitfalls_node(state: OntoAgentState) -> OntoAgentState:
+    print("Correcting OWL pitfalls...")
+    story_id = state.get("story_id", "")
+    combined_owl = state.get("combined_owl", "")
+    pitfall_feedback = state.get("pitfall_feedback", "")
+    retry_count = state.get("retry_count", 0)
+
+    if not pitfall_feedback:
+        print("No pitfall feedback to address")
+        return state
+
+    print(f"Attempting correction (attempt {retry_count + 1})...")
+    print("Pitfalls to address:")
+    print(pitfall_feedback)
+
+    # Use prompt manager for correction prompt
+    structured_prompt = prompt_manager.get_structured_prompt("correct_owl_pitfalls")
+    correction_prompt = structured_prompt["user_template"].format(
+        pitfall_feedback=pitfall_feedback,
+        combined_owl=combined_owl,
+    )
+
+    # Call LLM to fix the OWL
+    corrected_owl = call_llm(llm_type, correction_prompt)
+
+    # Save the corrected version
+    correction_file = (
+        f"data/output/{story_id}_combined_turtle_correction_{retry_count + 1}.owl"
+    )
+    save_text_file(correction_file, corrected_owl)
+    print(f"Saved correction attempt to: {correction_file}")
+
+    # Also update the main combined file
+    save_text_file(f"data/output/{story_id}_combined_turtle.owl", corrected_owl)
+
+    return {
+        **state,
+        "combined_owl": corrected_owl,
+        "retry_count": retry_count + 1,
+    }
 
 
 def end_node(state: OntoAgentState) -> OntoAgentState:
     print(f"Workflow complete for story {state.get('story_id', '')}")
     return state
 
+
 ########### Branches ###########
+
 
 def validate_and_store_owl_branch(state: OntoAgentState) -> str:
     unprocessed_cqs = state.get("unprocessed_cqs", [])
@@ -277,7 +338,19 @@ def validate_and_store_owl_branch(state: OntoAgentState) -> str:
 
 
 def validate_combined_owl_branch(state: OntoAgentState) -> str:
-    return "end" if state.get("combined_validation_ok", False) else "combine_owls"
+    """Branch logic after combined OWL validation"""
+    if state.get("combined_validation_ok", False):
+        # Validation passed - end workflow
+        return "end"
+    else:
+        # Validation failed - check retry count
+        retry_count = state.get("retry_count", 0)
+        max_retries = 5
+        if retry_count >= max_retries:
+            print(f"Max retries ({max_retries}) reached. Ending workflow.")
+            return "end"
+        # Still have retries left - correct the OWL
+        return "correct_owl_pitfalls"
 
 
 ###################################
@@ -290,6 +363,7 @@ graph.add_node("generate_owl", generate_owl_node)
 graph.add_node("validate_and_store_owl", validate_and_store_owl_node)
 graph.add_node("combine_owls", combine_owls_node)
 graph.add_node("validate_combined_owl", validate_combined_owl_node)
+graph.add_node("correct_owl_pitfalls", correct_owl_pitfalls_node)
 graph.add_node("end", end_node)
 
 ######################################
@@ -302,6 +376,7 @@ graph.add_edge("generate_owl", "validate_and_store_owl")
 graph.add_conditional_edges("validate_and_store_owl", validate_and_store_owl_branch)
 graph.add_edge("combine_owls", "validate_combined_owl")
 graph.add_conditional_edges("validate_combined_owl", validate_combined_owl_branch)
+graph.add_edge("correct_owl_pitfalls", "validate_combined_owl")
 
 graph.set_finish_point("end")
 
@@ -310,19 +385,94 @@ graph.set_finish_point("end")
 ########################################
 
 if __name__ == "__main__":
-    # Requesting which Story to process from user
-    # story_id = input(
-    #     "Please enter the Story ID to process (e.g., FestS, MusicS or HospitalS): "
-    # )
+    # Parse command-line arguments
+    parser = argparse.ArgumentParser(
+        description="Otho - Ontology generation workflow with competency questions"
+    )
+    parser.add_argument(
+        "--story-id",
+        type=str,
+        default="MusicS",
+        help="Story ID to process (e.g., FestS, MusicS, HospitalS). Default: MusicS",
+    )
+    parser.add_argument(
+        "--skip-to-combine",
+        action="store_true",
+        help="Skip CQ generation and jump directly to combination phase. Loads existing OWL files.",
+    )
 
-    # Test code to speed up testing
-    story_id = "MusicS"  # Example story ID for testing
+    args = parser.parse_args()
+    story_id = args.story_id
 
-    print(f"Starting ontology workflow for Story ID: {story_id}\n")
-    initial_state: OntoAgentState = {"story_id": story_id}
+    print(f"Starting ontology workflow for Story ID: {story_id}")
+    print(f"Mode: {'Skip-to-Combine' if args.skip_to_combine else 'Full Workflow'}\n")
+
+    # Compile the workflow graph
     app = graph.compile()
 
+    if args.skip_to_combine:
+        # Skip-to-combine mode: Load existing OWL files and start at combine_owls
+        try:
+            print("Loading existing OWL files...")
+            processed_owls = load_existing_owl_files(story_id)
 
-    
-    # Alternate startup with recursion limit. TODO: Streamline workflow to reduce recursions.
-    app.invoke(initial_state, config={"recursion_limit": 125})
+            if not processed_owls:
+                print(f"ERROR: No OWL files found for story '{story_id}'")
+                print("Please run the full workflow first to generate OWL files.")
+                sys.exit(1)
+
+            print(
+                f"\nStarting combination phase with {len(processed_owls)} OWL files...\n"
+            )
+
+            # Create initial state with pre-loaded OWL files
+            initial_state: OntoAgentState = {
+                "story_id": story_id,
+                "processed_owls": processed_owls,
+                "unprocessed_cqs": [],  # Empty to skip generation
+            }
+
+            # Manually execute nodes starting from combine_owls
+            print("Executing combine_owls node...")
+            state = combine_owls_node(initial_state)
+
+            print("\nExecuting validate_combined_owl node...")
+            state = validate_combined_owl_node(state)
+
+            # Correction loop - attempt to fix pitfalls up to max_retries
+            max_retries = 5
+            while (
+                not state.get("combined_validation_ok", False)
+                and state.get("retry_count", 0) < max_retries
+            ):
+                print(f"\nExecuting correct_owl_pitfalls node...")
+                state = correct_owl_pitfalls_node(state)
+
+                print("\nRe-validating corrected OWL...")
+                state = validate_combined_owl_node(state)
+
+            print("\nExecuting end node...")
+            state = end_node(state)
+
+            if state.get("combined_validation_ok", False):
+                print("\n✓ Workflow completed successfully!")
+            else:
+                print(
+                    f"\n✗ Workflow completed but validation failed after {max_retries} retries."
+                )
+
+        except FileNotFoundError as e:
+            print(f"ERROR: {e}")
+            print(
+                "\nPlease ensure you have run the full workflow first to generate OWL files."
+            )
+            print(f"Expected files: data/output/{story_id}_{{CQ_ID}}.owl")
+            sys.exit(1)
+        except Exception as e:
+            print(f"ERROR: An unexpected error occurred: {e}")
+            sys.exit(1)
+
+    else:
+        # Normal mode: Full workflow from the beginning
+        initial_state: OntoAgentState = {"story_id": story_id}
+        app.invoke(initial_state, config={"recursion_limit": 125})

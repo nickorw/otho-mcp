@@ -1,0 +1,152 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix : <http://example.org/ontology#> .
+
+# Ontology definition
+:ontology rdf:type owl:Ontology ;
+    rdfs:comment "Ontology for musical instruments and performers, designed to answer 'What instruments does a certain person play?' using reification for the 'playing' relationship." ;
+    owl:versionIRI <http://example.org/ontology/1.0> ;
+    owl:imports <http://www.w3.org/2002/07/owl> .
+
+# ---------------------------------------------------
+# Classes
+# ---------------------------------------------------
+
+# Top-level general classes for hierarchy
+Cl_Entity rdf:type owl:Class ;
+    rdfs:comment "The most general class for all entities in the ontology." .
+
+Cl_Agent rdf:type owl:Class ;
+    rdfs:subClassOf Cl_Entity ;
+    rdfs:comment "A class for active entities that can perform actions." .
+
+Cl_Object rdf:type owl:Class ;
+    rdfs:subClassOf Cl_Entity ;
+    rdfs:comment "A class for tangible or intangible objects." .
+
+Cl_Activity rdf:type owl:Class ;
+    rdfs:subClassOf Cl_Entity ;
+    rdfs:comment "A class for actions, events, or processes that occur over time." .
+
+# Specific domain classes based on the competency question
+Cl_Person rdf:type owl:Class ;
+    rdfs:subClassOf Cl_Agent ;
+    rdfs:comment "Represents a human being." .
+
+Cl_Musician rdf:type owl:Class ;
+    rdfs:subClassOf Cl_Person ;
+    rdfs:comment "A person who plays a musical instrument." .
+
+Cl_Instrument rdf:type owl:Class ;
+    rdfs:subClassOf Cl_Object ;
+    rdfs:comment "A device created or used to make musical sounds." .
+
+# Hierarchical classification for instruments
+Cl_StringInstrument rdf:type owl:Class ;
+    rdfs:subClassOf Cl_Instrument ;
+    rdfs:comment "An instrument that produces sound from vibrating strings (e.g., guitar, violin)." .
+Cl_WindInstrument rdf:type owl:Class ;
+    rdfs:subClassOf Cl_Instrument ;
+    rdfs:comment "An instrument that produces sound from a vibrating air column (e.g., flute, trumpet)." .
+Cl_PercussionInstrument rdf:type owl:Class ;
+    rdfs:subClassOf Cl_Instrument ;
+    rdfs:comment "An instrument sounded by being struck, scraped, or rubbed (e.g., drums, xylophone)." .
+Cl_KeyboardInstrument rdf:type owl:Class ;
+    rdfs:subClassOf Cl_Instrument ;
+    rdfs:comment "An instrument played using a musical keyboard (e.g., piano, organ)." .
+
+# Reification Pivot Class
+Cl_InstrumentPlaying rdf:type owl:Class ;
+    rdfs:subClassOf Cl_Activity ;
+    rdfs:comment "A pivot class representing an instance of a person playing a specific musical instrument. This reifies the 'plays' relationship to allow for additional details or complex queries." .
+
+# ---------------------------------------------------
+# Properties
+# ---------------------------------------------------
+
+# Object Properties (relations between classes)
+
+# Property linking a Person to their InstrumentPlaying activity
+:hasInstrumentPlayingActivity rdf:type owl:ObjectProperty ;
+    rdfs:domain Cl_Person ;
+    rdfs:range Cl_InstrumentPlaying ;
+    rdfs:comment "Connects a person to an instance of them playing an instrument. This property initiates the reified relationship." .
+
+# Properties linking the Cl_InstrumentPlaying pivot to the Cl_Person and Cl_Instrument
+:involvesPlayer rdf:type owl:ObjectProperty ;
+    rdfs:domain Cl_InstrumentPlaying ;
+    rdfs:range Cl_Person ;
+    rdfs:comment "Connects an instrument playing activity to the person who performs it." ;
+    owl:inverseOf :hasInstrumentPlayingActivity . # Establishes inverse relationship for better querying.
+
+:involvesInstrument rdf:type owl:ObjectProperty ;
+    rdfs:domain Cl_InstrumentPlaying ;
+    rdfs:range Cl_Instrument ;
+    rdfs:comment "Connects an instrument playing activity to the specific instrument being played." .
+
+# Optional inverse property for convenience (e.g., to query which activities an instrument is played in)
+:isPlayedInActivity rdf:type owl:ObjectProperty ;
+    rdfs:domain Cl_Instrument ;
+    rdfs:range Cl_InstrumentPlaying ;
+    rdfs:comment "Connects an instrument to the specific playing activities in which it is involved." ;
+    owl:inverseOf :involvesInstrument .
+
+# Data Properties (relations between classes and datatypes)
+
+:personName rdf:type owl:DatatypeProperty ;
+    rdfs:domain Cl_Person ;
+    rdfs:range xsd:string ;
+    rdfs:comment "The full name of a person." .
+
+:instrumentName rdf:type owl:DatatypeProperty ;
+    rdfs:domain Cl_Instrument ;
+    rdfs:range xsd:string ;
+    rdfs:comment "The common name of an instrument." .
+
+# ---------------------------------------------------
+# Restrictions and Axioms
+# ---------------------------------------------------
+
+# Every Cl_InstrumentPlaying instance must involve a player and an instrument
+Cl_InstrumentPlaying rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :involvesPlayer ;
+    owl:someValuesFrom Cl_Person
+] ;
+rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :involvesInstrument ;
+    owl:someValuesFrom Cl_Instrument
+] .
+
+# Definition of a Cl_Musician: a Person who has at least one InstrumentPlaying activity.
+Cl_Musician owl:equivalentClass [
+    rdf:type owl:Class ;
+    owl:intersectionOf (
+        Cl_Person
+        [ rdf:type owl:Restriction ;
+          owl:onProperty :hasInstrumentPlayingActivity ;
+          owl:someValuesFrom Cl_InstrumentPlaying
+        ]
+    )
+] .
+
+# Every Person must have a name
+Cl_Person rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :personName ;
+    owl:someValuesFrom xsd:string
+] .
+
+# Every Instrument must have a name
+Cl_Instrument rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :instrumentName ;
+    owl:someValuesFrom xsd:string
+] .
+
+# Disjoint Classes: Ensure instrument categories are mutually exclusive
+owl:AllDisjointClasses rdf:type owl:AllDisjointClasses ;
+    owl:members ( Cl_StringInstrument Cl_WindInstrument Cl_PercussionInstrument Cl_KeyboardInstrument ) .

@@ -95,6 +95,7 @@ otho_memless_cq_by_cq:
     3- You usually forget to write the name of the reification (pivot) that you want to create at the beginning of the output
     4- In reification, the reification node (pivot class) is connected to all related classes by object properties, not by the subclassof. it can be a subclass of something, but for reification, it needs object properties.
     5- Enclosing the output in a code block. Do not do this, just write the output in turtle syntax.
+    6- Forgetting to add rdfs:label and rdfs:comment for classes and properties.
     Common mistakes in extracting classes:
     1- Mistake: not extracting all classes and missing many of them. classes can be found in the story, or in the competency question number and restrictions.
     2- Returning empty answer
@@ -197,3 +198,15 @@ generate_owl_for_cq_structured:
     Competency Question: {cq}
 
     Generate the OWL ontology code:
+
+correct_owl_pitfalls:
+  user_template: |
+    You are an OWL ontology expert. You have created an OWL ontology that has the following validation issues:
+
+    {pitfall_feedback}
+
+    Here is the current OWL ontology in Turtle format:
+
+    {combined_owl}
+
+    Please make targeted corrections to fix ALL of the validation issues listed above while preserving the rest of the ontology structure and semantics. Return ONLY the corrected OWL code in Turtle format, with no explanations or markdown formatting.

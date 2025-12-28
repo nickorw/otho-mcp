@@ -30,7 +30,7 @@ class OopsPitfallReviewer:
         )
 
     def review_owl_content(
-        self,df xczv
+        self,
         owl_content: str,
         pitfalls: Optional[List[str]] = None,
         output_format: str = "XML",
@@ -57,10 +57,10 @@ class OopsPitfallReviewer:
 
             print("serialized graph")
             # Print the first 5 lines of the serialized RDF/XML
-            owl_lines = owl_content_xml.splitlines()
-            print("First 5 lines of owl_content_xml:")
-            for line in owl_lines[:5]:
-                print(line)
+            # owl_lines = owl_content_xml.splitlines()
+            # print("First 5 lines of owl_content_xml:")
+            # for line in owl_lines[:5]:
+            #     print(line)
         except Exception as e:
             print(f"Error converting Turtle to RDF/XML: {e}")
             raise ValueError(f"Failed to convert Turtle to RDF/XML: {e}")

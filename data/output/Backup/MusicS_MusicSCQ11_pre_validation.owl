@@ -1,0 +1,103 @@
+@prefix : <http://www.example.org/musicontology#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+#################################################################
+#    Classes
+#################################################################
+
+:Cl_Entity rdf:type owl:Class ;
+    rdfs:label "Entity" .
+
+:Cl_Event rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Entity ;
+    rdfs:label "Event" .
+
+:Cl_Performance rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Event ;
+    rdfs:label "Performance" ;
+    owl:equivalentClass [
+        rdf:type owl:Restriction ;
+        owl:onProperty :hasPerformanceEvent ;
+        owl:someValuesFrom :Cl_PerformanceSongEvent
+    ] .
+
+:Cl_MusicalWork rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Entity ;
+    rdfs:label "Musical Work" .
+
+:Cl_Song rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_MusicalWork ;
+    rdfs:label "Song" ;
+    owl:equivalentClass [
+        rdf:type owl:Restriction ;
+        owl:onProperty :isFeaturedInEvent ;
+        owl:someValuesFrom :Cl_PerformanceSongEvent
+    ] .
+
+# Reification/Pivot Class for "What songs were played in a certain performance?"
+:Cl_PerformanceSongEvent rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Event ;
+    rdfs:label "Performance Song Event" ;
+    rdfs:comment "Represents a specific instance of a song being played within a performance, acting as a pivot between a performance and a song." ;
+    owl:equivalentClass [
+        rdf:type owl:Restriction ;
+        owl:onProperty :referencesPerformance ;
+        owl:allValuesFrom :Cl_Performance
+    ] ;
+    owl:equivalentClass [
+        rdf:type owl:Restriction ;
+        owl:onProperty :featuresSong ;
+        owl:allValuesFrom :Cl_Song
+    ] .
+
+#################################################################
+#    Properties
+#################################################################
+
+### Object Properties ###
+
+:hasPerformanceEvent rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_Performance ;
+    rdfs:range :Cl_PerformanceSongEvent ;
+    rdfs:label "has performance event" ;
+    rdfs:comment "Connects a performance to a specific event of a song being played within it." .
+
+:referencesPerformance rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_PerformanceSongEvent ;
+    rdfs:range :Cl_Performance ;
+    rdfs:label "references performance" ;
+    rdfs:comment "Links a PerformanceSongEvent to the specific Performance it is part of." ;
+    owl:inverseOf :hasPerformanceEvent .
+
+:featuresSong rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_PerformanceSongEvent ;
+    rdfs:range :Cl_Song ;
+    rdfs:label "features song" ;
+    rdfs:comment "Indicates which song was played in a particular PerformanceSongEvent." .
+
+:isFeaturedInEvent rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_Song ;
+    rdfs:range :Cl_PerformanceSongEvent ;
+    rdfs:label "is featured in event" ;
+    rdfs:comment "Indicates the PerformanceSongEvent(s) a song was played in." ;
+    owl:inverseOf :featuresSong .
+
+### Data Properties ###
+
+:hasTitle rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Cl_MusicalWork ;
+    rdfs:range xsd:string ;
+    rdfs:label "has title" .
+
+:hasDate rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Cl_Event ;
+    rdfs:range xsd:date ;
+    rdfs:label "has date" .
+
+:hasLocation rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Cl_Event ;
+    rdfs:range xsd:string ;
+    rdfs:label "has location" .

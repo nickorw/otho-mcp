@@ -1,0 +1,156 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix : <http://example.org/ontology#> .
+
+# Ontology definition
+:ontology rdf:type owl:Ontology ;
+    rdfs:comment "Ontology for musical instruments and performers, designed to answer 'What instruments does a certain person play?' using reification for the 'playing' relationship." ;
+    owl:versionIRI <http://example.org/ontology/1.0.0> ;
+    owl:imports <http://www.w3.org/2002/07/owl> .
+
+# ---------------------------------------------------
+# Classes
+# ---------------------------------------------------
+
+# Top-level general classes for hierarchy
+:Cl_Entity rdf:type owl:Class ;
+    rdfs:comment "The most general class for all entities in the ontology." .
+
+:Cl_Agent rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Entity ;
+    rdfs:comment "A class for active entities that can perform actions." .
+
+:Cl_Object rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Entity ;
+    rdfs:comment "A class for tangible or intangible objects." .
+
+:Cl_Relation rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Entity ;
+    rdfs:comment "A class for reified relationships or statements between entities." .
+
+# Specific domain classes
+:Cl_Person rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Agent ;
+    rdfs:comment "Represents a human being." .
+
+:Cl_Musician rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Person ;
+    rdfs:comment "A person who plays one or more musical instruments." .
+
+:Cl_MusicalInstrument rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Object ;
+    rdfs:comment "A device created or adapted to make musical sounds." .
+
+# Hierarchical classification for musical instruments
+:Cl_StringInstrument rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_MusicalInstrument ;
+    rdfs:comment "A musical instrument that produces sound from vibrating strings (e.g., guitar, violin)." .
+:Cl_WindInstrument rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_MusicalInstrument ;
+    rdfs:comment "A musical instrument that produces sound from a vibrating air column (e.g., flute, trumpet)." .
+:Cl_PercussionInstrument rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_MusicalInstrument ;
+    rdfs:comment "A musical instrument sounded by being struck, scraped, or rubbed (e.g., drums, xylophone)." .
+:Cl_KeyboardInstrument rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_MusicalInstrument ;
+    rdfs:comment "A musical instrument played using a musical keyboard (e.g., piano, organ)." .
+:Cl_ElectronicInstrument rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_MusicalInstrument ;
+    rdfs:comment "A musical instrument that produces sound using electronic circuitry (e.g., synthesizer, electric guitar)." .
+
+# Reification Pivot Class for the "plays" relationship
+:Cl_InstrumentPlayingRelation rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Relation ;
+    rdfs:comment "A pivot class representing the relationship instance where a specific person plays a specific musical instrument. This reifies the 'plays' association to allow for additional details or complex queries about this skill/capability." .
+
+# ---------------------------------------------------
+# Properties
+# ---------------------------------------------------
+
+# Object Properties (relations between classes)
+
+# Property linking a Person to their instrument playing relationship instance
+:playsInstrumentRelation rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_Person ;
+    rdfs:range :Cl_InstrumentPlayingRelation ;
+    rdfs:comment "Connects a person to an instance of their playing an instrument. This property initiates the reified relationship." .
+
+# Properties linking the Cl_InstrumentPlayingRelation pivot to the Cl_Person and Cl_MusicalInstrument
+:hasPlayer rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_InstrumentPlayingRelation ;
+    rdfs:range :Cl_Person ;
+    rdfs:comment "Connects an instrument playing relation to the person who is the player in this relation." ;
+    owl:inverseOf :playsInstrumentRelation .
+
+:hasInstrument rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_InstrumentPlayingRelation ;
+    rdfs:range :Cl_MusicalInstrument ;
+    rdfs:comment "Connects an instrument playing relation to the specific musical instrument involved." .
+
+# Inverse property for convenience (e.g., to query which relations involve a particular instrument)
+:instrumentIsPlayedInRelation rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_MusicalInstrument ;
+    rdfs:range :Cl_InstrumentPlayingRelation ;
+    rdfs:comment "Connects a musical instrument to the specific playing relations in which it is involved." ;
+    owl:inverseOf :hasInstrument .
+
+# Data Properties (relations between classes and datatypes)
+
+:hasName rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Cl_Entity ; # General name property for any entity
+    rdfs:range xsd:string ;
+    rdfs:comment "The common name of an entity (e.g., person's name, instrument's name)." .
+
+:playsSinceYear rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Cl_InstrumentPlayingRelation ;
+    rdfs:range xsd:gYear ;
+    rdfs:comment "The approximate year when the person started playing the specific instrument in this relation. This exemplifies additional details that can be attached to the reified relation." .
+
+# ---------------------------------------------------
+# Restrictions and Axioms
+# ---------------------------------------------------
+
+# Every Cl_InstrumentPlayingRelation instance must involve a player and a musical instrument
+:Cl_InstrumentPlayingRelation rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :hasPlayer ;
+    owl:someValuesFrom :Cl_Person
+] ;
+rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :hasInstrument ;
+    owl:someValuesFrom :Cl_MusicalInstrument
+] .
+
+# Definition of a Cl_Musician: a Person who has at least one Cl_InstrumentPlayingRelation.
+# This makes Cl_Musician an equivalent class to a Person who plays an instrument.
+:Cl_Musician owl:equivalentClass [
+    rdf:type owl:Class ;
+    owl:intersectionOf (
+        :Cl_Person
+        [ rdf:type owl:Restriction ;
+          owl:onProperty :playsInstrumentRelation ;
+          owl:someValuesFrom :Cl_InstrumentPlayingRelation
+        ]
+    )
+] .
+
+# Every Person must have a name
+:Cl_Person rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :hasName ;
+    owl:someValuesFrom xsd:string
+] .
+
+# Every MusicalInstrument must have a name
+:Cl_MusicalInstrument rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :hasName ;
+    owl:someValuesFrom xsd:string
+] .
+
+# Disjoint Classes: Ensure instrument categories are mutually exclusive
+owl:AllDisjointClasses rdf:type owl:AllDisjointClasses ;
+    owl:members ( :Cl_StringInstrument :Cl_WindInstrument :Cl_PercussionInstrument :Cl_KeyboardInstrument :Cl_ElectronicInstrument ) .

@@ -65,6 +65,33 @@ Github Saeedizade et al. ESWC 2024: https://github.com/LiUSemWeb/LLMs4OntologyDe
 
 
 
+## Usage
+
+### Full Workflow (Generate all 15 CQs)
+```bash
+python otho.py --story-id MusicS
+```
+
+Generates OWL for each CQ, validates, combines, and attempts to fix any OOPS pitfalls automatically.
+
+### Skip-to-Combine (Checkpoint from existing OWL files)
+When you already have all 15 CQ OWL files and want to test combination/validation only:
+```bash
+python otho.py --story-id MusicS --skip-to-combine
+```
+
+**Requirements:** Existing validated OWL files in `data/output/{story_id}_{cq_id}.owl` format.
+
+**What it does:**
+- Loads existing OWL files
+- Skips CQ generation
+- Runs combination and validation phases
+- **Automatically corrects OOPS pitfalls** (up to 5 attempts)
+- Saves each correction attempt for auditing
+
+**Automatic Pitfall Correction:**
+The workflow now detects and attempts to fix all OOPS pitfalls (P08, P13, P22, P24, etc.) automatically. Each correction attempt is saved as `{story_id}_combined_turtle_correction_{attempt}.owl` for review.
+
 ## Env Setup
 ### OOps Pitfall Scanner
 1) docker run -p 80:8080 mpovedavillalon/oops:v1
