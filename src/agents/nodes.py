@@ -17,6 +17,10 @@ from langgraph.prebuilt import create_react_agent
 from src.agents.tools import check_pitfalls_tool, validate_syntax_tool
 from src.agents.workspace import AgentWorkspace
 from src.prompts.prompt_manager import PromptManager
+from src.reviewers.reasoner_validator import (
+    HermitReasonerValidator,
+    PelletReasonerValidator,
+)
 from src.reviewers.reviewer import OopsPitfallReviewer, RDFSyntaxReviewer
 from src.utils.agent_logger import AgentLogger
 from src.utils.excel_processor import get_story_by_id
@@ -312,16 +316,21 @@ def ontology_generation_agent(state: StateDict) -> StateDict:
 
 def validate_and_save_node(state: StateDict) -> StateDict:
     """
-    Final validation and save to disk.
+    Final validation and save to disk in a multi-dimensional, 3-pillar, approach.
 
-    This is a safety check - the agent should have already validated,
-    but we verify once more and save results to files.
+    Validates ontology across three complementary dimensions:
+    1. Structural: RDF/Turtle syntax validation
+    2. Pitfalls: OOPS modeling anti-pattern detection
+    3. Logical: Reasoning consistency with Hermit and Pellet
+
+    Each validator runs in isolation with proper cleanup to prevent
+    state contamination. Results are aggregated and saved with timing metrics.
 
     Args:
         state: Current workflow state with workspace
 
     Returns:
-        Updated state with validation results
+        Updated state with comprehensive validation results
     """
     story_id = state.get("story_id", "")
 
@@ -335,22 +344,47 @@ def validate_and_save_node(state: StateDict) -> StateDict:
         return {**state, "error_message": "Agent did not produce ontology"}
 
     print(f"\n{'=' * 60}")
-    print(f"FINAL VALIDATION FOR {story_id}")
+    print(f"FINAL VALIDATION AND SAVE TO DISK FOR {story_id}")
     print(f"{'=' * 60}\n")
 
     # Final syntax check
     print("Running final syntax validation...")
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    validation_results = {
+        "timestamp": timestamp,
+        "story_id": story_id,
+        "ontology_size_chars": len(generated_owl),
+    }
+
+    # ============================================================
+    # PILLAR 1: SYNTAX VALIDATION
+    # ============================================================
+    print("1️⃣  Syntax Validation (RDFLib)")
+    print("-" * 60)
+    import time
+
+    start_time = time.time()
     syntax_result = RDFSyntaxReviewer().review_owl_content(generated_owl)
+    syntax_time_ms = int((time.time() - start_time) * 1000)
     syntax_valid = syntax_result == "OK"
 
+    validation_results["syntax"] = {
+        "valid": syntax_valid,
+        "execution_time_ms": syntax_time_ms,
+        "error": None if syntax_valid else syntax_result,
+    }
+
     if syntax_valid:
-        print("✓ Syntax validation PASSED\n")
+        print(f"✓ Syntax validation PASSED ({syntax_time_ms}ms)\n")
     else:
-        print(f"✗ Syntax validation FAILED")
+        print(f"✗ Syntax validation FAILED ({syntax_time_ms}ms)")
         print(f"  Error: {syntax_result}\n")
 
-    # Final pitfall check
-    print("Running final OOPS pitfall check...")
+    # ============================================================
+    # PILLAR 2: PITFALL DETECTION
+    # ============================================================
+    print("2️⃣  Pitfall Detection (OOPS)")
+    print("-" * 60)
     pitfall_reviewer = OopsPitfallReviewer()
     pitfalls = [
         "2",
@@ -376,67 +410,155 @@ def validate_and_save_node(state: StateDict) -> StateDict:
         "29",
     ]
 
+    start_time = time.time()
     pitfall_result = pitfall_reviewer.review_owl_content(
         owl_content=generated_owl, pitfalls=pitfalls, output_format="XML"
     )
+    oops_time_ms = int((time.time() - start_time) * 1000)
+
     pitfall_data = parse_oops_response(pitfall_result)
     has_pitfalls = pitfall_data.get("has_pitfalls", False)
     pitfall_count = pitfall_data.get("pitfall_count", 0)
 
+    validation_results["oops"] = {
+        "has_pitfalls": has_pitfalls,
+        "pitfall_count": pitfall_count,
+        "execution_time_ms": oops_time_ms,
+        "pitfalls": pitfall_data.get("pitfalls", []),
+    }
+
     if not has_pitfalls:
-        print("✓ Pitfall check PASSED (no pitfalls detected)\n")
+        print(f"✓ Pitfall check PASSED - No pitfalls detected ({oops_time_ms}ms)\n")
     else:
-        print(f"⚠ Pitfall check: Found {pitfall_count} pitfall(s)")
+        print(f"⚠ Pitfall check: Found {pitfall_count} pitfall(s) ({oops_time_ms}ms)")
         pitfall_codes = [p.get("code", "") for p in pitfall_data.get("pitfalls", [])]
         print(f"  Pitfalls: {', '.join(pitfall_codes)}\n")
 
-    # Save final ontology
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    # ============================================================
+    # PILLAR 3: REASONING CONSISTENCY
+    # ============================================================
+    print("3️⃣  Reasoning Consistency")
+    print("-" * 60)
+
+    # 3a. Hermit Reasoner (reads RDF/XML file created by OOPS)
+    print("  → Hermit Reasoner...")
+    hermit_validator = HermitReasonerValidator()
+    hermit_result = hermit_validator.validate()
+
+    validation_results["hermit"] = hermit_result
+
+    if hermit_result["is_consistent"]:
+        print(
+            f"    ✓ PASSED - Ontology is consistent ({hermit_result['execution_time_ms']}ms)"
+        )
+    else:
+        print(
+            f"    ✗ FAILED - Inconsistencies detected ({hermit_result['execution_time_ms']}ms)"
+        )
+        if hermit_result.get("inconsistent_classes"):
+            print(f"    Inconsistent classes: {hermit_result['inconsistent_classes']}")
+        if hermit_result.get("error"):
+            print(f"    Error: {hermit_result['error']}")
+
+    # 3b. Pellet Reasoner (reads RDF/XML file created by OOPS)
+    print("\n  → Pellet Reasoner...")
+    pellet_validator = PelletReasonerValidator()
+    pellet_result = pellet_validator.validate()
+
+    validation_results["pellet"] = pellet_result
+
+    if pellet_result["is_consistent"]:
+        print(
+            f"    ✓ PASSED - Ontology is consistent ({pellet_result['execution_time_ms']}ms)\n"
+        )
+    else:
+        print(
+            f"    ✗ FAILED - Inconsistencies detected ({pellet_result['execution_time_ms']}ms)"
+        )
+        if pellet_result.get("inconsistent_classes"):
+            print(f"    Inconsistent classes: {pellet_result['inconsistent_classes']}")
+        if pellet_result.get("error"):
+            print(f"    Error: {pellet_result['error']}\n")
+
+    # ============================================================
+    # AGGREGATE RESULTS
+    # ============================================================
+    total_time_ms = (
+        syntax_time_ms
+        + oops_time_ms
+        + hermit_result["execution_time_ms"]
+        + pellet_result["execution_time_ms"]
+    )
+
+    all_passed = (
+        syntax_valid
+        and not has_pitfalls
+        and hermit_result["is_consistent"]
+        and pellet_result["is_consistent"]
+    )
+
+    validation_results["aggregate"] = {
+        "all_validators_passed": all_passed,
+        "total_execution_time_ms": total_time_ms,
+    }
+
+    # ============================================================
+    # SAVE OUTPUTS
+    # ============================================================
+    print("=" * 60)
+    print("SAVING OUTPUTS")
+    print("=" * 60)
+
+    # Save ontology
     final_path = f"data/output/{story_id}_ontology_{timestamp}.owl"
     save_text_file(final_path, generated_owl)
     print(f"✓ Ontology saved to: {final_path}")
 
-    # Save validation results
+    # Save OOPS XML results
     validation_path = f"data/output/{story_id}_validation_{timestamp}.xml"
     save_text_file(validation_path, pitfall_result)
-    print(f"✓ Validation results saved to: {validation_path}")
+    print(f"✓ OOPS results: {validation_path}")
 
-    # Save scratchpad for audit
+    # Save comprehensive validation results as JSON
+    validation_json_path = f"data/output/{story_id}_validation_{timestamp}.json"
+    with open(validation_json_path, "w") as f:
+        json.dump(validation_results, f, indent=2)
+    print(f"✓ Validation metrics: {validation_json_path}")
+
+    # Save scratchpad
     scratchpad_path = f"data/output/{story_id}_scratchpad_{timestamp}.json"
     with open(scratchpad_path, "w") as f:
         json.dump(scratchpad, f, indent=2)
-    print(f"✓ Scratchpad saved to: {scratchpad_path}")
+    print(f"✓ Scratchpad: {scratchpad_path}")
 
-    # Report results
+    # ============================================================
+    # FINAL REPORT
+    # ============================================================
     print(f"\n{'=' * 60}")
-    print(f"FINAL RESULTS")
+    print("VALIDATION SUMMARY")
     print(f"{'=' * 60}")
-    print(f"Syntax validation: {'✓ PASSED' if syntax_valid else '✗ FAILED'}")
-    if not syntax_valid:
-        print(f"  Error: {syntax_result}")
-
     print(
-        f"Pitfall check: {'✓ PASSED' if not has_pitfalls else f'⚠ Found {pitfall_count} pitfalls'}"
+        f"1. Syntax:    {'✓ PASSED' if syntax_valid else '✗ FAILED'} ({syntax_time_ms}ms)"
     )
-    if has_pitfalls:
-        pitfall_codes = [p.get("code", "") for p in pitfall_data.get("pitfalls", [])]
-        print(f"  Pitfalls: {', '.join(pitfall_codes)}")
-
-    print(f"Agent iterations: {state.get('iteration_count', 0)}")
+    print(
+        f"2. OOPS:      {'✓ PASSED' if not has_pitfalls else f'⚠ {pitfall_count} pitfalls'} ({oops_time_ms}ms)"
+    )
+    print(
+        f"3. Hermit:    {'✓ PASSED' if hermit_result['is_consistent'] else '✗ FAILED'} ({hermit_result['execution_time_ms']}ms)"
+    )
+    print(
+        f"4. Pellet:    {'✓ PASSED' if pellet_result['is_consistent'] else '✗ FAILED'} ({pellet_result['execution_time_ms']}ms)"
+    )
+    print("-" * 60)
+    print(f"Overall:      {'✅ ALL PASSED' if all_passed else '❌ VALIDATION FAILED'}")
+    print(f"Total time:   {total_time_ms}ms ({total_time_ms / 1000:.2f}s)")
+    print(f"Iterations:   {state.get('iteration_count', 0)}")
     print(f"{'=' * 60}\n")
 
     return {
         **state,
         "validation_history": state.get("validation_history", [])
-        + [
-            {
-                "timestamp": timestamp,
-                "syntax_valid": syntax_valid,
-                "has_pitfalls": has_pitfalls,
-                "pitfall_count": pitfall_count,
-                "final_check": True,
-            }
-        ],
+        + [validation_results],
     }
 
 
