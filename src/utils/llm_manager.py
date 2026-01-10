@@ -86,6 +86,28 @@ def call_gaih_google(model: str, prompt: str) -> str:
     return str(response)
 
 
+def get_gaih_openai_llm(model: str):
+    """
+    Get a LangChain LLM object for OpenAI via GenAIHub.
+    For use with create_react_agent.
+
+    Args:
+        model: The model name to use
+
+    Returns:
+        A LangChain LLM object (not invoked)
+    """
+    # Models that require init_llm instead of ChatOpenAI
+    legacy_models = ["gpt-4o", "gpt-4o-mini", "o1", "o1-mini", "o1-preview"]
+
+    if model in legacy_models:
+        return init_llm(model, max_tokens=4096)
+    else:
+        return ChatOpenAI(
+            proxy_model_name=model, proxy_client=proxy_client, temperature=0.5
+        )
+
+
 def call_gaih_openai(model: str, prompt: str) -> str:
     """
     Call an OpenAI model via GenAIHub.
@@ -99,21 +121,9 @@ def call_gaih_openai(model: str, prompt: str) -> str:
     Returns:
         The model's response content as a string
     """
-    # Models that require init_llm instead of ChatOpenAI
-    legacy_models = ["gpt-4o", "gpt-4o-mini", "o1", "o1-mini", "o1-preview"]
-
-    if model in legacy_models:
-        # Use init_llm for older OpenAI models
-        llm_openai = init_llm(model, max_tokens=4096)
-        response = llm_openai.invoke(prompt).content
-        return str(response)
-    else:
-        # Use ChatOpenAI for newer models (gpt-4.1 and later)
-        llm_openai = ChatOpenAI(
-            proxy_model_name=model, proxy_client=proxy_client, temperature=0.5
-        )
-        response = llm_openai.invoke(prompt).content
-        return str(response)
+    llm_openai = get_gaih_openai_llm(model)
+    response = llm_openai.invoke(prompt).content
+    return str(response)
 
 
 def call_llm(llm_type: str, prompt: str, model: Optional[str] = None) -> str:

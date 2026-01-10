@@ -1,6 +1,5 @@
 import glob
 import os
-from typing import Any, List, Tuple
 
 
 def save_owl_code(owl_code: str, story_id: int, cq_id: int, output_dir: str) -> str:
@@ -26,55 +25,36 @@ def save_text_file(file_path: str, text: str) -> str:
     return file_path
 
 
-def load_existing_owl_files(
-    story_id: str, output_dir: str = "data/output"
-) -> List[Tuple[str, str]]:
+def load_story_owl(story_id: str, output_dir: str = "data/output") -> str:
     """
-    Load all existing validated OWL files for a given story.
-
-    Args:
-        story_id: The story ID (e.g., 'MusicS', 'FestS', 'HospitalS')
-        output_dir: Directory where OWL files are stored
+    Load the ontology OWL file for a story.
 
     Returns:
-        List of tuples (cq_id, owl_content) for each found OWL file
+        OWL file content as a string
 
     Raises:
-        FileNotFoundError: If no OWL files are found for the story
+        FileNotFoundError: If no OWL file is found
     """
-    # Pattern to match: {story_id}_{cq_id}.owl (not pre_validation files)
-    pattern = os.path.join(output_dir, f"{story_id}_*.owl")
-    owl_files = glob.glob(pattern)
 
-    # Filter out pre_validation, concat, and combined files
-    owl_files = [
-        f
-        for f in owl_files
-        if not any(x in f for x in ["pre_validation", "concat", "combined"])
-    ]
+    # Pattern for the single ontology file: {story_id}_ontology_{timestamp}.owl
+    pattern = os.path.join(output_dir, f"{story_id}_ontology_*.owl")
+    matches = glob.glob(pattern)
 
-    if not owl_files:
+    if not matches:
         raise FileNotFoundError(
-            f"No validated OWL files found for story '{story_id}' in {output_dir}"
+            f"No ontology OWL file found for story '{story_id}' in {output_dir}"
         )
 
-    # Sort files to maintain order
-    owl_files.sort()
+    # Pick the most recent file if multiple exist
+    matches.sort(key=os.path.getmtime, reverse=True)
+    file_path = matches[0]
 
-    processed_owls = []
-    for file_path in owl_files:
-        # Extract CQ ID from filename: {story_id}_{cq_id}.owl
-        filename = os.path.basename(file_path)
-        cq_id = filename.replace(f"{story_id}_", "").replace(".owl", "")
+    with open(file_path, "r", encoding="utf-8") as f:
+        owl_content = f.read()
 
-        # Read the OWL content
-        with open(file_path, "r", encoding="utf-8") as f:
-            owl_content = f.read()
+    print(
+        f"Loaded ontology OWL file for story '{story_id}': {os.path.basename(file_path)}"
+        + (" (picked latest)" if len(matches) > 1 else "")
+    )
 
-        processed_owls.append((cq_id, owl_content))
-
-    print(f"Loaded {len(processed_owls)} existing OWL files for story '{story_id}':")
-    for cq_id, _ in processed_owls:
-        print(f"  - {cq_id}")
-
-    return processed_owls
+    return owl_content

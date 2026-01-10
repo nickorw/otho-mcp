@@ -1,73 +1,103 @@
-# This YAML file contains prompts for generating OWL ontologies based on stories and competency questions.
+generate_ontology: |
+  task: 
+    You are an expert Ontologist with deep OWL experience. Your task is to create a sophisticated OWL ontology in Turtle syntax based on a given Story and Competency Questions (CQs). 
 
-##This prompt is the original version of the original prompt used by Lippolis et al. (2025)
-original_memless_cq_by_cq: |
-  Your task is to contribute to creating a piece of well-structured ontology by reading information that appeared in the given story, requirements, and restrictions (if there are any).
-  The way you approach this is first you pick this competency question "{CQ}" and read the given turtle RDF (we append the code at the end of the previous one) to know what is the current ontology till this stage (it can be empty at the beginning). Then you add or change the RDF so it can answer this competency question. Your output at each stage is an append to the previous ones, just do not repeat. You only need to solve the question number so do not touch the next questions since they belong to the next stages of development. you can read these definisions to understand the concepts:
-  lasses are the keywords/classes that are going to be node types in the knowledge graph ontology. try to extract all classes, in addition, classes are also can be defined for reification. We use Turtle Syntax for representation. Hierarchies are rdfs:subClassOf in the turtle syntax. They can be used to classify similar classes in one superclass. To do this you can find similar nodes and create/use a class as their parent class, for example, adding the node "Cl_employee" is a good middleware and superclass for "Cl_Professors" and "Cl_Administrator" if the story is about modeling ontology of a university. Mostly the lengthier the hierarchy the better. One way can be categorizing classes into several classes and creating superclasses for them. Important: Class names have Cl_ as the prefix for example Cl_Professors. Also keep in mind you can add Equivalent To, General class axioms, Disjoint with, and Disjoint Union of, for each class.
-  In your ontology modeling, for each competency question, when faced with complex scenarios that involve more than two entities or a combination of entities and datatypes, apply reification. Specifically, create a pivot class to act as an intermediary for these entities, ensuring the nuanced relationships are accurately captured. For instance, when representing "a user accessed a resource at a given time", establish a pivot class like Cl_UserResourceUsage, linked from the user, resource, and the specific time of access to Cl_UserResourceInteraction, rather than directly connecting the user to both the resource and time.
-  Then you need to create properties (owl:Property). In this step, you use classes from the previous stage and create object and data properties to connect them and establish the ontology. Always output a turtle syntax, if you need more classes to model a competency question between more than 2 concepts, feel free to add more pivot (reification) classes here. try to find as much relation as possible by reading competency questions, restrictions, and stories. At this stage, you can create both data and object properties. Data properties are between classes or hierarchy classes and data types such as xsd:string, xsd:integer, xsd:decimal, xsd:dateTime, xsd:date, xsd:time, xsd:boolean, xsd:byte, xsd:double, xsd:float and etc. For example, in the university domain, we have: employee_id a owl:Property ; rdfs:domain :cl_teacher ; rdfs:range xsd:integer. Object properties are between classes. try to find as much relation as possible by reading competency questions and the story. Feel free to use rdfs:subPropertyOf for creating hierarchies for relations. For modeling properties (object or data properties) if it is necessary, use these relations characteristics: Functional, Inverse functional, Transitive, Symmetric, Asymmetric, Reflexive, and Irreflexive. Also, you are flexible in domain and range so you can use Cl_class1 or Cl_class2 in domain and range or disjoint with, the inverse of between relations.
-  It is common to forget to add relations that are related to reification: In RDF reification, achieving precise modeling is pivotal, especially when handling multifaceted scenarios where mere binary associations fall short. Take for instance the statement, "a user used a resource at a time". While it might initially seem to involve a direct link between a 'user' and a 'resource', it inherently embodies three entities: a 'user', a 'resource', and a 'time'. Directly connecting 'user' to both 'resource' and 'time' fails to capture the essence of the statement, as it obscures which resource was utilized by the user at a specific time. To address this, a more sophisticated modeling approach is needed, invoking a pivot class, Cl_usingResource. This pivot class acts as an intermediary, linking both Cl_user and Cl_resource. Furthermore, it integrates a time property to denote the exact instance of usage. By employing this method, we can coherently model the statement, ensuring that the user's interaction with a specific resource at a distinct time is unambiguously represented. This approach highlights the imperative of ontology design patterns and the necessity of intermediary nodes when modeling complex relationships involving multiple entities or a mix of entities and datatypes.
-  Upon implementation of restrictions, feel free to use owl:equivalentClass [ rdf:type owl:Restriction ;  owl:onProperty :{{relation}} ;  owl:allValuesFrom :{{Class}} ] ; in this way, you can put restrictions for classes such as class Cl_C1 is the only class that uses the relation R. or you can put soft restrictions by using owl:someValuesFrom. Also, you can use general class axioms: [ rdf:type owl:Restriction ; owl:onProperty :R1 ; owl:someValuesFrom :Cl_1 ; rdfs:subClassOf :Cl_2 ] when you want to put restrictions on the definition of a class based on its relation and the definition is necessary but not enough (if it is enough it would be equivalent to owl:equivalentClass).
-
-  these are the prifixes:
-  @prefix : <http://www.example.org/test#> .
-  @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-  @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-  @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
-  @prefix owl: <http://www.w3.org/2002/07/owl#>.
-
-  Important: before writing the owl code, write this text: is this competency question answerable by the previous version of the RDF (given down) or not? (most likely (~90%) is it not answerable). If no, write a reification class for this question if needed. then solve it. if it was answerable, simply rewrite the given rdf in the output without changing it.
-  here is one story:
-
-  {story}
-
-  End of story
-  here are some possible mistakes that you might make:
-  1- forgetting to add prefixes at the beginning of the code.
-  2- forgetting to write pivot classes at the beginning before starting to code.
-  3- your output would be concatenated to the previous output rdf, so don't write repetitive words, classes, or ...
-  4- in your output put all of the previous RDF classes, relations, and restrictions and add yours. your output will be passed to the next stage so don't remove previous code (it is going to replace the previous rdf)
-  5- you usually forget to write the name of the reification (pivot) that you want to create at the beginning of the output
-  6- In reification, the reification node (pivot class) is connected to all related classes by object properties, not by the subclassof. it can be a subclass of something, but for reification, it needs object properties.
-  common mistakes in extracting classes:
-  1- mistake: not extracting all classes and missing many of them. classes can be found in the story, or in the competency question number and restrictions.
-  2- Returning empty answer
-  3- Providing comments or explanations
-  4- Extracint classes like 'Date', and 'integer' are wrong since they are data properties.
-  5- not using RDF reification: not extracting pivot classes for modeling relation between classes (more than one class and one data property, or more than two classes)
-  6- extracting individuals in the text as a class
-  7- The pivot class is not a sublcass of its components.
-  common mistakes in the hierarchy extraction:
-  1- creating an ontology for non-existing classes: creating a new leaf and expanding it into the root
-  2- returning empty answer or very short
-  3- Providing comments or explanations
-  4- Extracting attributes such as date, time, and string names that are related to data properties
-  5- Forget to add "" around the strings in the tuples
-  Common mistakes in the object_properties:
-  1- returning new variables with anything except object_properties
-  2- returning empty answer or very short
-  3- providing comments or explanations
-  4- when the pivot class is created, all of the related classes should point to it (direction of relation is from the classes (domains) 'to'  pivot class (range))
-  Common mistakes in the data_properties:
-  1- returning new variables with anything except data_properties
-  2- returning empty answer or very short
-  3- providing comments or explanations
-  Here is the last RDF:
-  {rdf}
-
-##This prompt is a modified and modularized version of the original prompt used by Lippolis et al.(2025) to improve the performance of the model.
-otho_memless_cq_by_cq: 
-  task: |
-    Your task is to contribute to creating a piece of well-structured ontology by reading information that appeared in the given story, requirements, and restrictions (if there are any).
-    The way you approach this is first you pick this competency question "{CQ}" and then add the RDF so it can answer this competency question. You can read these definitions to understand the concepts:
-    Classes are the keywords/classes that are going to be node types in the knowledge graph ontology. Try to extract all classes, in addition, classes are also can be defined for reification. We use Turtle Syntax for representation. Hierarchies are rdfs:subClassOf in the turtle syntax. They can be used to classify similar classes in one superclass. To do this you can find similar nodes and create/use a class as their parent class, for example, adding the node "Cl_employee" is a good middleware and superclass for "Cl_Professors" and "Cl_Administrator" if the story is about modeling ontology of a university. Mostly the lengthier the hierarchy the better. One way can be categorizing classes into several classes and creating superclasses for them. Important: Class names have Cl_ as the prefix for example Cl_Professors. Also keep in mind you can add Equivalent To, General class axioms, Disjoint with, and Disjoint Union of, for each class.
-    In your ontology modeling, for each competency question, when faced with complex scenarios that involve more than two entities or a combination of entities and datatypes, apply reification. Specifically, create a pivot class to act as an intermediary for these entities, ensuring the nuanced relationships are accurately captured. For instance, when representing "a user accessed a resource at a given time", establish a pivot class like Cl_UserResourceUsage, linked from the user, resource, and the specific time of access to Cl_UserResourceInteraction, rather than directly connecting the user to both the resource and time.
-    Then you need to create properties (owl:Property). In this step, you use classes from the previous stage and create object and data properties to connect them and establish the ontology. Always output a turtle syntax, if you need more classes to model a competency question between more than 2 concepts, feel free to add more pivot (reification) classes here. try to find as much relation as possible by reading competency questions, restrictions, and stories. At this stage, you can create both data and object properties. Data properties are between classes or hierarchy classes and data types such as xsd:string, xsd:integer, xsd:decimal, xsd:dateTime, xsd:date, xsd:time, xsd:boolean, xsd:byte, xsd:double, xsd:float and etc. For example, in the university domain, we have: employee_id a owl:Property ; rdfs:domain :cl_teacher ; rdfs:range xsd:integer. Object properties are between classes. try to find as much relation as possible by reading competency questions and the story. Feel free to use rdfs:subPropertyOf for creating hierarchies for relations. For modeling properties (object or data properties) if it is necessary, use these relations characteristics: Functional, Inverse functional, Transitive, Symmetric, Asymmetric, Reflexive, and Irreflexive. Also, you are flexible in domain and range so you can use Cl_class1 or Cl_class2 in domain and range or disjoint with, the inverse of between relations.
-    It is common to forget to add relations that are related to reification: In RDF reification, achieving precise modeling is pivotal, especially when handling multifaceted scenarios where mere binary associations fall short. Take for instance the statement, "a user used a resource at a time". While it might initially seem to involve a direct link between a 'user' and a 'resource', it inherently embodies three entities: a 'user', a 'resource', and a 'time'. Directly connecting 'user' to both 'resource' and 'time' fails to capture the essence of the statement, as it obscures which resource was utilized by the user at a specific time. To address this, a more sophisticated modeling approach is needed, invoking a pivot class, Cl_usingResource. This pivot class acts as an intermediary, linking both Cl_user and Cl_resource. Furthermore, it integrates a time property to denote the exact instance of usage. By employing this method, we can coherently model the statement, ensuring that the user's interaction with a specific resource at a distinct time is unambiguously represented. This approach highlights the imperative of ontology design patterns and the necessity of intermediary nodes when modeling complex relationships involving multiple entities or a mix of entities and datatypes.
-    Upon implementation of restrictions, feel free to use owl:equivalentClass [ rdf:type owl:Restriction ;  owl:onProperty :{{relation}} ;  owl:allValuesFrom :{{Class}} ] ; in this way, you can put restrictions for classes such as class Cl_C1 is the only class that uses the relation R. or you can put soft restrictions by using owl:someValuesFrom. Also, you can use general class axioms: [ rdf:type owl:Restriction ; owl:onProperty :R1 ; owl:someValuesFrom :Cl_1 ; rdfs:subClassOf :Cl_2 ] when you want to put restrictions on the definition of a class based on its relation and the definition is necessary but not enough (if it is enough it would be equivalent to owl:equivalentClass).
+    ### EXPECTED WORKFLOW
+    You have access to 5 tools to help you complete this task. Don't send a message without calling a tool unless you are done and have saved the generated OWL. You must follow this iterative workflow:
     
-    DO NOT ENCLOSE THE CODE IN A CODE BLOCK, JUST WRITE THE OUTPUT IN TURTLE SYNTAX.
+    **STEP 1: PLANNING (Use update_scratchpad tool)**
+    - BEFORE generating any code, call `update_scratchpad` with key "plan" to record your ontology structure plan.
+    - Your plan must include:
+      1. **Concept Extraction:** List all Classes (including Pivot Classes for reification)
+      2. **Hierarchy Plan:** Your intended subClassOf, disjointWith, and DisjointUnion structures
+      3. **Properties:** List of Object/Data properties with domains, ranges, and characteristics
+      4. **CQ Coverage Verification (CRITICAL):** Map EVERY Competency Question to specific Classes/Properties that answer it
+    - Call `update_scratchpad` with key "cq_coverage" to document how each CQ is addressed
+
+    **STEP 2: GENERATE OWL CODE**
+    - Generate the complete OWL ontology in Turtle syntax
+    - Include ALL required prefixes, classes, properties, and axioms
+    - Ensure every Class and Property has rdfs:label and rdfs:comment
+    - Always save your progress by calling `update_scratchpad` with key "current_owl" after generating or modifying OWL code
+
+    **STEP 3: VALIDATE AND ITERATE (Use validation tools)**
+    - Use `validate_syntax_tool` and `check_pitfalls_tool` to validate your OWL code
+    - If issues are found, fix them and re-validate
+    - Continue iterating until BOTH syntax and pitfalls pass (max 10 iterations)
+    - Use `update_scratchpad` with key "iterations" to track your progress and decisions
+
+  **STEP 4: SAVE FINAL ONTOLOGY (Use save_final_ontology tool)**
+  - Once BOTH validations pass, call `save_final_ontology` with your final OWL code
+  - This tool marks task completion - calling it signals you are done
+  - Only call this after validating syntax and pitfalls successfully
+
+    ### TOOLS AVAILABLE
+    1. `update_scratchpad(key, value)` - Store planning, progress, iteration history
+    2. `read_scratchpad(key)` - Review previous decisions
+    3. `validate_syntax_tool(owl_content)` - Check RDF/Turtle syntax with rdflib
+    4. `check_pitfalls_tool(owl_content)` - Check for OOPS modeling pitfalls
+    5. `save_final_ontology(owl_content, label)` - Save final validated ontology to complete task
+    
+    ### ADVANCED MODELING INSTRUCTIONS
+    
+    **1. Reification & Pivot Classes:**
+    - **Requirement:** Apply reification for scenarios involving >2 entities or Entity+Entity+Time/Data.
+      
+    - **Implementation:** Create a Pivot Class (e.g., `UserResourceUsage`).
+    - **Directionality:** Ensure relations point FROM the entities TO the pivot class (e.g., `User -> hasUsage -> UserResourceUsage`).
+    - *Constraint:* Do not make the pivot class a subclass of its components.
+
+    **2. Complex Axioms & Restrictions:**
+    - **Restrictions:** Apply `owl:allValuesFrom` (strict) or `owl:someValuesFrom` (soft).
+    - **General Class Axioms (GCAs):** Use GCAs when a class definition depends on a relation. 
+      - *Pattern:* `[ rdf:type owl:Restriction ; owl:onProperty :property ; owl:someValuesFrom :ClassA ; rdfs:subClassOf :ClassB ]`
+    - **Equivalence:** Use `owl:equivalentClass` with restrictions for necessary and sufficient conditions:
+      - *Pattern:* `ClassA owl:equivalentClass [ rdf:type owl:Restriction ; owl:onProperty :prop ; owl:allValuesFrom :ClassB ]`
+
+    **3. Property Characteristics:**
+    - Define characteristics for every property: Functional, InverseFunctional, Transitive, Symmetric, Asymmetric, Reflexive, Irreflexive.
+
+  prefixes: 
+    @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+    @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+    @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+    @prefix owl: <http://www.w3.org/2002/07/owl#> .
+    @prefix : <http://www.example.org/ontology#> .
+
+  story: 
+    {story_text}
+
+  competency_questions: 
+    {cq_list}
+
+  constraints_and_mistakes: 
+    ### CRITICAL CONSTRAINTS:
+    1. **Tool Usage:** You MUST use all 5 tools in the workflow. Do not skip validation steps.
+    2. **Validation Required:** Iterate until BOTH syntax and pitfalls pass before calling save_final_ontology.
+    3. **Task Completion:** Calling save_final_ontology is the ONLY way to complete this task. Don't skip validations!
+    4. **Prefixes:** Always include all provided prefixes at the start of the ontology.
+    5. **Annotations:** Every Class and Property MUST have rdfs:label and rdfs:comment.
+    6. **Data vs Object:** Do not create Classes for simple attributes (Date, Integer); use Data Properties.
+    7. **Iteration Tracking:** Log each validation attempt in scratchpad with results and fixes applied.
+    8. **Output Format:** When generating OWL code, provide complete valid Turtle syntax.
+    9. **Ontology declaration** Ensure the ontology is declared at the start using the storyid in the IRI.
+
+#old prompt template for reference - do not use. New version is "generate_ontology".
+OLD_best_practices_owl_task: |
+  task: |
+    Your task is create a well-structured OWL ontology by reading the given story that provides you context and requirements.
+    The approach is to evaluate all Competency Questions(CQs) together with the story, plan the order the CQs will be processed and the considerations needed. Use the scratchpad available to record your plan and progress and be sure you don't miss anything. Once you are done, start processing the CQs and generating the OWL code, save your progress periodically  to and then add the RDF so it can answer this competency question. Use RDFS and OWL best practices and Turtle syntax. You can read these definitions to understand the concepts:
+    
+    Try to extract all classes, in addition, classes can also be defined for reification. In extracting or defining Classes, generally the more complete the hierarchy the better. Also keep in mind you can add Equivalent To, General class axioms, Disjoint with, and Disjoint Union of, for each class.
+
+    In complex scenarios that involve more than two entities or a combination of entities and datatypes, apply reification. Specifically, create a pivot class to act as an intermediary for these entities, ensuring the nuanced relationships are accurately captured. For instance, when representing "a user accessed a resource at a given time", establish a pivot class like UserResourceUsage, linked from the user, resource, and the specific time of access to UserResourceInteraction, rather than directly connecting the user to both the resource and time.
+    
+    Then, create owl properties. In this step, use classes from the previous stage and create object and data properties to connect them and establish the ontology. If you need more classes to model a competency question between more than 2 concepts, feel free to apply more reification. Try to find as many relations as possible by reading competency questions and stories. At this stage, you can create both data and object properties. Data properties are between classes or hierarchy classes and xsd data types. Use rdfs:subPropertyOf as necessary for creating hierarchies to relations. On property modeling, use characteristics such as: Functional, Inverse functional, Transitive, Symmetric, Asymmetric, Reflexive, and Irreflexive. Also, consider if you can or should be flexible in domain and range, or disjoint with.
+    
+    It is common to forget to add relations that are related to reification: In RDF reification, achieving precise modeling is pivotal, especially when handling multifaceted scenarios where mere binary associations fall short. Take for instance the statement, "a user used a resource at a time". While it might initially seem to involve a direct link between a 'user' and a 'resource', it inherently embodies three entities: a 'user', a 'resource', and a 'time'. Directly connecting 'user' to both 'resource' and 'time' fails to capture the essence of the statement, as it obscures which resource was utilized by the user at a specific time. To address this, a more sophisticated modeling approach is needed, invoking a pivot class, UsingResource. This pivot class acts as an intermediary, linking both User and Resource. Furthermore, it integrates a time property to denote the exact instance of usage. By employing this method, we can coherently model the statement, ensuring that the user's interaction with a specific resource at a distinct time is unambiguously represented. This approach highlights the imperative of ontology design patterns and the necessity of intermediary nodes when modeling complex relationships involving multiple entities or a mix of entities and datatypes.
+    
+    Upon implementation of restrictions, feel free to use owl:equivalentClass [ rdf:type owl:Restriction ;  owl:onProperty :{{relation}} ;  owl:allValuesFrom :{{Class}} ] ; in this way, you can put restrictions for classes such as class Class1 is the only class that uses the relation R. or you can put soft restrictions by using owl:someValuesFrom. Also, you can use general class axioms: [ rdf:type owl:Restriction ; owl:onProperty :R1 ; owl:someValuesFrom :Class1 ; rdfs:subClassOf :Class2 ] when you want to put restrictions on the definition of a class based on its relation and the definition is necessary but not enough (if it is enough it would be equivalent to owl:equivalentClass).
+    
     
   prefixes: |
     These are the prefixes:
@@ -87,23 +117,22 @@ otho_memless_cq_by_cq:
     {CQ}
 
   common_mistakes: |
-    Here are some possible mistakes that you might make:
+    Here are possible mistakes that you might make:
 
     Common mistakes in the coding process:
-    1- Forgetting to add prefixes at the beginning of the code.
+    1- Forgetting to add the prefixes at the beginning of the code.
     2- Forgetting to write pivot classes at the beginning before starting to code.
-    3- You usually forget to write the name of the reification (pivot) that you want to create at the beginning of the output
+    3- You may forget to write the name of the reification (pivot) that you want to create at the beginning of the output
     4- In reification, the reification node (pivot class) is connected to all related classes by object properties, not by the subclassof. it can be a subclass of something, but for reification, it needs object properties.
-    5- Enclosing the output in a code block. Do not do this, just write the output in turtle syntax.
+    5- Enclosing the output in a code block. Just write the output in turtle syntax.
     6- Forgetting to add rdfs:label and rdfs:comment for classes and properties.
     Common mistakes in extracting classes:
-    1- Mistake: not extracting all classes and missing many of them. classes can be found in the story, or in the competency question number and restrictions.
-    2- Returning empty answer
-    3- Providing comments or explanations
-    4- Extract classes like 'Date', and 'integer' are wrong since they are data properties.
-    5- Not using RDF reification: not extracting pivot classes for modeling relation between classes (more than one class and one data property, or more than two classes)
-    6- Extracting individuals in the text as a class
-    7- The pivot class is not a subclass of its components.
+    1- Not extracting all classes, missing many of them. Classes can be identified in the story, or in the competency questions.
+    2- Extract classes like 'Date', and 'integer' are wrong since they are data properties.
+    3- Not using RDF reification: not extracting pivot classes for modeling relation between classes (more than one class and one data property, or more than two classes)
+    4- Extracting instances of classes as classes(e.g.: an individual instead of Person or similar).
+    5- The pivot class cannot be a subclass of its components.
+    6- Returning redundant classes. If you would use owl:equivalentClass or owl:sameAs between two classes within the same ontology, consolidate them. 
     Common mistakes in the hierarchy extraction:
     1- Creating an ontology for non-existing classes: creating a new leaf and expanding it into the root
     2- Returning empty answer or very short
@@ -118,62 +147,7 @@ otho_memless_cq_by_cq:
     Common mistakes in the data_properties:
     1- Returning new variables with anything except data_properties
     2- Returning empty answer or very short
-    3- Providing comments or explanations
-
-
-
-prefixes: | 
-    @prefix : <http://www.example.org/test#> .
-    @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-    @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-    @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
-    @prefix owl: <http://www.w3.org/2002/07/owl#>.
-
-memless_cq_by_cq_task: |
-  Your task is to contribute to creating a piece of well-structured ontology by reading information that appeared in the given story, requirements, and restrictions (if there are any).
-  The way you approach this is first you pick this competency question "{CQ}" and then add the RDF so it can answer this competency question. You can read these definitions to understand the concepts:
-  Classes are the keywords/classes that are going to be node types in the knowledge graph ontology. Try to extract all classes, in addition, classes are also can be defined for reification. We use Turtle Syntax for representation. Hierarchies are rdfs:subClassOf in the turtle syntax. They can be used to classify similar classes in one superclass. To do this you can find similar nodes and create/use a class as their parent class, for example, adding the node "Cl_employee" is a good middleware and superclass for "Cl_Professors" and "Cl_Administrator" if the story is about modeling ontology of a university. Mostly the lengthier the hierarchy the better. One way can be categorizing classes into several classes and creating superclasses for them. Important: Class names have Cl_ as the prefix for example Cl_Professors. Also keep in mind you can add Equivalent To, General class axioms, Disjoint with, and Disjoint Union of, for each class.
-  In your ontology modeling, for each competency question, when faced with complex scenarios that involve more than two entities or a combination of entities and datatypes, apply reification. Specifically, create a pivot class to act as an intermediary for these entities, ensuring the nuanced relationships are accurately captured. For instance, when representing "a user accessed a resource at a given time", establish a pivot class like Cl_UserResourceUsage, linked from the user, resource, and the specific time of access to Cl_UserResourceInteraction, rather than directly connecting the user to both the resource and time.
-  Then you need to create properties (owl:Property). In this step, you use classes from the previous stage and create object and data properties to connect them and establish the ontology. Always output a turtle syntax, if you need more classes to model a competency question between more than 2 concepts, feel free to add more pivot (reification) classes here. try to find as much relation as possible by reading competency questions, restrictions, and stories. At this stage, you can create both data and object properties. Data properties are between classes or hierarchy classes and data types such as xsd:string, xsd:integer, xsd:decimal, xsd:dateTime, xsd:date, xsd:time, xsd:boolean, xsd:byte, xsd:double, xsd:float and etc. For example, in the university domain, we have: employee_id a owl:Property ; rdfs:domain :cl_teacher ; rdfs:range xsd:integer. Object properties are between classes. try to find as much relation as possible by reading competency questions and the story. Feel free to use rdfs:subPropertyOf for creating hierarchies for relations. For modeling properties (object or data properties) if it is necessary, use these relations characteristics: Functional, Inverse functional, Transitive, Symmetric, Asymmetric, Reflexive, and Irreflexive. Also, you are flexible in domain and range so you can use Cl_class1 or Cl_class2 in domain and range or disjoint with, the inverse of between relations.
-  It is common to forget to add relations that are related to reification: In RDF reification, achieving precise modeling is pivotal, especially when handling multifaceted scenarios where mere binary associations fall short. Take for instance the statement, "a user used a resource at a time". While it might initially seem to involve a direct link between a 'user' and a 'resource', it inherently embodies three entities: a 'user', a 'resource', and a 'time'. Directly connecting 'user' to both 'resource' and 'time' fails to capture the essence of the statement, as it obscures which resource was utilized by the user at a specific time. To address this, a more sophisticated modeling approach is needed, invoking a pivot class, Cl_usingResource. This pivot class acts as an intermediary, linking both Cl_user and Cl_resource. Furthermore, it integrates a time property to denote the exact instance of usage. By employing this method, we can coherently model the statement, ensuring that the user's interaction with a specific resource at a distinct time is unambiguously represented. This approach highlights the imperative of ontology design patterns and the necessity of intermediary nodes when modeling complex relationships involving multiple entities or a mix of entities and datatypes.
-  Upon implementation of restrictions, feel free to use owl:equivalentClass [ rdf:type owl:Restriction ;  owl:onProperty :{{relation}} ;  owl:allValuesFrom :{{Class}} ] ; in this way, you can put restrictions for classes such as class Cl_C1 is the only class that uses the relation R. or you can put soft restrictions by using owl:someValuesFrom. Also, you can use general class axioms: [ rdf:type owl:Restriction ; owl:onProperty :R1 ; owl:someValuesFrom :Cl_1 ; rdfs:subClassOf :Cl_2 ] when you want to put restrictions on the definition of a class based on its relation and the definition is necessary but not enough (if it is enough it would be equivalent to owl:equivalentClass).
-
-
-common_mistakes: |
-  Common mistakes in the coding process:
-  1- Forgetting to add prefixes at the beginning of the code.
-  2- Forgetting to write pivot classes at the beginning before starting to code.
-  3- You usually forget to write the name of the reification (pivot) that you want to create at the beginning of the output
-  4- In reification, the reification node (pivot class) is connected to all related classes by object properties, not by the subclassof. it can be a subclass of something, but for reification, it needs object properties.
-  5- Enclosing the output in a code block. Do not do this, just write the output in turtle syntax.
-  Common mistakes in extracting classes:
-  1- Mistake: not extracting all classes and missing many of them. classes can be found in the story, or in the competency question number and restrictions.
-  2- Returning empty answer
-  3- Providing comments or explanations
-  4- Extract classes like 'Date', and 'integer' are wrong since they are data properties.
-  5- Not using RDF reification: not extracting pivot classes for modeling relation between classes (more than one class and one data property, or more than two classes)
-  6- Extracting individuals in the text as a class
-  7- The pivot class is not a subclass of its components.
-  Common mistakes in the hierarchy extraction:
-  1- Creating an ontology for non-existing classes: creating a new leaf and expanding it into the root
-  2- Returning empty answer or very short
-  3- Providing comments or explanations
-  4- Extracting attributes such as date, time, and string names that are related to data properties
-  5- Forget to add "" around the string literals in the tuples
-  Common mistakes in the object_properties:
-  1- Returning new variables with anything except object_properties
-  2- Returning empty answer or very short
-  3- Providing comments or explanations
-  4- When the pivot class is created, all of the related classes should point to it (direction of relation is from the classes (domains) 'to'  pivot class (range))
-  Common mistakes in the data_properties:
-  1- Returning new variables with anything except data_properties
-  2- Returning empty answer or very short
-  3- Providing comments or explanations
-
-
-
-
-#### To be defined, using Lippolis et al. prompts as a base
+    3- Providing comments or explanations 
 
 combine_owl_codes: 
     
@@ -188,16 +162,7 @@ combine_owl_codes:
     {snippets} 
 
   
-# You could even structure them more, e.g., using LangChain's message structure:
-generate_owl_for_cq_structured:
-  system: "You are an expert in OWL ontology engineering. Generate OWL code in RDF/XML syntax or Turtle syntax. Ensure all necessary prefixes (rdf, rdfs, owl, xsd, and a base prefix like : or ex:) are defined. The ontology should model the entities, relationships, and axioms needed to answer the competency question based on the provided story."
-  user_template: |
-    Story:
-    {story}
 
-    Competency Question: {cq}
-
-    Generate the OWL ontology code:
 
 correct_owl_pitfalls:
   user_template: |

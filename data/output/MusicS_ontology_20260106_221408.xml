@@ -1,0 +1,465 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rdf:RDF
+   xmlns:owl="http://www.w3.org/2002/07/owl#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+>
+  <rdf:Description rdf:about="http://www.example.org/ontology#isCriticizedBy">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.example.org/ontology#Album"/>
+    <rdfs:range rdf:resource="http://www.example.org/ontology#Critic"/>
+    <owl:inverseOf rdf:resource="http://www.example.org/ontology#criticizes"/>
+    <rdfs:label>is criticized by</rdfs:label>
+    <rdfs:comment>Relates an album to critics who reviewed it.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.example.org/ontology#isAlbumRecordingOf">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.example.org/ontology#Album"/>
+    <rdfs:range rdf:resource="http://www.example.org/ontology#AlbumRecording"/>
+    <owl:inverseOf rdf:resource="http://www.example.org/ontology#albumRecorded"/>
+    <rdfs:label>is album recording of</rdfs:label>
+    <rdfs:comment>Relates an album to its recording event.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.example.org/ontology#hasCity">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.example.org/ontology#Region"/>
+    <rdfs:range rdf:resource="http://www.example.org/ontology#City"/>
+    <owl:inverseOf rdf:resource="http://www.example.org/ontology#locatedInRegion"/>
+    <rdfs:label>has city</rdfs:label>
+    <rdfs:comment>Relates a region to its cities.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.example.org/ontology#roleStart">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://www.example.org/ontology#BandRoleAssignment"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#date"/>
+    <rdfs:label>role start</rdfs:label>
+    <rdfs:comment>Start date of a specific role assignment.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.example.org/ontology#recordingStart">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://www.example.org/ontology#AlbumRecording"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#date"/>
+    <rdfs:label>recording start</rdfs:label>
+    <rdfs:comment>Start date of an album recording.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.example.org/ontology#Critic">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>Critic</rdfs:label>
+    <rdfs:comment>A person who critiques or reviews albums.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://www.example.org/ontology#Person"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.example.org/ontology#Person">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>Person</rdfs:label>
+    <rdfs:comment>A human individual, including musicians and critics.</rdfs:comment>
+    <owl:disjointWith rdf:resource="http://www.example.org/ontology#Band"/>
+    <owl:disjointWith rdf:resource="http://www.example.org/ontology#Instrument"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.example.org/ontology#UserBandMembership">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>User Band Membership</rdfs:label>
+    <rdfs:comment>Reifies the membership of a person in a band during a certain period.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.example.org/ontology#membershipEnd">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://www.example.org/ontology#UserBandMembership"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#date"/>
+    <rdfs:label>membership end</rdfs:label>
+    <rdfs:comment>End date of a person's membership in a band.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.example.org/ontology#isPerformanceSongOf">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.example.org/ontology#PerformanceSong"/>
+    <rdfs:range rdf:resource="http://www.example.org/ontology#Performance"/>
+    <owl:inverseOf rdf:resource="http://www.example.org/ontology#performanceSongRelation"/>
+    <rdfs:label>is performance song of</rdfs:label>
+    <rdfs:comment>Relates a performance-song reification to the performance.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.example.org/ontology#performedSong">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:domain rdf:resource="http://www.example.org/ontology#PerformanceSong"/>
+    <rdfs:range rdf:resource="http://www.example.org/ontology#Song"/>
+    <owl:inverseOf rdf:resource="http://www.example.org/ontology#isPerformedIn"/>
+    <rdfs:label>performed song</rdfs:label>
+    <rdfs:comment>Relates a performance-song relation to the song performed.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.example.org/ontology#isPerformedIn">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.example.org/ontology#Song"/>
+    <rdfs:range rdf:resource="http://www.example.org/ontology#PerformanceSong"/>
+    <owl:inverseOf rdf:resource="http://www.example.org/ontology#performedSong"/>
+    <rdfs:label>is performed in</rdfs:label>
+    <rdfs:comment>Relates a song to the performance-song relations it is part of.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.example.org/ontology#playsInstrument">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:domain rdf:resource="http://www.example.org/ontology#Person"/>
+    <rdfs:range rdf:resource="http://www.example.org/ontology#Instrument"/>
+    <owl:inverseOf rdf:resource="http://www.example.org/ontology#isPlayedBy"/>
+    <rdfs:label>plays instrument</rdfs:label>
+    <rdfs:comment>Relates a person to the instrument they play.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.example.org/ontology#locatedInRegion">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:domain rdf:resource="http://www.example.org/ontology#City"/>
+    <rdfs:range rdf:resource="http://www.example.org/ontology#Region"/>
+    <owl:inverseOf rdf:resource="http://www.example.org/ontology#hasCity"/>
+    <rdfs:label>located in region</rdfs:label>
+    <rdfs:comment>Relates a city to the region it is located in.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.example.org/ontology#roleEnd">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://www.example.org/ontology#BandRoleAssignment"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#date"/>
+    <rdfs:label>role end</rdfs:label>
+    <rdfs:comment>End date of a specific role assignment.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.example.org/ontology#hasRecording">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.example.org/ontology#Song"/>
+    <rdfs:range rdf:resource="http://www.example.org/ontology#TrackSongRelation"/>
+    <owl:inverseOf rdf:resource="http://www.example.org/ontology#isRecordingOf"/>
+    <rdfs:label>has recording</rdfs:label>
+    <rdfs:comment>Relates a song to its track-song relations.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.example.org/ontology#Instrument">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>Instrument</rdfs:label>
+    <rdfs:comment>A musical instrument played by a person.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.example.org/ontology#PerformanceSong">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>Performance Song</rdfs:label>
+    <rdfs:comment>Reifies the relationship between a performance and a song played.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.example.org/ontology#membershipStart">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://www.example.org/ontology#UserBandMembership"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#date"/>
+    <rdfs:label>membership start</rdfs:label>
+    <rdfs:comment>Start date of a person's membership in a band.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.example.org/ontology#trackNumber">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:domain rdf:resource="http://www.example.org/ontology#Track"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+    <rdfs:label>track number</rdfs:label>
+    <rdfs:comment>The number of a track within an album.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.example.org/ontology#isMembershipOf">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#InverseFunctionalProperty"/>
+    <rdfs:domain rdf:resource="http://www.example.org/ontology#UserBandMembership"/>
+    <rdfs:range rdf:resource="http://www.example.org/ontology#Band"/>
+    <owl:inverseOf rdf:resource="http://www.example.org/ontology#hasMember"/>
+    <rdfs:label>is membership of</rdfs:label>
+    <rdfs:comment>Relates a band membership to the band.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.example.org/ontology#isTrackOf">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.example.org/ontology#Track"/>
+    <rdfs:range rdf:resource="http://www.example.org/ontology#Album"/>
+    <owl:inverseOf rdf:resource="http://www.example.org/ontology#containsTrack"/>
+    <rdfs:label>is track of</rdfs:label>
+    <rdfs:comment>Relates a track to the album it is part of.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.example.org/ontology#containsTrack">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.example.org/ontology#Album"/>
+    <rdfs:range rdf:resource="http://www.example.org/ontology#Track"/>
+    <owl:inverseOf rdf:resource="http://www.example.org/ontology#isTrackOf"/>
+    <rdfs:label>contains track</rdfs:label>
+    <rdfs:comment>Relates an album to its tracks.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.example.org/ontology#albumRecorded">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:domain rdf:resource="http://www.example.org/ontology#AlbumRecording"/>
+    <rdfs:range rdf:resource="http://www.example.org/ontology#Album"/>
+    <owl:inverseOf rdf:resource="http://www.example.org/ontology#isAlbumRecordingOf"/>
+    <rdfs:label>album recorded</rdfs:label>
+    <rdfs:comment>Relates an album recording event to the album.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.example.org/ontology#isRoleOf">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.example.org/ontology#Role"/>
+    <rdfs:range rdf:resource="http://www.example.org/ontology#BandRoleAssignment"/>
+    <owl:inverseOf rdf:resource="http://www.example.org/ontology#hasRole"/>
+    <rdfs:label>is role of</rdfs:label>
+    <rdfs:comment>Relates a role to the role assignments it is part of.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.example.org/ontology#isPerformanceOf">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.example.org/ontology#Performance"/>
+    <rdfs:range rdf:resource="http://www.example.org/ontology#Band"/>
+    <owl:inverseOf rdf:resource="http://www.example.org/ontology#hasPerformance"/>
+    <rdfs:label>is performance of</rdfs:label>
+    <rdfs:comment>Relates a performance to its band.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.example.org/ontology#TrackSongRelation">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>Track Song Relation</rdfs:label>
+    <rdfs:comment>Reifies the relationship between a track and the song it records.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.example.org/ontology#Album">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>Album</rdfs:label>
+    <rdfs:comment>A collection of musical tracks released by a band.</rdfs:comment>
+    <rdfs:subClassOf rdf:nodeID="n4cc32eedf4a945fd82c50f0b6113c28ab1"/>
+    <owl:disjointWith rdf:resource="http://www.example.org/ontology#Song"/>
+    <owl:disjointWith rdf:resource="http://www.example.org/ontology#Performance"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.example.org/ontology#hasRegion">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.example.org/ontology#Country"/>
+    <rdfs:range rdf:resource="http://www.example.org/ontology#Region"/>
+    <owl:inverseOf rdf:resource="http://www.example.org/ontology#locatedInCountry"/>
+    <rdfs:label>has region</rdfs:label>
+    <rdfs:comment>Relates a country to its regions.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.example.org/ontology#locatedInCountry">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:domain rdf:resource="http://www.example.org/ontology#Region"/>
+    <rdfs:range rdf:resource="http://www.example.org/ontology#Country"/>
+    <owl:inverseOf rdf:resource="http://www.example.org/ontology#hasRegion"/>
+    <rdfs:label>located in country</rdfs:label>
+    <rdfs:comment>Relates a region to the country it is located in.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.example.org/ontology#hasPerson">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:domain rdf:resource="http://www.example.org/ontology#UserBandMembership"/>
+    <rdfs:range rdf:resource="http://www.example.org/ontology#Person"/>
+    <owl:inverseOf rdf:resource="http://www.example.org/ontology#isPersonMembership"/>
+    <rdfs:label>has person</rdfs:label>
+    <rdfs:comment>Relates a band membership to the person.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.example.org/ontology#hasRole">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:domain rdf:resource="http://www.example.org/ontology#BandRoleAssignment"/>
+    <rdfs:range rdf:resource="http://www.example.org/ontology#Role"/>
+    <owl:inverseOf rdf:resource="http://www.example.org/ontology#isRoleOf"/>
+    <rdfs:label>has role</rdfs:label>
+    <rdfs:comment>Relates a role assignment to a specific role.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.example.org/ontology#criticComment">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://www.example.org/ontology#Critic"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label>critic comment</rdfs:label>
+    <rdfs:comment>The textual critique or comment by a critic on an album.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.example.org/ontology#records">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.example.org/ontology#Band"/>
+    <rdfs:range rdf:resource="http://www.example.org/ontology#AlbumRecording"/>
+    <owl:inverseOf rdf:resource="http://www.example.org/ontology#isRecordedBy"/>
+    <rdfs:label>records</rdfs:label>
+    <rdfs:comment>Relates a band to an album recording event.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.example.org/ontology#isLocationOfPerformance">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.example.org/ontology#City"/>
+    <rdfs:range rdf:resource="http://www.example.org/ontology#Performance"/>
+    <owl:inverseOf rdf:resource="http://www.example.org/ontology#performanceLocation"/>
+    <rdfs:label>is location of performance</rdfs:label>
+    <rdfs:comment>Relates a city to performances held there.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.example.org/ontology#Role">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>Role</rdfs:label>
+    <rdfs:comment>A musical or organizational role a person can have in a band (e.g., vocalist, guitarist).</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.example.org/ontology/music-production">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Ontology"/>
+    <rdfs:label>Music Production Ontology</rdfs:label>
+    <rdfs:comment>Ontology for modeling music production, band membership, roles, albums, performances, and related entities as described in the Red Hot Chili Peppers scenario.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.example.org/ontology#performanceSongRelation">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.example.org/ontology#Performance"/>
+    <rdfs:range rdf:resource="http://www.example.org/ontology#PerformanceSong"/>
+    <owl:inverseOf rdf:resource="http://www.example.org/ontology#isPerformanceSongOf"/>
+    <rdfs:label>performance song relation</rdfs:label>
+    <rdfs:comment>Relates a performance to the reification of a song performed.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.example.org/ontology#songComposedOn">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:domain rdf:resource="http://www.example.org/ontology#Song"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#date"/>
+    <rdfs:label>song composed on</rdfs:label>
+    <rdfs:comment>Date when a song was composed.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.example.org/ontology#recordingEnd">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://www.example.org/ontology#AlbumRecording"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#date"/>
+    <rdfs:label>recording end</rdfs:label>
+    <rdfs:comment>End date (or release date) of an album recording.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.example.org/ontology#Performance">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>Performance</rdfs:label>
+    <rdfs:comment>A live event where a band performs songs.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.example.org/ontology#Region">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>Region</rdfs:label>
+    <rdfs:comment>A geographical region containing cities.</rdfs:comment>
+    <owl:disjointWith rdf:resource="http://www.example.org/ontology#Country"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.example.org/ontology#isTrackRelationOf">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.example.org/ontology#TrackSongRelation"/>
+    <rdfs:range rdf:resource="http://www.example.org/ontology#Track"/>
+    <owl:inverseOf rdf:resource="http://www.example.org/ontology#trackRelation"/>
+    <rdfs:label>is track relation of</rdfs:label>
+    <rdfs:comment>Relates a track-song relation to the track.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.example.org/ontology#hasPerformance">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.example.org/ontology#Band"/>
+    <rdfs:range rdf:resource="http://www.example.org/ontology#Performance"/>
+    <owl:inverseOf rdf:resource="http://www.example.org/ontology#isPerformanceOf"/>
+    <rdfs:label>has performance</rdfs:label>
+    <rdfs:comment>Relates a band to its performances.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.example.org/ontology#isPersonMembership">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.example.org/ontology#Person"/>
+    <rdfs:range rdf:resource="http://www.example.org/ontology#UserBandMembership"/>
+    <owl:inverseOf rdf:resource="http://www.example.org/ontology#hasPerson"/>
+    <rdfs:label>is person membership</rdfs:label>
+    <rdfs:comment>Relates a person to their band membership reification.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n4cc32eedf4a945fd82c50f0b6113c28ab1">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://www.example.org/ontology#containsTrack"/>
+    <owl:someValuesFrom rdf:resource="http://www.example.org/ontology#Track"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.example.org/ontology#BandRoleAssignment">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>Band Role Assignment</rdfs:label>
+    <rdfs:comment>Reifies the assignment of a specific role to a person in a band for a period.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.example.org/ontology#criticizes">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.example.org/ontology#Critic"/>
+    <rdfs:range rdf:resource="http://www.example.org/ontology#Album"/>
+    <owl:inverseOf rdf:resource="http://www.example.org/ontology#isCriticizedBy"/>
+    <rdfs:label>criticizes</rdfs:label>
+    <rdfs:comment>Relates a critic to an album they review.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.example.org/ontology#isRecordingOf">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:domain rdf:resource="http://www.example.org/ontology#TrackSongRelation"/>
+    <rdfs:range rdf:resource="http://www.example.org/ontology#Song"/>
+    <owl:inverseOf rdf:resource="http://www.example.org/ontology#hasRecording"/>
+    <rdfs:label>is recording of</rdfs:label>
+    <rdfs:comment>Relates a track-song relation to the song it records.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.example.org/ontology#hasMember">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.example.org/ontology#Band"/>
+    <rdfs:range rdf:resource="http://www.example.org/ontology#UserBandMembership"/>
+    <owl:inverseOf rdf:resource="http://www.example.org/ontology#isMembershipOf"/>
+    <rdfs:label>has member</rdfs:label>
+    <rdfs:comment>Relates a band to its membership reification.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.example.org/ontology#Track">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>Track</rdfs:label>
+    <rdfs:comment>A single audio recording that is part of an album.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.example.org/ontology#Country">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>Country</rdfs:label>
+    <rdfs:comment>A country containing regions.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.example.org/ontology#isRoleAssignmentOf">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.example.org/ontology#BandRoleAssignment"/>
+    <rdfs:range rdf:resource="http://www.example.org/ontology#UserBandMembership"/>
+    <owl:inverseOf rdf:resource="http://www.example.org/ontology#hasRoleAssignment"/>
+    <rdfs:label>is role assignment of</rdfs:label>
+    <rdfs:comment>Relates a role assignment to the membership it refers to.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.example.org/ontology#isPlayedBy">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.example.org/ontology#Instrument"/>
+    <rdfs:range rdf:resource="http://www.example.org/ontology#Person"/>
+    <owl:inverseOf rdf:resource="http://www.example.org/ontology#playsInstrument"/>
+    <rdfs:label>is played by</rdfs:label>
+    <rdfs:comment>Relates an instrument to the person who plays it.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.example.org/ontology#isRecordedBy">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.example.org/ontology#AlbumRecording"/>
+    <rdfs:range rdf:resource="http://www.example.org/ontology#Band"/>
+    <owl:inverseOf rdf:resource="http://www.example.org/ontology#records"/>
+    <rdfs:label>is recorded by</rdfs:label>
+    <rdfs:comment>Relates an album recording event to the band.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.example.org/ontology#hasRoleAssignment">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.example.org/ontology#UserBandMembership"/>
+    <rdfs:range rdf:resource="http://www.example.org/ontology#BandRoleAssignment"/>
+    <owl:inverseOf rdf:resource="http://www.example.org/ontology#isRoleAssignmentOf"/>
+    <rdfs:label>has role assignment</rdfs:label>
+    <rdfs:comment>Relates a membership to a role assignment.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.example.org/ontology#City">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>City</rdfs:label>
+    <rdfs:comment>A city where performances occur or bands are based.</rdfs:comment>
+    <owl:disjointWith rdf:resource="http://www.example.org/ontology#Region"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.example.org/ontology#Song">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>Song</rdfs:label>
+    <rdfs:comment>A musical composition that can be recorded as a track.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.example.org/ontology#performanceLocation">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:domain rdf:resource="http://www.example.org/ontology#Performance"/>
+    <rdfs:range rdf:resource="http://www.example.org/ontology#City"/>
+    <owl:inverseOf rdf:resource="http://www.example.org/ontology#isLocationOfPerformance"/>
+    <rdfs:label>performance location</rdfs:label>
+    <rdfs:comment>City where a performance is held.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.example.org/ontology#AlbumRecording">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>Album Recording</rdfs:label>
+    <rdfs:comment>Reifies the recording event of an album by a band, with start and end dates.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.example.org/ontology#trackRelation">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.example.org/ontology#Track"/>
+    <rdfs:range rdf:resource="http://www.example.org/ontology#TrackSongRelation"/>
+    <owl:inverseOf rdf:resource="http://www.example.org/ontology#isTrackRelationOf"/>
+    <rdfs:label>track relation</rdfs:label>
+    <rdfs:comment>Relates a track to its song relation reification.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.example.org/ontology#performanceDate">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:domain rdf:resource="http://www.example.org/ontology#Performance"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#date"/>
+    <rdfs:label>performance date</rdfs:label>
+    <rdfs:comment>Date of a performance.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.example.org/ontology#Band">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>Band</rdfs:label>
+    <rdfs:comment>A musical group or band.</rdfs:comment>
+  </rdf:Description>
+</rdf:RDF>

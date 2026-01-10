@@ -1,0 +1,30 @@
+2026-01-06 21:55:32 | INFO     | ============================================================
+2026-01-06 21:55:32 | INFO     | Agent Logger Initialized for MusicS
+2026-01-06 21:55:32 | INFO     | Log files: MusicS_agent_20260106_215532.log
+2026-01-06 21:55:32 | INFO     | ============================================================
+2026-01-06 21:55:32 | INFO     | Starting React agent execution
+2026-01-06 21:55:32 | DEBUG    | Prompt length: 6685 characters
+2026-01-06 21:55:32 | DEBUG    | Tools available: 5
+2026-01-06 21:55:32 | DEBUG    |   - update_scratchpad
+2026-01-06 21:55:32 | DEBUG    |   - read_scratchpad
+2026-01-06 21:55:32 | DEBUG    |   - validate_syntax_tool
+2026-01-06 21:55:32 | DEBUG    |   - check_pitfalls_tool
+2026-01-06 21:55:32 | DEBUG    |   - save_final_ontology
+2026-01-06 21:55:36 | INFO     | Creating React agent with tools...
+2026-01-06 21:55:37 | INFO     | Invoking React agent (this may take several minutes)...
+2026-01-06 21:57:16 | ERROR    | ERROR: Recursion limit of 25 reached without hitting a stop condition. You can increase the limit by setting the `recursion_limit` config key.
+For troubleshooting, visit: https://python.langchain.com/docs/troubleshooting/errors/GRAPH_RECURSION_LIMIT
+2026-01-06 21:57:16 | DEBUG    | Traceback:
+Traceback (most recent call last):
+  File "/Users/i833032/DevResearch/Otho/src/agents/nodes.py", line 258, in ontology_generation_agent
+    agent_response = agent_executor.invoke(
+                     ^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/i833032/.pyenv/versions/3.12.8/lib/python3.12/site-packages/langgraph/pregel/__init__.py", line 2719, in invoke
+    for chunk in self.stream(
+                 ^^^^^^^^^^^^
+  File "/Users/i833032/.pyenv/versions/3.12.8/lib/python3.12/site-packages/langgraph/pregel/__init__.py", line 2456, in stream
+    raise GraphRecursionError(msg)
+langgraph.errors.GraphRecursionError: Recursion limit of 25 reached without hitting a stop condition. You can increase the limit by setting the `recursion_limit` config key.
+For troubleshooting, visit: https://python.langchain.com/docs/troubleshooting/errors/GRAPH_RECURSION_LIMIT
+
+2026-01-06 21:57:16 | INFO     | JSON log saved: logs/MusicS_agent_20260106_215532.json

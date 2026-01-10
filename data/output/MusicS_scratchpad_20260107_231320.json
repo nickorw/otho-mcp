@@ -1,0 +1,468 @@
+{
+  "plan": {
+    "Concept Extraction": {
+      "Classes": [
+        "Person",
+        "Band",
+        "Instrument",
+        "Role",
+        "Album",
+        "Track",
+        "Song",
+        "Critic",
+        "Performance",
+        "City",
+        "Region",
+        "Country",
+        "UserBandMembership",
+        "TrackRecording",
+        "SongComposition",
+        "AlbumRecording",
+        "AlbumRelease",
+        "PerformanceSong",
+        "PerformanceLocation"
+      ],
+      "Pivot Classes": [
+        "UserBandMembership",
+        "TrackRecording",
+        "SongComposition",
+        "AlbumRecording",
+        "AlbumRelease",
+        "PerformanceSong",
+        "PerformanceLocation"
+      ]
+    },
+    "Hierarchy Plan": {
+      "subClassOf": [
+        [
+          "UserBandMembership",
+          "owl:Thing"
+        ],
+        [
+          "TrackRecording",
+          "owl:Thing"
+        ],
+        [
+          "SongComposition",
+          "owl:Thing"
+        ],
+        [
+          "AlbumRecording",
+          "owl:Thing"
+        ],
+        [
+          "AlbumRelease",
+          "owl:Thing"
+        ],
+        [
+          "PerformanceSong",
+          "owl:Thing"
+        ],
+        [
+          "PerformanceLocation",
+          "owl:Thing"
+        ],
+        [
+          "Person",
+          "owl:Thing"
+        ],
+        [
+          "Band",
+          "owl:Thing"
+        ],
+        [
+          "Instrument",
+          "owl:Thing"
+        ],
+        [
+          "Role",
+          "owl:Thing"
+        ],
+        [
+          "Album",
+          "owl:Thing"
+        ],
+        [
+          "Track",
+          "owl:Thing"
+        ],
+        [
+          "Song",
+          "owl:Thing"
+        ],
+        [
+          "Critic",
+          "Person"
+        ],
+        [
+          "Performance",
+          "owl:Thing"
+        ],
+        [
+          "City",
+          "owl:Thing"
+        ],
+        [
+          "Region",
+          "owl:Thing"
+        ],
+        [
+          "Country",
+          "owl:Thing"
+        ]
+      ],
+      "disjointWith": [
+        [
+          "Person",
+          "Band"
+        ],
+        [
+          "Instrument",
+          "Role"
+        ],
+        [
+          "Album",
+          "Track"
+        ],
+        [
+          "Song",
+          "Album"
+        ],
+        [
+          "Performance",
+          "Album"
+        ],
+        [
+          "City",
+          "Region"
+        ],
+        [
+          "Region",
+          "Country"
+        ]
+      ],
+      "DisjointUnion": []
+    },
+    "Properties": {
+      "ObjectProperties": [
+        {
+          "name": "playsInstrument",
+          "domain": "Person",
+          "range": "Instrument",
+          "characteristics": [
+            "Functional"
+          ]
+        },
+        {
+          "name": "hasRole",
+          "domain": "UserBandMembership",
+          "range": "Role",
+          "characteristics": [
+            "Functional"
+          ]
+        },
+        {
+          "name": "hasMember",
+          "domain": "Band",
+          "range": "UserBandMembership",
+          "characteristics": [
+            "Functional"
+          ]
+        },
+        {
+          "name": "hasPerson",
+          "domain": "UserBandMembership",
+          "range": "Person",
+          "characteristics": [
+            "Functional"
+          ]
+        },
+        {
+          "name": "hasBand",
+          "domain": "UserBandMembership",
+          "range": "Band",
+          "characteristics": [
+            "Functional"
+          ]
+        },
+        {
+          "name": "membershipTime",
+          "domain": "UserBandMembership",
+          "range": "xsd:dateTime",
+          "type": "DataProperty"
+        },
+        {
+          "name": "recordsAlbum",
+          "domain": "AlbumRecording",
+          "range": "Band",
+          "characteristics": [
+            "Functional"
+          ]
+        },
+        {
+          "name": "recordingPeriodStart",
+          "domain": "AlbumRecording",
+          "range": "xsd:dateTime",
+          "type": "DataProperty"
+        },
+        {
+          "name": "recordingPeriodEnd",
+          "domain": "AlbumRecording",
+          "range": "xsd:dateTime",
+          "type": "DataProperty"
+        },
+        {
+          "name": "containsTrack",
+          "domain": "Album",
+          "range": "Track",
+          "characteristics": [
+            "Functional"
+          ]
+        },
+        {
+          "name": "isRecordingOf",
+          "domain": "TrackRecording",
+          "range": "Track",
+          "characteristics": [
+            "Functional"
+          ]
+        },
+        {
+          "name": "isTrackOfSong",
+          "domain": "TrackRecording",
+          "range": "Song",
+          "characteristics": [
+            "Functional"
+          ]
+        },
+        {
+          "name": "compositionDate",
+          "domain": "SongComposition",
+          "range": "xsd:dateTime",
+          "type": "DataProperty"
+        },
+        {
+          "name": "composedSong",
+          "domain": "SongComposition",
+          "range": "Song",
+          "characteristics": [
+            "Functional"
+          ]
+        },
+        {
+          "name": "composedBy",
+          "domain": "SongComposition",
+          "range": "Person",
+          "characteristics": [
+            "Functional"
+          ]
+        },
+        {
+          "name": "releasedAlbum",
+          "domain": "AlbumRelease",
+          "range": "Album",
+          "characteristics": [
+            "Functional"
+          ]
+        },
+        {
+          "name": "releaseDate",
+          "domain": "AlbumRelease",
+          "range": "xsd:dateTime",
+          "type": "DataProperty"
+        },
+        {
+          "name": "criticReview",
+          "domain": "Critic",
+          "range": "Album",
+          "characteristics": [
+            "Functional"
+          ]
+        },
+        {
+          "name": "reviewText",
+          "domain": "Critic",
+          "range": "xsd:string",
+          "type": "DataProperty"
+        },
+        {
+          "name": "performanceDate",
+          "domain": "Performance",
+          "range": "xsd:dateTime",
+          "type": "DataProperty"
+        },
+        {
+          "name": "performanceBand",
+          "domain": "Performance",
+          "range": "Band",
+          "characteristics": [
+            "Functional"
+          ]
+        },
+        {
+          "name": "performanceSong",
+          "domain": "PerformanceSong",
+          "range": "Performance",
+          "characteristics": [
+            "Functional"
+          ]
+        },
+        {
+          "name": "performedSong",
+          "domain": "PerformanceSong",
+          "range": "Song",
+          "characteristics": [
+            "Functional"
+          ]
+        },
+        {
+          "name": "performanceLocation",
+          "domain": "PerformanceLocation",
+          "range": "Performance",
+          "characteristics": [
+            "Functional"
+          ]
+        },
+        {
+          "name": "locationCity",
+          "domain": "PerformanceLocation",
+          "range": "City",
+          "characteristics": [
+            "Functional"
+          ]
+        },
+        {
+          "name": "cityInRegion",
+          "domain": "City",
+          "range": "Region",
+          "characteristics": [
+            "Functional"
+          ]
+        },
+        {
+          "name": "regionInCountry",
+          "domain": "Region",
+          "range": "Country",
+          "characteristics": [
+            "Functional"
+          ]
+        }
+      ],
+      "DataProperties": [
+        {
+          "name": "membershipTime",
+          "domain": "UserBandMembership",
+          "range": "xsd:dateTime"
+        },
+        {
+          "name": "recordingPeriodStart",
+          "domain": "AlbumRecording",
+          "range": "xsd:dateTime"
+        },
+        {
+          "name": "recordingPeriodEnd",
+          "domain": "AlbumRecording",
+          "range": "xsd:dateTime"
+        },
+        {
+          "name": "compositionDate",
+          "domain": "SongComposition",
+          "range": "xsd:dateTime"
+        },
+        {
+          "name": "releaseDate",
+          "domain": "AlbumRelease",
+          "range": "xsd:dateTime"
+        },
+        {
+          "name": "reviewText",
+          "domain": "Critic",
+          "range": "xsd:string"
+        },
+        {
+          "name": "performanceDate",
+          "domain": "Performance",
+          "range": "xsd:dateTime"
+        }
+      ]
+    },
+    "Complex Axioms & Restrictions": {
+      "GCAs": [
+        {
+          "pattern": "Band owl:equivalentClass [ rdf:type owl:Restriction ; owl:onProperty :hasMember ; owl:someValuesFrom :UserBandMembership ]"
+        },
+        {
+          "pattern": "Album owl:equivalentClass [ rdf:type owl:Restriction ; owl:onProperty :containsTrack ; owl:someValuesFrom :Track ]"
+        },
+        {
+          "pattern": "Track owl:equivalentClass [ rdf:type owl:Restriction ; owl:onProperty :isTrackOfSong ; owl:someValuesFrom :Song ]"
+        },
+        {
+          "pattern": "Performance owl:equivalentClass [ rdf:type owl:Restriction ; owl:onProperty :performanceBand ; owl:someValuesFrom :Band ]"
+        }
+      ]
+    }
+  },
+  "cq_coverage": {
+    "CQ1": "playsInstrument (Person, Instrument)",
+    "CQ2": "UserBandMembership (Person, Band, membershipTime)",
+    "CQ3": "UserBandMembership (Person, Band, Role, membershipTime)",
+    "CQ4": "AlbumRecording (Album, Band, recordingPeriodStart, recordingPeriodEnd)",
+    "CQ5": "containsTrack (Album, Track), cardinality restriction or count query",
+    "CQ6": "AlbumRelease (Album, releaseDate)",
+    "CQ7": "TrackRecording (Track, Song)",
+    "CQ8": "SongComposition (Song, compositionDate)",
+    "CQ9": "criticReview, reviewText (Critic, Album, reviewText)",
+    "CQ10": "Performance (performanceDate)",
+    "CQ11": "PerformanceSong (Performance, Song)",
+    "CQ12": "PerformanceLocation (Performance, City)",
+    "CQ13": "cityInRegion (City, Region)",
+    "CQ14": "regionInCountry (Region, Country)",
+    "CQ15": "Album owl:equivalentClass [ rdf:type owl:Restriction ; owl:onProperty :containsTrack ; owl:minCardinality 1 ; owl:someValuesFrom :Track ]"
+  },
+  "current_owl": "@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n@prefix owl: <http://www.w3.org/2002/07/owl#> .\n@prefix : <http://www.example.org/ontology#> .\n\n<http://www.example.org/ontology/music-production>\n    rdf:type owl:Ontology ;\n    rdfs:label \"Music Production Ontology\" ;\n    rdfs:comment \"Ontology for music production, band membership, albums, tracks, performances, and related entities.\" .\n\n#################################################################\n# Classes\n#################################################################\n:Person rdf:type owl:Class ;\n    rdfs:label \"Person\" ;\n    rdfs:comment \"A human individual involved in music production.\" .\n\n:Band rdf:type owl:Class ;\n    rdfs:label \"Band\" ;\n    rdfs:comment \"A music group or ensemble.\" ;\n    owl:disjointWith :Person .\n\n:Instrument rdf:type owl:Class ;\n    rdfs:label \"Instrument\" ;\n    rdfs:comment \"A musical instrument played by a person.\" ;\n    owl:disjointWith :Role .\n\n:Role rdf:type owl:Class ;\n    rdfs:label \"Role\" ;\n    rdfs:comment \"A specific role held by a person within a band.\" ;\n    owl:disjointWith :Instrument .\n\n:Album rdf:type owl:Class ;\n    rdfs:label \"Album\" ;\n    rdfs:comment \"A collection of music tracks released together.\" ;\n    owl:disjointWith :Track, :Song, :Performance .\n\n:Track rdf:type owl:Class ;\n    rdfs:label \"Track\" ;\n    rdfs:comment \"A single music track included in an album.\" ;\n    owl:disjointWith :Album .\n\n:Song rdf:type owl:Class ;\n    rdfs:label \"Song\" ;\n    rdfs:comment \"A musical composition.\" ;\n    owl:disjointWith :Album .\n\n:Critic rdf:type owl:Class ;\n    rdfs:label \"Critic\" ;\n    rdfs:comment \"A person who reviews music albums.\" ;\n    rdfs:subClassOf :Person .\n\n:Performance rdf:type owl:Class ;\n    rdfs:label \"Performance\" ;\n    rdfs:comment \"A live event where music is performed.\" ;\n    owl:disjointWith :Album .\n\n:City rdf:type owl:Class ;\n    rdfs:label \"City\" ;\n    rdfs:comment \"A city where performances can take place.\" ;\n    owl:disjointWith :Region .\n\n:Region rdf:type owl:Class ;\n    rdfs:label \"Region\" ;\n    rdfs:comment \"A geographic region containing cities.\" ;\n    owl:disjointWith :Country .\n\n:Country rdf:type owl:Class ;\n    rdfs:label \"Country\" ;\n    rdfs:comment \"A country containing regions.\" .\n\n# Pivot Classes for Reification\n:UserBandMembership rdf:type owl:Class ;\n    rdfs:label \"User Band Membership\" ;\n    rdfs:comment \"Reifies a person's membership in a band at a specific time and with a specific role.\" ;\n    rdfs:subClassOf [ a owl:Restriction ; owl:onProperty :hasRole ; owl:someValuesFrom :Role ] .\n\n:TrackRecording rdf:type owl:Class ;\n    rdfs:label \"Track Recording\" ;\n    rdfs:comment \"Reifies the relationship between a track and the song it records.\" .\n\n:SongComposition rdf:type owl:Class ;\n    rdfs:label \"Song Composition\" ;\n    rdfs:comment \"Reifies the composition of a song by a person at a specific date.\" .\n\n:AlbumRecording rdf:type owl:Class ;\n    rdfs:label \"Album Recording\" ;\n    rdfs:comment \"Reifies the recording period of an album by a band.\" .\n\n:AlbumRelease rdf:type owl:Class ;\n    rdfs:label \"Album Release\" ;\n    rdfs:comment \"Reifies the release of an album on a specific date.\" .\n\n:PerformanceSong rdf:type owl:Class ;\n    rdfs:label \"Performance Song\" ;\n    rdfs:comment \"Reifies the performance of a song during a live event.\" .\n\n:PerformanceLocation rdf:type owl:Class ;\n    rdfs:label \"Performance Location\" ;\n    rdfs:comment \"Reifies the location of a performance in a city.\" .\n\n#################################################################\n# Object Properties (reviewed inverses)\n#################################################################\n:playsInstrument rdf:type owl:ObjectProperty , owl:FunctionalProperty ;\n    rdfs:label \"plays instrument\" ;\n    rdfs:comment \"Indicates the instrument played by a person.\" ;\n    rdfs:domain :Person ;\n    rdfs:range :Instrument ;\n    owl:inverseOf :isPlayedBy .\n\n:isPlayedBy rdf:type owl:ObjectProperty ;\n    rdfs:label \"is played by\" ;\n    rdfs:comment \"Inverse property: the instrument is played by a person.\" ;\n    rdfs:domain :Instrument ;\n    rdfs:range :Person ;\n    owl:inverseOf :playsInstrument .\n\n# Only true logical inverses are defined below\n:hasMember rdf:type owl:ObjectProperty , owl:FunctionalProperty ;\n    rdfs:label \"has member\" ;\n    rdfs:comment \"Indicates the membership relation from a band to a UserBandMembership.\" ;\n    rdfs:domain :Band ;\n    rdfs:range :UserBandMembership ;\n    owl:inverseOf :isMembershipOfBand .\n\n:isMembershipOfBand rdf:type owl:ObjectProperty ;\n    rdfs:label \"is membership of band\" ;\n    rdfs:comment \"Inverse property: the membership is of a band.\" ;\n    rdfs:domain :UserBandMembership ;\n    rdfs:range :Band ;\n    owl:inverseOf :hasMember .\n\n:containsTrack rdf:type owl:ObjectProperty , owl:FunctionalProperty ;\n    rdfs:label \"contains track\" ;\n    rdfs:comment \"Indicates the tracks contained in an album.\" ;\n    rdfs:domain :Album ;\n    rdfs:range :Track ;\n    owl:inverseOf :isTrackOfAlbum .\n\n:isTrackOfAlbum rdf:type owl:ObjectProperty ;\n    rdfs:label \"is track of album\" ;\n    rdfs:comment \"Inverse property: the track is contained in an album.\" ;\n    rdfs:domain :Track ;\n    rdfs:range :Album ;\n    owl:inverseOf :containsTrack .\n\n:isRecordingOf rdf:type owl:ObjectProperty , owl:FunctionalProperty ;\n    rdfs:label \"is recording of\" ;\n    rdfs:comment \"Indicates the track that is a recording of a song.\" ;\n    rdfs:domain :TrackRecording ;\n    rdfs:range :Track ;\n    owl:inverseOf :hasRecording .\n\n:hasRecording rdf:type owl:ObjectProperty ;\n    rdfs:label \"has recording\" ;\n    rdfs:comment \"Inverse property: the track has a recording event.\" ;\n    rdfs:domain :Track ;\n    rdfs:range :TrackRecording ;\n    owl:inverseOf :isRecordingOf .\n\n:isTrackOfSong rdf:type owl:ObjectProperty , owl:FunctionalProperty ;\n    rdfs:label \"is track of song\" ;\n    rdfs:comment \"Indicates the song that is recorded in a track.\" ;\n    rdfs:domain :TrackRecording ;\n    rdfs:range :Song ;\n    owl:inverseOf :hasTrackRecording .\n\n:hasTrackRecording rdf:type owl:ObjectProperty ;\n    rdfs:label \"has track recording\" ;\n    rdfs:comment \"Inverse property: the song has a track recording event.\" ;\n    rdfs:domain :Song ;\n    rdfs:range :TrackRecording ;\n    owl:inverseOf :isTrackOfSong .\n\n:criticReview rdf:type owl:ObjectProperty , owl:FunctionalProperty ;\n    rdfs:label \"critic review\" ;\n    rdfs:comment \"Indicates the album reviewed by a critic.\" ;\n    rdfs:domain :Critic ;\n    rdfs:range :Album ;\n    owl:inverseOf :isReviewedBy .\n\n:isReviewedBy rdf:type owl:ObjectProperty ;\n    rdfs:label \"is reviewed by\" ;\n    rdfs:comment \"Inverse property: the album is reviewed by a critic.\" ;\n    rdfs:domain :Album ;\n    rdfs:range :Critic ;\n    owl:inverseOf :criticReview .\n\n:performanceBand rdf:type owl:ObjectProperty , owl:FunctionalProperty ;\n    rdfs:label \"performance band\" ;\n    rdfs:comment \"Indicates the band performing at a live event.\" ;\n    rdfs:domain :Performance ;\n    rdfs:range :Band ;\n    owl:inverseOf :isPerformedIn .\n\n:isPerformedIn rdf:type owl:ObjectProperty ;\n    rdfs:label \"is performed in\" ;\n    rdfs:comment \"Inverse property: the band is performed in a performance.\" ;\n    rdfs:domain :Band ;\n    rdfs:range :Performance ;\n    owl:inverseOf :performanceBand .\n\n:performanceSong rdf:type owl:ObjectProperty , owl:FunctionalProperty ;\n    rdfs:label \"performance song\" ;\n    rdfs:comment \"Indicates the performance event for a song.\" ;\n    rdfs:domain :PerformanceSong ;\n    rdfs:range :Performance ;\n    owl:inverseOf :hasPerformanceSong .\n\n:hasPerformanceSong rdf:type owl:ObjectProperty ;\n    rdfs:label \"has performance song\" ;\n    rdfs:comment \"Inverse property: the performance has a performance song event.\" ;\n    rdfs:domain :Performance ;\n    rdfs:range :PerformanceSong ;\n    owl:inverseOf :performanceSong .\n\n:performedSong rdf:type owl:ObjectProperty , owl:FunctionalProperty ;\n    rdfs:label \"performed song\" ;\n    rdfs:comment \"Indicates the song performed in a performance event.\" ;\n    rdfs:domain :PerformanceSong ;\n    rdfs:range :Song ;\n    owl:inverseOf :isPerformedSongIn .\n\n:isPerformedSongIn rdf:type owl:ObjectProperty ;\n    rdfs:label \"is performed song in\" ;\n    rdfs:comment \"Inverse property: the song is performed in a performance song event.\" ;\n    rdfs:domain :Song ;\n    rdfs:range :PerformanceSong ;\n    owl:inverseOf :performedSong .\n\n:performanceLocation rdf:type owl:ObjectProperty , owl:FunctionalProperty ;\n    rdfs:label \"performance location\" ;\n    rdfs:comment \"Indicates the location event for a performance.\" ;\n    rdfs:domain :PerformanceLocation ;\n    rdfs:range :Performance ;\n    owl:inverseOf :hasPerformanceLocation .\n\n:hasPerformanceLocation rdf:type owl:ObjectProperty ;\n    rdfs:label \"has performance location\" ;\n    rdfs:comment \"Inverse property: the performance has a performance location event.\" ;\n    rdfs:domain :Performance ;\n    rdfs:range :PerformanceLocation ;\n    owl:inverseOf :performanceLocation .\n\n:locationCity rdf:type owl:ObjectProperty , owl:FunctionalProperty ;\n    rdfs:label \"location city\" ;\n    rdfs:comment \"Indicates the city where a performance takes place.\" ;\n    rdfs:domain :PerformanceLocation ;\n    rdfs:range :City ;\n    owl:inverseOf :isLocationOf .\n\n:isLocationOf rdf:type owl:ObjectProperty ;\n    rdfs:label \"is location of\" ;\n    rdfs:comment \"Inverse property: the city is the location of a performance location event.\" ;\n    rdfs:domain :City ;\n    rdfs:range :PerformanceLocation ;\n    owl:inverseOf :locationCity .\n\n:cityInRegion rdf:type owl:ObjectProperty , owl:FunctionalProperty ;\n    rdfs:label \"city in region\" ;\n    rdfs:comment \"Indicates the region containing a city.\" ;\n    rdfs:domain :City ;\n    rdfs:range :Region ;\n    owl:inverseOf :hasCity .\n\n:hasCity rdf:type owl:ObjectProperty ;\n    rdfs:label \"has city\" ;\n    rdfs:comment \"Inverse property: the region has a city.\" ;\n    rdfs:domain :Region ;\n    rdfs:range :City ;\n    owl:inverseOf :cityInRegion .\n\n:regionInCountry rdf:type owl:ObjectProperty , owl:FunctionalProperty ;\n    rdfs:label \"region in country\" ;\n    rdfs:comment \"Indicates the country containing a region.\" ;\n    rdfs:domain :Region ;\n    rdfs:range :Country ;\n    owl:inverseOf :hasRegion .\n\n:hasRegion rdf:type owl:ObjectProperty ;\n    rdfs:label \"has region\" ;\n    rdfs:comment \"Inverse property: the country has a region.\" ;\n    rdfs:domain :Country ;\n    rdfs:range :Region ;\n    owl:inverseOf :regionInCountry .\n\n#################################################################\n# Data Properties\n#################################################################\n:membershipTime rdf:type owl:DatatypeProperty ;\n    rdfs:label \"membership time\" ;\n    rdfs:comment \"The time period of a person's membership in a band.\" ;\n    rdfs:domain :UserBandMembership ;\n    rdfs:range xsd:dateTime .\n\n:recordingPeriodStart rdf:type owl:DatatypeProperty ;\n    rdfs:label \"recording period start\" ;\n    rdfs:comment \"Start of the album recording period.\" ;\n    rdfs:domain :AlbumRecording ;\n    rdfs:range xsd:dateTime .\n\n:recordingPeriodEnd rdf:type owl:DatatypeProperty ;\n    rdfs:label \"recording period end\" ;\n    rdfs:comment \"End of the album recording period.\" ;\n    rdfs:domain :AlbumRecording ;\n    rdfs:range xsd:dateTime .\n\n:compositionDate rdf:type owl:DatatypeProperty ;\n    rdfs:label \"composition date\" ;\n    rdfs:comment \"Date of song composition.\" ;\n    rdfs:domain :SongComposition ;\n    rdfs:range xsd:dateTime .\n\n:releaseDate rdf:type owl:DatatypeProperty ;\n    rdfs:label \"release date\" ;\n    rdfs:comment \"Release date of an album.\" ;\n    rdfs:domain :AlbumRelease ;\n    rdfs:range xsd:dateTime .\n\n:reviewText rdf:type owl:DatatypeProperty ;\n    rdfs:label \"review text\" ;\n    rdfs:comment \"Text of a critic's review.\" ;\n    rdfs:domain :Critic ;\n    rdfs:range xsd:string .\n\n:performanceDate rdf:type owl:DatatypeProperty ;\n    rdfs:label \"performance date\" ;\n    rdfs:comment \"Date of a performance event.\" ;\n    rdfs:domain :Performance ;\n    rdfs:range xsd:dateTime .\n\n#################################################################\n# Complex Axioms & Restrictions\n#################################################################\n:Band owl:equivalentClass [ rdf:type owl:Restriction ; owl:onProperty :hasMember ; owl:someValuesFrom :UserBandMembership ] .\n\n:Album owl:equivalentClass [ rdf:type owl:Restriction ; owl:onProperty :containsTrack ; owl:someValuesFrom :Track ] ;\n    owl:equivalentClass [ rdf:type owl:Restriction ; owl:onProperty :containsTrack ; owl:minCardinality 1 ; owl:someValuesFrom :Track ] .\n\n:Track owl:equivalentClass [ rdf:type owl:Restriction ; owl:onProperty :isTrackOfSong ; owl:someValuesFrom :Song ] .\n\n:Performance owl:equivalentClass [ rdf:type owl:Restriction ; owl:onProperty :performanceBand ; owl:someValuesFrom :Band ] .\n",
+  "iterations": [
+    {
+      "iteration": 1,
+      "syntax_result": "Exception during syntax validation: RDF syntax error: at line 110 of <>: Bad syntax (objectList expected) at ^ in: ...b'on ;\\n    rdfs:range :Instrument ;\\n    owl:FunctionalProperty'^b' .\\n\\n:hasRole rdf:type owl:ObjectProperty ;\\n    rdfs:label \"h'...",
+      "pitfall_result": "Failed to convert Turtle to RDF/XML: at line 110 of <>: Bad syntax (objectList expected) at ^ in: ...b'on ;\\n    rdfs:range :Instrument ;\\n    owl:FunctionalProperty'^b' .\\n\\n:hasRole rdf:type owl:ObjectProperty ;\\n    rdfs:label \"h'...",
+      "fix": "The error is caused by incorrect usage of 'owl:FunctionalProperty'. It should be used as rdf:type, not as a predicate at the end of the property definition. The correct Turtle syntax is to add '; rdf:type owl:FunctionalProperty' within the property block, not as a separate triple at the end."
+    },
+    {
+      "iteration": 2,
+      "syntax_result": "Valid",
+      "pitfall_result": "Pitfall P13: Inverse relationships not explicitly declared. 20 ObjectProperties require owl:inverseOf.",
+      "fix": "Add owl:inverseOf properties for all object properties that do not have an explicit inverse."
+    },
+    {
+      "iteration": 3,
+      "syntax_result": "Valid",
+      "pitfall_result": "Pitfall P05: Defining wrong inverse relationships. Two relationships are defined as inverse relations when they are not necessarily inverse.",
+      "fix": "Review all owl:inverseOf pairs and ensure only true inverse relationships are defined. Remove any owl:inverseOf declarations that do not represent strict logical inverses (e.g., do not define both directions for membership, where a band has memberships and a membership is of a band, but not person-band directly)."
+    },
+    {
+      "iteration": 4,
+      "syntax_result": "Valid",
+      "pitfall_result": "Pitfall P04: Creating unconnected ontology elements. Class Role is unconnected.",
+      "fix": "Connect the Role class to the rest of the ontology, e.g., by adding a property such as :hasRole or ensure it is used in relevant restrictions or axioms."
+    },
+    {
+      "iteration": 5,
+      "syntax_result": "Exception during syntax validation: RDF syntax error: at line 33 of <>: Bad syntax (objectList expected) at ^ in: ...b'    owl:disjointWith :Instrument .\\n    rdfs:seeAlso :hasRole'^b' .\\n\\n:Album rdf:type owl:Class ;\\n    rdfs:label \"Album\" ;\\n   '...\"",
+      "pitfall_result": "Failed to convert Turtle to RDF/XML: at line 33 of <>: Bad syntax (objectList expected) at ^ in: ...b'    owl:disjointWith :Instrument .\\n    rdfs:seeAlso :hasRole'^b' .\\n\\n:Album rdf:type owl:Class ;\\n    rdfs:label \"Album\" ;\\n   '...\"",
+      "fix": "Remove rdfs:seeAlso :hasRole from the :Role class definition. Instead, ensure that the :hasRole property is defined and used in restrictions or axioms involving :Role and other classes (e.g., :UserBandMembership)."
+    },
+    {
+      "iteration": 6,
+      "syntax_result": "Valid",
+      "pitfall_result": "Pitfall P04: Creating unconnected ontology elements. Class Role is unconnected.",
+      "fix": "Add an axiom or restriction that explicitly links :Role to other classes. For example, add an axiom that :UserBandMembership has a :hasRole some :Role restriction, or :Role owl:equivalentClass [rdf:type owl:Restriction ; owl:onProperty :isRoleOfMembership ; owl:someValuesFrom :UserBandMembership ] ."
+    },
+    {
+      "iteration": 7,
+      "syntax_result": "Exception during syntax validation: RDF syntax error: at line 33 of <>: Bad syntax (objectList expected) at ^ in: ...b'sRoleOfMembership ; owl:someValuesFrom :UserBandMembership ]'^b' .\\n\\n:Album rdf:type owl:Class ;\\n    rdfs:label \"Album\" ;\\n   '...\"",
+      "pitfall_result": "Failed to convert Turtle to RDF/XML: at line 33 of <>: Bad syntax (objectList expected) at ^ in: ...b'sRoleOfMembership ; owl:someValuesFrom :UserBandMembership ]'^b' .\\n\\n:Album rdf:type owl:Class ;\\n    rdfs:label \"Album\" ;\\n   '...\"",
+      "fix": "The axiom for :Role is not valid Turtle. Instead, add the restriction to the :UserBandMembership class: :UserBandMembership rdfs:subClassOf [ a owl:Restriction ; owl:onProperty :hasRole ; owl:someValuesFrom :Role ] ."
+    }
+  ]
+}

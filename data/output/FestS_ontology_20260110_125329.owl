@@ -1,0 +1,95 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix : <http://www.example.org/ontology#> .
+
+<http://www.example.org/ontology/theatre-productions> a owl:Ontology ;
+    rdfs:label "Theatre Productions Ontology" ;
+    rdfs:comment "Ontology for modelling theatre productions, festivals, plays, actors, and related events in Italy." .
+
+### Classes
+:Actor a owl:Class ; rdfs:label "Actor" ; rdfs:comment "A person performing roles in theatre productions." .
+:Author a owl:Class ; rdfs:label "Author" ; rdfs:comment "A person who writes plays." .
+:City a owl:Class ; rdfs:label "City" ; rdfs:comment "A city where festivals or theatres are located." .
+:Country a owl:Class ; rdfs:label "Country" ; rdfs:comment "A country in which a city is located." .
+:Ensemble a owl:Class ; rdfs:label "Ensemble" ; rdfs:comment "A group of actors performing together in a production." .
+:Play a owl:Class ; rdfs:label "Play" ; rdfs:comment "A written dramatic work performed in a production." .
+:Production a owl:Class ; rdfs:label "Production" ; rdfs:comment "A specific staging of a play at a theatre." .
+:Newspaper a owl:Class ; rdfs:label "Newspaper" ; rdfs:comment "A publisher of reviews." .
+:Theatre a owl:Class ; rdfs:label "Theatre" ; rdfs:comment "A venue for theatre productions." .
+:TheatreFestival a owl:Class ; rdfs:label "Theatre Festival" ; rdfs:comment "An event hosting multiple theatre productions." .
+:Act a owl:Class ; rdfs:label "Act" ; rdfs:comment "A major division of a play." .
+:ProductionPremiere a owl:Class ; rdfs:label "Production Premiere" ; rdfs:comment "The first performance of a production." .
+:ProductionParticipation a owl:Class ; rdfs:label "Production Participation" ; rdfs:comment "Reifies the participation of a theatre in a production, with date." .
+:RoleAssignment a owl:Class ; rdfs:label "Role Assignment" ; rdfs:comment "Reifies the assignment of a role to an actor in a production at a specific time." .
+:EnsembleMembership a owl:Class ; rdfs:label "Ensemble Membership" ; rdfs:comment "Reifies the membership of an actor in an ensemble, with time interval." .
+:ProductionReview a owl:Class ; rdfs:label "Production Review" ; rdfs:comment "Reifies the review of a production by a newspaper, with star rating." .
+:ActorEmployment a owl:Class ; rdfs:label "Actor Employment" ; rdfs:comment "Reifies the employment of an actor at a theatre, with start date." .
+:Role a owl:Class ; rdfs:label "Role" ; rdfs:comment "A role played by an actor in a production." .
+
+### Disjointness and Union
+:City owl:disjointWith :Country .
+:Actor owl:disjointWith :Ensemble .
+:TheatreFestival owl:disjointWith :Production .
+:Play owl:disjointWith :Production .
+:Role owl:disjointWith :Actor .
+:ProductionParticipation owl:disjointWith :RoleAssignment, :EnsembleMembership .
+:RoleAssignment owl:disjointWith :EnsembleMembership .
+
+### Object Properties
+:hasFestival a owl:ObjectProperty ; rdfs:label "has festival" ; rdfs:comment "Links a production to the festival it participates in." ; rdfs:domain :Production ; rdfs:range :TheatreFestival ; owl:inverseOf :festivalHasProduction .
+:festivalHasProduction a owl:ObjectProperty ; rdfs:label "festival has production" ; rdfs:comment "Links a festival to the productions it hosts." ; rdfs:domain :TheatreFestival ; rdfs:range :Production ; owl:inverseOf :hasFestival .
+:takesPlaceIn a owl:ObjectProperty ; rdfs:label "takes place in" ; rdfs:comment "Links a festival to the city where it takes place." ; rdfs:domain :TheatreFestival ; rdfs:range :City ; owl:inverseOf :hostsFestival .
+:hostsFestival a owl:ObjectProperty ; rdfs:label "hosts festival" ; rdfs:comment "Links a city to the festivals it hosts." ; rdfs:domain :City ; rdfs:range :TheatreFestival ; owl:inverseOf :takesPlaceIn .
+:locatedIn a owl:ObjectProperty ; rdfs:label "located in" ; rdfs:comment "Links a theatre to the city it is located in." ; rdfs:domain :Theatre ; rdfs:range :City ; owl:inverseOf :hasTheatre .
+:hasTheatre a owl:ObjectProperty ; rdfs:label "has theatre" ; rdfs:comment "Links a city to its theatres." ; rdfs:domain :City ; rdfs:range :Theatre ; owl:inverseOf :locatedIn .
+:inCountry a owl:ObjectProperty ; rdfs:label "in country" ; rdfs:comment "Links a city to its country." ; rdfs:domain :City ; rdfs:range :Country ; owl:inverseOf :hasCity .
+:hasCity a owl:ObjectProperty ; rdfs:label "has city" ; rdfs:comment "Links a country to its cities." ; rdfs:domain :Country ; rdfs:range :City ; owl:inverseOf :inCountry .
+:hasPlay a owl:ObjectProperty ; rdfs:label "has play" ; rdfs:comment "Links a production to the play it is based on." ; rdfs:domain :Production ; rdfs:range :Play ; owl:inverseOf :playOfProduction .
+:playOfProduction a owl:ObjectProperty ; rdfs:label "play of production" ; rdfs:comment "Links a play to the productions based on it." ; rdfs:domain :Play ; rdfs:range :Production ; owl:inverseOf :hasPlay .
+:writtenBy a owl:ObjectProperty ; rdfs:label "written by" ; rdfs:comment "Links a play to its author." ; rdfs:domain :Play ; rdfs:range :Author ; owl:inverseOf :authorOfPlay .
+:authorOfPlay a owl:ObjectProperty ; rdfs:label "author of play" ; rdfs:comment "Links an author to the plays they wrote." ; rdfs:domain :Author ; rdfs:range :Play ; owl:inverseOf :writtenBy .
+:hasAct a owl:ObjectProperty ; rdfs:label "has act" ; rdfs:comment "Links a play to its acts." ; rdfs:domain :Play ; rdfs:range :Act ; owl:inverseOf :actOfPlay .
+:actOfPlay a owl:ObjectProperty ; rdfs:label "act of play" ; rdfs:comment "Links an act to the play it is part of." ; rdfs:domain :Act ; rdfs:range :Play ; owl:inverseOf :hasAct .
+:hasPremier a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:label "has premier" ; rdfs:comment "Links a production to its premiere event." ; rdfs:domain :Production ; rdfs:range :ProductionPremiere ; owl:inverseOf :premierOfProduction .
+:premierOfProduction a owl:ObjectProperty ; rdfs:label "premier of production" ; rdfs:comment "Links a premiere event to the production it is for." ; rdfs:domain :ProductionPremiere ; rdfs:range :Production ; owl:inverseOf :hasPremier .
+:hasReview a owl:ObjectProperty ; rdfs:label "has review" ; rdfs:comment "Links a production to its review." ; rdfs:domain :Production ; rdfs:range :ProductionReview ; owl:inverseOf :reviewOfProduction .
+:reviewOfProduction a owl:ObjectProperty ; rdfs:label "review of production" ; rdfs:comment "Links a review to the production it reviews." ; rdfs:domain :ProductionReview ; rdfs:range :Production ; owl:inverseOf :hasReview .
+:reviewedBy a owl:ObjectProperty ; rdfs:label "reviewed by" ; rdfs:comment "Links a production review to the newspaper that published it." ; rdfs:domain :ProductionReview ; rdfs:range :Newspaper ; owl:inverseOf :hasReviewed .
+:hasReviewed a owl:ObjectProperty ; rdfs:label "has reviewed" ; rdfs:comment "Links a newspaper to the reviews it published." ; rdfs:domain :Newspaper ; rdfs:range :ProductionReview ; owl:inverseOf :reviewedBy .
+:employedAt a owl:ObjectProperty ; rdfs:label "employed at" ; rdfs:comment "Links an actor employment to the theatre." ; rdfs:domain :ActorEmployment ; rdfs:range :Theatre ; owl:inverseOf :hasEmployment .
+:hasEmployment a owl:ObjectProperty ; rdfs:label "has employment" ; rdfs:comment "Links a theatre to its actor employments." ; rdfs:domain :Theatre ; rdfs:range :ActorEmployment ; owl:inverseOf :employedAt .
+:hasEnsemble a owl:ObjectProperty ; rdfs:label "has ensemble" ; rdfs:comment "Links a production to its performing ensemble." ; rdfs:domain :Production ; rdfs:range :Ensemble ; owl:inverseOf :ensembleOfProduction .
+:ensembleOfProduction a owl:ObjectProperty ; rdfs:label "ensemble of production" ; rdfs:comment "Links an ensemble to the production it performs in." ; rdfs:domain :Ensemble ; rdfs:range :Production ; owl:inverseOf :hasEnsemble .
+:hasMember a owl:ObjectProperty ; rdfs:label "has member" ; rdfs:comment "Links an ensemble to its members (actors)." ; rdfs:domain :Ensemble ; rdfs:range :Actor ; owl:inverseOf :memberOfEnsemble .
+:memberOfEnsemble a owl:ObjectProperty ; rdfs:label "member of ensemble" ; rdfs:comment "Links an actor to the ensembles they are part of." ; rdfs:domain :Actor ; rdfs:range :Ensemble ; owl:inverseOf :hasMember .
+:hasRoleAssignment a owl:ObjectProperty ; rdfs:label "has role assignment" ; rdfs:comment "Links a production to its role assignments." ; rdfs:domain :Production ; rdfs:range :RoleAssignment ; owl:inverseOf :roleAssignmentOfProduction .
+:roleAssignmentOfProduction a owl:ObjectProperty ; rdfs:label "role assignment of production" ; rdfs:comment "Links a role assignment to the production it is for." ; rdfs:domain :RoleAssignment ; rdfs:range :Production ; owl:inverseOf :hasRoleAssignment .
+:assignedRole a owl:ObjectProperty ; rdfs:label "assigned role" ; rdfs:comment "Links a role assignment to the role." ; rdfs:domain :RoleAssignment ; rdfs:range :Role ; owl:inverseOf :roleOfAssignment .
+:roleOfAssignment a owl:ObjectProperty ; rdfs:label "role of assignment" ; rdfs:comment "Links a role to the role assignments it is involved in." ; rdfs:domain :Role ; rdfs:range :RoleAssignment ; owl:inverseOf :assignedRole .
+:assignedActor a owl:ObjectProperty ; rdfs:label "assigned actor" ; rdfs:comment "Links a role assignment to the actor." ; rdfs:domain :RoleAssignment ; rdfs:range :Actor ; owl:inverseOf :actorOfAssignment .
+:actorOfAssignment a owl:ObjectProperty ; rdfs:label "actor of assignment" ; rdfs:comment "Links an actor to their role assignments." ; rdfs:domain :Actor ; rdfs:range :RoleAssignment ; owl:inverseOf :assignedActor .
+:festivalHasPlay a owl:ObjectProperty ; rdfs:label "festival has play" ; rdfs:comment "Links a festival to the plays performed." ; rdfs:domain :TheatreFestival ; rdfs:range :Play ; owl:inverseOf :playOfFestival .
+:playOfFestival a owl:ObjectProperty ; rdfs:label "play of festival" ; rdfs:comment "Links a play to the festivals it is performed at." ; rdfs:domain :Play ; rdfs:range :TheatreFestival ; owl:inverseOf :festivalHasPlay .
+:participatedInFestival a owl:ObjectProperty ; rdfs:label "participated in festival" ; rdfs:comment "Links a production to the festival it participated in." ; rdfs:domain :Production ; rdfs:range :TheatreFestival ; owl:inverseOf :festivalParticipation .
+:festivalParticipation a owl:ObjectProperty ; rdfs:label "festival participation" ; rdfs:comment "Links a festival to the productions that participated." ; rdfs:domain :TheatreFestival ; rdfs:range :Production ; owl:inverseOf :participatedInFestival .
+:hasParticipation a owl:ObjectProperty ; rdfs:label "has participation" ; rdfs:comment "Links a production to its participation records." ; rdfs:domain :Production ; rdfs:range :ProductionParticipation ; owl:inverseOf :participationOfProduction .
+:participationOfProduction a owl:ObjectProperty ; rdfs:label "participation of production" ; rdfs:comment "Links a production participation to the production." ; rdfs:domain :ProductionParticipation ; rdfs:range :Production ; owl:inverseOf :hasParticipation .
+:participatingTheatre a owl:ObjectProperty ; rdfs:label "participating theatre" ; rdfs:comment "Links a production participation to the theatre." ; rdfs:domain :ProductionParticipation ; rdfs:range :Theatre ; owl:inverseOf :theatreParticipation .
+:theatreParticipation a owl:ObjectProperty ; rdfs:label "theatre participation" ; rdfs:comment "Links a theatre to its production participations." ; rdfs:domain :Theatre ; rdfs:range :ProductionParticipation ; owl:inverseOf :participatingTheatre .
+
+### Data Properties
+:writtenDuring a owl:DatatypeProperty ; rdfs:label "written during" ; rdfs:comment "The time interval when a play was written." ; rdfs:domain :Play ; rdfs:range xsd:string .
+:premierDate a owl:DatatypeProperty ; rdfs:label "premier date" ; rdfs:comment "The date of a production's premiere." ; rdfs:domain :ProductionPremiere ; rdfs:range xsd:date .
+:starRating a owl:DatatypeProperty ; rdfs:label "star rating" ; rdfs:comment "The star rating given to a production review." ; rdfs:domain :ProductionReview ; rdfs:range xsd:integer .
+:employmentStartDate a owl:DatatypeProperty ; rdfs:label "employment start date" ; rdfs:comment "The date an actor started working at a theatre." ; rdfs:domain :ActorEmployment ; rdfs:range xsd:date .
+:memberFrom a owl:DatatypeProperty ; rdfs:label "member from" ; rdfs:comment "Start date of ensemble membership." ; rdfs:domain :EnsembleMembership ; rdfs:range xsd:date .
+:memberTo a owl:DatatypeProperty ; rdfs:label "member to" ; rdfs:comment "End date of ensemble membership." ; rdfs:domain :EnsembleMembership ; rdfs:range xsd:date .
+:roleAssignmentDate a owl:DatatypeProperty ; rdfs:label "role assignment date" ; rdfs:comment "Date when a role was assigned." ; rdfs:domain :RoleAssignment ; rdfs:range xsd:date .
+:participationDate a owl:DatatypeProperty ; rdfs:label "participation date" ; rdfs:comment "Date of production participation in a festival." ; rdfs:domain :ProductionParticipation ; rdfs:range xsd:date .
+
+### Restrictions & GCAs
+:Production owl:equivalentClass [ rdf:type owl:Restriction ; owl:onProperty :hasPlay ; owl:someValuesFrom :Play ] .
+:ProductionPremiere owl:equivalentClass [ rdf:type owl:Restriction ; owl:onProperty :premierDate ; owl:allValuesFrom xsd:date ] .
+:ProductionReview owl:equivalentClass [ rdf:type owl:Restriction ; owl:onProperty :starRating ; owl:allValuesFrom xsd:integer ] .

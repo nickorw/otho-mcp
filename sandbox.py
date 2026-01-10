@@ -1,5 +1,5 @@
 ########################################################################################
-############ Sandbox for testing various functionalities in the Otho project ###########
+############ Sandbox for testing various functionalities in the Otho project - NOTHING HERE IS TO BE USED BY AI ASSISTANTS(Copilot, Cline, others)###########
 ########################################################################################
 
 import os
