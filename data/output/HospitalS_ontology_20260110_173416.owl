@@ -1,0 +1,98 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix : <http://www.example.org/ontology#> .
+
+<http://www.example.org/ontology/hospital-story>
+    rdf:type owl:Ontology ;
+    rdfs:label "Hospital Story Ontology" ;
+    rdfs:comment "An ontology representing hospital staff, unions, articles, and events for competency question coverage." .
+
+### Classes
+:Person rdf:type owl:Class ; rdfs:label "Person" ; rdfs:comment "Any human involved in the hospital context." .
+:Nurse rdf:type owl:Class ; rdfs:label "Nurse" ; rdfs:comment "A nurse working or studying at the hospital." ; rdfs:subClassOf :Person .
+:Doctor rdf:type owl:Class ; rdfs:label "Doctor" ; rdfs:comment "A doctor working at the hospital." ; rdfs:subClassOf :Person .
+:NursingAssistant rdf:type owl:Class ; rdfs:label "Nursing Assistant" ; rdfs:comment "A person who assists nurses." ; rdfs:subClassOf :Nurse .
+:CertifiedNurse rdf:type owl:Class ; rdfs:label "Certified Nurse" ; rdfs:comment "A nurse with certification." ; rdfs:subClassOf :Nurse .
+:MedicalDegree rdf:type owl:Class ; rdfs:label "Medical Degree" ; rdfs:comment "A degree awarded in medicine or nursing." .
+:StudyPeriod rdf:type owl:Class ; rdfs:label "Study Period" ; rdfs:comment "A period in which a person studies for a degree." .
+:Employment rdf:type owl:Class ; rdfs:label "Employment" ; rdfs:comment "A period of employment at a hospital." .
+:Hospital rdf:type owl:Class ; rdfs:label "Hospital" ; rdfs:comment "A hospital institution." .
+:City rdf:type owl:Class ; rdfs:label "City" ; rdfs:comment "A city where a hospital is located." .
+:Country rdf:type owl:Class ; rdfs:label "Country" ; rdfs:comment "A country where a city is located." .
+:Union rdf:type owl:Class ; rdfs:label "Union" ; rdfs:comment "A staff union at the hospital." .
+:UnionMembership rdf:type owl:Class ; rdfs:label "Union Membership" ; rdfs:comment "A membership of a person in a union." .
+:UnionRole rdf:type owl:Class ; rdfs:label "Union Role" ; rdfs:comment "A role held within a union." .
+:Evaluation rdf:type owl:Class ; rdfs:label "Evaluation" ; rdfs:comment "A written evaluation of an employee by a doctor." .
+:Employee rdf:type owl:Class ; rdfs:label "Employee" ; rdfs:comment "A person employed at the hospital." ; rdfs:subClassOf :Person .
+:Article rdf:type owl:Class ; rdfs:label "Article" ; rdfs:comment "A research article in a collection." .
+:ArticleCollection rdf:type owl:Class ; rdfs:label "Article Collection" ; rdfs:comment "A collection of research articles." .
+:Book rdf:type owl:Class ; rdfs:label "Book" ; rdfs:comment "A book containing articles." ; rdfs:subClassOf :ArticleCollection .
+:CD rdf:type owl:Class ; rdfs:label "CD" ; rdfs:comment "A CD containing articles." ; rdfs:subClassOf :ArticleCollection .
+:Seminar rdf:type owl:Class ; rdfs:label "Seminar" ; rdfs:comment "A seminar where articles are presented." .
+
+### Disjointness & DisjointUnion
+:Nurse owl:disjointWith :Doctor .
+:Book owl:disjointWith :CD .
+:ArticleCollection owl:disjointUnionOf ( :Book :CD ) .
+
+### Object Properties
+:hasDegree rdf:type owl:ObjectProperty , owl:FunctionalProperty ; rdfs:label "has degree" ; rdfs:comment "Links a person to their medical degree." ; rdfs:domain :Person ; rdfs:range :MedicalDegree .
+:studiedDuring rdf:type owl:ObjectProperty ; rdfs:label "studied during" ; rdfs:comment "Links a person to a period of study." ; rdfs:domain :Person ; rdfs:range :StudyPeriod .
+:studyForDegree rdf:type owl:ObjectProperty ; rdfs:label "study for degree" ; rdfs:comment "Links a study period to the degree studied for." ; rdfs:domain :StudyPeriod ; rdfs:range :MedicalDegree .
+:employedAt rdf:type owl:ObjectProperty ; rdfs:label "employed at" ; rdfs:comment "Links an employment period to a hospital." ; rdfs:domain :Employment ; rdfs:range :Hospital .
+:employmentOf rdf:type owl:ObjectProperty ; rdfs:label "employment of" ; rdfs:comment "Links a person to their employment." ; rdfs:domain :Person ; rdfs:range :Employment .
+:hospitalInCity rdf:type owl:ObjectProperty , owl:FunctionalProperty ; rdfs:label "hospital in city" ; rdfs:comment "Links a hospital to its city." ; rdfs:domain :Hospital ; rdfs:range :City .
+:cityInCountry rdf:type owl:ObjectProperty , owl:FunctionalProperty ; rdfs:label "city in country" ; rdfs:comment "Links a city to its country." ; rdfs:domain :City ; rdfs:range :Country .
+:memberOfUnion rdf:type owl:ObjectProperty ; rdfs:label "member of union" ; rdfs:comment "Links a union membership to a union." ; rdfs:domain :UnionMembership ; rdfs:range :Union .
+:membershipOf rdf:type owl:ObjectProperty ; rdfs:label "membership of" ; rdfs:comment "Links a person to their union membership." ; rdfs:domain :Person ; rdfs:range :UnionMembership .
+:hasUnionRole rdf:type owl:ObjectProperty ; rdfs:label "has union role" ; rdfs:comment "Links a union membership to the role held." ; rdfs:domain :UnionMembership ; rdfs:range :UnionRole .
+:evaluatedBy rdf:type owl:ObjectProperty ; rdfs:label "evaluated by" ; rdfs:comment "Links an evaluation to the doctor who performed it." ; rdfs:domain :Evaluation ; rdfs:range :Doctor .
+:evaluationOf rdf:type owl:ObjectProperty ; rdfs:label "evaluation of" ; rdfs:comment "Links an evaluation to the employee evaluated." ; rdfs:domain :Evaluation ; rdfs:range :Employee .
+:hasEvaluation rdf:type owl:ObjectProperty ; rdfs:label "has evaluation" ; rdfs:comment "Links an employee to their evaluation." ; rdfs:domain :Employee ; rdfs:range :Evaluation .
+:containsArticle rdf:type owl:ObjectProperty ; rdfs:label "contains article" ; rdfs:comment "Links an article collection to its articles." ; rdfs:domain :ArticleCollection ; rdfs:range :Article .
+:presentedInSeminar rdf:type owl:ObjectProperty ; rdfs:label "presented in seminar" ; rdfs:comment "Links an article to the seminar in which it was presented." ; rdfs:domain :Article ; rdfs:range :Seminar .
+:seminarAtHospital rdf:type owl:ObjectProperty , owl:FunctionalProperty ; rdfs:label "seminar at hospital" ; rdfs:comment "Links a seminar to the hospital where it took place." ; rdfs:domain :Seminar ; rdfs:range :Hospital .
+
+### Inverse Object Properties
+:degreeOf rdf:type owl:ObjectProperty ; rdfs:label "degree of" ; rdfs:comment "Inverse of hasDegree, links a medical degree to a person." ; rdfs:domain :MedicalDegree ; rdfs:range :Person ; owl:inverseOf :hasDegree .
+:studyPeriodOf rdf:type owl:ObjectProperty ; rdfs:label "study period of" ; rdfs:comment "Inverse of studiedDuring, links a study period to a person." ; rdfs:domain :StudyPeriod ; rdfs:range :Person ; owl:inverseOf :studiedDuring .
+:degreeStudiedDuring rdf:type owl:ObjectProperty ; rdfs:label "degree studied during" ; rdfs:comment "Inverse of studyForDegree, links a medical degree to a study period." ; rdfs:domain :MedicalDegree ; rdfs:range :StudyPeriod ; owl:inverseOf :studyForDegree .
+:employmentAtPerson rdf:type owl:ObjectProperty ; rdfs:label "employment at person" ; rdfs:comment "Inverse of employmentOf, links an employment to a person." ; rdfs:domain :Employment ; rdfs:range :Person ; owl:inverseOf :employmentOf .
+:employerOfEmployment rdf:type owl:ObjectProperty ; rdfs:label "employer of employment" ; rdfs:comment "Inverse of employedAt, links a hospital to an employment." ; rdfs:domain :Hospital ; rdfs:range :Employment ; owl:inverseOf :employedAt .
+:cityHasHospital rdf:type owl:ObjectProperty ; rdfs:label "city has hospital" ; rdfs:comment "Inverse of hospitalInCity, links a city to a hospital." ; rdfs:domain :City ; rdfs:range :Hospital ; owl:inverseOf :hospitalInCity .
+:countryHasCity rdf:type owl:ObjectProperty ; rdfs:label "country has city" ; rdfs:comment "Inverse of cityInCountry, links a country to a city." ; rdfs:domain :Country ; rdfs:range :City ; owl:inverseOf :cityInCountry .
+:unionHasMember rdf:type owl:ObjectProperty ; rdfs:label "union has member" ; rdfs:comment "Inverse of memberOfUnion, links a union to a union membership." ; rdfs:domain :Union ; rdfs:range :UnionMembership ; owl:inverseOf :memberOfUnion .
+:unionMembershipOfPerson rdf:type owl:ObjectProperty ; rdfs:label "union membership of person" ; rdfs:comment "Inverse of membershipOf, links a union membership to a person." ; rdfs:domain :UnionMembership ; rdfs:range :Person ; owl:inverseOf :membershipOf .
+:unionRoleOfMembership rdf:type owl:ObjectProperty ; rdfs:label "union role of membership" ; rdfs:comment "Inverse of hasUnionRole, links a union role to a union membership." ; rdfs:domain :UnionRole ; rdfs:range :UnionMembership ; owl:inverseOf :hasUnionRole .
+:doctorEvaluation rdf:type owl:ObjectProperty ; rdfs:label "doctor evaluation" ; rdfs:comment "Inverse of evaluatedBy, links a doctor to an evaluation." ; rdfs:domain :Doctor ; rdfs:range :Evaluation ; owl:inverseOf :evaluatedBy .
+:evaluatedEmployee rdf:type owl:ObjectProperty ; rdfs:label "evaluated employee" ; rdfs:comment "Inverse of evaluationOf, links an employee to an evaluation." ; rdfs:domain :Employee ; rdfs:range :Evaluation ; owl:inverseOf :evaluationOf .
+:evaluationOfEmployee rdf:type owl:ObjectProperty ; rdfs:label "evaluation of employee" ; rdfs:comment "Inverse of hasEvaluation, links an evaluation to an employee." ; rdfs:domain :Evaluation ; rdfs:range :Employee ; owl:inverseOf :hasEvaluation .
+:articleOfCollection rdf:type owl:ObjectProperty ; rdfs:label "article of collection" ; rdfs:comment "Inverse of containsArticle, links an article to a collection." ; rdfs:domain :Article ; rdfs:range :ArticleCollection ; owl:inverseOf :containsArticle .
+:seminarPresentation rdf:type owl:ObjectProperty ; rdfs:label "seminar presentation" ; rdfs:comment "Inverse of presentedInSeminar, links a seminar to an article presented." ; rdfs:domain :Seminar ; rdfs:range :Article ; owl:inverseOf :presentedInSeminar .
+:hospitalSeminar rdf:type owl:ObjectProperty ; rdfs:label "hospital seminar" ; rdfs:comment "Inverse of seminarAtHospital, links a hospital to a seminar." ; rdfs:domain :Hospital ; rdfs:range :Seminar ; owl:inverseOf :seminarAtHospital .
+
+### Data Properties
+:degreeDate rdf:type owl:DatatypeProperty , owl:FunctionalProperty ; rdfs:label "degree date" ; rdfs:comment "The date a medical degree was awarded." ; rdfs:domain :MedicalDegree ; rdfs:range xsd:dateTime .
+:studyStart rdf:type owl:DatatypeProperty , owl:FunctionalProperty ; rdfs:label "study start" ; rdfs:comment "The start date of a study period." ; rdfs:domain :StudyPeriod ; rdfs:range xsd:dateTime .
+:studyEnd rdf:type owl:DatatypeProperty , owl:FunctionalProperty ; rdfs:label "study end" ; rdfs:comment "The end date of a study period." ; rdfs:domain :StudyPeriod ; rdfs:range xsd:dateTime .
+:employmentStart rdf:type owl:DatatypeProperty , owl:FunctionalProperty ; rdfs:label "employment start" ; rdfs:comment "The start date of employment." ; rdfs:domain :Employment ; rdfs:range xsd:dateTime .
+:employmentEnd rdf:type owl:DatatypeProperty , owl:FunctionalProperty ; rdfs:label "employment end" ; rdfs:comment "The end date of employment." ; rdfs:domain :Employment ; rdfs:range xsd:dateTime .
+:unionRoleStart rdf:type owl:DatatypeProperty , owl:FunctionalProperty ; rdfs:label "union role start" ; rdfs:comment "The start date of a union role." ; rdfs:domain :UnionMembership ; rdfs:range xsd:dateTime .
+:unionRoleEnd rdf:type owl:DatatypeProperty , owl:FunctionalProperty ; rdfs:label "union role end" ; rdfs:comment "The end date of a union role." ; rdfs:domain :UnionMembership ; rdfs:range xsd:dateTime .
+:evaluationText rdf:type owl:DatatypeProperty , owl:FunctionalProperty ; rdfs:label "evaluation text" ; rdfs:comment "The written evaluation text." ; rdfs:domain :Evaluation ; rdfs:range xsd:string .
+:bookPages rdf:type owl:DatatypeProperty , owl:FunctionalProperty ; rdfs:label "book pages" ; rdfs:comment "The number of pages in a book." ; rdfs:domain :Book ; rdfs:range xsd:integer .
+:publicationDate rdf:type owl:DatatypeProperty , owl:FunctionalProperty ; rdfs:label "publication date" ; rdfs:comment "The publication date of an article collection." ; rdfs:domain :ArticleCollection ; rdfs:range xsd:dateTime .
+:seminarDate rdf:type owl:DatatypeProperty , owl:FunctionalProperty ; rdfs:label "seminar date" ; rdfs:comment "The date a seminar took place." ; rdfs:domain :Seminar ; rdfs:range xsd:dateTime .
+
+### Advanced Axioms
+# At least one article is presented at each seminar
+:Seminar rdfs:subClassOf [ rdf:type owl:Restriction ; owl:onProperty :presentedInSeminar ; owl:someValuesFrom :Article ] .
+
+# Book and CD are both ArticleCollections (disjointUnion above)
+# Employee is a Person employed at a hospital
+:Employee owl:equivalentClass [ rdf:type owl:Class ; owl:intersectionOf ( :Person [ rdf:type owl:Restriction ; owl:onProperty :employmentOf ; owl:someValuesFrom :Employment ] ) ] .
+
+# UnionMembership links Person, Union, UnionRole, and Time
+:UnionMembership owl:equivalentClass [ rdf:type owl:Class ; owl:intersectionOf ( [ rdf:type owl:Restriction ; owl:onProperty :membershipOf ; owl:someValuesFrom :Person ] [ rdf:type owl:Restriction ; owl:onProperty :memberOfUnion ; owl:someValuesFrom :Union ] [ rdf:type owl:Restriction ; owl:onProperty :hasUnionRole ; owl:someValuesFrom :UnionRole ] ) ] .
