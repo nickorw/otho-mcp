@@ -84,11 +84,20 @@ Generates a complete OWL ontology for all 15 competency questions (CQs) using an
 
 ### Command-Line Options
 ```bash
+# Generate ontology for a specific story
 python otho.py --story-id <STORY_ID>
+
+# Use default story (MusicS)
+python otho.py
+
+# Benchmark mode: run all stories N times
+python otho.py --benchmark <N>
 ```
 
 **Options:**
-- `--story-id`: Story ID to process (default: MusicS)
+- `--story-id <STORY_ID>`: Story ID to process (default: MusicS)
+  - Available: `MusicS`, `HospitalS`, `FestS`
+- `--benchmark <N>`: Run all three stories N times for benchmarking
 
 ### Output Files
 All output files are saved to `data/output/` with timestamps:

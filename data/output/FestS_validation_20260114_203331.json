@@ -1,0 +1,40 @@
+{
+  "timestamp": "20260114_203331",
+  "story_id": "FestS",
+  "ontology_size_chars": 14114,
+  "syntax": {
+    "valid": true,
+    "execution_time_ms": 13,
+    "error": null
+  },
+  "oops": {
+    "has_pitfalls": false,
+    "pitfall_count": 0,
+    "execution_time_ms": 326,
+    "pitfalls": []
+  },
+  "hermit": {
+    "is_consistent": false,
+    "inconsistent_classes": [
+      "ontology.Production",
+      "owl.Nothing"
+    ],
+    "execution_time_ms": 661,
+    "error": null,
+    "reasoner": "Hermit"
+  },
+  "pellet": {
+    "is_consistent": false,
+    "inconsistent_classes": [
+      "ontology.Production",
+      "owl.Nothing"
+    ],
+    "execution_time_ms": 537,
+    "error": null,
+    "reasoner": "Pellet"
+  },
+  "aggregate": {
+    "all_validators_passed": false,
+    "total_execution_time_ms": 1537
+  }
+}

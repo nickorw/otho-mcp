@@ -84,18 +84,34 @@ if __name__ == "__main__":
         help="Story ID to process (e.g., FestS, MusicS, HospitalS). Default: MusicS",
     )
     parser.add_argument(
-        "--validate-only",
-        action="store_true",
-        help="Validate only the combined OWL without generating new OWL files.",
+        "--benchmark",
+        type=int,
+        metavar="N",
+        help="Run all stories (MusicS, HospitalS, FestS) N times for benchmarking.",
     )
 
     args = parser.parse_args()
-    story_id = args.story_id
 
-    print(f"Starting ontology workflow for Story ID: {story_id}")
-    print(f"Mode: {'Validate Only' if args.validate_only else 'Full Workflow'}\n")
     # Compile the workflow graph
     app = graph.compile()
 
-    initial_state: OntoAgentState = {"story_id": story_id}
-    app.invoke(initial_state)
+    # Benchmark mode: run all stories N times
+    if args.benchmark:
+        stories = ["MusicS", "HospitalS", "FestS"]
+        print(f"BENCHMARK MODE: Running all stories {args.benchmark} time(s)\n")
+
+        for iteration in range(1, args.benchmark + 1):
+            print(f"\n{'=' * 60}\nITERATION {iteration}/{args.benchmark}\n{'=' * 60}")
+
+            for story_id in stories:
+                print(f"\nProcessing: {story_id}")
+                initial_state: OntoAgentState = {"story_id": story_id}
+                app.invoke(initial_state)
+
+    # Single story mode
+    else:
+        story_id = args.story_id
+        print(f"Starting ontology workflow for Story ID: {story_id}\n")
+
+        initial_state: OntoAgentState = {"story_id": story_id}
+        app.invoke(initial_state)

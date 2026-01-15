@@ -1,0 +1,293 @@
+{
+  "plan": {
+    "Concept Extraction": {
+      "Classes": [
+        "TheatreFestival",
+        "City",
+        "Country",
+        "Theatre",
+        "Play",
+        "Production",
+        "Ensemble",
+        "Person",
+        "Actor",
+        "Role",
+        "Review",
+        "Newspaper",
+        "Act",
+        "Author",
+        "StarRating",
+        "ProductionMembership (Pivot)",
+        "RoleAssignment (Pivot)"
+      ],
+      "Pivot Classes": [
+        "ProductionMembership",
+        "RoleAssignment"
+      ]
+    },
+    "Hierarchy Plan": {
+      "subClassOf": [
+        [
+          "Actor",
+          "Person"
+        ],
+        [
+          "Author",
+          "Person"
+        ]
+      ],
+      "disjointWith": [
+        [
+          "TheatreFestival",
+          "Play"
+        ],
+        [
+          "Theatre",
+          "City"
+        ],
+        [
+          "Actor",
+          "Author"
+        ]
+      ],
+      "DisjointUnion": [
+        [
+          "Person",
+          "Actor",
+          "Author"
+        ]
+      ]
+    },
+    "Properties": {
+      "Object Properties": [
+        {
+          "name": "heldInCity",
+          "domain": "TheatreFestival",
+          "range": "City",
+          "characteristics": []
+        },
+        {
+          "name": "hasProduction",
+          "domain": "TheatreFestival",
+          "range": "Production",
+          "characteristics": []
+        },
+        {
+          "name": "locatedInCity",
+          "domain": "Theatre",
+          "range": "City",
+          "characteristics": []
+        },
+        {
+          "name": "locatedInCountry",
+          "domain": "City",
+          "range": "Country",
+          "characteristics": []
+        },
+        {
+          "name": "basisPlay",
+          "domain": "Production",
+          "range": "Play",
+          "characteristics": []
+        },
+        {
+          "name": "hasEnsemble",
+          "domain": "Production",
+          "range": "Ensemble",
+          "characteristics": []
+        },
+        {
+          "name": "hasMember",
+          "domain": "Ensemble",
+          "range": "ProductionMembership",
+          "characteristics": []
+        },
+        {
+          "name": "memberPerson",
+          "domain": "ProductionMembership",
+          "range": "Person",
+          "characteristics": []
+        },
+        {
+          "name": "membershipInProduction",
+          "domain": "ProductionMembership",
+          "range": "Production",
+          "characteristics": []
+        },
+        {
+          "name": "hasRoleAssignment",
+          "domain": "Production",
+          "range": "RoleAssignment",
+          "characteristics": []
+        },
+        {
+          "name": "rolePerson",
+          "domain": "RoleAssignment",
+          "range": "Person",
+          "characteristics": []
+        },
+        {
+          "name": "roleRole",
+          "domain": "RoleAssignment",
+          "range": "Role",
+          "characteristics": []
+        },
+        {
+          "name": "roleInProduction",
+          "domain": "RoleAssignment",
+          "range": "Production",
+          "characteristics": []
+        },
+        {
+          "name": "writtenBy",
+          "domain": "Play",
+          "range": "Author",
+          "characteristics": []
+        },
+        {
+          "name": "hasAct",
+          "domain": "Play",
+          "range": "Act",
+          "characteristics": []
+        },
+        {
+          "name": "premierOfProduction",
+          "domain": "Production",
+          "range": "Act",
+          "characteristics": []
+        },
+        {
+          "name": "reviewedBy",
+          "domain": "Review",
+          "range": "Newspaper",
+          "characteristics": []
+        },
+        {
+          "name": "reviewOfProduction",
+          "domain": "Review",
+          "range": "Production",
+          "characteristics": []
+        },
+        {
+          "name": "reviewHasStarRating",
+          "domain": "Review",
+          "range": "StarRating",
+          "characteristics": []
+        }
+      ],
+      "Data Properties": [
+        {
+          "name": "festivalStartDate",
+          "domain": "TheatreFestival",
+          "range": "xsd:dateTime",
+          "characteristics": []
+        },
+        {
+          "name": "festivalEndDate",
+          "domain": "TheatreFestival",
+          "range": "xsd:dateTime",
+          "characteristics": []
+        },
+        {
+          "name": "actNumber",
+          "domain": "Act",
+          "range": "xsd:integer",
+          "characteristics": [
+            "Functional"
+          ]
+        },
+        {
+          "name": "writingStartDate",
+          "domain": "Play",
+          "range": "xsd:dateTime",
+          "characteristics": []
+        },
+        {
+          "name": "writingEndDate",
+          "domain": "Play",
+          "range": "xsd:dateTime",
+          "characteristics": []
+        },
+        {
+          "name": "premierDate",
+          "domain": "Production",
+          "range": "xsd:dateTime",
+          "characteristics": [
+            "Functional"
+          ]
+        },
+        {
+          "name": "employmentStartDate",
+          "domain": "ProductionMembership",
+          "range": "xsd:dateTime",
+          "characteristics": []
+        },
+        {
+          "name": "roleStartDate",
+          "domain": "RoleAssignment",
+          "range": "xsd:dateTime",
+          "characteristics": []
+        },
+        {
+          "name": "roleEndDate",
+          "domain": "RoleAssignment",
+          "range": "xsd:dateTime",
+          "characteristics": []
+        },
+        {
+          "name": "starRatingValue",
+          "domain": "StarRating",
+          "range": "xsd:integer",
+          "characteristics": [
+            "Functional"
+          ]
+        }
+      ]
+    }
+  },
+  "cq_coverage": {
+    "1": "TheatreFestival, festivalStartDate, festivalEndDate",
+    "2": "TheatreFestival, heldInCity, City",
+    "3": "TheatreFestival, hasProduction, Production, basisPlay, Play",
+    "4": "Theatre, locatedInCity, City",
+    "5": "City, locatedInCountry, Country",
+    "6": "Production, basisPlay, Play",
+    "7": "Ensemble, hasMember, ProductionMembership, memberPerson, employmentStartDate (with time), membershipInProduction",
+    "8": "Play, writtenBy, Author",
+    "9": "Play, writingStartDate, writingEndDate",
+    "10": "Play, hasAct, Act, actNumber",
+    "11": "Production, premierDate (with Functional restriction)",
+    "12": "Review, reviewedBy, Newspaper, reviewOfProduction, reviewHasStarRating, StarRating, starRatingValue",
+    "13": "ProductionMembership, employmentStartDate, memberPerson, membershipInProduction",
+    "14": "RoleAssignment (pivot), rolePerson, roleRole, roleInProduction, roleStartDate, roleEndDate",
+    "15": "Production, premierDate (Functional), one value per Production"
+  },
+  "notes": "Planning complete. Classes and properties have been extracted, including two pivot classes for reification: ProductionMembership (person's membership in an ensemble/production, with possible start date) and RoleAssignment (person's role(s) in a production at a time, with possible start/end dates). All CQs have been mapped to ontology elements. Ready to proceed to OWL code generation.",
+  "current_owl": "@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n@prefix owl: <http://www.w3.org/2002/07/owl#> .\n@prefix : <http://www.example.org/ontology#> .\n\n<http://www.example.org/ontology/theatre-productions>\n    a owl:Ontology ;\n    rdfs:label \"Theatre Productions Ontology\" ;\n    rdfs:comment \"Ontology for representing theatre festivals, productions, plays, people, roles, and reviews in the context of Italian theatre events.\" .\n\n#################################################################\n# CLASSES\n#################################################################\n\n:Person a owl:Class ;\n    rdfs:label \"Person\" ;\n    rdfs:comment \"A human individual involved in theatre productions.\" .\n\n:Actor a owl:Class ;\n    rdfs:label \"Actor\" ;\n    rdfs:comment \"A person who acts in a production.\" ;\n    rdfs:subClassOf :Person .\n\n:Author a owl:Class ;\n    rdfs:label \"Author\" ;\n    rdfs:comment \"A person who writes plays.\" ;\n    rdfs:subClassOf :Person .\n\n:TheatreFestival a owl:Class ;\n    rdfs:label \"Theatre Festival\" ;\n    rdfs:comment \"An event where theatre performances are held.\" .\n\n:City a owl:Class ;\n    rdfs:label \"City\" ;\n    rdfs:comment \"A city where theatres or festivals are located.\" .\n\n:Country a owl:Class ;\n    rdfs:label \"Country\" ;\n    rdfs:comment \"A country containing cities.\" .\n\n:Theatre a owl:Class ;\n    rdfs:label \"Theatre\" ;\n    rdfs:comment \"A building or institution for theatre performances.\" .\n\n:Play a owl:Class ;\n    rdfs:label \"Play\" ;\n    rdfs:comment \"A dramatic work performed in a theatre.\" .\n\n:Production a owl:Class ;\n    rdfs:label \"Production\" ;\n    rdfs:comment \"A specific staging of a play by a theatre or ensemble.\" .\n\n:Ensemble a owl:Class ;\n    rdfs:label \"Ensemble\" ;\n    rdfs:comment \"A group of people performing together in a production.\" .\n\n:Act a owl:Class ;\n    rdfs:label \"Act\" ;\n    rdfs:comment \"A major division of a play.\" .\n\n:Role a owl:Class ;\n    rdfs:label \"Role\" ;\n    rdfs:comment \"A character or function played by a person in a production.\" .\n\n:Review a owl:Class ;\n    rdfs:label \"Review\" ;\n    rdfs:comment \"A critique or rating of a production by a newspaper.\" .\n\n:Newspaper a owl:Class ;\n    rdfs:label \"Newspaper\" ;\n    rdfs:comment \"A newspaper publishing reviews of productions.\" .\n\n:StarRating a owl:Class ;\n    rdfs:label \"Star Rating\" ;\n    rdfs:comment \"A numerical rating given to a production in a review.\" .\n\n# Pivot Classes for Reification\n:ProductionMembership a owl:Class ;\n    rdfs:label \"Production Membership\" ;\n    rdfs:comment \"Reifies a person's membership in a production ensemble, with time information.\" .\n\n:RoleAssignment a owl:Class ;\n    rdfs:label \"Role Assignment\" ;\n    rdfs:comment \"Reifies a person's assignment to a role in a production at a given time.\" .\n\n#################################################################\n# OBJECT PROPERTIES (with inverses)\n#################################################################\n\n:heldInCity a owl:ObjectProperty ;\n    rdfs:label \"held in city\" ;\n    rdfs:comment \"Links a theatre festival to the city where it is held.\" ;\n    rdfs:domain :TheatreFestival ;\n    rdfs:range :City ;\n    owl:inverseOf :cityHoldsFestival .\n\n:cityHoldsFestival a owl:ObjectProperty ;\n    rdfs:label \"city holds festival\" ;\n    rdfs:comment \"Inverse: Links a city to the festivals it hosts.\" ;\n    rdfs:domain :City ;\n    rdfs:range :TheatreFestival ;\n    owl:inverseOf :heldInCity .\n\n:hasProduction a owl:ObjectProperty ;\n    rdfs:label \"has production\" ;\n    rdfs:comment \"Links a festival to a production it hosts.\" ;\n    rdfs:domain :TheatreFestival ;\n    rdfs:range :Production ;\n    owl:inverseOf :productionOfFestival .\n\n:productionOfFestival a owl:ObjectProperty ;\n    rdfs:label \"production of festival\" ;\n    rdfs:comment \"Inverse: Links a production to the festival it is part of.\" ;\n    rdfs:domain :Production ;\n    rdfs:range :TheatreFestival ;\n    owl:inverseOf :hasProduction .\n\n:locatedInCity a owl:ObjectProperty ;\n    rdfs:label \"located in city\" ;\n    rdfs:comment \"Links a theatre to the city where it is located.\" ;\n    rdfs:domain :Theatre ;\n    rdfs:range :City ;\n    owl:inverseOf :cityHasTheatre .\n\n:cityHasTheatre a owl:ObjectProperty ;\n    rdfs:label \"city has theatre\" ;\n    rdfs:comment \"Inverse: Links a city to its theatres.\" ;\n    rdfs:domain :City ;\n    rdfs:range :Theatre ;\n    owl:inverseOf :locatedInCity .\n\n:locatedInCountry a owl:ObjectProperty ;\n    rdfs:label \"located in country\" ;\n    rdfs:comment \"Links a city to the country it is located in.\" ;\n    rdfs:domain :City ;\n    rdfs:range :Country ;\n    owl:inverseOf :countryHasCity .\n\n:countryHasCity a owl:ObjectProperty ;\n    rdfs:label \"country has city\" ;\n    rdfs:comment \"Inverse: Links a country to its cities.\" ;\n    rdfs:domain :Country ;\n    rdfs:range :City ;\n    owl:inverseOf :locatedInCountry .\n\n:basisPlay a owl:ObjectProperty ;\n    rdfs:label \"basis play\" ;\n    rdfs:comment \"Links a production to the play it is based on.\" ;\n    rdfs:domain :Production ;\n    rdfs:range :Play ;\n    owl:inverseOf :isBasisOfProduction .\n\n:isBasisOfProduction a owl:ObjectProperty ;\n    rdfs:label \"is basis of production\" ;\n    rdfs:comment \"Inverse: Links a play to the productions based on it.\" ;\n    rdfs:domain :Play ;\n    rdfs:range :Production ;\n    owl:inverseOf :basisPlay .\n\n:hasEnsemble a owl:ObjectProperty ;\n    rdfs:label \"has ensemble\" ;\n    rdfs:comment \"Links a production to its ensemble.\" ;\n    rdfs:domain :Production ;\n    rdfs:range :Ensemble ;\n    owl:inverseOf :ensembleOfProduction .\n\n:ensembleOfProduction a owl:ObjectProperty ;\n    rdfs:label \"ensemble of production\" ;\n    rdfs:comment \"Inverse: Links an ensemble to its production.\" ;\n    rdfs:domain :Ensemble ;\n    rdfs:range :Production ;\n    owl:inverseOf :hasEnsemble .\n\n:hasMember a owl:ObjectProperty ;\n    rdfs:label \"has member\" ;\n    rdfs:comment \"Links an ensemble to a production membership.\" ;\n    rdfs:domain :Ensemble ;\n    rdfs:range :ProductionMembership ;\n    owl:inverseOf :memberOfEnsemble .\n\n:memberOfEnsemble a owl:ObjectProperty ;\n    rdfs:label \"member of ensemble\" ;\n    rdfs:comment \"Inverse: Links a production membership to its ensemble.\" ;\n    rdfs:domain :ProductionMembership ;\n    rdfs:range :Ensemble ;\n    owl:inverseOf :hasMember .\n\n:memberPerson a owl:ObjectProperty ;\n    rdfs:label \"member person\" ;\n    rdfs:comment \"Links a production membership to a person.\" ;\n    rdfs:domain :ProductionMembership ;\n    rdfs:range :Person ;\n    owl:inverseOf :personHasMembership .\n\n:personHasMembership a owl:ObjectProperty ;\n    rdfs:label \"person has membership\" ;\n    rdfs:comment \"Inverse: Links a person to their production memberships.\" ;\n    rdfs:domain :Person ;\n    rdfs:range :ProductionMembership ;\n    owl:inverseOf :memberPerson .\n\n:membershipInProduction a owl:ObjectProperty ;\n    rdfs:label \"membership in production\" ;\n    rdfs:comment \"Links a production membership to a production.\" ;\n    rdfs:domain :ProductionMembership ;\n    rdfs:range :Production ;\n    owl:inverseOf :productionHasMembership .\n\n:productionHasMembership a owl:ObjectProperty ;\n    rdfs:label \"production has membership\" ;\n    rdfs:comment \"Inverse: Links a production to its production memberships.\" ;\n    rdfs:domain :Production ;\n    rdfs:range :ProductionMembership ;\n    owl:inverseOf :membershipInProduction .\n\n:hasRoleAssignment a owl:ObjectProperty ;\n    rdfs:label \"has role assignment\" ;\n    rdfs:comment \"Links a production to a role assignment.\" ;\n    rdfs:domain :Production ;\n    rdfs:range :RoleAssignment ;\n    owl:inverseOf :roleAssignmentOfProduction .\n\n:roleAssignmentOfProduction a owl:ObjectProperty ;\n    rdfs:label \"role assignment of production\" ;\n    rdfs:comment \"Inverse: Links a role assignment to its production.\" ;\n    rdfs:domain :RoleAssignment ;\n    rdfs:range :Production ;\n    owl:inverseOf :hasRoleAssignment .\n\n:rolePerson a owl:ObjectProperty ;\n    rdfs:label \"role person\" ;\n    rdfs:comment \"Links a role assignment to a person.\" ;\n    rdfs:domain :RoleAssignment ;\n    rdfs:range :Person ;\n    owl:inverseOf :personHasRoleAssignment .\n\n:personHasRoleAssignment a owl:ObjectProperty ;\n    rdfs:label \"person has role assignment\" ;\n    rdfs:comment \"Inverse: Links a person to their role assignments.\" ;\n    rdfs:domain :Person ;\n    rdfs:range :RoleAssignment ;\n    owl:inverseOf :rolePerson .\n\n:roleRole a owl:ObjectProperty ;\n    rdfs:label \"role role\" ;\n    rdfs:comment \"Links a role assignment to a role.\" ;\n    rdfs:domain :RoleAssignment ;\n    rdfs:range :Role ;\n    owl:inverseOf :roleHasAssignment .\n\n:roleHasAssignment a owl:ObjectProperty ;\n    rdfs:label \"role has assignment\" ;\n    rdfs:comment \"Inverse: Links a role to its assignments.\" ;\n    rdfs:domain :Role ;\n    rdfs:range :RoleAssignment ;\n    owl:inverseOf :roleRole .\n\n:roleInProduction a owl:ObjectProperty ;\n    rdfs:label \"role in production\" ;\n    rdfs:comment \"Links a role assignment to the production.\" ;\n    rdfs:domain :RoleAssignment ;\n    rdfs:range :Production ;\n    owl:inverseOf :productionHasRoleAssignment .\n\n:productionHasRoleAssignment a owl:ObjectProperty ;\n    rdfs:label \"production has role assignment\" ;\n    rdfs:comment \"Inverse: Links a production to its role assignments.\" ;\n    rdfs:domain :Production ;\n    rdfs:range :RoleAssignment ;\n    owl:inverseOf :roleInProduction .\n\n:writtenBy a owl:ObjectProperty ;\n    rdfs:label \"written by\" ;\n    rdfs:comment \"Links a play to its author.\" ;\n    rdfs:domain :Play ;\n    rdfs:range :Author ;\n    owl:inverseOf :authorOfPlay .\n\n:authorOfPlay a owl:ObjectProperty ;\n    rdfs:label \"author of play\" ;\n    rdfs:comment \"Inverse: Links an author to plays they've written.\" ;\n    rdfs:domain :Author ;\n    rdfs:range :Play ;\n    owl:inverseOf :writtenBy .\n\n:hasAct a owl:ObjectProperty ;\n    rdfs:label \"has act\" ;\n    rdfs:comment \"Links a play to its acts.\" ;\n    rdfs:domain :Play ;\n    rdfs:range :Act ;\n    owl:inverseOf :actOfPlay .\n\n:actOfPlay a owl:ObjectProperty ;\n    rdfs:label \"act of play\" ;\n    rdfs:comment \"Inverse: Links an act to the play it is part of.\" ;\n    rdfs:domain :Act ;\n    rdfs:range :Play ;\n    owl:inverseOf :hasAct .\n\n:premierOfProduction a owl:ObjectProperty ;\n    rdfs:label \"premier of production\" ;\n    rdfs:comment \"Links a production to its premier act.\" ;\n    rdfs:domain :Production ;\n    rdfs:range :Act ;\n    owl:inverseOf :isPremierOf .\n\n:isPremierOf a owl:ObjectProperty ;\n    rdfs:label \"is premier of\" ;\n    rdfs:comment \"Inverse: Links an act to the production it is the premier of.\" ;\n    rdfs:domain :Act ;\n    rdfs:range :Production ;\n    owl:inverseOf :premierOfProduction .\n\n:reviewedBy a owl:ObjectProperty ;\n    rdfs:label \"reviewed by\" ;\n    rdfs:comment \"Links a review to the newspaper that published it.\" ;\n    rdfs:domain :Review ;\n    rdfs:range :Newspaper ;\n    owl:inverseOf :newspaperHasReview .\n\n:newspaperHasReview a owl:ObjectProperty ;\n    rdfs:label \"newspaper has review\" ;\n    rdfs:comment \"Inverse: Links a newspaper to reviews it has published.\" ;\n    rdfs:domain :Newspaper ;\n    rdfs:range :Review ;\n    owl:inverseOf :reviewedBy .\n\n:reviewOfProduction a owl:ObjectProperty ;\n    rdfs:label \"review of production\" ;\n    rdfs:comment \"Links a review to the production it critiques.\" ;\n    rdfs:domain :Review ;\n    rdfs:range :Production ;\n    owl:inverseOf :productionHasReview .\n\n:productionHasReview a owl:ObjectProperty ;\n    rdfs:label \"production has review\" ;\n    rdfs:comment \"Inverse: Links a production to its reviews.\" ;\n    rdfs:domain :Production ;\n    rdfs:range :Review ;\n    owl:inverseOf :reviewOfProduction .\n\n:reviewHasStarRating a owl:ObjectProperty ;\n    rdfs:label \"review has star rating\" ;\n    rdfs:comment \"Links a review to its star rating.\" ;\n    rdfs:domain :Review ;\n    rdfs:range :StarRating ;\n    owl:inverseOf :starRatingOfReview .\n\n:starRatingOfReview a owl:ObjectProperty ;\n    rdfs:label \"star rating of review\" ;\n    rdfs:comment \"Inverse: Links a star rating to the review it is part of.\" ;\n    rdfs:domain :StarRating ;\n    rdfs:range :Review ;\n    owl:inverseOf :reviewHasStarRating .\n\n#################################################################\n# DATA PROPERTIES\n#################################################################\n\n:festivalStartDate a owl:DatatypeProperty ;\n    rdfs:label \"festival start date\" ;\n    rdfs:comment \"The start date of a theatre festival.\" ;\n    rdfs:domain :TheatreFestival ;\n    rdfs:range xsd:dateTime .\n\n:festivalEndDate a owl:DatatypeProperty ;\n    rdfs:label \"festival end date\" ;\n    rdfs:comment \"The end date of a theatre festival.\" ;\n    rdfs:domain :TheatreFestival ;\n    rdfs:range xsd:dateTime .\n\n:actNumber a owl:DatatypeProperty ;\n    rdfs:label \"act number\" ;\n    rdfs:comment \"The number of an act within a play.\" ;\n    rdfs:domain :Act ;\n    rdfs:range xsd:integer ;\n    a owl:FunctionalProperty .\n\n:writingStartDate a owl:DatatypeProperty ;\n    rdfs:label \"writing start date\" ;\n    rdfs:comment \"The start date of writing a play.\" ;\n    rdfs:domain :Play ;\n    rdfs:range xsd:dateTime .\n\n:writingEndDate a owl:DatatypeProperty ;\n    rdfs:label \"writing end date\" ;\n    rdfs:comment \"The end date of writing a play.\" ;\n    rdfs:domain :Play ;\n    rdfs:range xsd:dateTime .\n\n:premierDate a owl:DatatypeProperty ;\n    rdfs:label \"premier date\" ;\n    rdfs:comment \"The date of the premier of a production.\" ;\n    rdfs:domain :Production ;\n    rdfs:range xsd:dateTime ;\n    a owl:FunctionalProperty .\n\n:employmentStartDate a owl:DatatypeProperty ;\n    rdfs:label \"employment start date\" ;\n    rdfs:comment \"The start date of a person's membership in a production.\" ;\n    rdfs:domain :ProductionMembership ;\n    rdfs:range xsd:dateTime .\n\n:roleStartDate a owl:DatatypeProperty ;\n    rdfs:label \"role start date\" ;\n    rdfs:comment \"The start date of a role assignment for a person in a production.\" ;\n    rdfs:domain :RoleAssignment ;\n    rdfs:range xsd:dateTime .\n\n:roleEndDate a owl:DatatypeProperty ;\n    rdfs:label \"role end date\" ;\n    rdfs:comment \"The end date of a role assignment for a person in a production.\" ;\n    rdfs:domain :RoleAssignment ;\n    rdfs:range xsd:dateTime .\n\n:starRatingValue a owl:DatatypeProperty ;\n    rdfs:label \"star rating value\" ;\n    rdfs:comment \"The numeric value of a star rating.\" ;\n    rdfs:domain :StarRating ;\n    rdfs:range xsd:integer ;\n    a owl:FunctionalProperty .\n\n#################################################################\n# CLASS AXIOMS & RESTRICTIONS\n#################################################################\n\n# A production has exactly one premier date\n:Production rdfs:subClassOf [ a owl:Restriction ; owl:onProperty :premierDate ; owl:cardinality 1 ] .\n\n# A play is written by at least one author\n:Play rdfs:subClassOf [ a owl:Restriction ; owl:onProperty :writtenBy ; owl:someValuesFrom :Author ] .\n\n# An ensemble has at least one member\n:Ensemble rdfs:subClassOf [ a owl:Restriction ; owl:onProperty :hasMember ; owl:someValuesFrom :ProductionMembership ] .\n\n# A production has at least one role assignment\n:Production rdfs:subClassOf [ a owl:Restriction ; owl:onProperty :hasRoleAssignment ; owl:someValuesFrom :RoleAssignment ] .\n\n# Disjointness\n:Actor owl:disjointWith :Author .\n:TheatreFestival owl:disjointWith :Play .\n:Theatre owl:disjointWith :City .\n\n# DisjointUnion for Person\n:Person owl:disjointUnionOf ( :Actor :Author ) .\n",
+  "iterations": [
+    {
+      "iteration": 1,
+      "syntax_valid": true,
+      "pitfalls_found": true,
+      "pitfalls": [
+        {
+          "code": "P13",
+          "name": "Inverse relationships not explicitly declared",
+          "description": "Some object properties do not have owl:inverseOf relationships defined."
+        }
+      ],
+      "fixes_applied": [
+        "Defined owl:inverseOf properties for all object properties where appropriate."
+      ]
+    },
+    {
+      "iteration": 2,
+      "syntax_valid": true,
+      "pitfalls_found": false,
+      "pitfalls": [],
+      "fixes_applied": [
+        "No further fixes needed; all pitfalls resolved."
+      ]
+    }
+  ]
+}

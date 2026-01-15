@@ -1,0 +1,363 @@
+{
+  "plan": {
+    "Concept Extraction": {
+      "Classes": [
+        "Person",
+        "Degree",
+        "StudyPeriod (Pivot Class)",
+        "Hospital",
+        "City",
+        "Country",
+        "Employment (Pivot Class)",
+        "Union",
+        "UnionMembership (Pivot Class)",
+        "UnionRole (Pivot Class)",
+        "Doctor",
+        "Nurse",
+        "NursingAssistant",
+        "Employee",
+        "Evaluation (Pivot Class)",
+        "Article",
+        "ArticleCollection",
+        "Book",
+        "CD",
+        "Seminar",
+        "SeminarPresentation (Pivot Class)"
+      ],
+      "Pivot Classes": [
+        "StudyPeriod",
+        "Employment",
+        "UnionMembership",
+        "UnionRole",
+        "Evaluation",
+        "SeminarPresentation"
+      ]
+    },
+    "Hierarchy Plan": {
+      "subClassOf": [
+        [
+          "Doctor",
+          "Person"
+        ],
+        [
+          "Nurse",
+          "Person"
+        ],
+        [
+          "NursingAssistant",
+          "Person"
+        ],
+        [
+          "Employee",
+          "Person"
+        ],
+        [
+          "Book",
+          "ArticleCollection"
+        ],
+        [
+          "CD",
+          "ArticleCollection"
+        ]
+      ],
+      "disjointWith": [
+        [
+          "Doctor",
+          "Nurse"
+        ],
+        [
+          "Doctor",
+          "NursingAssistant"
+        ],
+        [
+          "Nurse",
+          "NursingAssistant"
+        ]
+      ],
+      "DisjointUnion": []
+    },
+    "Properties": {
+      "ObjectProperties": [
+        {
+          "name": "hasDegree",
+          "domain": "Person",
+          "range": "Degree",
+          "characteristics": [
+            "Functional"
+          ]
+        },
+        {
+          "name": "studiedFor",
+          "domain": "StudyPeriod",
+          "range": "Degree",
+          "characteristics": []
+        },
+        {
+          "name": "hasStudyPeriod",
+          "domain": "Person",
+          "range": "StudyPeriod",
+          "characteristics": []
+        },
+        {
+          "name": "employedAt",
+          "domain": "Employment",
+          "range": "Hospital",
+          "characteristics": []
+        },
+        {
+          "name": "hasEmployment",
+          "domain": "Person",
+          "range": "Employment",
+          "characteristics": []
+        },
+        {
+          "name": "hospitalLocatedIn",
+          "domain": "Hospital",
+          "range": "City",
+          "characteristics": [
+            "Functional"
+          ]
+        },
+        {
+          "name": "cityInCountry",
+          "domain": "City",
+          "range": "Country",
+          "characteristics": [
+            "Functional"
+          ]
+        },
+        {
+          "name": "hasUnionMembership",
+          "domain": "Person",
+          "range": "UnionMembership",
+          "characteristics": []
+        },
+        {
+          "name": "membershipInUnion",
+          "domain": "UnionMembership",
+          "range": "Union",
+          "characteristics": []
+        },
+        {
+          "name": "unionRoleHeld",
+          "domain": "UnionRole",
+          "range": "Union",
+          "characteristics": []
+        },
+        {
+          "name": "roleHeldBy",
+          "domain": "UnionRole",
+          "range": "Person",
+          "characteristics": [
+            "Functional"
+          ]
+        },
+        {
+          "name": "roleHeldDuring",
+          "domain": "UnionRole",
+          "range": "UnionMembership",
+          "characteristics": [
+            "Functional"
+          ]
+        },
+        {
+          "name": "evaluatedBy",
+          "domain": "Evaluation",
+          "range": "Doctor",
+          "characteristics": [
+            "Functional"
+          ]
+        },
+        {
+          "name": "evaluationFor",
+          "domain": "Evaluation",
+          "range": "Employee",
+          "characteristics": [
+            "Functional"
+          ]
+        },
+        {
+          "name": "hasEvaluation",
+          "domain": "Employee",
+          "range": "Evaluation",
+          "characteristics": []
+        },
+        {
+          "name": "containsArticle",
+          "domain": "ArticleCollection",
+          "range": "Article",
+          "characteristics": []
+        },
+        {
+          "name": "presentedInSeminar",
+          "domain": "SeminarPresentation",
+          "range": "Seminar",
+          "characteristics": [
+            "Functional"
+          ]
+        },
+        {
+          "name": "presentationOfArticle",
+          "domain": "SeminarPresentation",
+          "range": "Article",
+          "characteristics": [
+            "Functional"
+          ]
+        },
+        {
+          "name": "seminarHeldAt",
+          "domain": "Seminar",
+          "range": "Hospital",
+          "characteristics": [
+            "Functional"
+          ]
+        }
+      ],
+      "DataProperties": [
+        {
+          "name": "degreeAwardedDate",
+          "domain": "Degree",
+          "range": "xsd:dateTime",
+          "characteristics": [
+            "Functional"
+          ]
+        },
+        {
+          "name": "studyStartDate",
+          "domain": "StudyPeriod",
+          "range": "xsd:dateTime",
+          "characteristics": [
+            "Functional"
+          ]
+        },
+        {
+          "name": "studyEndDate",
+          "domain": "StudyPeriod",
+          "range": "xsd:dateTime",
+          "characteristics": [
+            "Functional"
+          ]
+        },
+        {
+          "name": "employmentStartDate",
+          "domain": "Employment",
+          "range": "xsd:dateTime",
+          "characteristics": [
+            "Functional"
+          ]
+        },
+        {
+          "name": "unionMembershipStartDate",
+          "domain": "UnionMembership",
+          "range": "xsd:dateTime",
+          "characteristics": [
+            "Functional"
+          ]
+        },
+        {
+          "name": "unionMembershipEndDate",
+          "domain": "UnionMembership",
+          "range": "xsd:dateTime",
+          "characteristics": [
+            "Functional"
+          ]
+        },
+        {
+          "name": "unionRoleStartDate",
+          "domain": "UnionRole",
+          "range": "xsd:dateTime",
+          "characteristics": [
+            "Functional"
+          ]
+        },
+        {
+          "name": "unionRoleEndDate",
+          "domain": "UnionRole",
+          "range": "xsd:dateTime",
+          "characteristics": [
+            "Functional"
+          ]
+        },
+        {
+          "name": "evaluationText",
+          "domain": "Evaluation",
+          "range": "xsd:string",
+          "characteristics": [
+            "Functional"
+          ]
+        },
+        {
+          "name": "bookPageCount",
+          "domain": "Book",
+          "range": "xsd:integer",
+          "characteristics": [
+            "Functional"
+          ]
+        },
+        {
+          "name": "publicationDate",
+          "domain": "Book",
+          "range": "xsd:dateTime",
+          "characteristics": [
+            "Functional"
+          ]
+        },
+        {
+          "name": "publicationDateCD",
+          "domain": "CD",
+          "range": "xsd:dateTime",
+          "characteristics": [
+            "Functional"
+          ]
+        },
+        {
+          "name": "seminarDate",
+          "domain": "Seminar",
+          "range": "xsd:dateTime",
+          "characteristics": [
+            "Functional"
+          ]
+        }
+      ]
+    }
+  },
+  "cq_coverage": {
+    "1": "Person, Degree, hasDegree, DegreeAwardedDate",
+    "2": "StudyPeriod (pivot), studiedFor, studyStartDate, studyEndDate, Person, Degree, hasStudyPeriod",
+    "3": "Employment (pivot), employedAt, employmentStartDate, Person, Hospital, hasEmployment",
+    "4": "Hospital, City, hospitalLocatedIn",
+    "5": "City, Country, cityInCountry",
+    "6": "UnionMembership (pivot), Person, Union, hasUnionMembership, membershipInUnion, unionMembershipStartDate, unionMembershipEndDate",
+    "7": "UnionRole (pivot), roleHeldBy, unionRoleHeld, roleHeldDuring, unionRoleStartDate, unionRoleEndDate, Person, Union, UnionMembership",
+    "8": "Evaluation (pivot), evaluatedBy, evaluationFor, evaluationText, Doctor, Employee, hasEvaluation",
+    "9": "ArticleCollection, containsArticle, Book, CD, Article",
+    "10": "Book, bookPageCount",
+    "11": "Book, publicationDate, CD, publicationDateCD",
+    "12": "Seminar, seminarDate",
+    "13": "SeminarPresentation (pivot), Seminar, presentedInSeminar, presentationOfArticle, Article",
+    "14": "Seminar, seminarHeldAt, Hospital",
+    "15": "SeminarPresentation (pivot), Seminar, presentedInSeminar, presentationOfArticle, Article, (GCAs: Seminar subclass of restriction on at least one SeminarPresentation)"
+  },
+  "notes": "Planning completed. All classes, properties, hierarchy, and CQ coverage mapped. Will now proceed to generate full OWL ontology in Turtle, with required annotations, all prefixes, ontology declaration, and advanced axioms (GCAs, restrictions, property characteristics). Will use only OWL 2 DL datatypes. Pivot classes and reification applied as planned.",
+  "current_owl": "@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n@prefix owl: <http://www.w3.org/2002/07/owl#> .\n@prefix : <http://www.example.org/ontology#> .\n\n<http://www.example.org/ontology/hospital_story>\n    a owl:Ontology ;\n    rdfs:label \"Hospital Story Ontology\" ;\n    rdfs:comment \"Ontology modeling entities and events from a hospital scenario for answering competency questions about staff, unions, evaluations, publications, and seminars.\" .\n\n### Classes\n:Person a owl:Class ;\n    rdfs:label \"Person\" ;\n    rdfs:comment \"A human individual, including doctors, nurses, assistants, and employees.\" .\n\n:Doctor a owl:Class ;\n    rdfs:subClassOf :Person ;\n    rdfs:label \"Doctor\" ;\n    rdfs:comment \"A medical doctor working at a hospital.\" .\n\n:Nurse a owl:Class ;\n    rdfs:subClassOf :Person ;\n    rdfs:label \"Nurse\" ;\n    rdfs:comment \"A certified nurse working at a hospital.\" .\n\n:NursingAssistant a owl:Class ;\n    rdfs:subClassOf :Person ;\n    rdfs:label \"Nursing Assistant\" ;\n    rdfs:comment \"A nursing assistant working at a hospital.\" .\n\n:Employee a owl:Class ;\n    rdfs:subClassOf :Person ;\n    rdfs:label \"Employee\" ;\n    rdfs:comment \"Any person employed at a hospital.\" .\n\n:Degree a owl:Class ;\n    rdfs:label \"Degree\" ;\n    rdfs:comment \"A formal qualification awarded to a person.\" .\n\n:StudyPeriod a owl:Class ;\n    rdfs:label \"Study Period\" ;\n    rdfs:comment \"A period during which a person studies for a degree (pivot/reification class).\" .\n\n:Hospital a owl:Class ;\n    rdfs:label \"Hospital\" ;\n    rdfs:comment \"A healthcare institution where staff are employed and seminars held.\" .\n\n:City a owl:Class ;\n    rdfs:label \"City\" ;\n    rdfs:comment \"A city in which a hospital is located.\" .\n\n:Country a owl:Class ;\n    rdfs:label \"Country\" ;\n    rdfs:comment \"A country in which a city is located.\" .\n\n:Employment a owl:Class ;\n    rdfs:label \"Employment\" ;\n    rdfs:comment \"A period of employment for a person at a hospital (pivot/reification class).\" .\n\n:Union a owl:Class ;\n    rdfs:label \"Union\" ;\n    rdfs:comment \"A staff union organizing employees at a hospital.\" .\n\n:UnionMembership a owl:Class ;\n    rdfs:label \"Union Membership\" ;\n    rdfs:comment \"A person's membership in a union at a hospital (pivot/reification class).\" .\n\n:UnionRole a owl:Class ;\n    rdfs:label \"Union Role\" ;\n    rdfs:comment \"A role held by a person within a union (pivot/reification class).\" .\n\n:Evaluation a owl:Class ;\n    rdfs:label \"Evaluation\" ;\n    rdfs:comment \"A written evaluation by a doctor for an employee (pivot/reification class).\" .\n\n:Article a owl:Class ;\n    rdfs:label \"Article\" ;\n    rdfs:comment \"A research article written by staff and included in collections.\" .\n\n:ArticleCollection a owl:Class ;\n    rdfs:label \"Article Collection\" ;\n    rdfs:comment \"A collection of research articles, available as books or CDs.\" .\n\n:Book a owl:Class ;\n    rdfs:subClassOf :ArticleCollection ;\n    rdfs:label \"Book\" ;\n    rdfs:comment \"A book version of an article collection.\" .\n\n:CD a owl:Class ;\n    rdfs:subClassOf :ArticleCollection ;\n    rdfs:label \"CD\" ;\n    rdfs:comment \"A CD version of an article collection.\" .\n\n:Seminar a owl:Class ;\n    rdfs:label \"Seminar\" ;\n    rdfs:comment \"A seminar held at a hospital for presenting articles.\" .\n\n:SeminarPresentation a owl:Class ;\n    rdfs:label \"Seminar Presentation\" ;\n    rdfs:comment \"A presentation of an article at a seminar (pivot/reification class).\" .\n\n### Disjointness\n:Doctor owl:disjointWith :Nurse, :NursingAssistant .\n:Nurse owl:disjointWith :NursingAssistant .\n\n### Object Properties and Inverses\n:hasDegree a owl:ObjectProperty, owl:FunctionalProperty ;\n    rdfs:label \"has degree\" ;\n    rdfs:comment \"Relates a person to a degree they have obtained.\" ;\n    rdfs:domain :Person ;\n    rdfs:range :Degree ;\n    owl:inverseOf :degreeOf .\n:degreeOf a owl:ObjectProperty ;\n    rdfs:label \"degree of\" ;\n    rdfs:comment \"Inverse: Relates a degree to the person who has it.\" ;\n    rdfs:domain :Degree ;\n    rdfs:range :Person ;\n    owl:inverseOf :hasDegree .\n\n:studiedFor a owl:ObjectProperty ;\n    rdfs:label \"studied for\" ;\n    rdfs:comment \"Relates a study period to the degree studied for.\" ;\n    rdfs:domain :StudyPeriod ;\n    rdfs:range :Degree ;\n    owl:inverseOf :degreeStudiedDuring .\n:degreeStudiedDuring a owl:ObjectProperty ;\n    rdfs:label \"degree studied during\" ;\n    rdfs:comment \"Inverse: Relates a degree to study periods.\" ;\n    rdfs:domain :Degree ;\n    rdfs:range :StudyPeriod ;\n    owl:inverseOf :studiedFor .\n\n:hasStudyPeriod a owl:ObjectProperty ;\n    rdfs:label \"has study period\" ;\n    rdfs:comment \"Relates a person to a period of study.\" ;\n    rdfs:domain :Person ;\n    rdfs:range :StudyPeriod ;\n    owl:inverseOf :studyPeriodOf .\n:studyPeriodOf a owl:ObjectProperty ;\n    rdfs:label \"study period of\" ;\n    rdfs:comment \"Inverse: Relates a study period to the person.\" ;\n    rdfs:domain :StudyPeriod ;\n    rdfs:range :Person ;\n    owl:inverseOf :hasStudyPeriod .\n\n:employedAt a owl:ObjectProperty ;\n    rdfs:label \"employed at\" ;\n    rdfs:comment \"Relates an employment event to a hospital.\" ;\n    rdfs:domain :Employment ;\n    rdfs:range :Hospital ;\n    owl:inverseOf :employmentEvent .\n:employmentEvent a owl:ObjectProperty ;\n    rdfs:label \"employment event\" ;\n    rdfs:comment \"Inverse: Relates a hospital to employment events.\" ;\n    rdfs:domain :Hospital ;\n    rdfs:range :Employment ;\n    owl:inverseOf :employedAt .\n\n:hasEmployment a owl:ObjectProperty ;\n    rdfs:label \"has employment\" ;\n    rdfs:comment \"Relates a person to an employment event.\" ;\n    rdfs:domain :Person ;\n    rdfs:range :Employment ;\n    owl:inverseOf :employmentOf .\n:employmentOf a owl:ObjectProperty ;\n    rdfs:label \"employment of\" ;\n    rdfs:comment \"Inverse: Relates an employment event to the person.\" ;\n    rdfs:domain :Employment ;\n    rdfs:range :Person ;\n    owl:inverseOf :hasEmployment .\n\n:hospitalLocatedIn a owl:ObjectProperty, owl:FunctionalProperty ;\n    rdfs:label \"hospital located in\" ;\n    rdfs:comment \"Relates a hospital to the city it is located in.\" ;\n    rdfs:domain :Hospital ;\n    rdfs:range :City ;\n    owl:inverseOf :cityHasHospital .\n:cityHasHospital a owl:ObjectProperty ;\n    rdfs:label \"city has hospital\" ;\n    rdfs:comment \"Inverse: Relates a city to hospitals located in it.\" ;\n    rdfs:domain :City ;\n    rdfs:range :Hospital ;\n    owl:inverseOf :hospitalLocatedIn .\n\n:cityInCountry a owl:ObjectProperty, owl:FunctionalProperty ;\n    rdfs:label \"city in country\" ;\n    rdfs:comment \"Relates a city to the country it is in.\" ;\n    rdfs:domain :City ;\n    rdfs:range :Country ;\n    owl:inverseOf :countryHasCity .\n:countryHasCity a owl:ObjectProperty ;\n    rdfs:label \"country has city\" ;\n    rdfs:comment \"Inverse: Relates a country to its cities.\" ;\n    rdfs:domain :Country ;\n    rdfs:range :City ;\n    owl:inverseOf :cityInCountry .\n\n:hasUnionMembership a owl:ObjectProperty ;\n    rdfs:label \"has union membership\" ;\n    rdfs:comment \"Relates a person to a union membership event.\" ;\n    rdfs:domain :Person ;\n    rdfs:range :UnionMembership ;\n    owl:inverseOf :unionMembershipOf .\n:unionMembershipOf a owl:ObjectProperty ;\n    rdfs:label \"union membership of\" ;\n    rdfs:comment \"Inverse: Relates a union membership to the person.\" ;\n    rdfs:domain :UnionMembership ;\n    rdfs:range :Person ;\n    owl:inverseOf :hasUnionMembership .\n\n:membershipInUnion a owl:ObjectProperty ;\n    rdfs:label \"membership in union\" ;\n    rdfs:comment \"Relates a union membership event to a union.\" ;\n    rdfs:domain :UnionMembership ;\n    rdfs:range :Union ;\n    owl:inverseOf :unionHasMembership .\n:unionHasMembership a owl:ObjectProperty ;\n    rdfs:label \"union has membership\" ;\n    rdfs:comment \"Inverse: Relates a union to its memberships.\" ;\n    rdfs:domain :Union ;\n    rdfs:range :UnionMembership ;\n    owl:inverseOf :membershipInUnion .\n\n:unionRoleHeld a owl:ObjectProperty ;\n    rdfs:label \"union role held\" ;\n    rdfs:comment \"Relates a union role event to a union.\" ;\n    rdfs:domain :UnionRole ;\n    rdfs:range :Union ;\n    owl:inverseOf :unionHasRole .\n:unionHasRole a owl:ObjectProperty ;\n    rdfs:label \"union has role\" ;\n    rdfs:comment \"Inverse: Relates a union to its roles.\" ;\n    rdfs:domain :Union ;\n    rdfs:range :UnionRole ;\n    owl:inverseOf :unionRoleHeld .\n\n:roleHeldBy a owl:ObjectProperty, owl:FunctionalProperty ;\n    rdfs:label \"role held by\" ;\n    rdfs:comment \"Relates a union role event to the person holding the role.\" ;\n    rdfs:domain :UnionRole ;\n    rdfs:range :Person ;\n    owl:inverseOf :personHoldsRole .\n:personHoldsRole a owl:ObjectProperty ;\n    rdfs:label \"person holds role\" ;\n    rdfs:comment \"Inverse: Relates a person to union roles they hold.\" ;\n    rdfs:domain :Person ;\n    rdfs:range :UnionRole ;\n    owl:inverseOf :roleHeldBy .\n\n:roleHeldDuring a owl:ObjectProperty, owl:FunctionalProperty ;\n    rdfs:label \"role held during\" ;\n    rdfs:comment \"Relates a union role event to a union membership.\" ;\n    rdfs:domain :UnionRole ;\n    rdfs:range :UnionMembership ;\n    owl:inverseOf :unionMembershipHasRole .\n:unionMembershipHasRole a owl:ObjectProperty ;\n    rdfs:label \"union membership has role\" ;\n    rdfs:comment \"Inverse: Relates a union membership to union roles held during it.\" ;\n    rdfs:domain :UnionMembership ;\n    rdfs:range :UnionRole ;\n    owl:inverseOf :roleHeldDuring .\n\n:evaluatedBy a owl:ObjectProperty, owl:FunctionalProperty ;\n    rdfs:label \"evaluated by\" ;\n    rdfs:comment \"Relates an evaluation event to the doctor who performed it.\" ;\n    rdfs:domain :Evaluation ;\n    rdfs:range :Doctor ;\n    owl:inverseOf :performedEvaluation .\n:performedEvaluation a owl:ObjectProperty ;\n    rdfs:label \"performed evaluation\" ;\n    rdfs:comment \"Inverse: Relates a doctor to evaluations they performed.\" ;\n    rdfs:domain :Doctor ;\n    rdfs:range :Evaluation ;\n    owl:inverseOf :evaluatedBy .\n\n:evaluationFor a owl:ObjectProperty, owl:FunctionalProperty ;\n    rdfs:label \"evaluation for\" ;\n    rdfs:comment \"Relates an evaluation event to the employee being evaluated.\" ;\n    rdfs:domain :Evaluation ;\n    rdfs:range :Employee ;\n    owl:inverseOf :hasEvaluation .\n:hasEvaluation a owl:ObjectProperty ;\n    rdfs:label \"has evaluation\" ;\n    rdfs:comment \"Relates an employee to an evaluation event.\" ;\n    rdfs:domain :Employee ;\n    rdfs:range :Evaluation ;\n    owl:inverseOf :evaluationFor .\n\n:containsArticle a owl:ObjectProperty ;\n    rdfs:label \"contains article\" ;\n    rdfs:comment \"Relates an article collection to an article it contains.\" ;\n    rdfs:domain :ArticleCollection ;\n    rdfs:range :Article ;\n    owl:inverseOf :articleInCollection .\n:articleInCollection a owl:ObjectProperty ;\n    rdfs:label \"article in collection\" ;\n    rdfs:comment \"Inverse: Relates an article to article collections it is in.\" ;\n    rdfs:domain :Article ;\n    rdfs:range :ArticleCollection ;\n    owl:inverseOf :containsArticle .\n\n:presentedInSeminar a owl:ObjectProperty, owl:FunctionalProperty ;\n    rdfs:label \"presented in seminar\" ;\n    rdfs:comment \"Relates a seminar presentation to the seminar.\" ;\n    rdfs:domain :SeminarPresentation ;\n    rdfs:range :Seminar ;\n    owl:inverseOf :seminarHasPresentation .\n:seminarHasPresentation a owl:ObjectProperty ;\n    rdfs:label \"seminar has presentation\" ;\n    rdfs:comment \"Inverse: Relates a seminar to its presentations.\" ;\n    rdfs:domain :Seminar ;\n    rdfs:range :SeminarPresentation ;\n    owl:inverseOf :presentedInSeminar .\n\n:presentationOfArticle a owl:ObjectProperty, owl:FunctionalProperty ;\n    rdfs:label \"presentation of article\" ;\n    rdfs:comment \"Relates a seminar presentation to the article presented.\" ;\n    rdfs:domain :SeminarPresentation ;\n    rdfs:range :Article ;\n    owl:inverseOf :articlePresentedIn .\n:articlePresentedIn a owl:ObjectProperty ;\n    rdfs:label \"article presented in\" ;\n    rdfs:comment \"Inverse: Relates an article to seminar presentations where it was presented.\" ;\n    rdfs:domain :Article ;\n    rdfs:range :SeminarPresentation ;\n    owl:inverseOf :presentationOfArticle .\n\n:seminarHeldAt a owl:ObjectProperty, owl:FunctionalProperty ;\n    rdfs:label \"seminar held at\" ;\n    rdfs:comment \"Relates a seminar to the hospital where it is held.\" ;\n    rdfs:domain :Seminar ;\n    rdfs:range :Hospital ;\n    owl:inverseOf :hospitalHasSeminar .\n:hospitalHasSeminar a owl:ObjectProperty ;\n    rdfs:label \"hospital has seminar\" ;\n    rdfs:comment \"Inverse: Relates a hospital to seminars held there.\" ;\n    rdfs:domain :Hospital ;\n    rdfs:range :Seminar ;\n    owl:inverseOf :seminarHeldAt .\n\n### Data Properties\n:degreeAwardedDate a owl:DatatypeProperty, owl:FunctionalProperty ;\n    rdfs:label \"degree awarded date\" ;\n    rdfs:comment \"The date a degree was awarded.\" ;\n    rdfs:domain :Degree ;\n    rdfs:range xsd:dateTime .\n\n:studyStartDate a owl:DatatypeProperty, owl:FunctionalProperty ;\n    rdfs:label \"study start date\" ;\n    rdfs:comment \"The start date of a study period.\" ;\n    rdfs:domain :StudyPeriod ;\n    rdfs:range xsd:dateTime .\n\n:studyEndDate a owl:DatatypeProperty, owl:FunctionalProperty ;\n    rdfs:label \"study end date\" ;\n    rdfs:comment \"The end date of a study period.\" ;\n    rdfs:domain :StudyPeriod ;\n    rdfs:range xsd:dateTime .\n\n:employmentStartDate a owl:DatatypeProperty, owl:FunctionalProperty ;\n    rdfs:label \"employment start date\" ;\n    rdfs:comment \"The start date of an employment event.\" ;\n    rdfs:domain :Employment ;\n    rdfs:range xsd:dateTime .\n\n:unionMembershipStartDate a owl:DatatypeProperty, owl:FunctionalProperty ;\n    rdfs:label \"union membership start date\" ;\n    rdfs:comment \"The start date of a union membership event.\" ;\n    rdfs:domain :UnionMembership ;\n    rdfs:range xsd:dateTime .\n\n:unionMembershipEndDate a owl:DatatypeProperty, owl:FunctionalProperty ;\n    rdfs:label \"union membership end date\" ;\n    rdfs:comment \"The end date of a union membership event.\" ;\n    rdfs:domain :UnionMembership ;\n    rdfs:range xsd:dateTime .\n\n:unionRoleStartDate a owl:DatatypeProperty, owl:FunctionalProperty ;\n    rdfs:label \"union role start date\" ;\n    rdfs:comment \"The start date of a union role event.\" ;\n    rdfs:domain :UnionRole ;\n    rdfs:range xsd:dateTime .\n\n:unionRoleEndDate a owl:DatatypeProperty, owl:FunctionalProperty ;\n    rdfs:label \"union role end date\" ;\n    rdfs:comment \"The end date of a union role event.\" ;\n    rdfs:domain :UnionRole ;\n    rdfs:range xsd:dateTime .\n\n:evaluationText a owl:DatatypeProperty, owl:FunctionalProperty ;\n    rdfs:label \"evaluation text\" ;\n    rdfs:comment \"The text of an evaluation statement.\" ;\n    rdfs:domain :Evaluation ;\n    rdfs:range xsd:string .\n\n:bookPageCount a owl:DatatypeProperty, owl:FunctionalProperty ;\n    rdfs:label \"book page count\" ;\n    rdfs:comment \"The number of pages in a book.\" ;\n    rdfs:domain :Book ;\n    rdfs:range xsd:integer .\n\n:publicationDate a owl:DatatypeProperty, owl:FunctionalProperty ;\n    rdfs:label \"publication date\" ;\n    rdfs:comment \"The publication date of a book.\" ;\n    rdfs:domain :Book ;\n    rdfs:range xsd:dateTime .\n\n:publicationDateCD a owl:DatatypeProperty, owl:FunctionalProperty ;\n    rdfs:label \"publication date CD\" ;\n    rdfs:comment \"The publication date of a CD.\" ;\n    rdfs:domain :CD ;\n    rdfs:range xsd:dateTime .\n\n:seminarDate a owl:DatatypeProperty, owl:FunctionalProperty ;\n    rdfs:label \"seminar date\" ;\n    rdfs:comment \"The date a seminar was held.\" ;\n    rdfs:domain :Seminar ;\n    rdfs:range xsd:dateTime .\n\n### General Class Axioms & Restrictions\n:Seminar rdfs:subClassOf [ a owl:Restriction ; owl:onProperty :presentedInSeminar ; owl:someValuesFrom :SeminarPresentation ] .\n# This restriction ensures at least one SeminarPresentation per Seminar (CQ15)\n",
+  "iterations": [
+    {
+      "iteration": 1,
+      "syntax_result": "Invalid: RDF syntax error at line 113 (owl:FunctionalProperty used incorrectly)",
+      "pitfall_result": "Validation Exception: Bad syntax at owl:FunctionalProperty usage",
+      "fix": "owl:FunctionalProperty should be declared as a type triple (a owl:FunctionalProperty), not as a predicate. Will correct all usages to ':property a owl:ObjectProperty, owl:FunctionalProperty' and likewise for DatatypeProperties."
+    },
+    {
+      "iteration": 2,
+      "syntax_result": "Valid",
+      "pitfall_result": "Pitfall P13: Inverse relationships not explicitly declared for 17 properties. Minor issue, but will add owl:inverseOf for all relevant object properties.",
+      "fix": "Add owl:inverseOf declarations for all object properties that are not symmetric."
+    },
+    {
+      "iteration": 3,
+      "syntax_result": "Valid",
+      "pitfall_result": "No pitfalls. All validations passed.",
+      "fix": "None needed. Ontology is now fully validated."
+    }
+  ]
+}
