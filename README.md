@@ -100,15 +100,18 @@ python otho.py --benchmark <N>
 - `--benchmark <N>`: Run all three stories N times for benchmarking
 
 ### Output Files
-All output files are saved to `data/output/` with timestamps:
-- `{story_id}_ontology_{timestamp}.owl` - Final validated ontology
-- `{story_id}_validation_{timestamp}.json` - Validation results (syntax + pitfalls)
-- `{story_id}_validation_{timestamp}.xml` - OOPS XML report
-- `{story_id}_scratchpad_{timestamp}.json` - Agent's planning and iteration history
+All output files are saved to `data/output/` subdirectories with timestamps:
+- `ontologies/{story_id}_ontology_{timestamp}.owl` - Final validated ontology
+- `validations/{story_id}_validation_{timestamp}.json` - Validation results (syntax + pitfalls)
+- `validations/{story_id}_validation_{timestamp}.xml` - OOPS XML report
+- `scratchpads/{story_id}_scratchpad_{timestamp}.json` - Agent's planning and iteration history
+- `reviews/{story_id}_review_iter{N}_{timestamp}.json` - Review reports for each iteration
 
 All execution logs are saved to `logs/`:
-- `{story_id}_agent_{timestamp}.log` - Human-readable log
-- `{story_id}_agent_{timestamp}.json` - Structured JSON log
+- `{story_id}_generator_{timestamp}.log` - Generator agent human-readable log
+- `{story_id}_generator_{timestamp}.json` - Generator agent structured JSON log
+- `{story_id}_validation_{timestamp}.log` - Validation human-readable log
+- `{story_id}_validation_{timestamp}.json` - Validation structured JSON log
 
 ## Environment Setup
 
@@ -127,11 +130,25 @@ All execution logs are saved to `logs/`:
 
 ## Architecture
 
-### Agent Workflow
-Otho uses a **self-validating React agent** architecture built on LangGraph:
+### Dual-Agent Workflow
+Otho uses a **generator-reviewer dual-agent** architecture built on LangGraph with an iterative review-refinement loop:
+
+```
+get_story_node
+    ↓
+ontology_generation_agent (initial generation)
+    ↓
+advisory_review_node (iteration 1)
+    ↓
+review_routing_node
+    ├─→ [< 2 iterations] → ontology_generation_agent (refinement) → advisory_review_node (iteration 2)
+    └─→ [≥ 2 iterations] → validate_and_save_node (3-pillar validation) → end_node
+```
+
+### Workflow Stages
 
 1. **Story Loading**: Reads competency questions from Excel dataset
-2. **Autonomous Generation**: React agent with 5 specialized tools:
+2. **Generator Agent**: Dual-mode React agent with 5 specialized tools:
    - `update_scratchpad` - Store planning and progress notes
    - `read_scratchpad` - Review previous decisions
    - `validate_syntax_tool` - RDF/Turtle syntax validation
@@ -140,6 +157,9 @@ Otho uses a **self-validating React agent** architecture built on LangGraph:
 3. **Self-Validation Loop**: Agent iterates internally until both syntax and pitfalls pass
 4. **Persistent Memory**: AgentWorkspace maintains mutable state across tool calls
 5. **Complete Auditability**: All decisions, iterations, and validations logged
+6. **Advisory Review**: LLM-based reviewer evaluates the ontology and provides structured JSON feedback with CQ coverage analysis, quality metrics, and prioritized improvement suggestions
+7. **Refinement Loop**: Generator agent refines based on review feedback (2 iterations guaranteed)
+8. **Final Validation**: 3-pillar validation (syntax, OOPS pitfalls, reasoners)
 
 ### Key Features
 - ✅ **Full Autonomy**: Agent plans, generates, validates, and iterates independently
@@ -147,8 +167,10 @@ Otho uses a **self-validating React agent** architecture built on LangGraph:
 - ✅ **Persistent Scratchpad**: Maintains planning notes and iteration history
 - ✅ **Comprehensive Logging**: Complete audit trail for research analysis
 - ✅ **Automatic Iteration**: Continues until validation passes (max 10 attempts)
-
-For detailed architecture documentation, see `docs/AGENT_ARCHITECTURE_PLAN.md` and `docs/IMPLEMENTATION_SUMMARY.md`.
+- ✅ **Dual-Agent Architecture**: Generator and advisory reviewer working in tandem
+- ✅ **2-Iteration Review Loop**: Guaranteed review-refinement cycles for quality assurance
+- ✅ **Structured Review Feedback**: JSON reports with coverage scores, quality metrics, and prioritized suggestions
+- ✅ **Improvement Tracking**: Delta metrics track quality changes across iterations
 
 ## Project Structure
 ```
@@ -156,25 +178,33 @@ src/
 ├── agents/
 │   ├── workspace.py         # AgentWorkspace - mutable state container
 │   ├── tools.py             # Validation tools (syntax, pitfalls)
-│   └── nodes.py             # StateGraph nodes (4 nodes)
+│   └── nodes.py             # StateGraph nodes and workflow logic
 ├── models/
 │   └── requirement_models.py   # Story and CompetencyQuestion models
 ├── prompts/
 │   ├── prompt_manager.py
-│   └── prompts.yaml         # Agent prompts with tool documentation
+│   ├── prompts.yaml         # Agent prompts with tool documentation
+│   └── owl2_datatype_map.txt   # OWL2 datatype reference
 ├── reviewers/
-│   └── reviewer.py          # RDFSyntaxReviewer, OopsPitfallReviewer
+│   ├── reviewer.py          # RDFSyntaxReviewer, OopsPitfallReviewer
+│   └── reasoner_validator.py   # Reasoner-based validation
 └── utils/
     ├── agent_logger.py      # Structured logging
     ├── excel_processor.py   # Dataset loading
     ├── file_handler.py      # File I/O operations
     ├── llm_manager.py       # LLM configuration
     ├── ontology_converter.py # OWL format conversion
-    └── oops_parser.py       # OOPS XML parsing
+    ├── oops_parser.py       # OOPS XML parsing
+    ├── timing.py            # Execution timing utilities
+    └── validation_logger.py # Validation-specific logging
 
 data/
 ├── input/                   # Excel datasets with CQs
-└── output/                  # Generated ontologies and validation results
+└── output/
+    ├── ontologies/          # Generated .owl files
+    ├── reviews/             # Review JSON reports
+    ├── scratchpads/         # Agent planning history
+    └── validations/         # Validation results
 
 docs/                        # Architecture and implementation documentation
 logs/                        # Agent execution logs
