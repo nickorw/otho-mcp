@@ -1,0 +1,362 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix : <http://www.example.org/ontology#> .
+
+<http://www.example.org/ontology/music-production>
+    a owl:Ontology ;
+    rdfs:label "Music Production Ontology" ;
+    rdfs:comment "An ontology for modeling music production, band membership, performances, albums, tracks, and related entities." .
+
+### Classes
+
+:Person a owl:Class ;
+    rdfs:label "Person" ;
+    rdfs:comment "A human being involved in music production, performance, or critique." .
+
+:Band a owl:Class ;
+    rdfs:label "Band" ;
+    rdfs:comment "A musical group consisting of one or more people." .
+
+:Instrument a owl:Class ;
+    rdfs:label "Instrument" ;
+    rdfs:comment "A musical instrument played by a person." .
+
+:Role a owl:Class ;
+    rdfs:label "Role" ;
+    rdfs:comment "A musical or organizational role a person can have in a band." .
+
+:Album a owl:Class ;
+    rdfs:label "Album" ;
+    rdfs:comment "A published collection of tracks." .
+
+:Track a owl:Class ;
+    rdfs:label "Track" ;
+    rdfs:comment "A single audio recording on an album." .
+
+:Song a owl:Class ;
+    rdfs:label "Song" ;
+    rdfs:comment "A musical composition that can be recorded as a track." .
+
+:Critic a owl:Class ;
+    rdfs:label "Critic" ;
+    rdfs:comment "A person who reviews or critiques music albums." .
+
+:Performance a owl:Class ;
+    rdfs:label "Performance" ;
+    rdfs:comment "A live presentation of music by a band or artist." .
+
+:City a owl:Class ;
+    rdfs:label "City" ;
+    rdfs:comment "A city where performances can take place." .
+
+:Region a owl:Class ;
+    rdfs:label "Region" ;
+    rdfs:comment "A geographical region containing cities." .
+
+:Country a owl:Class ;
+    rdfs:label "Country" ;
+    rdfs:comment "A country containing regions." .
+
+# Pivot Classes (for reification)
+
+:BandMembership a owl:Class ;
+    rdfs:label "Band Membership" ;
+    rdfs:comment "A reified relation representing a person's membership in a band at a given time and role." .
+
+:AlbumRecording a owl:Class ;
+    rdfs:label "Album Recording" ;
+    rdfs:comment "A reified relation representing the recording of an album, including time period." .
+
+:TrackSongRelation a owl:Class ;
+    rdfs:label "Track-Song Relation" ;
+    rdfs:comment "A reified relation linking a track to the song it records." .
+
+:CriticReview a owl:Class ;
+    rdfs:label "Critic Review" ;
+    rdfs:comment "A reified relation representing a critic's review of an album." .
+
+:PerformanceSong a owl:Class ;
+    rdfs:label "Performance Song" ;
+    rdfs:comment "A reified relation representing a specific song performed in a performance." .
+
+### Object Properties (with inverses)
+
+:playsInstrument a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:label "plays instrument" ;
+    rdfs:comment "Relates a person to an instrument they play." ;
+    rdfs:domain :Person ;
+    rdfs:range :Instrument ;
+    owl:inverseOf :instrumentPlayedBy .
+
+:instrumentPlayedBy a owl:ObjectProperty ;
+    rdfs:label "instrument played by" ;
+    rdfs:comment "Inverse: Relates an instrument to the person who plays it." ;
+    rdfs:domain :Instrument ;
+    rdfs:range :Person ;
+    owl:inverseOf :playsInstrument .
+
+:hasMember a owl:ObjectProperty ;
+    rdfs:label "has member" ;
+    rdfs:comment "Relates a band to its membership events (BandMembership)." ;
+    rdfs:domain :Band ;
+    rdfs:range :BandMembership ;
+    owl:inverseOf :memberOfBand .
+
+:memberOfBand a owl:ObjectProperty ;
+    rdfs:label "member of band" ;
+    rdfs:comment "Inverse: Relates a BandMembership to the Band." ;
+    rdfs:domain :BandMembership ;
+    rdfs:range :Band ;
+    owl:inverseOf :hasMember .
+
+:memberPerson a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:label "member person" ;
+    rdfs:comment "Relates a BandMembership to the Person who is a member." ;
+    rdfs:domain :BandMembership ;
+    rdfs:range :Person ;
+    owl:inverseOf :personMembership .
+
+:personMembership a owl:ObjectProperty ;
+    rdfs:label "person membership" ;
+    rdfs:comment "Inverse: Relates a Person to their BandMembership." ;
+    rdfs:domain :Person ;
+    rdfs:range :BandMembership ;
+    owl:inverseOf :memberPerson .
+
+:memberRole a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:label "member role" ;
+    rdfs:comment "Relates a BandMembership to the Role a person has." ;
+    rdfs:domain :BandMembership ;
+    rdfs:range :Role ;
+    owl:inverseOf :roleInMembership .
+
+:roleInMembership a owl:ObjectProperty ;
+    rdfs:label "role in membership" ;
+    rdfs:comment "Inverse: Relates a Role to BandMemberships in which it is held." ;
+    rdfs:domain :Role ;
+    rdfs:range :BandMembership ;
+    owl:inverseOf :memberRole .
+
+:recordedAlbum a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:label "recorded album" ;
+    rdfs:comment "Relates an AlbumRecording event to the Album recorded." ;
+    rdfs:domain :AlbumRecording ;
+    rdfs:range :Album ;
+    owl:inverseOf :albumRecording .
+
+:albumRecording a owl:ObjectProperty ;
+    rdfs:label "album recording" ;
+    rdfs:comment "Inverse: Relates an Album to its AlbumRecording event." ;
+    rdfs:domain :Album ;
+    rdfs:range :AlbumRecording ;
+    owl:inverseOf :recordedAlbum .
+
+:hasTrack a owl:ObjectProperty ;
+    rdfs:label "has track" ;
+    rdfs:comment "Relates an Album to its Tracks." ;
+    rdfs:domain :Album ;
+    rdfs:range :Track ;
+    owl:inverseOf :trackOfAlbum .
+
+:trackOfAlbum a owl:ObjectProperty ;
+    rdfs:label "track of album" ;
+    rdfs:comment "Inverse: Relates a Track to the Album it is part of." ;
+    rdfs:domain :Track ;
+    rdfs:range :Album ;
+    owl:inverseOf :hasTrack .
+
+:trackSong a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:label "track song" ;
+    rdfs:comment "Relates a TrackSongRelation to the Song it records." ;
+    rdfs:domain :TrackSongRelation ;
+    rdfs:range :Song ;
+    owl:inverseOf :songRecordedByTrack .
+
+:songRecordedByTrack a owl:ObjectProperty ;
+    rdfs:label "song recorded by track" ;
+    rdfs:comment "Inverse: Relates a Song to the TrackSongRelation that records it." ;
+    rdfs:domain :Song ;
+    rdfs:range :TrackSongRelation ;
+    owl:inverseOf :trackSong .
+
+:trackInAlbum a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:label "track in album" ;
+    rdfs:comment "Relates a TrackSongRelation to the Track." ;
+    rdfs:domain :TrackSongRelation ;
+    rdfs:range :Track ;
+    owl:inverseOf :albumTrackRelation .
+
+:albumTrackRelation a owl:ObjectProperty ;
+    rdfs:label "album track relation" ;
+    rdfs:comment "Inverse: Relates a Track to the TrackSongRelation." ;
+    rdfs:domain :Track ;
+    rdfs:range :TrackSongRelation ;
+    owl:inverseOf :trackInAlbum .
+
+:reviewedBy a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:label "reviewed by" ;
+    rdfs:comment "Relates a CriticReview to the Critic." ;
+    rdfs:domain :CriticReview ;
+    rdfs:range :Critic ;
+    owl:inverseOf :criticReview .
+
+:criticReview a owl:ObjectProperty ;
+    rdfs:label "critic review" ;
+    rdfs:comment "Inverse: Relates a Critic to their CriticReviews." ;
+    rdfs:domain :Critic ;
+    rdfs:range :CriticReview ;
+    owl:inverseOf :reviewedBy .
+
+:reviewedAlbum a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:label "reviewed album" ;
+    rdfs:comment "Relates a CriticReview to the Album." ;
+    rdfs:domain :CriticReview ;
+    rdfs:range :Album ;
+    owl:inverseOf :albumReviewedBy .
+
+:albumReviewedBy a owl:ObjectProperty ;
+    rdfs:label "album reviewed by" ;
+    rdfs:comment "Inverse: Relates an Album to CriticReviews." ;
+    rdfs:domain :Album ;
+    rdfs:range :CriticReview ;
+    owl:inverseOf :reviewedAlbum .
+
+:performanceOf a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:label "performance of" ;
+    rdfs:comment "Relates a PerformanceSong to the Performance." ;
+    rdfs:domain :PerformanceSong ;
+    rdfs:range :Performance ;
+    owl:inverseOf :performanceSong .
+
+:performanceSong a owl:ObjectProperty ;
+    rdfs:label "performance song" ;
+    rdfs:comment "Inverse: Relates a Performance to its PerformanceSongs." ;
+    rdfs:domain :Performance ;
+    rdfs:range :PerformanceSong ;
+    owl:inverseOf :performanceOf .
+
+:performedSong a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:label "performed song" ;
+    rdfs:comment "Relates a PerformanceSong to the Song performed." ;
+    rdfs:domain :PerformanceSong ;
+    rdfs:range :Song ;
+    owl:inverseOf :songPerformedIn .
+
+:songPerformedIn a owl:ObjectProperty ;
+    rdfs:label "song performed in" ;
+    rdfs:comment "Inverse: Relates a Song to the PerformanceSong in which it is performed." ;
+    rdfs:domain :Song ;
+    rdfs:range :PerformanceSong ;
+    owl:inverseOf :performedSong .
+
+:performanceLocation a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:label "performance location" ;
+    rdfs:comment "Relates a Performance to the City where it takes place." ;
+    rdfs:domain :Performance ;
+    rdfs:range :City ;
+    owl:inverseOf :cityPerformance .
+
+:cityPerformance a owl:ObjectProperty ;
+    rdfs:label "city performance" ;
+    rdfs:comment "Inverse: Relates a City to Performances held there." ;
+    rdfs:domain :City ;
+    rdfs:range :Performance ;
+    owl:inverseOf :performanceLocation .
+
+:cityInRegion a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:label "city in region" ;
+    rdfs:comment "Relates a City to the Region it is located in." ;
+    rdfs:domain :City ;
+    rdfs:range :Region ;
+    owl:inverseOf :regionHasCity .
+
+:regionHasCity a owl:ObjectProperty ;
+    rdfs:label "region has city" ;
+    rdfs:comment "Inverse: Relates a Region to the Cities it contains." ;
+    rdfs:domain :Region ;
+    rdfs:range :City ;
+    owl:inverseOf :cityInRegion .
+
+:regionInCountry a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:label "region in country" ;
+    rdfs:comment "Relates a Region to the Country it is located in." ;
+    rdfs:domain :Region ;
+    rdfs:range :Country ;
+    owl:inverseOf :countryHasRegion .
+
+:countryHasRegion a owl:ObjectProperty ;
+    rdfs:label "country has region" ;
+    rdfs:comment "Inverse: Relates a Country to the Regions it contains." ;
+    rdfs:domain :Country ;
+    rdfs:range :Region ;
+    owl:inverseOf :regionInCountry .
+
+### Data Properties
+
+:membershipTime a owl:DatatypeProperty ;
+    rdfs:label "membership time" ;
+    rdfs:comment "The time period of a BandMembership (e.g., as a string or interval)." ;
+    rdfs:domain :BandMembership ;
+    rdfs:range xsd:string .
+
+:recordingStart a owl:DatatypeProperty ;
+    rdfs:label "recording start" ;
+    rdfs:comment "The start date of an AlbumRecording (as xsd:string for OWL2 compliance)." ;
+    rdfs:domain :AlbumRecording ;
+    rdfs:range xsd:string .
+
+:recordingEnd a owl:DatatypeProperty ;
+    rdfs:label "recording end" ;
+    rdfs:comment "The end date of an AlbumRecording (as xsd:string for OWL2 compliance)." ;
+    rdfs:domain :AlbumRecording ;
+    rdfs:range xsd:string .
+
+:trackCount a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:label "track count" ;
+    rdfs:comment "The number of tracks on an album." ;
+    rdfs:domain :Album ;
+    rdfs:range xsd:nonNegativeInteger .
+
+:releaseDate a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:label "release date" ;
+    rdfs:comment "The release date of an album (as xsd:string for OWL2 compliance)." ;
+    rdfs:domain :Album ;
+    rdfs:range xsd:string .
+
+:songComposedOn a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:label "song composed on" ;
+    rdfs:comment "The date a song was composed (as xsd:string for OWL2 compliance)." ;
+    rdfs:domain :Song ;
+    rdfs:range xsd:string .
+
+:reviewText a owl:DatatypeProperty ;
+    rdfs:label "review text" ;
+    rdfs:comment "The text of a critic's review." ;
+    rdfs:domain :CriticReview ;
+    rdfs:range xsd:string .
+
+:performanceDate a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:label "performance date" ;
+    rdfs:comment "The date of a performance (as xsd:string for OWL2 compliance)." ;
+    rdfs:domain :Performance ;
+    rdfs:range xsd:string .
+
+### General Class Axioms and Restrictions
+
+:Album owl:equivalentClass [
+    a owl:Restriction ;
+    owl:onProperty :hasTrack ;
+    owl:someValuesFrom :Track
+] ;
+    rdfs:comment "Every album has at least one track." .
+
+### Disjointness
+
+:Person owl:disjointWith :Band .
+:Instrument owl:disjointWith :Role .
+:Album owl:disjointWith :Song .
+:Performance owl:disjointWith :Critic .
+:City owl:disjointWith :Country .
+:Region owl:disjointWith :Country .

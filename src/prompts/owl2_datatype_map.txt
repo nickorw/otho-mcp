@@ -1,0 +1,52 @@
+OWL 2 DATATYPE MAP - ALLOWED DATATYPES
+========================================
+Source: https://www.w3.org/TR/owl2-syntax/#Datatype_Maps
+
+## Core Datatypes (MUST Support)
+
+### String Datatypes
+- xsd:string
+- xsd:normalizedString
+- xsd:token
+- xsd:language
+- xsd:Name
+- xsd:NCName
+- xsd:NMTOKEN
+
+### Boolean
+- xsd:boolean
+
+### Numeric Datatypes
+- xsd:decimal
+- xsd:integer
+- xsd:nonNegativeInteger
+- xsd:nonPositiveInteger
+- xsd:positiveInteger
+- xsd:negativeInteger
+- xsd:long
+- xsd:int
+- xsd:short
+- xsd:byte
+- xsd:unsignedLong
+- xsd:unsignedInt
+- xsd:unsignedShort
+- xsd:unsignedByte
+- xsd:double
+- xsd:float
+
+### Date and Time Datatypes
+- xsd:dateTime
+- xsd:dateTimeStamp
+
+### Binary Datatypes
+- xsd:hexBinary
+- xsd:base64Binary
+
+### URI Datatypes
+- xsd:anyURI
+
+### XML Datatypes
+- rdf:XMLLiteral
+- rdf:PlainLiteral
+
+## IMPORTANT: Do NOT use any xsd: datatypes outside this list. 

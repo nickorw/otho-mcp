@@ -1,0 +1,34 @@
+{
+  "timestamp": "20260124_154550",
+  "story_id": "MusicS",
+  "ontology_size_chars": 11076,
+  "syntax": {
+    "valid": true,
+    "execution_time_seconds": 0.014,
+    "error": null
+  },
+  "oops": {
+    "has_pitfalls": false,
+    "pitfall_count": 0,
+    "execution_time_seconds": 0.083,
+    "pitfalls": []
+  },
+  "hermit": {
+    "is_consistent": true,
+    "inconsistent_classes": [],
+    "execution_time_seconds": 0.694,
+    "error": null,
+    "reasoner": "Hermit"
+  },
+  "pellet": {
+    "is_consistent": true,
+    "inconsistent_classes": [],
+    "execution_time_seconds": 0.812,
+    "error": null,
+    "reasoner": "Pellet"
+  },
+  "aggregate": {
+    "all_validators_passed": true,
+    "total_execution_time_seconds": 1.602
+  }
+}

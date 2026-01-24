@@ -1,129 +1,57 @@
 ########################################################################################
-############ Sandbox for testing various functionalities in the Otho project - NOTHING HERE IS TO BE USED BY AI ASSISTANTS(Copilot, Cline, others)###########
+############ Sandbox for testing various functionalities in the Otho project ###########
 ########################################################################################
 
-import os
-import traceback
-from pathlib import Path
-
 import dotenv
-from google import genai
-from google.genai import types
-
-from src.prompts.prompt_manager import PromptManager
-from src.reviewers.reviewer import OopsPitfallReviewer, RDFSyntaxReviewer
-from src.utils.excel_processor import get_story_by_id
-from src.utils.file_handler import save_text_file
+from gen_ai_hub.proxy.langchain import init_llm
+from gen_ai_hub.proxy.langchain.amazon import (
+    init_chat_converse_model as amazon_init_converse_model,
+)
+from langchain_core.tools import tool
+from langgraph.prebuilt import create_react_agent
 
 dotenv.load_dotenv()
 
-# Initialize Gemini client with API key from environment variable
-gemini_client = genai.Client()
+# Initialize Claude LLM
+model_name_amazon = "anthropic--claude-4.5-sonnet"
+model_id_amazon = "anthropic.claude-4.5-sonnet-v1:0"
 
-prompt_manager = PromptManager(prompts_file_path=Path("src/prompts/prompts.yaml"))
-
-
-def call_gemini(prompt: str) -> str:
-    response = gemini_client.models.generate_content(
-        model="gemini-2.5-flash",
-        contents=prompt,
-    )
-
-    return response.text or ""
+llm_claude = init_llm(
+    model_name=model_name_amazon,
+    model_id=model_id_amazon,
+    init_func=amazon_init_converse_model,
+    temperature=0.5,
+    top_p=None,  # Explicitly set to None to avoid conflict
+)
 
 
+# Define a simple tool
+@tool
+def multiply(a: int, b: int) -> int:
+    """Multiply two numbers."""
+    return a * b
+
+
+# Create the simplest ReAct agent using LangGraph's built-in function
+tools = [multiply]
+agent = create_react_agent(llm_claude, tools)
+
+# Test the agent
 if __name__ == "__main__":
-    # Get story by ID, populating into Story object
-    story_id = "FestS"
-    story = get_story_by_id(story_id)
+    print("=" * 80)
+    print("LangGraph Native ReAct Agent with Claude (Simplest Form)")
+    print("=" * 80)
 
-    # # Print story & cqs
-    # print(f"Story ID: {story.id}")
-    # print(f"Story Text: {story.context}")
-    # if story.competency_questions:
-    #     for cq in story.competency_questions:
-    #         print(f"{cq.id}: {cq.question}")
+    # Test 1: Simple question
+    print("\n[Test 1] Simple question:")
+    result = agent.invoke({"messages": [("user", "Hello! What can you do?")]})
+    print(result["messages"][-1].content)
 
-    #################################### Prompt manager test
-    # if story.competency_questions:
+    # Test 2: Using multiply tool
+    print("\n[Test 2] Using multiply tool:")
+    result = agent.invoke({"messages": [("user", "What is 123 times 456?")]})
+    print(result["messages"][-1].content)
 
-    #     structured_prompt = prompt_manager.get_structured_prompt("otho_memless_cq_by_cq")
-    #     # Use the 'task' field as the main prompt template
-    #     prompt = structured_prompt['task'].format(
-    #         story=story.context,
-    #         CQ=story.competency_questions[0].question
-    #     )
-    #     print("\nPrompt sent to Gemini (otho_memless_cq_by_cq):\n", prompt)
-    #     llm_response = call_gemini(prompt)
-    #     print("\nGemini response:\n", llm_response)
-    #     # Save LLM response to a text file in data/output
-    #     output_path = f"data/output/{story_id}_llm_response.txt"
-    #     save_text_file(output_path, llm_response)
-    #     print(f"LLM response saved to {output_path}")
-
-    ####################################  Path to the OWL file to validate
-    # owl_file_path = "data/output/FestS_combined.owl"
-
-    # with open(owl_file_path, "r", encoding="utf-8") as f:
-    #     owl_content = f.read()
-
-    #################################### OWL Syntax Validator instantiation
-    reviewer = RDFSyntaxReviewer(
-        format="turtle"
-    )  # Use "xml" for RDF/XML, "turtle" for Turtle, etc.
-
-    #################################### OWL Syntax Validation Test
-    # try:
-    #     result = reviewer.review_owl_content(owl_content)
-    #     print(f"RDF Syntax Valid: {result == 'OK'}")
-    # except Exception as e:
-    #     print("RDF Syntax Error:", e)
-    #     print("Full exception details:")
-    #     traceback.print_exc()
-
-    #################################### Combination Prompt Test
-    # structured_prompt = prompt_manager.get_structured_prompt("combine_owl_codes")
-    # prompt = structured_prompt['user_template'].format(
-    #     story_id="FestS",
-    #     story="",
-    #     snippets=owl_content,
-
-    # )
-    # output_path = f"data/output/prompt_{story_id}_agent_combined_OWL2.txt"
-    # save_text_file(output_path, prompt)
-    # llm_response = call_gemini(prompt)
-    # # Save LLM response to a text file in data/output
-    # output_path = f"data/output/{story_id}_agent_combined_OWL2.txt"
-    # save_text_file(output_path, llm_response)
-
-    #################################### Syntax Check File #################################
-    # reviewer = RDFSyntaxReviewer()
-    # try:
-    #     syntax_review_result = reviewer.review_owl_content(owl_content)
-    #     validation_successful = syntax_review_result == "OK"
-    #     print("Validation successful: ", validation_successful)
-
-    # except Exception as e:
-    #     print(f"Exception during RDF validation: {e}")
-
-
-############## Node test for validation of OWL
-def validate_combined_owl_node():
-    reviewer = OopsPitfallReviewer()
-    try:
-        with open(
-            "data/output/backup/FestS_combined_turtle.owl", "r", encoding="utf-8"
-        ) as f:
-            combined_owl = f.read()
-        validation_result = reviewer.review_owl_content(combined_owl)
-        save_text_file(
-            f"data/output/debug_FestS_combined_oops_result.xml", validation_result
-        )
-        print("Combined OWL validation result:", validation_result)
-        print("Combined OWL validation ran successfully")
-
-    except Exception as e:
-        print("Validation failed, result: ", str(e))
-
-
-validate_combined_owl_node()
+    print("\n" + "=" * 80)
+    print("Agent tests completed!")
+    print("=" * 80)

@@ -1,0 +1,121 @@
+================================================================================
+OTHO AGENT LOG ANALYSIS - COMPREHENSIVE REPORT
+================================================================================
+
+OVERALL SUMMARY (Generator Runs)
+--------------------------------------------------------------------------------
+Total Runs Analyzed: 5
+Total Successes: 5
+Total Failures: 0
+Overall Success Rate: 100.00%
+
+ITERATION STATISTICS
+--------------------------------------------------------------------------------
+Average Iterations: 1.40
+Median Iterations: 1.0
+Min Iterations: 1
+Max Iterations: 2
+
+DURATION STATISTICS
+--------------------------------------------------------------------------------
+Average Duration: 175.94 seconds (2.93 minutes)
+Median Duration: 178.73 seconds
+Min Duration: 157.24 seconds
+Max Duration: 189.24 seconds
+
+COMMUNICATION STATISTICS
+--------------------------------------------------------------------------------
+Average Messages per Run: 4.00
+Median Messages per Run: 4.0
+Average Tool Calls per Run: 1.00
+Median Tool Calls per Run: 1.0
+
+PER-STORY ANALYSIS (Generator)
+--------------------------------------------------------------------------------
+
+MusicS:
+  Runs: 5
+  Success Rate: 100.00%
+  Successes: 5
+  Failures: 0
+  Avg Iterations: 1.40
+  Median Iterations: 1.0
+  Avg Duration: 175.94 seconds (2.93 minutes)
+
+PITFALLS ANALYSIS (Generator)
+--------------------------------------------------------------------------------
+Total Pitfall Occurrences: 3
+Unique Pitfalls Encountered: 1
+
+Most Common Pitfalls:
+  P13: 3 occurrences
+
+TOOL USAGE ANALYSIS
+--------------------------------------------------------------------------------
+Total Tool Calls: 63
+
+Tool Call Breakdown:
+  update_scratchpad: 38 calls (60.3%)
+  validate_syntax_tool: 10 calls (15.9%)
+  check_pitfalls_tool: 10 calls (15.9%)
+  save_final_ontology: 5 calls (7.9%)
+
+SUCCESS PATTERNS
+--------------------------------------------------------------------------------
+Average Iterations for Success: 1.40
+Most Common Iteration Count: 1
+
+================================================================================
+VALIDATION ANALYSIS (Reasoner Results)
+================================================================================
+
+OVERALL VALIDATION SUMMARY
+--------------------------------------------------------------------------------
+Total Validations: 5
+All Validators Passed: 5 (100.00%)
+Syntax Valid: 5 (100.00%)
+OOPS Passed (No Pitfalls): 5 (100.00%)
+OOPS Passed (No Critical/Important): 5 (100.00%)
+Reasoners Passed (Both Consistent): 5 (100.00%)
+
+REASONER VALIDATION RESULTS
+--------------------------------------------------------------------------------
+Hermit Consistent: 5 (100.00%)
+Pellet Consistent: 5 (100.00%)
+Both Reasoners Consistent: 5 (100.00%)
+Hermit Errors: 0
+Pellet Errors: 0
+
+OOPS PITFALLS (Validation)
+--------------------------------------------------------------------------------
+Total Pitfall Occurrences: 0
+Unique Pitfalls: 0
+
+Severity Breakdown:
+  Runs Passed (No Pitfalls): 5 (100.00%)
+  Runs Passed (No Critical/Important): 5 (100.00%)
+  Runs with Only Minor Pitfalls: 0 (0.00%)
+
+Most Common Pitfalls:
+
+VALIDATION TIMING ANALYSIS
+--------------------------------------------------------------------------------
+Hermit Avg Time: 0.659s (median: 0.646s)
+Pellet Avg Time: 0.596s (median: 0.519s)
+Syntax Avg Time: 0.014s
+OOPS Avg Time: 0.080s
+Total Validation Avg Time: 1.349s
+
+PER-STORY VALIDATION ANALYSIS
+--------------------------------------------------------------------------------
+
+MusicS:
+  Validations: 5
+  All Passed Rate: 100.00%
+  Hermit Consistent Rate: 100.00%
+  Pellet Consistent Rate: 100.00%
+  OOPS Passed Rate: 100.00%
+
+================================================================================
+END OF REPORT
+================================================================================

@@ -18,7 +18,7 @@ generate_ontology: |
     - Generate the complete OWL ontology in Turtle syntax
     - Include ALL required prefixes, classes, properties, and axioms
     - Ensure every Class and Property has rdfs:label and rdfs:comment.
-    - Use only OWL2 DL datatype map compliant datatypes. Don't use, for instance, xsd:date or gYearMonth.
+    - Use only OWL2 DL datatype map compliant datatypes. Don't use, for instance: xsd:date, xsd:gYear or gYearMonth.
     - Always save your progress by calling `update_scratchpad` with key "current_owl" after generating or modifying OWL code
 
     **STEP 3: VALIDATE AND ITERATE (Use validation tools)**
@@ -82,7 +82,8 @@ generate_ontology: |
     7. **Iteration Tracking:** Log each validation attempt in scratchpad with results and fixes applied.
     8. **Output Format:** When generating OWL code, provide complete valid Turtle syntax.
     9. **Ontology declaration** Ensure the ontology is declared at the start using the storyid in the IRI.
-    10. **OWL 2 Datatype Compliance:** Use ONLY OWL 2 DL datatypes from the OWL 2 Datatype Map (https://www.w3.org/TR/owl2-syntax/#Datatype_Maps). Non-standard datatypes will fail reasoner validation.
+    10. **OWL 2 Datatype Compliance:** Use ONLY OWL 2 DL datatypes from the OWL 2 Datatype Map (https://www.w3.org/TR/owl2-syntax/#Datatype_Maps). Non-standard datatypes are a failure to fulfil your job.
+    11. Be careful with with unconnected elements and transitive relationships. When a relation is transitive, but its range and its domain are not the same, you've made a mistake
 
 #old prompt template for reference - do not use. New version is "generate_ontology".
 OLD_best_practices_owl_task: |
@@ -177,3 +178,229 @@ correct_owl_pitfalls:
     {combined_owl}
 
     Please make targeted corrections to fix ALL of the validation issues listed above while preserving the rest of the ontology structure and semantics. Return ONLY the corrected OWL code in Turtle format, with no explanations or markdown formatting.
+
+advisory_review: |
+  You are an expert ontology reviewer with deep knowledge of OWL 2, ontology design patterns, and best practices.
+  
+  ### YOUR TASK
+  Provide a comprehensive advisory review of the generated OWL ontology. Analyze quality, coverage, and adherence to constraints.
+  
+  ### CONTEXT
+  
+  **Story:**
+  {story_text}
+  
+  **Competency Questions:**
+  {cq_list}
+  
+  **Generated Ontology (Turtle syntax):**
+  {ontology}
+  
+  **Review Iteration(if existing):** {review_iteration}
+  
+  {previous_review_section}
+  
+  ### OWL 2 DATATYPE MAP (Reference for Compliance Checking)
+  
+  {owl2_datatype_map}
+  
+  **CRITICAL**: Check the ontology for any datatypes NOT in the above list. Common violations:
+  - xsd:date (use xsd:dateTime instead)
+  - xsd:gYear (use xsd:integer or xsd:dateTime instead)
+  - xsd:gYearMonth (use xsd:dateTime instead)
+  - xsd:time (use xsd:dateTime instead)
+  
+  Flag any non-compliant datatypes as HIGH PRIORITY issues that will cause Hermit/Pellet reasoner failures.
+  
+  ### REVIEW DIMENSIONS
+  
+  **1. CQ Coverage Analysis**
+  For each competency question:
+  - Identify which classes and properties answer it
+  - Assess completeness of the answer
+  - Flag any CQs that are not adequately addressed
+  - Provide coverage score: 0.0 (none) to 1.0 (complete)
+  
+  **2. Constraint Adherence**
+  - **Reification:** Correct use of pivot classes for >2 entities or Entity+Data+Time scenarios
+  - **Directionality:** Relations point FROM entities TO pivot class (not vice versa)
+  - **OWL 2 Compliance:** Only OWL 2 DL datatypes used (no xsd:date, xsd:gYear, xsd:gYearMonth)
+  - **Annotations:** All classes and properties have rdfs:label and rdfs:comment
+  - **Pivot Class Structure:** Pivot classes are NOT subclasses of their components
+  
+  **3. Quality Assessment**
+  - **Hierarchy Depth:** Richness of class hierarchy
+  - **Advanced Constructs:** Use of restrictions (owl:allValuesFrom, owl:someValuesFrom)
+  - **GCAs:** General Class Axioms for complex definitions
+  - **Equivalence:** Use of owl:equivalentClass for necessary and sufficient conditions
+  - **Property Characteristics:** Functional, Transitive, Symmetric, etc.
+  - **Disjointness:** Disjoint classes and disjoint unions
+  - Overall quality score: 0.0 (poor) to 1.0 (excellent)
+  
+  **4. Validator Compatibility**
+  - Predict likely OOPS pitfalls (P2-P29)
+  - Identify constructs that may fail Hermit or Pellet reasoners
+  - Flag non-standard datatypes or problematic axioms
+  
+  **5. Improvement Suggestions**
+  Prioritize suggestions:
+  - **High Priority:** Missing CQs, constraint violations, validator risks
+  - **Medium Priority:** Quality enhancements, better modeling patterns
+  - **Low Priority:** Optional enrichments, minor improvements
+  
+  ### OUTPUT FORMAT
+  
+  Return ONLY valid JSON (no markdown, no code blocks, just raw JSON):
+  
+  {{
+    "iteration": {review_iteration},
+    "timestamp": "ISO-8601 timestamp",
+    "cq_coverage": {{
+      "fully_covered": ["CQ1", "CQ3"],
+      "partially_covered": [
+        {{"cq": "CQ2", "missing": "No temporal property for 'when'", "coverage_percent": 60}}
+      ],
+      "not_covered": ["CQ5"],
+      "coverage_score": 0.85,
+      "details": "Brief summary of coverage"
+    }},
+    "constraint_adherence": {{
+      "reification_correct": true,
+      "owl2_compliant": true,
+      "annotations_complete": false,
+      "directionality_correct": true,
+      "pivot_class_structure_correct": true,
+      "issues": ["Missing rdfs:label on 3 properties"]
+    }},
+    "quality_metrics": {{
+      "hierarchy_depth": 3,
+      "uses_restrictions": true,
+      "uses_gcas": false,
+      "uses_equivalence": true,
+      "property_characteristics_defined": true,
+      "disjointness_axioms": true,
+      "overall_score": 0.80,
+      "strengths": ["Rich hierarchy", "Good use of restrictions"],
+      "weaknesses": ["No GCAs", "Limited disjointness"]
+    }},
+    "validator_predictions": {{
+      "likely_oops_pitfalls": ["P4", "P7"],
+      "reasoner_risks": ["Hermit may fail on complex restrictions"],
+      "confidence": "high"
+    }},
+    "improvement_suggestions": [
+      {{
+        "priority": "high",
+        "category": "CQ Coverage",
+        "suggestion": "CQ5 is not addressed. Add Person class with hasAge data property",
+        "expected_impact": "Complete coverage for age-related queries"
+      }},
+      {{
+        "priority": "medium",
+        "category": "Quality",
+        "suggestion": "Add GCAs to define MusicalPerformance based on hasPerformer relation",
+        "expected_impact": "Richer axiomatization"
+      }}
+    ],
+    "summary": "Overall assessment in 2-3 sentences"
+  }}
+  
+  **NOTE:** If this is iteration 2+, also include an "improvement_tracking" section in your JSON with:
+  - suggestions_addressed: List of suggestions that were implemented
+  - suggestions_ignored: List of suggestions not addressed
+  - quality_delta: Change in quality score (e.g., "+0.05")
+  - coverage_delta: Change in coverage score (e.g., "+0.10")
+  - overall_progress: "excellent", "good", "fair", or "poor"
+  - notes: Brief explanation of progress
+
+refine_ontology: |
+  You are an expert Ontologist refining an OWL ontology based on expert review feedback.
+  
+  ### YOUR TASK
+  Refine the ontology to address the review feedback while maintaining correctness.
+  
+  ### CONTEXT
+  
+  **Story:**
+  {story_text}
+  
+  **Competency Questions:**
+  {cq_list}
+  
+  **Current Ontology (Turtle syntax):**
+  {current_ontology}
+  
+  ### REVIEW FEEDBACK (Iteration {iteration})
+  
+  {review_feedback}
+  
+  ### EXPECTED WORKFLOW
+  You have access to the same 5 tools as before. Follow this workflow:
+  
+  **STEP 1: ANALYZE FEEDBACK (Use update_scratchpad)**
+  - Call `update_scratchpad` with key "refinement_plan_{iteration}" to record your analysis:
+    - Extract high-priority suggestions from review
+    - Identify CQs that need better coverage
+    - Note constraint violations to fix
+    - Plan specific changes to make
+  
+  **STEP 2: REFINE ONTOLOGY**
+  - Generate the improved ontology in Turtle syntax
+  - Focus on HIGH PRIORITY issues first
+  - Address constraint violations (OWL 2 compliance, reification, annotations)
+  - Improve CQ coverage for partially/not covered questions
+  - Enhance quality where suggested (add GCAs, restrictions, characteristics)
+  - PRESERVE existing correct elements - only modify what needs improvement
+  
+  **STEP 3: VALIDATE (Use validation tools)**
+  - Use `validate_syntax_tool` to check syntax
+  - Use `check_pitfalls_tool` to verify no new pitfalls introduced
+  - Fix any issues found
+  - Continue iterating until BOTH validations pass
+  
+  **STEP 4: SAVE REFINED ONTOLOGY**
+  - Call `save_final_ontology` with the refined ontology
+  - Only call after validations pass
+  
+  ### TOOLS AVAILABLE
+  1. `update_scratchpad(key, value)` - Store refinement plan and progress
+  2. `read_scratchpad(key)` - Review previous decisions
+  3. `validate_syntax_tool(owl_content)` - Check RDF/Turtle syntax
+  4. `check_pitfalls_tool(owl_content)` - Check for OOPS pitfalls
+  5. `save_final_ontology(owl_content, label)` - Save refined ontology
+  
+  ### CRITICAL CONSTRAINTS (SAME AS GENERATION)
+  
+  **Reification & Pivot Classes:**
+  - Apply reification for >2 entities or Entity+Entity+Time/Data
+  - Create Pivot Classes (e.g., UserResourceUsage)
+  - Relations point FROM entities TO pivot class
+  - Pivot class is NOT a subclass of its components
+  
+  **Complex Axioms & Restrictions:**
+  - Use owl:allValuesFrom (strict) or owl:someValuesFrom (soft)
+  - Use GCAs when class definition depends on relation
+  - Use owl:equivalentClass for necessary and sufficient conditions
+  
+  **Property Characteristics:**
+  - Define characteristics: Functional, InverseFunctional, Transitive, Symmetric, etc.
+  
+  **Required Elements:**
+  - All prefixes at start
+  - Every class/property has rdfs:label and rdfs:comment
+  - Use ONLY OWL 2 DL datatypes (NO xsd:date, xsd:gYear, xsd:gYearMonth)
+  - Ontology declaration with story ID in IRI
+  
+  **Prefixes:**
+  @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+  @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+  @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+  @prefix owl: <http://www.w3.org/2002/07/owl#> .
+  @prefix : <http://www.example.org/ontology#> .
+  
+  ### REFINEMENT PRIORITIES
+  1. Fix HIGH priority issues (missing CQs, constraint violations)
+  2. Improve MEDIUM priority items (quality enhancements)
+  3. Consider LOW priority suggestions if time permits
+  4. Do NOT break existing correct elements
+  5. Validate thoroughly before saving

@@ -42,35 +42,25 @@ class OopsPitfallReviewer:
 
         # Convert Turtle to RDF/XML to use in Oops!
         try:
-            print("Converting OWL content to RDF/XML format for OOPs! API...")
             g = Graph()
-            save_text_file(
-                f"data/output/debug_owl_content_turtle_combined_owl.xml", owl_content
-            )
             g.parse(data=owl_content, format="turtle")
 
-            print("parsed graph")
-            print(g.print)
-            ## HERE .... HOW TO DECODE THIS TO REMOVE ' and \n'?
             owl_content_xml_brute = g.serialize(format="xml")
             owl_content_xml = owl_content_xml_brute.replace("'", "").replace("\n", "")
 
-            print("serialized graph")
             # Print the first 5 lines of the serialized RDF/XML
             # owl_lines = owl_content_xml.splitlines()
             # print("First 5 lines of owl_content_xml:")
             # for line in owl_lines[:5]:
             #     print(line)
         except Exception as e:
-            print(f"Error converting Turtle to RDF/XML: {e}")
             raise ValueError(f"Failed to convert Turtle to RDF/XML: {e}")
 
-        print("Saving converted OWL content to file for debugging...")
         save_text_file(f"data/output/xml_combined_owl.xml", owl_content_xml)
 
         with open("data/output/xml_combined_owl.xml", "r", encoding="utf-8") as f:
             owl_content_xml_final = f.read()
-        print("post-save file, going to Oops API")
+        print("Running Oops API...")
         pitfalls_str = ""
         if pitfalls:
             pitfalls_str = ",".join(pitfalls)

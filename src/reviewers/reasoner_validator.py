@@ -71,21 +71,21 @@ class ReasonerValidator:
             # Check for inconsistencies
             inconsistent_classes = list(onto.inconsistent_classes())
 
-            elapsed_ms = int((time.time() - start_time) * 1000)
+            elapsed_seconds = time.time() - start_time
 
             return {
                 "is_consistent": len(inconsistent_classes) == 0,
                 "inconsistent_classes": [str(c) for c in inconsistent_classes],
-                "execution_time_ms": elapsed_ms,
+                "execution_time_seconds": round(elapsed_seconds, 3),
                 "error": None,
             }
 
         except Exception as e:
-            elapsed_ms = int((time.time() - start_time) * 1000)
+            elapsed_seconds = time.time() - start_time
             return {
                 "is_consistent": False,
                 "inconsistent_classes": [],
-                "execution_time_ms": elapsed_ms,
+                "execution_time_seconds": round(elapsed_seconds, 3),
                 "error": str(e),
             }
 
@@ -132,7 +132,7 @@ class HermitReasonerValidator(ReasonerValidator):
                 "reasoner": "Hermit",
                 "is_consistent": bool,
                 "inconsistent_classes": list of class URIs,
-                "execution_time_ms": int,
+                "execution_time_seconds": float,
                 "error": str or None
             }
         """
@@ -149,7 +149,7 @@ class HermitReasonerValidator(ReasonerValidator):
                     "reasoner": self.reasoner_name,
                     "is_consistent": False,
                     "inconsistent_classes": [],
-                    "execution_time_ms": 0,
+                    "execution_time_seconds": 0.0,
                     "error": f"RDF/XML file not found: {rdfxml_path}. OOPS must run first.",
                 }
 
@@ -169,7 +169,7 @@ class HermitReasonerValidator(ReasonerValidator):
                 "reasoner": self.reasoner_name,
                 "is_consistent": False,
                 "inconsistent_classes": [],
-                "execution_time_ms": 0,
+                "execution_time_seconds": 0.0,
                 "error": f"Failed to load or validate ontology: {str(e)}",
             }
 
@@ -207,7 +207,7 @@ class PelletReasonerValidator(ReasonerValidator):
                 "reasoner": "Pellet",
                 "is_consistent": bool,
                 "inconsistent_classes": list of class URIs,
-                "execution_time_ms": int,
+                "execution_time_seconds": float,
                 "error": str or None
             }
         """
@@ -224,7 +224,7 @@ class PelletReasonerValidator(ReasonerValidator):
                     "reasoner": self.reasoner_name,
                     "is_consistent": False,
                     "inconsistent_classes": [],
-                    "execution_time_ms": 0,
+                    "execution_time_seconds": 0.0,
                     "error": f"RDF/XML file not found: {rdfxml_path}. OOPS must run first.",
                 }
 
@@ -244,7 +244,7 @@ class PelletReasonerValidator(ReasonerValidator):
                 "reasoner": self.reasoner_name,
                 "is_consistent": False,
                 "inconsistent_classes": [],
-                "execution_time_ms": 0,
+                "execution_time_seconds": 0.0,
                 "error": f"Failed to load or validate ontology: {str(e)}",
             }
 
