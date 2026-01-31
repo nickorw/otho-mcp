@@ -136,7 +136,7 @@ if __name__ == "__main__":
 
     # Compile the workflow graph
     app = graph.compile()
-    app_config: RunnableConfig = {"recursion_limit": 200}
+    app_config: RunnableConfig = {"recursion_limit": 400}
 
     # Benchmark mode: run all stories N times
     if args.benchmark:

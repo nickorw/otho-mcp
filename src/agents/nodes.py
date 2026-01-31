@@ -15,7 +15,7 @@ from langchain.tools import tool
 from langchain_core.messages import HumanMessage
 from langgraph.prebuilt import create_react_agent
 
-from src.agents.tools import check_pitfalls_tool, validate_syntax_tool
+from src.agents.tools import validate_syntax_tool
 from src.agents.workspace import AgentWorkspace
 from src.prompts.prompt_manager import PromptManager
 from src.reviewers.reasoner_validator import (
@@ -26,7 +26,11 @@ from src.reviewers.reviewer import OopsPitfallReviewer, RDFSyntaxReviewer
 from src.utils.agent_logger import AgentLogger
 from src.utils.excel_processor import get_story_by_id
 from src.utils.file_handler import save_text_file
-from src.utils.llm_manager import get_gaih_anthropic_llm, get_gaih_openai_llm
+from src.utils.llm_manager import (
+    get_gaih_anthropic_llm,
+    get_gaih_google_llm,
+    get_gaih_openai_llm,
+)
 from src.utils.oops_parser import parse_oops_response
 from src.utils.timing import format_duration
 from src.utils.validation_logger import ValidationLogger
@@ -105,7 +109,9 @@ def get_story_node(state: StateDict) -> StateDict:
     }
 
 
-def create_agent_tools(workspace: AgentWorkspace) -> List:
+def create_agent_tools(
+    workspace: AgentWorkspace, story_id: str, timestamp: str
+) -> List:
     """
     Create tool instances with access to shared workspace.
 
@@ -114,6 +120,8 @@ def create_agent_tools(workspace: AgentWorkspace) -> List:
 
     Args:
         workspace: AgentWorkspace instance that tools will modify
+        story_id: Story identifier for unique file naming (prevents race conditions)
+        timestamp: Timestamp for unique file naming (prevents race conditions)
 
     Returns:
         List of tool instances for the React agent
@@ -122,7 +130,7 @@ def create_agent_tools(workspace: AgentWorkspace) -> List:
     @tool
     def update_scratchpad(key: str, value: Any) -> Dict[str, bool]:
         """
-        Update agent's persistent working memory (scratchpad).
+        Update agent's persistent working memory (scratchpad) with a key-value pair.
 
         Use this to track your planning, progress, and decisions.
         Recommended keys:
@@ -151,21 +159,26 @@ def create_agent_tools(workspace: AgentWorkspace) -> List:
     @tool
     def read_scratchpad(key: str) -> Any:
         """
-        Read from agent's persistent working memory (scratchpad).
-
-        Use this to review your previous plans, decisions, and drafts.
+        Read a single key from the scratchpad.
 
         Args:
             key: The scratchpad key to read
 
         Returns:
             The value stored at that key, or None if not found
-
-        Example:
-            plan = read_scratchpad("plan")
-            previous_iterations = read_scratchpad("iterations")
         """
         return workspace.get_scratchpad(key)
+
+    @tool
+    def read_full_context() -> Dict[str, Any]:
+        """
+        Read ALL scratchpad entries in one call. Use at the start of refinement
+        to restore your previous design context (plan, cq_coverage, iterations, notes).
+
+        Returns:
+            Dictionary with all stored scratchpad entries
+        """
+        return workspace.scratchpad
 
     @tool
     def save_final_ontology(
@@ -206,10 +219,105 @@ def create_agent_tools(workspace: AgentWorkspace) -> List:
             "message": "Final ontology saved - task complete",
         }
 
-    # Return all 5 tools
+    @tool
+    def check_pitfalls_tool(owl_content: str) -> Dict[str, Any]:
+        """
+        Check for OOPS ontology modeling pitfalls.
+
+        Use this tool to validate your ontology against common modeling pitfalls
+        using the OOPS (OntOlogy Pitfall Scanner) web service. The tool checks
+        for 22 different types of pitfalls including missing annotations, unconnected
+        classes, and other modeling issues.
+
+        Args:
+            owl_content: OWL ontology code in Turtle syntax
+
+        Returns:
+            Dictionary with pitfall analysis:
+            - has_pitfalls (bool): True if pitfalls were detected
+            - pitfall_count (int): Number of pitfalls found
+            - pitfalls (list): List of pitfall details, each containing:
+                - code (str): Pitfall code (e.g., "P04", "P08")
+                - name (str): Pitfall name
+                - description (str): Description of the issue
+                - affected_elements (list): List of ontology elements with this pitfall
+        """
+        import os
+        import tempfile
+
+        # Save to temporary file for OOPS validation
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".owl", delete=False) as f:
+            f.write(owl_content)
+            temp_path = f.name
+
+        try:
+            reviewer = OopsPitfallReviewer()
+
+            # Check for common pitfalls
+            pitfalls_to_check = [
+                "2",
+                "3",
+                "4",
+                "5",
+                "6",
+                "7",
+                "8",
+                "10",
+                "11",
+                "12",
+                "13",
+                "19",
+                "20",
+                "21",
+                "22",
+                "24",
+                "25",
+                "26",
+                "27",
+                "28",
+                "29",
+            ]
+
+            # Use story_id and timestamp captured from create_agent_tools parameters
+            # This ensures unique file naming to prevent race conditions
+            result = reviewer.review_owl_file(
+                temp_path,
+                pitfalls=pitfalls_to_check,
+                output_format="XML",
+                story_id=story_id,
+                timestamp=timestamp,
+            )
+
+            pitfall_data = parse_oops_response(result)
+
+            return {
+                "has_pitfalls": pitfall_data.get("has_pitfalls", False),
+                "pitfall_count": pitfall_data.get("pitfall_count", 0),
+                "pitfalls": pitfall_data.get("pitfalls", []),
+            }
+        except Exception as e:
+            return {
+                "has_pitfalls": True,
+                "pitfall_count": 1,
+                "pitfalls": [
+                    {
+                        "code": "ERROR",
+                        "name": "Validation Exception",
+                        "description": str(e),
+                        "affected_elements": [],
+                    }
+                ],
+            }
+        finally:
+            # Clean up temporary file
+            if os.path.exists(temp_path):
+                os.unlink(temp_path)
+
+    # Return all 6 tools
     return [
         update_scratchpad,
         read_scratchpad,
+        read_full_context,
         validate_syntax_tool,
         check_pitfalls_tool,
         save_final_ontology,
@@ -311,18 +419,19 @@ def ontology_generation_agent(state: StateDict) -> StateDict:
     # Get workspace reference
     workspace = state["workspace"][0]
 
-    # Create tools with workspace reference
-    tools = create_agent_tools(workspace)
+    # Get shared timestamp and increment generator iteration
+    log_timestamp = state.get("log_timestamp")
+    generator_iteration = state.get("generator_iteration", 0) + 1
+
+    # Create tools with workspace, story_id, and timestamp for unique file naming
+    # The timestamp is the same shared log_timestamp used for all logs in this run
+    tools = create_agent_tools(workspace, story_id=story_id, timestamp=log_timestamp)
 
     tool_names = [tool.name for tool in tools]
     print(f"Created {len(tools)} tools for agent:")
     for tool_name in tool_names:
         print(f"  - {tool_name}")
     print()
-
-    # Get shared timestamp and increment generator iteration
-    log_timestamp = state.get("log_timestamp")
-    generator_iteration = state.get("generator_iteration", 0) + 1
 
     # Initialize comprehensive logger with shared timestamp and iteration tracking
     agent_logger = AgentLogger(
@@ -336,10 +445,15 @@ def ontology_generation_agent(state: StateDict) -> StateDict:
     )
 
     # Get LLM for React agent
-    generator_model = "gpt-4.1"
-    # llm = get_gaih_anthropic_llm(model="anthropic--claude-4.5-sonnet")
+    generator_model = "anthropic--claude-4.5-opus"
+    llm = get_gaih_anthropic_llm(model=generator_model)
 
-    llm = get_gaih_openai_llm(model=generator_model)
+    # generator_model = "gpt-4.1"
+    # llm = get_gaih_openai_llm(model=generator_model)
+
+    # generator_model = "gemini-2.5-flash"
+    # llm = get_gaih_google_llm(model=generator_model)
+
     agent_logger.log_llm_model(generator_model)
 
     # Create React agent
@@ -347,7 +461,7 @@ def ontology_generation_agent(state: StateDict) -> StateDict:
     agent_executor = create_react_agent(llm, tools)
 
     # Configure recursion limit (175 to accommodate review loop with 3 agent runs)
-    config = {"recursion_limit": 175}
+    config = {"recursion_limit": 400}
 
     # Invoke agent
     agent_logger.logger.info("Invoking React agent (this may take several minutes)...")
@@ -515,10 +629,19 @@ def validate_and_save_node(state: StateDict) -> StateDict:
     ]
 
     start_time = time.time()
+    # Pass story_id and timestamp for unique file naming to prevent race conditions
+    # when running multiple Otho instances concurrently
     pitfall_result = pitfall_reviewer.review_owl_content(
-        owl_content=generated_owl, pitfalls=pitfalls, output_format="XML"
+        owl_content=generated_owl,
+        pitfalls=pitfalls,
+        output_format="XML",
+        story_id=story_id,
+        timestamp=timestamp,
     )
     oops_time_seconds = time.time() - start_time
+
+    # Get the path to the RDF/XML file created by OOPS for use by reasoners
+    rdfxml_path = pitfall_reviewer.last_rdfxml_path
 
     pitfall_data = parse_oops_response(pitfall_result)
     has_pitfalls = pitfall_data.get("has_pitfalls", False)
@@ -552,8 +675,8 @@ def validate_and_save_node(state: StateDict) -> StateDict:
     validation_logger.log_reasoning_start()
 
     # 3a. Hermit Reasoner (reads RDF/XML file created by OOPS)
-
-    hermit_validator = HermitReasonerValidator()
+    # Pass the unique rdfxml_path to prevent race conditions with concurrent runs
+    hermit_validator = HermitReasonerValidator(rdfxml_path=rdfxml_path)
     hermit_result = hermit_validator.validate()
     validation_results["hermit"] = hermit_result
 
@@ -563,8 +686,8 @@ def validate_and_save_node(state: StateDict) -> StateDict:
     # Also print summary to console
 
     # 3b. Pellet Reasoner (reads RDF/XML file created by OOPS)
-
-    pellet_validator = PelletReasonerValidator()
+    # Pass the unique rdfxml_path to prevent race conditions with concurrent runs
+    pellet_validator = PelletReasonerValidator(rdfxml_path=rdfxml_path)
     pellet_result = pellet_validator.validate()
     validation_results["pellet"] = pellet_result
 
@@ -770,8 +893,14 @@ This is refinement iteration {review_iteration}. A previous review was provided:
     review_prompt = prompt_manager.format_prompt("advisory_review", **context)
 
     # Single LLM call for review
-    # llm = get_gaih_anthropic_llm(model="anthropic--claude-4.5-sonnet")
-    llm = get_gaih_openai_llm(model="gpt-4.1")
+    generator_model = "anthropic--claude-4.5-opus"
+    llm = get_gaih_anthropic_llm(model=generator_model)
+
+    # generator_model = "gemini-2.5-flash"
+    # llm = get_gaih_google_llm(model=generator_model)
+
+    # llm = get_gaih_openai_llm(model="gpt-4.1")
+
     print(f"Invoking reviewer LLM (iteration {review_iteration})...")
     review_response = llm.invoke(review_prompt)
 
@@ -799,7 +928,8 @@ This is refinement iteration {review_iteration}. A previous review was provided:
 
     # Save review to reviews folder
     set_output_directories()  # Ensure directories exist
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    # Use shared log_timestamp from state to ensure all files from this run share the same timestamp
+    timestamp = state.get("log_timestamp")
     story_id = story_object.id if story_object else "unknown"
     review_path = (
         f"data/output/reviews/{story_id}_review_iter{review_iteration}_{timestamp}.json"

@@ -240,6 +240,12 @@ class AgentLogger:
         self.logger.debug(f"Message {index}: {msg_type}")
         self.logger.debug(f"{'=' * 60}")
 
+        # For ToolMessage, log which tool returned the content
+        if msg_type == "ToolMessage":
+            tool_name = getattr(message, "name", None)
+            if tool_name:
+                self.logger.debug(f"Tool: {tool_name}")
+
         # Extract content
         content = None
         if hasattr(message, "content"):
@@ -298,10 +304,16 @@ class AgentLogger:
                     f"\nAdditional kwargs: {json.dumps(additional_kwargs, indent=2)}"
                 )
 
+        # For ToolMessage, also capture the tool name that returned the content
+        tool_name_for_msg = None
+        if msg_type == "ToolMessage":
+            tool_name_for_msg = getattr(message, "name", None)
+
         # Store in current iteration's JSON structure
         msg_data = {
             "index": index,
             "type": msg_type,
+            "tool_name": tool_name_for_msg,  # Only populated for ToolMessage
             "content": str(content) if content else None,
             "tool_calls": tool_calls,
             "additional_kwargs": additional_kwargs,

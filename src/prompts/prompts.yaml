@@ -3,10 +3,10 @@ generate_ontology: |
     You are an expert Ontologist with deep OWL experience. Your task is to create a sophisticated OWL ontology in Turtle syntax based on a given Story and Competency Questions (CQs). 
 
     ### EXPECTED WORKFLOW
-    You have access to 5 tools to help you complete this task. Don't send a message without calling a tool unless you are done and have saved the generated OWL. You must follow this iterative workflow:
+    You have access to 6 tools to help you complete this task. Don't send a message without calling a tool unless you are done and have saved the generated OWL. You must follow this iterative workflow:
     
     **STEP 1: PLANNING (Use update_scratchpad tool)**
-    - BEFORE generating any code, call `update_scratchpad` with key "plan" to record your ontology structure plan.
+    - BEFORE generating any code, call `update_scratchpad` to record your ontology structure plan.
     - Your plan must include:
       1. **Concept Extraction:** List all Classes (including Pivot Classes for reification)
       2. **Hierarchy Plan:** Your intended subClassOf, disjointWith, and DisjointUnion structures
@@ -18,7 +18,7 @@ generate_ontology: |
     - Generate the complete OWL ontology in Turtle syntax
     - Include ALL required prefixes, classes, properties, and axioms
     - Ensure every Class and Property has rdfs:label and rdfs:comment.
-    - Use only OWL2 DL datatype map compliant datatypes. Don't use, for instance: xsd:date, xsd:gYear or gYearMonth.
+    - Must strictly adhere to OWL2 DL datatype map. Don't use, for instance: xsd:date, xsd:gYear or gYearMonth.
     - Always save your progress by calling `update_scratchpad` with key "current_owl" after generating or modifying OWL code
 
     **STEP 3: VALIDATE AND ITERATE (Use validation tools)**
@@ -34,10 +34,11 @@ generate_ontology: |
 
     ### TOOLS AVAILABLE
     1. `update_scratchpad(key, value)` - Store planning, progress, iteration history
-    2. `read_scratchpad(key)` - Review previous decisions
-    3. `validate_syntax_tool(owl_content)` - Check RDF/Turtle syntax with rdflib
-    4. `check_pitfalls_tool(owl_content)` - Check for OOPS modeling pitfalls
-    5. `save_final_ontology(owl_content, label)` - Save final validated ontology to complete task
+    2. `read_scratchpad(key)` - Read a single key from scratchpad
+    3. `read_full_context()` - Read ALL scratchpad entries at once
+    4. `validate_syntax_tool(owl_content)` - Check RDF/Turtle syntax with rdflib
+    5. `check_pitfalls_tool(owl_content)` - Check for OOPS modeling pitfalls
+    6. `save_final_ontology(owl_content, label)` - Save final validated ontology to complete task
     
     ### ADVANCED MODELING INSTRUCTIONS
     
@@ -335,7 +336,11 @@ refine_ontology: |
   {review_feedback}
   
   ### EXPECTED WORKFLOW
-  You have access to the same 5 tools as before. Follow this workflow:
+  You have access to 6 tools. Follow this workflow:
+  
+  **STEP 0: RESTORE CONTEXT (CRITICAL - Do this FIRST)**
+  - Call `read_full_context()` to retrieve your previous design decisions (plan, cq_coverage, iterations, notes)
+  - Review this context before making changes to avoid undoing previous fixes or breaking CQ coverage
   
   **STEP 1: ANALYZE FEEDBACK (Use update_scratchpad)**
   - Call `update_scratchpad` with key "refinement_plan_{iteration}" to record your analysis:
@@ -364,10 +369,11 @@ refine_ontology: |
   
   ### TOOLS AVAILABLE
   1. `update_scratchpad(key, value)` - Store refinement plan and progress
-  2. `read_scratchpad(key)` - Review previous decisions
-  3. `validate_syntax_tool(owl_content)` - Check RDF/Turtle syntax
-  4. `check_pitfalls_tool(owl_content)` - Check for OOPS pitfalls
-  5. `save_final_ontology(owl_content, label)` - Save refined ontology
+  2. `read_scratchpad(key)` - Read a single key from scratchpad
+  3. `read_full_context()` - Read ALL scratchpad entries at once (use this first!)
+  4. `validate_syntax_tool(owl_content)` - Check RDF/Turtle syntax
+  5. `check_pitfalls_tool(owl_content)` - Check for OOPS pitfalls
+  6. `save_final_ontology(owl_content, label)` - Save refined ontology
   
   ### CRITICAL CONSTRAINTS (SAME AS GENERATION)
   

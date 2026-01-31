@@ -13,12 +13,20 @@ class OopsPitfallReviewer:
 
     def __init__(self, endpoint: str = "http://localhost/OOPS/rest"):
         self.endpoint = endpoint
+        self._last_rdfxml_path: Optional[str] = None  # Track last generated file path
+
+    @property
+    def last_rdfxml_path(self) -> Optional[str]:
+        """Get the path of the last generated RDF/XML file for use by reasoners."""
+        return self._last_rdfxml_path
 
     def review_owl_file(
         self,
         owl_file_path: str,
         pitfalls: Optional[List[str]] = None,
         output_format: str = "XML",
+        story_id: Optional[str] = None,
+        timestamp: Optional[str] = None,
     ) -> str:
         """
         Analyzes the given OWL file and returns the OOPs! pitfall report as XML.
@@ -26,7 +34,11 @@ class OopsPitfallReviewer:
         with open(owl_file_path, "r", encoding="utf-8") as f:
             owl_content = f.read()
         return self.review_owl_content(
-            owl_content, pitfalls=pitfalls, output_format=output_format
+            owl_content,
+            pitfalls=pitfalls,
+            output_format=output_format,
+            story_id=story_id,
+            timestamp=timestamp,
         )
 
     def review_owl_content(
@@ -34,10 +46,19 @@ class OopsPitfallReviewer:
         owl_content: str,
         pitfalls: Optional[List[str]] = None,
         output_format: str = "XML",
+        story_id: Optional[str] = None,
+        timestamp: Optional[str] = None,
     ) -> str:
         """
         Analyzes the given OWL content string and returns the OOPs! pitfall report as XML.
         Converts received OWL in turtle to RDF-XML as pre-req for Oops! API.
+
+        Args:
+            owl_content: OWL ontology content in Turtle format
+            pitfalls: List of pitfall IDs to check for
+            output_format: Output format (default: XML)
+            story_id: Story identifier for unique file naming (prevents race conditions)
+            timestamp: Timestamp for unique file naming (prevents race conditions)
         """
 
         # Convert Turtle to RDF/XML to use in Oops!
@@ -56,9 +77,21 @@ class OopsPitfallReviewer:
         except Exception as e:
             raise ValueError(f"Failed to convert Turtle to RDF/XML: {e}")
 
-        save_text_file(f"data/output/xml_combined_owl.xml", owl_content_xml)
+        # Generate unique filename to prevent race conditions when running multiple instances
+        # story_id and timestamp are REQUIRED to prevent race conditions
+        if not story_id or not timestamp:
+            raise ValueError(
+                "story_id and timestamp are required for unique xml_combined_owl file naming. "
+                f"Received: story_id={story_id!r}, timestamp={timestamp!r}"
+            )
+        rdfxml_filename = f"xml_combined_owl_{story_id}_{timestamp}.xml"
 
-        with open("data/output/xml_combined_owl.xml", "r", encoding="utf-8") as f:
+        rdfxml_path = f"data/output/{rdfxml_filename}"
+        self._last_rdfxml_path = rdfxml_path  # Store for reasoners to use
+
+        save_text_file(rdfxml_path, owl_content_xml)
+
+        with open(rdfxml_path, "r", encoding="utf-8") as f:
             owl_content_xml_final = f.read()
         print("Running Oops API...")
         pitfalls_str = ""

@@ -13,11 +13,11 @@ proxy_client = get_proxy_client("gen-ai-hub")
 # print(llmGPT.invoke("Hello, Otho!"))
 
 ########## GenAIHub Google LLM Initialization ###########
-# kwargs = dict({"model_name": "gemini-2.5-pro"})
-# model = GenerativeModel(proxy_client=proxy_client, **kwargs)
-# content = [{"role": "user", "parts": [{"text": "Hi, what is your name?"}]}]
-# model_response = model.generate_content(content)
-# print(model_response)
+kwargs = dict({"model_name": "gemini-2.5-flash-lite"})
+model = GenerativeModel(proxy_client=proxy_client, **kwargs)
+content = [{"role": "user", "parts": [{"text": "Hi, what is your name?"}]}]
+model_response = model.generate_content(content)
+print(model_response.text)
 
 
 # ########### Direct Google LLM Initialization ###########
@@ -26,5 +26,5 @@ proxy_client = get_proxy_client("gen-ai-hub")
 # llm = init_llm("gpt-4.1x", max_tokens=4096)
 # # print(llm.invoke("Hello, Otho!"))  # Test call to ensure LLM is initialized correctly
 
-llm = init_llm("gpt-4.1", max_tokens=4096)
-print(llm.invoke("Hello, Otho!"))  # Test call to ensure LLM
+# llm = init_llm("gpt-4.1", max_tokens=4096)
+# print(llm.invoke("Hello, Otho!"))  # Test call to ensure LLM

@@ -7,6 +7,8 @@ for the agent to self-validate its generated ontologies.
 
 import os
 import tempfile
+import uuid
+from datetime import datetime
 from typing import Any, Dict
 
 from langchain.tools import tool
@@ -118,8 +120,18 @@ def check_pitfalls_tool(owl_content: str) -> Dict[str, Any]:
             "29",
         ]
 
+        # Generate unique identifiers to prevent race conditions when multiple
+        # Otho instances run concurrently. Use "tool" prefix + UUID to distinguish
+        # from final validation files.
+        unique_id = f"tool_{uuid.uuid4().hex[:8]}"
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+
         result = reviewer.review_owl_file(
-            temp_path, pitfalls=pitfalls_to_check, output_format="XML"
+            temp_path,
+            pitfalls=pitfalls_to_check,
+            output_format="XML",
+            story_id=unique_id,
+            timestamp=timestamp,
         )
 
         pitfall_data = parse_oops_response(result)

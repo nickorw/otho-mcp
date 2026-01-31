@@ -24,21 +24,33 @@ class ReasonerValidator:
     explicitly cleans up afterward.
     """
 
-    def __init__(self, reasoner_name: str):
+    def __init__(self, reasoner_name: str, rdfxml_path: Optional[str] = None):
+        """
+        Initialize the reasoner validator.
+
+        Args:
+            reasoner_name: Name of the reasoner (e.g., "Hermit", "Pellet")
+            rdfxml_path: Path to RDF/XML file. If provided, overrides the default path.
+                        This allows unique paths per workflow run to prevent race conditions.
+        """
         self.reasoner_name = reasoner_name
         self.temp_file = None
+        self._rdfxml_path = rdfxml_path
 
     def _get_rdfxml_path(self) -> str:
         """
         Get path to RDF/XML file created by OOPS validation.
 
-        OOPS reviewer converts Turtle to RDF/XML and saves it to
-        data/output/xml_combined_owl.xml. Since reasoners run after
-        OOPS in the validation pipeline, we can reuse this file.
+        OOPS reviewer converts Turtle to RDF/XML and saves it to a file.
+        When running multiple instances, unique paths should be provided
+        to prevent race conditions.
 
         Returns:
             Path to RDF/XML file
         """
+        if self._rdfxml_path:
+            return self._rdfxml_path
+        # Fallback to default for backwards compatibility
         return "data/output/xml_combined_owl.xml"
 
     def _cleanup_temp_file(self):
@@ -117,8 +129,15 @@ class HermitReasonerValidator(ReasonerValidator):
     and correctness. It uses hypertableau calculus for reasoning.
     """
 
-    def __init__(self):
-        super().__init__("Hermit")
+    def __init__(self, rdfxml_path: Optional[str] = None):
+        """
+        Initialize Hermit reasoner validator.
+
+        Args:
+            rdfxml_path: Path to RDF/XML file. If provided, overrides the default path.
+                        Use this for unique paths per workflow run to prevent race conditions.
+        """
+        super().__init__("Hermit", rdfxml_path)
 
     def validate(self) -> Dict[str, Any]:
         """
@@ -192,8 +211,15 @@ class PelletReasonerValidator(ReasonerValidator):
     support for SWRL rules and OWL 2 features.
     """
 
-    def __init__(self):
-        super().__init__("Pellet")
+    def __init__(self, rdfxml_path: Optional[str] = None):
+        """
+        Initialize Pellet reasoner validator.
+
+        Args:
+            rdfxml_path: Path to RDF/XML file. If provided, overrides the default path.
+                        Use this for unique paths per workflow run to prevent race conditions.
+        """
+        super().__init__("Pellet", rdfxml_path)
 
     def validate(self) -> Dict[str, Any]:
         """
