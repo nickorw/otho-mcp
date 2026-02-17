@@ -1,0 +1,110 @@
+{
+  "iteration": 1,
+  "timestamp": "2026-02-14T21:54:33.581025",
+  "cq_coverage": {
+    "fully_covered": [
+      "CQ1",
+      "CQ2",
+      "CQ3",
+      "CQ4",
+      "CQ6",
+      "CQ7",
+      "CQ9",
+      "CQ10",
+      "CQ11",
+      "CQ12",
+      "CQ14"
+    ],
+    "partially_covered": [
+      {
+        "cq": "CQ5",
+        "missing": "No explicit data properties for organization contact info, legal form, etc.",
+        "coverage_percent": 60
+      },
+      {
+        "cq": "CQ8",
+        "missing": "Item details (e.g., description, product code) not modeled as properties of Item",
+        "coverage_percent": 50
+      },
+      {
+        "cq": "CQ13",
+        "missing": "No explicit cardinality or mandatory fields for D96A directory; SHACLConstraint class is present but not detailed",
+        "coverage_percent": 70
+      }
+    ],
+    "not_covered": [],
+    "coverage_score": 0.85,
+    "details": "Most core questions about invoice structure, participants, roles, items, and amounts are covered. Some detail-level and validation-related CQs are only partially supported due to lack of fine-grained attributes and explicit SHACL constraints."
+  },
+  "constraint_adherence": {
+    "reification_correct": true,
+    "owl2_compliant": true,
+    "annotations_complete": true,
+    "directionality_correct": true,
+    "pivot_class_structure_correct": true,
+    "issues": []
+  },
+  "quality_metrics": {
+    "hierarchy_depth": 4,
+    "uses_restrictions": true,
+    "uses_gcas": false,
+    "uses_equivalence": false,
+    "property_characteristics_defined": true,
+    "disjointness_axioms": true,
+    "overall_score": 0.8,
+    "strengths": [
+      "Rich class hierarchy reflecting EDIFACT structure",
+      "Comprehensive use of cardinality restrictions and functional properties",
+      "Disjointness axioms present for key classes"
+    ],
+    "weaknesses": [
+      "No general class axioms (GCAs) for complex definitions",
+      "No owl:equivalentClass axioms for necessary and sufficient conditions",
+      "Limited use of advanced constructs (e.g., allValuesFrom, someValuesFrom)"
+    ]
+  },
+  "validator_predictions": {
+    "likely_oops_pitfalls": [
+      "P4: Missing domain or range for some properties (none detected, but always verify)",
+      "P7: Missing inverse properties for some relations (not all relations need inverses, but coverage is good)"
+    ],
+    "reasoner_risks": [
+      "Hermit/Pellet may struggle if SHACL constraints are implemented as individuals rather than axioms",
+      "No non-standard datatypes detected, so datatype-related failures are unlikely"
+    ],
+    "confidence": "high"
+  },
+  "improvement_suggestions": [
+    {
+      "priority": "high",
+      "category": "CQ Coverage",
+      "suggestion": "Enrich the Organization and Item classes with additional data properties (e.g., organization legal name, VAT ID, item description, product code) to fully answer CQ5 and CQ8.",
+      "expected_impact": "Improves coverage for information displayed about organizations and items sold."
+    },
+    {
+      "priority": "high",
+      "category": "Validation",
+      "suggestion": "Define explicit SHACL constraints as individuals or axioms for mandatory fields and logical consistency, especially for CQ13.",
+      "expected_impact": "Enables automated validation and improves interoperability."
+    },
+    {
+      "priority": "medium",
+      "category": "Quality",
+      "suggestion": "Introduce general class axioms (GCAs) and owl:equivalentClass definitions for key classes (e.g., Invoice, OrganizationRoleAssignment) to strengthen semantic rigor.",
+      "expected_impact": "Richer axiomatization and better support for reasoning."
+    },
+    {
+      "priority": "medium",
+      "category": "EDIFACT Technical Vocabulary",
+      "suggestion": "Expand technical vocabulary and code mappings for EDIFACT segments and elements, including more segment types and element codes.",
+      "expected_impact": "Improves coverage of EDIFACT-specific queries and supports integration."
+    },
+    {
+      "priority": "low",
+      "category": "Complexity",
+      "suggestion": "Add more advanced property characteristics (e.g., transitive, symmetric) where appropriate, and consider modeling temporal properties (e.g., validity periods for roles).",
+      "expected_impact": "Enhances expressiveness and supports more complex queries."
+    }
+  ],
+  "summary": "This ontology provides a robust foundation for modeling EDIFACT invoice messages and procurement scenarios, with strong coverage of core structure, roles, and amounts. Some detail-level and validation-related competency questions require further enrichment, particularly for organization and item attributes and explicit SHACL constraints. The ontology follows OWL 2 best practices and is reasoner-friendly, but would benefit from deeper axiomatization and expanded technical vocabulary."
+}

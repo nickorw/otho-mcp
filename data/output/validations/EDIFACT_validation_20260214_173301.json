@@ -1,0 +1,45 @@
+{
+  "timestamp": "20260214_173301",
+  "story_id": "EDIFACT",
+  "ontology_size_chars": 9728,
+  "syntax": {
+    "valid": true,
+    "execution_time_seconds": 0.011,
+    "error": null
+  },
+  "oops": {
+    "has_pitfalls": true,
+    "pitfall_count": 1,
+    "execution_time_seconds": 0.087,
+    "pitfalls": [
+      {
+        "code": "P21",
+        "name": "Using a miscellaneous class",
+        "description": "This pitfall refers to the creation of a class with the only goal of classifying the instances that do not belong to any of its sibling classes (classes with which the miscellaneous problematic class shares a common direct ancestor).\t",
+        "importance": "Minor",
+        "num_affected": 1,
+        "affected_elements": [
+          "http://www.example.org/ontology#OtherRole"
+        ]
+      }
+    ]
+  },
+  "hermit": {
+    "is_consistent": true,
+    "inconsistent_classes": [],
+    "execution_time_seconds": 0.638,
+    "error": null,
+    "reasoner": "Hermit"
+  },
+  "pellet": {
+    "is_consistent": true,
+    "inconsistent_classes": [],
+    "execution_time_seconds": 0.517,
+    "error": null,
+    "reasoner": "Pellet"
+  },
+  "aggregate": {
+    "all_validators_passed": false,
+    "total_execution_time_seconds": 1.253
+  }
+}

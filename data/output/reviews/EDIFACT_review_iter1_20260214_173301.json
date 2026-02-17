@@ -1,0 +1,103 @@
+{
+  "iteration": 1,
+  "timestamp": "2026-02-14T17:35:14.857199",
+  "cq_coverage": {
+    "fully_covered": [
+      "CQ1",
+      "CQ2",
+      "CQ3",
+      "CQ4",
+      "CQ6",
+      "CQ7",
+      "CQ8",
+      "CQ9",
+      "CQ10",
+      "CQ11",
+      "CQ12",
+      "CQ14"
+    ],
+    "partially_covered": [
+      {
+        "cq": "CQ5",
+        "missing": "No explicit grouping or summary property for 'information displayed about involved organizations' (e.g., contact info, organization metadata)",
+        "coverage_percent": 70
+      },
+      {
+        "cq": "CQ13",
+        "missing": "No explicit class or property for file format validity/required fields; constraint is implicit only",
+        "coverage_percent": 50
+      }
+    ],
+    "not_covered": [],
+    "coverage_score": 0.92,
+    "details": "Almost all CQs are fully covered via explicit classes and properties. CQ5 and CQ13 are only partially addressed due to lack of explicit modeling of organization details aggregation and file format constraints."
+  },
+  "constraint_adherence": {
+    "reification_correct": true,
+    "owl2_compliant": true,
+    "annotations_complete": true,
+    "directionality_correct": true,
+    "pivot_class_structure_correct": true,
+    "issues": []
+  },
+  "quality_metrics": {
+    "hierarchy_depth": 3,
+    "uses_restrictions": false,
+    "uses_gcas": false,
+    "uses_equivalence": false,
+    "property_characteristics_defined": true,
+    "disjointness_axioms": true,
+    "overall_score": 0.78,
+    "strengths": [
+      "Clear and deep class hierarchy with disjointness and disjoint union",
+      "Consistent use of inverse and functional properties",
+      "Good annotation coverage"
+    ],
+    "weaknesses": [
+      "No use of OWL restrictions (e.g., cardinality, value constraints)",
+      "No general class axioms or equivalence axioms",
+      "No validation rules for file format or required fields"
+    ]
+  },
+  "validator_predictions": {
+    "likely_oops_pitfalls": [
+      "P4: Missing domain or range in some properties (none found here, but always a risk if expanded)",
+      "P7: No explicit modeling of mandatory fields or cardinality restrictions"
+    ],
+    "reasoner_risks": [],
+    "confidence": "high"
+  },
+  "improvement_suggestions": [
+    {
+      "priority": "high",
+      "category": "CQ Coverage",
+      "suggestion": "Explicitly model organization information aggregation (e.g., add properties for contact info, tax ID, etc.) to fully answer CQ5.",
+      "expected_impact": "Full coverage for organization information queries."
+    },
+    {
+      "priority": "high",
+      "category": "CQ Coverage / Constraint",
+      "suggestion": "Model file format validity explicitly, e.g., using SHACL shapes or OWL restrictions to indicate required fields for an invoice.",
+      "expected_impact": "CQ13 is fully covered and file validity can be checked automatically."
+    },
+    {
+      "priority": "medium",
+      "category": "Quality",
+      "suggestion": "Add OWL restrictions (e.g., minCardinality, someValuesFrom) to specify required relations (e.g., each Invoice must have at least one Buyer and Seller role, and at least one InvoiceItem).",
+      "expected_impact": "Improved data quality and validation."
+    },
+    {
+      "priority": "medium",
+      "category": "Quality",
+      "suggestion": "Introduce general class axioms (GCAs) and equivalence axioms for key concepts, such as defining Buyer/Seller roles by their relations.",
+      "expected_impact": "Richer reasoning and more precise class definitions."
+    },
+    {
+      "priority": "low",
+      "category": "Quality",
+      "suggestion": "Add further address granularity (e.g., city, postal code, country) as data properties.",
+      "expected_impact": "More detailed organization/address information."
+    }
+  ],
+  "summary": "The ontology provides a robust and well-structured foundation for EDIFACT invoice scenarios, with strong coverage of most competency questions and good OWL 2 compliance. However, it lacks explicit modeling of required fields, advanced OWL constructs, and full support for organization information and file format validity. Addressing these areas will further strengthen completeness and reasoning capabilities."
+}

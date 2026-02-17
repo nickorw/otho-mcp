@@ -1,0 +1,103 @@
+{
+  "iteration": 1,
+  "timestamp": "2026-02-14T19:10:03.944653",
+  "cq_coverage": {
+    "fully_covered": [
+      "CQ1",
+      "CQ2",
+      "CQ3",
+      "CQ4",
+      "CQ6",
+      "CQ7",
+      "CQ8",
+      "CQ9",
+      "CQ10",
+      "CQ11",
+      "CQ12",
+      "CQ14"
+    ],
+    "partially_covered": [
+      {
+        "cq": "CQ5",
+        "missing": "No explicit property or structure for 'information displayed' about organizations; only organizationName and address are present. No extensibility for contact info, tax ID, etc.",
+        "coverage_percent": 60
+      },
+      {
+        "cq": "CQ13",
+        "missing": "No explicit modeling of required/mandatory fields or file format constraints; ontology does not capture validation rules.",
+        "coverage_percent": 40
+      }
+    ],
+    "not_covered": [],
+    "coverage_score": 0.87,
+    "details": "Most CQs are structurally supported by the ontology, especially those about invoices, participants, roles, items, and invoice details. CQ5 and CQ13 lack explicit extensibility or constraint modeling."
+  },
+  "constraint_adherence": {
+    "reification_correct": true,
+    "owl2_compliant": true,
+    "annotations_complete": true,
+    "directionality_correct": true,
+    "pivot_class_structure_correct": true,
+    "issues": []
+  },
+  "quality_metrics": {
+    "hierarchy_depth": 3,
+    "uses_restrictions": true,
+    "uses_gcas": false,
+    "uses_equivalence": true,
+    "property_characteristics_defined": true,
+    "disjointness_axioms": true,
+    "overall_score": 0.83,
+    "strengths": [
+      "Rich use of pivot (reification) classes for n-ary relations",
+      "Good use of disjointness axioms and property characteristics",
+      "All classes and properties are labeled and commented"
+    ],
+    "weaknesses": [
+      "No GCAs (General Class Axioms) for higher-level logical definitions",
+      "Limited extensibility for organization/item details",
+      "No modeling of file format or validation constraints"
+    ]
+  },
+  "validator_predictions": {
+    "likely_oops_pitfalls": [
+      "P4: Missing domain or range for some properties (not observed here but always a risk)",
+      "P7: Lack of GCAs may indicate under-modeling"
+    ],
+    "reasoner_risks": [],
+    "confidence": "high"
+  },
+  "improvement_suggestions": [
+    {
+      "priority": "high",
+      "category": "CQ Coverage",
+      "suggestion": "Add a class or property for 'OrganizationInformation' or extend Organization with optional properties (e.g., taxID, contactPoint, email, etc.) to fully answer CQ5.",
+      "expected_impact": "Complete coverage for queries about all information displayed about organizations."
+    },
+    {
+      "priority": "high",
+      "category": "CQ Coverage",
+      "suggestion": "Model file format or validity constraints by introducing a 'FileFormatConstraint' class or SHACL shapes, and/or annotate required properties for CQ13.",
+      "expected_impact": "Enables answering of queries about required information for valid EDIFACT files."
+    },
+    {
+      "priority": "medium",
+      "category": "Quality",
+      "suggestion": "Introduce GCAs to define, for example, that a BuyerRole is always associated with an Organization via an InvoiceParticipant in an Invoice.",
+      "expected_impact": "Stronger logical axiomatization and better reasoning support."
+    },
+    {
+      "priority": "medium",
+      "category": "Extensibility",
+      "suggestion": "Add more detailed properties to Item (e.g., SKU, category, unitPrice) and Organization (e.g., VAT number, phone number).",
+      "expected_impact": "Improves real-world coverage and future-proofing."
+    },
+    {
+      "priority": "low",
+      "category": "OWL 2 Best Practices",
+      "suggestion": "Consider using disjoint unions for roles and for address/item/invoice classes to further strengthen class separation.",
+      "expected_impact": "Cleaner reasoning and easier maintenance."
+    }
+  ],
+  "summary": "This ontology provides a strong foundational model for EDIFACT invoice scenarios, with good coverage of core entities, roles, and relationships. Most competency questions are structurally supported, and the use of pivot classes and restrictions is appropriate. However, it lacks explicit support for organization detail extensibility, file format validation, and higher-level logical axioms. Addressing these areas will further improve completeness and reasoning quality."
+}

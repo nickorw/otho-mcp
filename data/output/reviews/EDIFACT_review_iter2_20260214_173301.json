@@ -1,0 +1,127 @@
+{
+  "iteration": 2,
+  "timestamp": "2026-02-14T17:35:47.065030",
+  "cq_coverage": {
+    "fully_covered": [
+      "CQ1",
+      "CQ2",
+      "CQ3",
+      "CQ4",
+      "CQ6",
+      "CQ7",
+      "CQ8",
+      "CQ9",
+      "CQ10",
+      "CQ11",
+      "CQ12",
+      "CQ14"
+    ],
+    "partially_covered": [
+      {
+        "cq": "CQ5",
+        "missing": "Still lacks explicit properties for organization details beyond name and address (e.g., contact info, tax ID); no aggregation or extensible details.",
+        "coverage_percent": 70
+      },
+      {
+        "cq": "CQ13",
+        "missing": "No explicit OWL restrictions or SHACL shapes for required fields or file format validity; validity is still implicit.",
+        "coverage_percent": 50
+      }
+    ],
+    "not_covered": [],
+    "coverage_score": 0.92,
+    "details": "Coverage remains strong for most CQs, but CQ5 and CQ13 are still only partially addressed due to lack of explicit modeling for organization metadata and file validity constraints."
+  },
+  "constraint_adherence": {
+    "reification_correct": true,
+    "owl2_compliant": false,
+    "annotations_complete": true,
+    "directionality_correct": true,
+    "pivot_class_structure_correct": true,
+    "issues": [
+      "Non-OWL2 datatype used: xsd:date (should use xsd:dateTime for invoiceDate property)"
+    ]
+  },
+  "quality_metrics": {
+    "hierarchy_depth": 3,
+    "uses_restrictions": false,
+    "uses_gcas": false,
+    "uses_equivalence": false,
+    "property_characteristics_defined": true,
+    "disjointness_axioms": true,
+    "overall_score": 0.78,
+    "strengths": [
+      "Clear class hierarchy",
+      "Consistent use of inverse and functional properties",
+      "Good annotation coverage"
+    ],
+    "weaknesses": [
+      "No OWL restrictions or cardinality constraints for required fields",
+      "No GCAs or equivalence axioms for key concepts",
+      "No explicit modeling of file format validity or organization detail extensibility"
+    ]
+  },
+  "validator_predictions": {
+    "likely_oops_pitfalls": [
+      "P7: No explicit modeling of mandatory fields or cardinality restrictions",
+      "P22: Use of non-standard datatype (xsd:date)"
+    ],
+    "reasoner_risks": [
+      "Hermit/Pellet will fail on xsd:date datatype"
+    ],
+    "confidence": "high"
+  },
+  "improvement_suggestions": [
+    {
+      "priority": "high",
+      "category": "CQ Coverage",
+      "suggestion": "Add extensible properties for organization details (e.g., contact info, tax ID, phone) to fully answer CQ5.",
+      "expected_impact": "Full support for organization information queries."
+    },
+    {
+      "priority": "high",
+      "category": "Constraint / Validator",
+      "suggestion": "Replace all uses of xsd:date with xsd:dateTime for OWL 2 compliance.",
+      "expected_impact": "Ensures reasoner compatibility and prevents validation errors."
+    },
+    {
+      "priority": "high",
+      "category": "CQ Coverage / Quality",
+      "suggestion": "Model file format validity explicitly, using OWL cardinality restrictions or SHACL shapes to indicate required fields for an invoice.",
+      "expected_impact": "Enables automatic validation and full CQ13 coverage."
+    },
+    {
+      "priority": "medium",
+      "category": "Quality",
+      "suggestion": "Add OWL restrictions (minCardinality, someValuesFrom) for key relations (e.g., Invoice must have at least one Buyer, Seller, and InvoiceItem).",
+      "expected_impact": "Improved data quality and validation."
+    },
+    {
+      "priority": "medium",
+      "category": "Quality",
+      "suggestion": "Introduce GCAs and equivalence axioms for roles (e.g., define Buyer/Seller classes by their relations).",
+      "expected_impact": "Richer reasoning and more precise class definitions."
+    },
+    {
+      "priority": "low",
+      "category": "Quality",
+      "suggestion": "Add more granular address data properties (city, postal code, country).",
+      "expected_impact": "More detailed organization/address information."
+    }
+  ],
+  "improvement_tracking": {
+    "suggestions_addressed": [],
+    "suggestions_ignored": [
+      "Explicitly model organization information aggregation (e.g., contact info, tax ID) for CQ5",
+      "Model file format validity explicitly (CQ13) using OWL restrictions or SHACL",
+      "Add OWL restrictions for required relations",
+      "Introduce GCAs and equivalence axioms",
+      "Add address granularity (city, postal code, country)"
+    ],
+    "quality_delta": "+0.00",
+    "coverage_delta": "+0.00",
+    "overall_progress": "poor",
+    "notes": "No substantive changes since the last review. All previous improvement suggestions were ignored, including critical datatype compliance. Quality and coverage scores are unchanged. A new high-priority issue (non-OWL2-compliant xsd:date usage) must be fixed for reasoner compatibility."
+  },
+  "summary": "The ontology remains structurally sound and covers most competency questions, but no progress was made on prior high-priority suggestions. Critical issues such as non-OWL2-compliant datatypes and lack of explicit modeling for organization details and file format validity persist. Immediate attention to these areas is required to achieve full coverage and validator compatibility."
+}

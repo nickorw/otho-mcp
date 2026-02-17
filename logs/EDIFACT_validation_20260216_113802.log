@@ -1,0 +1,57 @@
+2026-02-16 11:44:05 | INFO     | ============================================================
+2026-02-16 11:44:05 | INFO     | Validation Logger Initialized for EDIFACT
+2026-02-16 11:44:05 | INFO     | Log files: EDIFACT_validation_20260216_113802.log
+2026-02-16 11:44:05 | INFO     | Timestamp: 20260216_113802
+2026-02-16 11:44:05 | INFO     | ============================================================
+2026-02-16 11:44:05 | INFO     | 
+Starting final validation for EDIFACT
+2026-02-16 11:44:05 | DEBUG    | Ontology size: 24291 characters
+2026-02-16 11:44:05 | INFO     | 
+============================================================
+2026-02-16 11:44:05 | INFO     | PILLAR 1: SYNTAX VALIDATION (RDFLib)
+2026-02-16 11:44:05 | INFO     | ============================================================
+2026-02-16 11:44:05 | INFO     | ✓ Syntax validation PASSED (0.021s)
+2026-02-16 11:44:05 | DEBUG    | No syntax errors detected in RDF/Turtle parsing
+2026-02-16 11:44:05 | INFO     | 
+============================================================
+2026-02-16 11:44:05 | INFO     | PILLAR 2: PITFALL DETECTION (OOPS)
+2026-02-16 11:44:05 | INFO     | ============================================================
+2026-02-16 11:44:05 | INFO     | ✓ Pitfall check PASSED - No pitfalls detected (0.229s)
+2026-02-16 11:44:05 | DEBUG    | All checked OOPS pitfall categories passed successfully
+2026-02-16 11:44:05 | INFO     | 
+============================================================
+2026-02-16 11:44:05 | INFO     | PILLAR 3: REASONING CONSISTENCY
+2026-02-16 11:44:05 | INFO     | ============================================================
+2026-02-16 11:44:05 | DEBUG    | Checking logical consistency with OWL 2 DL reasoners (Hermit & Pellet)
+2026-02-16 11:44:07 | INFO     | 
+  → Hermit Reasoner
+2026-02-16 11:44:07 | INFO     |   --------------------------------------------------------
+2026-02-16 11:44:07 | INFO     |   ✓ PASSED - Ontology is logically consistent (1.755s)
+2026-02-16 11:44:07 | DEBUG    |   Hermit found no logical inconsistencies or contradictions
+2026-02-16 11:44:08 | INFO     | 
+  → Pellet Reasoner
+2026-02-16 11:44:08 | INFO     |   --------------------------------------------------------
+2026-02-16 11:44:08 | INFO     |   ✓ PASSED - Ontology is logically consistent (0.744s)
+2026-02-16 11:44:08 | DEBUG    |   Pellet found no logical inconsistencies or contradictions
+2026-02-16 11:44:08 | INFO     | ✓ Ontology: data/output/ontologies/EDIFACT_ontology_20260216_113802.owl
+2026-02-16 11:44:08 | INFO     | ✓ OOPS XML results: data/output/validations/EDIFACT_validation_20260216_113802.xml
+2026-02-16 11:44:08 | INFO     | ✓ Validation metrics JSON: data/output/validations/EDIFACT_validation_20260216_113802.json
+2026-02-16 11:44:08 | INFO     | ✓ Agent scratchpad: data/output/scratchpads/EDIFACT_scratchpad_20260216_113802.json
+2026-02-16 11:44:08 | INFO     | 
+============================================================
+2026-02-16 11:44:08 | INFO     | VALIDATION SUMMARY
+2026-02-16 11:44:08 | INFO     | ============================================================
+2026-02-16 11:44:08 | INFO     | 1. Syntax (RDFLib):    ✓ PASSED (0.021s)
+2026-02-16 11:44:08 | INFO     | 2. OOPS Pitfalls:      ✓ PASSED (0.229s)
+2026-02-16 11:44:08 | INFO     | 3. Hermit Reasoner:    ✓ PASSED (1.755s)
+2026-02-16 11:44:08 | INFO     | 4. Pellet Reasoner:    ✓ PASSED (0.744s)
+2026-02-16 11:44:08 | INFO     | ------------------------------------------------------------
+2026-02-16 11:44:08 | INFO     | Overall Result:        ✅ ALL VALIDATORS PASSED
+2026-02-16 11:44:08 | INFO     |                        Ontology is syntactically valid, free of pitfalls,
+2026-02-16 11:44:08 | INFO     |                        and logically consistent.
+2026-02-16 11:44:08 | INFO     | ------------------------------------------------------------
+2026-02-16 11:44:08 | INFO     | Total Validation Time: 2.749s
+2026-02-16 11:44:08 | INFO     | Agent Iterations:      2
+2026-02-16 11:44:08 | INFO     | ============================================================
+2026-02-16 11:44:08 | INFO     | 
+✓ Validation JSON log saved: logs/EDIFACT_validation_20260216_113802.json

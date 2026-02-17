@@ -1,6 +1,6 @@
 generate_ontology: |
   task: 
-    You are an expert Ontologist with deep OWL experience. Your task is to create a sophisticated OWL ontology in Turtle syntax based on a given Story and Competency Questions (CQs). 
+    You are an expert Ontologist with deep OWL experience. Your task is to create a sophisticated DEEP and PROFOUNDLY STRUCTURED OWL ontology in Turtle syntax based on a given Story and Competency Questions (CQs). Make it as complete and detailed as possible.
 
     ### EXPECTED WORKFLOW
     You have access to 6 tools to help you complete this task. Don't send a message without calling a tool unless you are done and have saved the generated OWL. You must follow this iterative workflow:
@@ -15,10 +15,12 @@ generate_ontology: |
     - Call `update_scratchpad` with key "cq_coverage" to document how each CQ is addressed
 
     **STEP 2: GENERATE OWL CODE**
+    - Create a sophisticated DEEP and PROFOUNDLY STRUCTURED ontology with rich hierarchies, comprehensive properties, and detailed annotations.
     - Generate the complete OWL ontology in Turtle syntax
     - Include ALL required prefixes, classes, properties, and axioms
     - Ensure every Class and Property has rdfs:label and rdfs:comment.
-    - Must strictly adhere to OWL2 DL datatype map. Don't use, for instance: xsd:date, xsd:gYear or gYearMonth.
+    - Ensure the vocabulary is complete. 
+    - Must strictly adhere to OWL2 DL datatype map. Don't use, for instance: xsd:date, xsd:gYear or gYearMonth. But you may use custom datatype properties.
     - Always save your progress by calling `update_scratchpad` with key "current_owl" after generating or modifying OWL code
 
     **STEP 3: VALIDATE AND ITERATE (Use validation tools)**
@@ -83,8 +85,9 @@ generate_ontology: |
     7. **Iteration Tracking:** Log each validation attempt in scratchpad with results and fixes applied.
     8. **Output Format:** When generating OWL code, provide complete valid Turtle syntax.
     9. **Ontology declaration** Ensure the ontology is declared at the start using the storyid in the IRI.
-    10. **OWL 2 Datatype Compliance:** Use ONLY OWL 2 DL datatypes from the OWL 2 Datatype Map (https://www.w3.org/TR/owl2-syntax/#Datatype_Maps). Non-standard datatypes are a failure to fulfil your job.
+    10. **OWL 2 Datatype Compliance:** Use ONLY OWL 2 DL datatypes from the OWL 2 Datatype Map (https://www.w3.org/TR/owl2-syntax/#Datatype_Maps) or custom datatypes that you define. Non-standard datatypes are a failure to fulfil your job.
     11. Be careful with with unconnected elements and transitive relationships. When a relation is transitive, but its range and its domain are not the same, you've made a mistake
+    12. Don't focus only on the CQs, try to find as many relations and classes as possible by reading the story and CQs. The more complete the ontology is, the better. 
 
 #old prompt template for reference - do not use. New version is "generate_ontology".
 OLD_best_practices_owl_task: |
@@ -211,7 +214,7 @@ advisory_review: |
   - xsd:gYearMonth (use xsd:dateTime instead)
   - xsd:time (use xsd:dateTime instead)
   
-  Flag any non-compliant datatypes as HIGH PRIORITY issues that will cause Hermit/Pellet reasoner failures.
+  Only these and custom defined datatypes are allowed. Flag any non-compliant datatypes as HIGH PRIORITY issues that will cause Hermit/Pellet reasoner failures.
   
   ### REVIEW DIMENSIONS
   
@@ -225,7 +228,7 @@ advisory_review: |
   **2. Constraint Adherence**
   - **Reification:** Correct use of pivot classes for >2 entities or Entity+Data+Time scenarios
   - **Directionality:** Relations point FROM entities TO pivot class (not vice versa)
-  - **OWL 2 Compliance:** Only OWL 2 DL datatypes used (no xsd:date, xsd:gYear, xsd:gYearMonth)
+  - **OWL 2 Compliance:** Only OWL 2 DL datatypes or custom datatypes that you define are used (no xsd:date, xsd:gYear, xsd:gYearMonth)
   - **Annotations:** All classes and properties have rdfs:label and rdfs:comment
   - **Pivot Class Structure:** Pivot classes are NOT subclasses of their components
   
@@ -242,6 +245,9 @@ advisory_review: |
   - Predict likely OOPS pitfalls (P2-P29)
   - Identify constructs that may fail Hermit or Pellet reasoners
   - Flag non-standard datatypes or problematic axioms
+
+  **5. Ontology Depth And Complexity**
+  - Ensure the Ontology is has deep hierarchies and complex axioms that reflect the richness of the story and competency questions.
   
   **5. Improvement Suggestions**
   Prioritize suggestions:
@@ -394,7 +400,7 @@ refine_ontology: |
   **Required Elements:**
   - All prefixes at start
   - Every class/property has rdfs:label and rdfs:comment
-  - Use ONLY OWL 2 DL datatypes (NO xsd:date, xsd:gYear, xsd:gYearMonth)
+  - Use ONLY OWL 2 DL datatypes or custom datatypes that you define (NO xsd:date, xsd:gYear, xsd:gYearMonth) 
   - Ontology declaration with story ID in IRI
   
   **Prefixes:**

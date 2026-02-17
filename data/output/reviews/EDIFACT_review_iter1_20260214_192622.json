@@ -1,0 +1,85 @@
+{
+  "iteration": 1,
+  "timestamp": "2026-02-14T19:28:58.891300",
+  "cq_coverage": {
+    "fully_covered": [
+      "CQ1",
+      "CQ2",
+      "CQ3",
+      "CQ4",
+      "CQ6",
+      "CQ7",
+      "CQ8",
+      "CQ9",
+      "CQ10",
+      "CQ11",
+      "CQ12",
+      "CQ13",
+      "CQ14"
+    ],
+    "partially_covered": [],
+    "not_covered": [
+      "CQ5"
+    ],
+    "coverage_score": 0.93,
+    "details": "All competency questions except CQ5 are directly supported by classes and properties. CQ5 ('What information is displayed about the involved organizations?') is not explicitly covered, as there are no data properties for organization attributes (e.g., name, tax ID, contact info)."
+  },
+  "constraint_adherence": {
+    "reification_correct": true,
+    "owl2_compliant": true,
+    "annotations_complete": true,
+    "directionality_correct": true,
+    "pivot_class_structure_correct": true,
+    "issues": []
+  },
+  "quality_metrics": {
+    "hierarchy_depth": 3,
+    "uses_restrictions": false,
+    "uses_gcas": false,
+    "uses_equivalence": false,
+    "property_characteristics_defined": true,
+    "disjointness_axioms": true,
+    "overall_score": 0.78,
+    "strengths": [
+      "Rich and deep class hierarchy",
+      "Good use of disjoint unions for roles",
+      "All object and data properties are well-typed and labeled",
+      "EDIFACT technical vocabulary is modeled"
+    ],
+    "weaknesses": [
+      "No use of GCAs or equivalence axioms for complex class definitions",
+      "No restrictions (e.g., cardinality, value constraints)",
+      "No data properties for organization or item descriptive attributes",
+      "Limited disjointness outside OrganizationRole"
+    ]
+  },
+  "validator_predictions": {
+    "likely_oops_pitfalls": [
+      "P4: Missing domain or range in some properties (none detected, so low risk)",
+      "P7: Missing descriptive data properties for core entities"
+    ],
+    "reasoner_risks": [],
+    "confidence": "high"
+  },
+  "improvement_suggestions": [
+    {
+      "priority": "high",
+      "category": "CQ Coverage",
+      "suggestion": "Add data properties to Organization for name, tax ID, and contact information to support CQ5.",
+      "expected_impact": "Full coverage of organizational information queries."
+    },
+    {
+      "priority": "medium",
+      "category": "Quality",
+      "suggestion": "Introduce restrictions (e.g., cardinality, value constraints) and general class axioms (GCAs) to define complex concepts such as 'An Invoice must have at least one InvoiceItem and one BuyerRole participation.'",
+      "expected_impact": "Greater logical rigor and validation of business rules."
+    },
+    {
+      "priority": "low",
+      "category": "Quality/Enrichment",
+      "suggestion": "Expand EDIFACT technical vocabulary coverage by adding more segment, element, and code instances and linking them to their semantic roles.",
+      "expected_impact": "Enhanced technical completeness for EDIFACT scenarios."
+    }
+  ],
+  "summary": "The ontology demonstrates strong coverage for nearly all competency questions and adheres well to OWL 2 and modeling best practices. Its class hierarchy is rich and EDIFACT-specific technical vocabulary is present, but the lack of descriptive data properties for organizations and limited use of advanced OWL constructs (restrictions, GCAs, equivalence) are notable gaps. Addressing these will further improve quality and completeness."
+}

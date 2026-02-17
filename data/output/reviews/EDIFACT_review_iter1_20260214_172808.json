@@ -1,0 +1,92 @@
+{
+  "iteration": 1,
+  "timestamp": "2026-02-14T17:31:56.502417",
+  "cq_coverage": {
+    "fully_covered": [
+      "CQ1",
+      "CQ2",
+      "CQ3",
+      "CQ4",
+      "CQ6",
+      "CQ7",
+      "CQ8",
+      "CQ9",
+      "CQ10",
+      "CQ11",
+      "CQ12",
+      "CQ13",
+      "CQ14"
+    ],
+    "partially_covered": [],
+    "not_covered": [
+      "CQ5"
+    ],
+    "coverage_score": 0.93,
+    "details": "The ontology covers nearly all competency questions through its classes and properties. CQ5 ('What information is displayed about the involved organizations?') is not directly addressed, as there are no explicit properties for organization details beyond name and address. All other CQs map well to the model, with clear support for message/invoice structure, participants, roles, items, and file format."
+  },
+  "constraint_adherence": {
+    "reification_correct": true,
+    "owl2_compliant": true,
+    "annotations_complete": true,
+    "directionality_correct": true,
+    "pivot_class_structure_correct": true,
+    "issues": []
+  },
+  "quality_metrics": {
+    "hierarchy_depth": 2,
+    "uses_restrictions": true,
+    "uses_gcas": false,
+    "uses_equivalence": false,
+    "property_characteristics_defined": true,
+    "disjointness_axioms": true,
+    "overall_score": 0.82,
+    "strengths": [
+      "Good use of reification for organization-role-invoice pattern",
+      "Consistent use of property characteristics and inverses",
+      "Comprehensive annotation coverage"
+    ],
+    "weaknesses": [
+      "No GCAs or equivalence axioms for key concepts",
+      "Limited class hierarchy depth",
+      "Disjointness only covers core classes"
+    ]
+  },
+  "validator_predictions": {
+    "likely_oops_pitfalls": [
+      "P7 (Missing domain or range in some cases)",
+      "P14 (Lack of equivalence axioms for defined concepts)"
+    ],
+    "reasoner_risks": [
+      "Hermit/Pellet may warn on the use of multiple functional properties per class (e.g., InvoiceParticipation)",
+      "Complexity of restrictions may slow reasoning"
+    ],
+    "confidence": "high"
+  },
+  "improvement_suggestions": [
+    {
+      "priority": "high",
+      "category": "CQ Coverage",
+      "suggestion": "CQ5 is not addressed: Add additional data properties to Organization (e.g., tax ID, contact info, registration number) to allow richer queries about organization details.",
+      "expected_impact": "Enables full coverage for queries about organization information."
+    },
+    {
+      "priority": "medium",
+      "category": "Quality",
+      "suggestion": "Introduce General Class Axioms (GCAs) or owl:equivalentClass definitions for key concepts like 'Buyer' and 'Seller' roles based on participation pattern.",
+      "expected_impact": "Improves reasoning and supports more advanced queries."
+    },
+    {
+      "priority": "medium",
+      "category": "Quality",
+      "suggestion": "Expand class hierarchy by introducing subclasses of OrganizationRole (e.g., BuyerRole, SellerRole) and Item (e.g., Product, Service).",
+      "expected_impact": "Increases hierarchy depth and expressivity."
+    },
+    {
+      "priority": "low",
+      "category": "Quality",
+      "suggestion": "Add owl:disjointUnionOf where appropriate to further clarify disjointness of roles or item types.",
+      "expected_impact": "Reduces ambiguity and improves ontology clarity."
+    }
+  ],
+  "summary": "This ontology provides strong coverage for an EDIFACT invoice scenario and addresses nearly all competency questions, with only minor gaps in organization details. The structure is sound, with correct use of reification and OWL 2 DL compliance. Quality can be enhanced by adding more detailed organization properties, introducing general class axioms, and deepening the class hierarchy."
+}

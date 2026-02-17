@@ -1,0 +1,107 @@
+{
+  "iteration": 1,
+  "timestamp": "2026-02-14T23:04:46.447848",
+  "cq_coverage": {
+    "fully_covered": [
+      "CQ1",
+      "CQ2",
+      "CQ3",
+      "CQ4",
+      "CQ6",
+      "CQ7",
+      "CQ8",
+      "CQ9",
+      "CQ10",
+      "CQ11",
+      "CQ12",
+      "CQ14"
+    ],
+    "partially_covered": [
+      {
+        "cq": "CQ5",
+        "missing": "Not all organization attributes (e.g., contact info, VAT number, legal form) are modeled; only address, name, GLN, and identifiers are present.",
+        "coverage_percent": 70
+      },
+      {
+        "cq": "CQ13",
+        "missing": "ValidationConstraint class exists, but no detailed encoding of D96A mandatory fields or SHACL shapes as individuals or rules.",
+        "coverage_percent": 60
+      }
+    ],
+    "not_covered": [],
+    "coverage_score": 0.9,
+    "details": "The ontology strongly covers most CQs, particularly those about invoice structure, involved organizations, roles, items, pricing, and business process assignment. Some details about organization attributes and explicit file format validation requirements are only partially modeled."
+  },
+  "constraint_adherence": {
+    "reification_correct": true,
+    "owl2_compliant": true,
+    "annotations_complete": true,
+    "directionality_correct": true,
+    "pivot_class_structure_correct": true,
+    "issues": []
+  },
+  "quality_metrics": {
+    "hierarchy_depth": 4,
+    "uses_restrictions": true,
+    "uses_gcas": false,
+    "uses_equivalence": false,
+    "property_characteristics_defined": true,
+    "disjointness_axioms": true,
+    "overall_score": 0.85,
+    "strengths": [
+      "Rich and deep class hierarchy reflecting EDIFACT and business roles",
+      "Comprehensive use of object/data property restrictions for structural validation",
+      "Clear disjointness between key conceptual partitions",
+      "All classes and properties are annotated"
+    ],
+    "weaknesses": [
+      "No general class axioms (GCAs) or equivalence axioms for necessary and sufficient class definitions",
+      "Limited modeling of code lists and EDIFACT code values",
+      "No explicit modeling for temporal context or document lifecycle events"
+    ]
+  },
+  "validator_predictions": {
+    "likely_oops_pitfalls": [
+      "P4: Missing domain or range for some properties (not observed here, but always a risk in large ontologies)",
+      "P7: Missing inverse properties for some relations (covered here, so low risk)"
+    ],
+    "reasoner_risks": [
+      "Hermit/Pellet may warn on large numbers of inverse functional properties if data is inconsistent",
+      "No OWL 2 DL datatype violations detected"
+    ],
+    "confidence": "high"
+  },
+  "improvement_suggestions": [
+    {
+      "priority": "high",
+      "category": "CQ Coverage",
+      "suggestion": "Expand Organization attributes to include additional mandatory details (e.g., VAT number, legal form, contact information) as per EN 16931 and D96A directory.",
+      "expected_impact": "Improves completeness for CQs about organization information and regulatory compliance."
+    },
+    {
+      "priority": "high",
+      "category": "CQ Coverage",
+      "suggestion": "Model SHACL or OWL-based validation constraints as individuals or rules, explicitly representing mandatory fields and value checks (e.g., itemized price sum, required identifiers).",
+      "expected_impact": "Enables automated validation and answers CQ13 fully."
+    },
+    {
+      "priority": "medium",
+      "category": "Quality",
+      "suggestion": "Add general class axioms (GCAs) and owl:equivalentClass axioms for classes like Buyer, Seller, and InvoiceMessage to capture necessary and sufficient conditions.",
+      "expected_impact": "Increases reasoning power and semantic precision."
+    },
+    {
+      "priority": "medium",
+      "category": "Ontology Depth",
+      "suggestion": "Model EDIFACT code lists and segment/element codes as individuals or subclasses, linking them to segments and data elements.",
+      "expected_impact": "Enhances technical vocabulary and supports code-based queries."
+    },
+    {
+      "priority": "low",
+      "category": "Enrichment",
+      "suggestion": "Add temporal properties (e.g., validFrom, validTo, issueDate as xsd:dateTime) to support queries about document lifecycle and historical context.",
+      "expected_impact": "Enables temporal reasoning and richer provenance tracking."
+    }
+  ],
+  "summary": "The ontology robustly models the EDIFACT invoice domain, with strong coverage for invoice structure, roles, and itemization. It meets OWL 2 DL requirements and is well-annotated, but could be improved by enriching organization attributes, formalizing validation constraints, and introducing more advanced axioms and code lists. Validator compatibility is high, with no major risks detected."
+}

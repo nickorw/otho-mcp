@@ -1,0 +1,113 @@
+{
+  "iteration": 1,
+  "timestamp": "2026-02-14T18:53:01.266405",
+  "cq_coverage": {
+    "fully_covered": [
+      "CQ1",
+      "CQ2",
+      "CQ4",
+      "CQ6",
+      "CQ7",
+      "CQ9",
+      "CQ10",
+      "CQ11",
+      "CQ12",
+      "CQ14"
+    ],
+    "partially_covered": [
+      {
+        "cq": "CQ3",
+        "missing": "No explicit relation between Organization, Role, and Invoice; cannot directly query what role a specific organization plays in a given invoice.",
+        "coverage_percent": 70
+      },
+      {
+        "cq": "CQ5",
+        "missing": "Organization information limited to name and address; no contact, registration, or other details.",
+        "coverage_percent": 60
+      },
+      {
+        "cq": "CQ8",
+        "missing": "Item information limited to description and net price; missing quantity, unit, or product code.",
+        "coverage_percent": 60
+      },
+      {
+        "cq": "CQ13",
+        "missing": "No explicit class or property to define required/mandatory fields for file format validity.",
+        "coverage_percent": 50
+      }
+    ],
+    "not_covered": [],
+    "coverage_score": 0.85,
+    "details": "Most core invoice, organization, and item queries are well supported. Role attribution and business process assignment are present but lack full modeling for detailed queries (e.g., specific role per invoice, item-level details). No explicit support for file format validation constraints."
+  },
+  "constraint_adherence": {
+    "reification_correct": true,
+    "owl2_compliant": true,
+    "annotations_complete": true,
+    "directionality_correct": true,
+    "pivot_class_structure_correct": true,
+    "issues": []
+  },
+  "quality_metrics": {
+    "hierarchy_depth": 3,
+    "uses_restrictions": false,
+    "uses_gcas": false,
+    "uses_equivalence": false,
+    "property_characteristics_defined": true,
+    "disjointness_axioms": true,
+    "overall_score": 0.75,
+    "strengths": [
+      "Clear class/property labeling and comments",
+      "Functional properties well defined for unique relations",
+      "Disjointness between major role classes"
+    ],
+    "weaknesses": [
+      "No use of OWL restrictions (e.g., cardinality, value constraints)",
+      "No GCAs or equivalence axioms for richer semantic definitions",
+      "Limited modeling of item and organization attributes"
+    ]
+  },
+  "validator_predictions": {
+    "likely_oops_pitfalls": [
+      "P4: Missing domain or range for some properties (all seem defined, but check for inverse properties)",
+      "P7: Lack of complex class definitions (GCAs, equivalence)"
+    ],
+    "reasoner_risks": [
+      "Potential performance issues if further restrictions or large instance data are added"
+    ],
+    "confidence": "high"
+  },
+  "improvement_suggestions": [
+    {
+      "priority": "high",
+      "category": "CQ Coverage",
+      "suggestion": "Add an explicit n-ary relation or reified class for Organization-Role-Invoice participation (e.g., Participation class with properties for organization, role, and invoice).",
+      "expected_impact": "Enables precise answers to CQ3 and richer queries about roles per invoice."
+    },
+    {
+      "priority": "high",
+      "category": "CQ Coverage",
+      "suggestion": "Introduce a class or annotation property to specify required fields and constraints for file format validity (CQ13).",
+      "expected_impact": "Supports validation and completeness queries."
+    },
+    {
+      "priority": "medium",
+      "category": "Quality",
+      "suggestion": "Use owl:someValuesFrom and owl:cardinality restrictions to express required relations (e.g., every Invoice must have at least one buyer, seller, item).",
+      "expected_impact": "Improves ontology robustness and validation."
+    },
+    {
+      "priority": "medium",
+      "category": "CQ Coverage",
+      "suggestion": "Expand Item and Organization classes to include additional attributes (e.g., product code, quantity, contact info, legal identifier).",
+      "expected_impact": "Enables more complete answers to CQ5 and CQ8."
+    },
+    {
+      "priority": "low",
+      "category": "Quality",
+      "suggestion": "Add owl:equivalentClass axioms for well-defined concepts (e.g., BuyerRole \u2261 Role and isRoleOf some (Invoice and buyer value Organization)).",
+      "expected_impact": "Enriches semantic reasoning capabilities."
+    }
+  ],
+  "summary": "The ontology provides a solid foundation for EDIFACT invoice scenarios, with strong coverage of most core queries and good adherence to OWL 2 best practices. However, it lacks advanced modeling constructs (restrictions, equivalence, GCAs) and does not fully support queries involving role participation per invoice or mandatory field validation. Addressing these areas will significantly enhance the ontology's expressiveness and practical utility."
+}

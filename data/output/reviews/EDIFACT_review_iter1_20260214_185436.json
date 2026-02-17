@@ -1,0 +1,97 @@
+{
+  "iteration": 1,
+  "timestamp": "2026-02-14T18:56:15.844852",
+  "cq_coverage": {
+    "fully_covered": [
+      "CQ1",
+      "CQ2",
+      "CQ3",
+      "CQ4",
+      "CQ6",
+      "CQ7",
+      "CQ8",
+      "CQ9",
+      "CQ10",
+      "CQ11",
+      "CQ12",
+      "CQ14"
+    ],
+    "partially_covered": [
+      {
+        "cq": "CQ5",
+        "missing": "No explicit data property or class for 'information displayed about the involved organizations' beyond name and address; lacks extensibility for additional organization attributes.",
+        "coverage_percent": 70
+      },
+      {
+        "cq": "CQ13",
+        "missing": "No explicit modeling of file format constraints or mandatory fields; ontology does not capture validation requirements for file format validity.",
+        "coverage_percent": 40
+      }
+    ],
+    "not_covered": [],
+    "coverage_score": 0.92,
+    "details": "All CQs except CQ5 and CQ13 are directly answerable with existing classes and properties. CQ5 is partially covered by organizationName and addressLine, but lacks extensibility for richer organization metadata. CQ13 is only weakly supported, as file format constraints are not modeled."
+  },
+  "constraint_adherence": {
+    "reification_correct": true,
+    "owl2_compliant": true,
+    "annotations_complete": true,
+    "directionality_correct": true,
+    "pivot_class_structure_correct": true,
+    "issues": []
+  },
+  "quality_metrics": {
+    "hierarchy_depth": 2,
+    "uses_restrictions": true,
+    "uses_gcas": false,
+    "uses_equivalence": false,
+    "property_characteristics_defined": true,
+    "disjointness_axioms": true,
+    "overall_score": 0.78,
+    "strengths": [
+      "Good use of reification for n-ary relations",
+      "Comprehensive annotation coverage",
+      "Functional and inverse properties declared"
+    ],
+    "weaknesses": [
+      "No use of GCAs or equivalence axioms",
+      "Shallow class hierarchy (mostly flat)",
+      "Limited extensibility for organization/item details"
+    ]
+  },
+  "validator_predictions": {
+    "likely_oops_pitfalls": [
+      "P4: Missing domain or range in some properties (if extended)",
+      "P7: Shallow hierarchy, potential for class explosion if extended"
+    ],
+    "reasoner_risks": [],
+    "confidence": "high"
+  },
+  "improvement_suggestions": [
+    {
+      "priority": "high",
+      "category": "CQ Coverage",
+      "suggestion": "Model file format validity requirements explicitly, e.g., via SHACL or additional OWL restrictions, to address CQ13.",
+      "expected_impact": "Enables automated validation of EDIFACT file structure and required fields."
+    },
+    {
+      "priority": "medium",
+      "category": "CQ Coverage",
+      "suggestion": "Extend Organization with optional properties (e.g., tax ID, contact info) and/or an OrganizationDetail class to fully answer CQ5.",
+      "expected_impact": "Allows richer queries about organization metadata."
+    },
+    {
+      "priority": "medium",
+      "category": "Quality",
+      "suggestion": "Introduce General Class Axioms (GCAs) to define key concepts (e.g., BuyerOrganization \u2261 Organization and (isBuyerOf some Invoice)).",
+      "expected_impact": "Improves reasoning and semantic richness."
+    },
+    {
+      "priority": "low",
+      "category": "Quality",
+      "suggestion": "Deepen class hierarchy by introducing subclasses (e.g., Company, Supplier, Customer under Organization; Product, Service under Item).",
+      "expected_impact": "Improves clarity and future extensibility."
+    }
+  ],
+  "summary": "The ontology provides strong coverage for most competency questions and adheres well to OWL 2 best practices, with correct use of reification and annotation. Improvements are needed in modeling file format constraints and enriching organization/item details. The class hierarchy is somewhat flat, and the ontology would benefit from more advanced axiomatization."
+}

@@ -1,0 +1,101 @@
+{
+  "story_id": "EDIFACT",
+  "timestamp": "20260214_173301",
+  "start_time": "2026-02-14T17:35:47.070351",
+  "ontology_size_chars": 9728,
+  "validation_results": {
+    "syntax": {
+      "valid": true,
+      "execution_time_seconds": 0.011,
+      "error": null,
+      "error_type": null
+    },
+    "oops": {
+      "has_pitfalls": true,
+      "pitfall_count": 1,
+      "execution_time_seconds": 0.087,
+      "pitfalls": [
+        {
+          "code": "P21",
+          "name": "Using a miscellaneous class",
+          "description": "This pitfall refers to the creation of a class with the only goal of classifying the instances that do not belong to any of its sibling classes (classes with which the miscellaneous problematic class shares a common direct ancestor).\t",
+          "importance": "Minor",
+          "num_affected": 1,
+          "affected_elements": [
+            "http://www.example.org/ontology#OtherRole"
+          ]
+        }
+      ],
+      "pitfall_codes": [
+        "P21"
+      ],
+      "pitfall_names": [
+        "Using a miscellaneous class"
+      ]
+    },
+    "hermit": {
+      "reasoner": "Hermit",
+      "is_consistent": true,
+      "execution_time_seconds": 0.638,
+      "inconsistent_classes": [],
+      "inconsistent_classes_count": 0,
+      "error": null,
+      "error_type": null
+    },
+    "pellet": {
+      "reasoner": "Pellet",
+      "is_consistent": true,
+      "execution_time_seconds": 0.517,
+      "inconsistent_classes": [],
+      "inconsistent_classes_count": 0,
+      "error": null,
+      "error_type": null
+    },
+    "aggregate": {
+      "all_validators_passed": false,
+      "total_execution_time_seconds": 1.253,
+      "validation_breakdown": {
+        "syntax_valid": true,
+        "oops_passed": false,
+        "oops_pitfall_count": 1,
+        "hermit_consistent": true,
+        "pellet_consistent": true
+      },
+      "timing_breakdown_seconds": {
+        "syntax": 0.011,
+        "oops": 0.087,
+        "hermit": 0.638,
+        "pellet": 0.517,
+        "total": 1.253
+      }
+    }
+  },
+  "files_saved": [
+    {
+      "path": "data/output/ontologies/EDIFACT_ontology_20260214_173301.owl",
+      "description": "Ontology",
+      "timestamp": "2026-02-14T17:35:48.590656"
+    },
+    {
+      "path": "data/output/validations/EDIFACT_validation_20260214_173301.xml",
+      "description": "OOPS XML results",
+      "timestamp": "2026-02-14T17:35:48.590917"
+    },
+    {
+      "path": "data/output/validations/EDIFACT_validation_20260214_173301.json",
+      "description": "Validation metrics JSON",
+      "timestamp": "2026-02-14T17:35:48.591199"
+    },
+    {
+      "path": "data/output/scratchpads/EDIFACT_scratchpad_20260214_173301.json",
+      "description": "Agent scratchpad",
+      "timestamp": "2026-02-14T17:35:48.591765"
+    }
+  ],
+  "end_time": "2026-02-14T17:35:48.592099",
+  "iteration_count": 3,
+  "story_timing": {
+    "duration_seconds": 166.89,
+    "duration_formatted": "2m 47s"
+  }
+}

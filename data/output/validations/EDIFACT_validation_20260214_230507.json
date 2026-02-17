@@ -1,0 +1,46 @@
+{
+  "timestamp": "20260214_230507",
+  "story_id": "EDIFACT",
+  "ontology_size_chars": 20002,
+  "syntax": {
+    "valid": true,
+    "execution_time_seconds": 0.023,
+    "error": null
+  },
+  "oops": {
+    "has_pitfalls": true,
+    "pitfall_count": 1,
+    "execution_time_seconds": 0.107,
+    "pitfalls": [
+      {
+        "code": "P22",
+        "name": "Using different naming conventions in the ontology",
+        "description": "The ontology elements are not named following the same convention (for example CamelCase or use of delimiters as \"-\" or \"_\") . Some notions about naming conventions are provided in [2].\t",
+        "importance": "Minor",
+        "num_affected": 1,
+        "affected_elements": [
+          "http://www.example.org/ontology#isContainedInEnvelope",
+          "http://www.example.org/ontology#P2POAlignmentOf"
+        ]
+      }
+    ]
+  },
+  "hermit": {
+    "is_consistent": true,
+    "inconsistent_classes": [],
+    "execution_time_seconds": 0.812,
+    "error": null,
+    "reasoner": "Hermit"
+  },
+  "pellet": {
+    "is_consistent": true,
+    "inconsistent_classes": [],
+    "execution_time_seconds": 0.502,
+    "error": null,
+    "reasoner": "Pellet"
+  },
+  "aggregate": {
+    "all_validators_passed": false,
+    "total_execution_time_seconds": 1.444
+  }
+}

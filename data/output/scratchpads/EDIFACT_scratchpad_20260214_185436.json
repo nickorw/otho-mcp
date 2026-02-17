@@ -1,0 +1,324 @@
+{
+  "plan": {
+    "Concept Extraction": {
+      "Classes": [
+        "EDIFACTMessage",
+        "Invoice",
+        "Organization",
+        "Role",
+        "Address",
+        "Item",
+        "BusinessProcess",
+        "InvoiceDetail",
+        "UserOrganizationRoleInInvoice",
+        "InvoiceItem"
+      ],
+      "Pivot Classes": [
+        "UserOrganizationRoleInInvoice",
+        "InvoiceItem"
+      ]
+    },
+    "Hierarchy Plan": {
+      "subClassOf": [
+        [
+          "InvoiceDetail",
+          "owl:Thing"
+        ],
+        [
+          "Organization",
+          "owl:Thing"
+        ],
+        [
+          "Role",
+          "owl:Thing"
+        ],
+        [
+          "Address",
+          "owl:Thing"
+        ],
+        [
+          "BusinessProcess",
+          "owl:Thing"
+        ],
+        [
+          "EDIFACTMessage",
+          "owl:Thing"
+        ],
+        [
+          "Invoice",
+          "owl:Thing"
+        ],
+        [
+          "Item",
+          "owl:Thing"
+        ],
+        [
+          "UserOrganizationRoleInInvoice",
+          "owl:Thing"
+        ],
+        [
+          "InvoiceItem",
+          "owl:Thing"
+        ]
+      ],
+      "disjointWith": [
+        [
+          "Organization",
+          "Role"
+        ],
+        [
+          "Invoice",
+          "Organization"
+        ],
+        [
+          "Invoice",
+          "Role"
+        ],
+        [
+          "Invoice",
+          "EDIFACTMessage"
+        ],
+        [
+          "Invoice",
+          "Item"
+        ],
+        [
+          "Invoice",
+          "InvoiceDetail"
+        ],
+        [
+          "Invoice",
+          "BusinessProcess"
+        ],
+        [
+          "Invoice",
+          "Address"
+        ],
+        [
+          "EDIFACTMessage",
+          "Organization"
+        ],
+        [
+          "EDIFACTMessage",
+          "Role"
+        ],
+        [
+          "EDIFACTMessage",
+          "Item"
+        ],
+        [
+          "EDIFACTMessage",
+          "Address"
+        ],
+        [
+          "EDIFACTMessage",
+          "InvoiceDetail"
+        ],
+        [
+          "EDIFACTMessage",
+          "BusinessProcess"
+        ]
+      ],
+      "DisjointUnion": []
+    },
+    "Properties": {
+      "ObjectProperties": [
+        {
+          "name": "hasInvoice",
+          "domain": "EDIFACTMessage",
+          "range": "Invoice",
+          "characteristics": [
+            "Functional"
+          ]
+        },
+        {
+          "name": "involvesOrganizationRole",
+          "domain": "Invoice",
+          "range": "UserOrganizationRoleInInvoice",
+          "characteristics": []
+        },
+        {
+          "name": "hasOrganization",
+          "domain": "UserOrganizationRoleInInvoice",
+          "range": "Organization",
+          "characteristics": [
+            "Functional"
+          ]
+        },
+        {
+          "name": "hasRole",
+          "domain": "UserOrganizationRoleInInvoice",
+          "range": "Role",
+          "characteristics": [
+            "Functional"
+          ]
+        },
+        {
+          "name": "hasAddress",
+          "domain": "Organization",
+          "range": "Address",
+          "characteristics": [
+            "Functional"
+          ]
+        },
+        {
+          "name": "hasBuyer",
+          "domain": "Invoice",
+          "range": "Organization",
+          "characteristics": [
+            "Functional"
+          ]
+        },
+        {
+          "name": "hasItem",
+          "domain": "Invoice",
+          "range": "InvoiceItem",
+          "characteristics": []
+        },
+        {
+          "name": "itemRefersTo",
+          "domain": "InvoiceItem",
+          "range": "Item",
+          "characteristics": [
+            "Functional"
+          ]
+        },
+        {
+          "name": "assignedToBusinessProcess",
+          "domain": "Invoice",
+          "range": "BusinessProcess",
+          "characteristics": [
+            "Functional"
+          ]
+        }
+      ],
+      "DataProperties": [
+        {
+          "name": "organizationName",
+          "domain": "Organization",
+          "range": "xsd:string"
+        },
+        {
+          "name": "addressLine",
+          "domain": "Address",
+          "range": "xsd:string"
+        },
+        {
+          "name": "itemName",
+          "domain": "Item",
+          "range": "xsd:string"
+        },
+        {
+          "name": "itemDescription",
+          "domain": "Item",
+          "range": "xsd:string"
+        },
+        {
+          "name": "netPrice",
+          "domain": "InvoiceItem",
+          "range": "xsd:decimal"
+        },
+        {
+          "name": "invoiceAmount",
+          "domain": "Invoice",
+          "range": "xsd:decimal"
+        },
+        {
+          "name": "invoiceNumber",
+          "domain": "Invoice",
+          "range": "xsd:string"
+        },
+        {
+          "name": "invoiceDetailText",
+          "domain": "InvoiceDetail",
+          "range": "xsd:string"
+        }
+      ]
+    },
+    "Complex Axioms & Restrictions": {
+      "GCAs": [
+        {
+          "pattern": "[ rdf:type owl:Restriction ; owl:onProperty :hasRole ; owl:someValuesFrom :Role ; rdfs:subClassOf :UserOrganizationRoleInInvoice ]"
+        }
+      ],
+      "Equivalence": [
+        {
+          "pattern": "Invoice owl:equivalentClass [ rdf:type owl:Restriction ; owl:onProperty :hasInvoice ; owl:allValuesFrom :Invoice ]"
+        }
+      ]
+    },
+    "Property Characteristics": {
+      "Functional": [
+        "hasInvoice",
+        "hasOrganization",
+        "hasRole",
+        "hasAddress",
+        "hasBuyer",
+        "itemRefersTo",
+        "assignedToBusinessProcess"
+      ],
+      "InverseFunctional": [],
+      "Transitive": [],
+      "Symmetric": [],
+      "Asymmetric": [],
+      "Reflexive": [],
+      "Irreflexive": []
+    }
+  },
+  "cq_coverage": {
+    "1": "EDIFACTMessage (hasInvoice) -> Invoice",
+    "2": "Invoice (involvesOrganizationRole) -> UserOrganizationRoleInInvoice (hasOrganization) -> Organization",
+    "3": "UserOrganizationRoleInInvoice (hasOrganization, hasRole) - can filter by organization S and get their role in Invoice",
+    "4": "Invoice (hasBuyer) -> Organization",
+    "5": "Organization (organizationName, hasAddress), Role (via UserOrganizationRoleInInvoice)",
+    "6": "Organization (hasAddress) -> Address (addressLine) [for Buyer: Invoice (hasBuyer)]",
+    "7": "Invoice (hasItem) -> InvoiceItem (itemRefersTo) -> Item",
+    "8": "Item (itemName, itemDescription), InvoiceItem (netPrice)",
+    "9": "InvoiceItem (netPrice)",
+    "10": "Invoice (hasInvoiceDetail) -> InvoiceDetail (invoiceDetailText)",
+    "11": "Invoice (invoiceAmount)",
+    "12": "Invoice (invoiceNumber)",
+    "13": "All required properties for EDIFACTMessage, Invoice, UserOrganizationRoleInInvoice, InvoiceItem, etc., must be present (ontology structure enforces this)",
+    "14": "Invoice (assignedToBusinessProcess) -> BusinessProcess"
+  },
+  "notes": "Story is EDIFACT scenario. Pivot classes are UserOrganizationRoleInInvoice (reifies org/role/invoice) and InvoiceItem (reifies item in invoice with price etc). Properties are designed to answer all CQs. Restrictions and characteristics are set per OWL2 DL best practices. CQ coverage is explicitly mapped. Ready to generate OWL code.",
+  "current_owl": "@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n@prefix owl: <http://www.w3.org/2002/07/owl#> .\n@prefix : <http://www.example.org/ontology#> .\n\n<http://www.example.org/ontology/EDIFACTScenario> a owl:Ontology ;\n    rdfs:label \"EDIFACT Scenario Ontology\" ;\n    rdfs:comment \"An ontology modeling EDIFACT messages, invoices, organizations, roles, items, and related business processes.\" .\n\n#################################################################\n#    Classes\n#################################################################\n:EDIFACTMessage a owl:Class ;\n    rdfs:label \"EDIFACT Message\" ;\n    rdfs:comment \"An EDIFACT message containing invoices and related data.\" .\n\n:Invoice a owl:Class ;\n    rdfs:label \"Invoice\" ;\n    rdfs:comment \"An invoice listed in an EDIFACT message.\" .\n\n:Organization a owl:Class ;\n    rdfs:label \"Organization\" ;\n    rdfs:comment \"An organization involved in an invoice, e.g., buyer or seller.\" .\n\n:Role a owl:Class ;\n    rdfs:label \"Role\" ;\n    rdfs:comment \"A role that an organization can play in an invoice (e.g., buyer, seller).\" .\n\n:Address a owl:Class ;\n    rdfs:label \"Address\" ;\n    rdfs:comment \"A postal address for an organization.\" .\n\n:Item a owl:Class ;\n    rdfs:label \"Item\" ;\n    rdfs:comment \"A product or service listed on an invoice.\" .\n\n:BusinessProcess a owl:Class ;\n    rdfs:label \"Business Process\" ;\n    rdfs:comment \"A business process to which an invoice may be assigned.\" .\n\n:InvoiceDetail a owl:Class ;\n    rdfs:label \"Invoice Detail\" ;\n    rdfs:comment \"Details or notes about an invoice.\" .\n\n:UserOrganizationRoleInInvoice a owl:Class ;\n    rdfs:label \"User Organization Role In Invoice\" ;\n    rdfs:comment \"A reification class linking an organization and its role in a specific invoice (pivot class).\" .\n\n:InvoiceItem a owl:Class ;\n    rdfs:label \"Invoice Item\" ;\n    rdfs:comment \"A reification class linking an invoice and an item, including price and other properties (pivot class).\" .\n\n#################################################################\n#    Disjointness\n#################################################################\n:Organization owl:disjointWith :Role , :Invoice .\n:Invoice owl:disjointWith :Role , :Organization , :EDIFACTMessage , :Item , :InvoiceDetail , :BusinessProcess , :Address .\n:EDIFACTMessage owl:disjointWith :Organization , :Role , :Item , :Address , :InvoiceDetail , :BusinessProcess .\n\n#################################################################\n#    Object Properties with Inverses\n#################################################################\n:hasInvoice a owl:ObjectProperty , owl:FunctionalProperty ;\n    rdfs:label \"has invoice\" ;\n    rdfs:comment \"Relates an EDIFACT message to an invoice.\" ;\n    rdfs:domain :EDIFACTMessage ;\n    rdfs:range :Invoice ;\n    owl:inverseOf :isInvoiceInMessage .\n\n:isInvoiceInMessage a owl:ObjectProperty ;\n    rdfs:label \"is invoice in message\" ;\n    rdfs:comment \"Inverse of hasInvoice: relates an invoice to an EDIFACT message.\" ;\n    rdfs:domain :Invoice ;\n    rdfs:range :EDIFACTMessage ;\n    owl:inverseOf :hasInvoice .\n\n:involvesOrganizationRole a owl:ObjectProperty ;\n    rdfs:label \"involves organization role\" ;\n    rdfs:comment \"Relates an invoice to a pivot class for organization/role participation.\" ;\n    rdfs:domain :Invoice ;\n    rdfs:range :UserOrganizationRoleInInvoice ;\n    owl:inverseOf :isOrganizationRoleInvolvedIn .\n\n:isOrganizationRoleInvolvedIn a owl:ObjectProperty ;\n    rdfs:label \"is organization role involved in\" ;\n    rdfs:comment \"Inverse of involvesOrganizationRole: relates a pivot class to an invoice.\" ;\n    rdfs:domain :UserOrganizationRoleInInvoice ;\n    rdfs:range :Invoice ;\n    owl:inverseOf :involvesOrganizationRole .\n\n:hasOrganization a owl:ObjectProperty , owl:FunctionalProperty ;\n    rdfs:label \"has organization\" ;\n    rdfs:comment \"Relates a pivot instance to an organization.\" ;\n    rdfs:domain :UserOrganizationRoleInInvoice ;\n    rdfs:range :Organization ;\n    owl:inverseOf :isOrganizationOfRoleInInvoice .\n\n:isOrganizationOfRoleInInvoice a owl:ObjectProperty ;\n    rdfs:label \"is organization of role in invoice\" ;\n    rdfs:comment \"Inverse of hasOrganization: relates an organization to a pivot instance.\" ;\n    rdfs:domain :Organization ;\n    rdfs:range :UserOrganizationRoleInInvoice ;\n    owl:inverseOf :hasOrganization .\n\n:hasRole a owl:ObjectProperty , owl:FunctionalProperty ;\n    rdfs:label \"has role\" ;\n    rdfs:comment \"Relates a pivot instance to a role.\" ;\n    rdfs:domain :UserOrganizationRoleInInvoice ;\n    rdfs:range :Role ;\n    owl:inverseOf :isRoleOfOrganizationInInvoice .\n\n:isRoleOfOrganizationInInvoice a owl:ObjectProperty ;\n    rdfs:label \"is role of organization in invoice\" ;\n    rdfs:comment \"Inverse of hasRole: relates a role to a pivot instance.\" ;\n    rdfs:domain :Role ;\n    rdfs:range :UserOrganizationRoleInInvoice ;\n    owl:inverseOf :hasRole .\n\n:hasAddress a owl:ObjectProperty , owl:FunctionalProperty ;\n    rdfs:label \"has address\" ;\n    rdfs:comment \"Relates an organization to its address.\" ;\n    rdfs:domain :Organization ;\n    rdfs:range :Address ;\n    owl:inverseOf :isAddressOfOrganization .\n\n:isAddressOfOrganization a owl:ObjectProperty ;\n    rdfs:label \"is address of organization\" ;\n    rdfs:comment \"Inverse of hasAddress: relates an address to an organization.\" ;\n    rdfs:domain :Address ;\n    rdfs:range :Organization ;\n    owl:inverseOf :hasAddress .\n\n:hasBuyer a owl:ObjectProperty , owl:FunctionalProperty ;\n    rdfs:label \"has buyer\" ;\n    rdfs:comment \"Relates an invoice to its buyer organization.\" ;\n    rdfs:domain :Invoice ;\n    rdfs:range :Organization ;\n    owl:inverseOf :isBuyerOf .\n\n:isBuyerOf a owl:ObjectProperty ;\n    rdfs:label \"is buyer of\" ;\n    rdfs:comment \"Inverse of hasBuyer: relates an organization to an invoice as buyer.\" ;\n    rdfs:domain :Organization ;\n    rdfs:range :Invoice ;\n    owl:inverseOf :hasBuyer .\n\n:hasItem a owl:ObjectProperty ;\n    rdfs:label \"has item\" ;\n    rdfs:comment \"Relates an invoice to a reified invoice item.\" ;\n    rdfs:domain :Invoice ;\n    rdfs:range :InvoiceItem ;\n    owl:inverseOf :isItemOfInvoice .\n\n:isItemOfInvoice a owl:ObjectProperty ;\n    rdfs:label \"is item of invoice\" ;\n    rdfs:comment \"Inverse of hasItem: relates an invoice item to an invoice.\" ;\n    rdfs:domain :InvoiceItem ;\n    rdfs:range :Invoice ;\n    owl:inverseOf :hasItem .\n\n:itemRefersTo a owl:ObjectProperty , owl:FunctionalProperty ;\n    rdfs:label \"item refers to\" ;\n    rdfs:comment \"Relates an invoice item pivot to an item.\" ;\n    rdfs:domain :InvoiceItem ;\n    rdfs:range :Item ;\n    owl:inverseOf :isItemReferredByInvoiceItem .\n\n:isItemReferredByInvoiceItem a owl:ObjectProperty ;\n    rdfs:label \"is item referred by invoice item\" ;\n    rdfs:comment \"Inverse of itemRefersTo: relates an item to an invoice item.\" ;\n    rdfs:domain :Item ;\n    rdfs:range :InvoiceItem ;\n    owl:inverseOf :itemRefersTo .\n\n:assignedToBusinessProcess a owl:ObjectProperty , owl:FunctionalProperty ;\n    rdfs:label \"assigned to business process\" ;\n    rdfs:comment \"Assigns an invoice to a business process.\" ;\n    rdfs:domain :Invoice ;\n    rdfs:range :BusinessProcess ;\n    owl:inverseOf :isBusinessProcessOfInvoice .\n\n:isBusinessProcessOfInvoice a owl:ObjectProperty ;\n    rdfs:label \"is business process of invoice\" ;\n    rdfs:comment \"Inverse of assignedToBusinessProcess: relates a business process to an invoice.\" ;\n    rdfs:domain :BusinessProcess ;\n    rdfs:range :Invoice ;\n    owl:inverseOf :assignedToBusinessProcess .\n\n:hasInvoiceDetail a owl:ObjectProperty ;\n    rdfs:label \"has invoice detail\" ;\n    rdfs:comment \"Relates an invoice to its detail/notes.\" ;\n    rdfs:domain :Invoice ;\n    rdfs:range :InvoiceDetail ;\n    owl:inverseOf :isInvoiceDetailOf .\n\n:isInvoiceDetailOf a owl:ObjectProperty ;\n    rdfs:label \"is invoice detail of\" ;\n    rdfs:comment \"Inverse of hasInvoiceDetail: relates an invoice detail to an invoice.\" ;\n    rdfs:domain :InvoiceDetail ;\n    rdfs:range :Invoice ;\n    owl:inverseOf :hasInvoiceDetail .\n\n#################################################################\n#    Data Properties\n#################################################################\n:organizationName a owl:DatatypeProperty ;\n    rdfs:label \"organization name\" ;\n    rdfs:comment \"The name of an organization.\" ;\n    rdfs:domain :Organization ;\n    rdfs:range xsd:string .\n\n:addressLine a owl:DatatypeProperty ;\n    rdfs:label \"address line\" ;\n    rdfs:comment \"The address line of an address.\" ;\n    rdfs:domain :Address ;\n    rdfs:range xsd:string .\n\n:itemName a owl:DatatypeProperty ;\n    rdfs:label \"item name\" ;\n    rdfs:comment \"The name of an item.\" ;\n    rdfs:domain :Item ;\n    rdfs:range xsd:string .\n\n:itemDescription a owl:DatatypeProperty ;\n    rdfs:label \"item description\" ;\n    rdfs:comment \"The description of an item.\" ;\n    rdfs:domain :Item ;\n    rdfs:range xsd:string .\n\n:netPrice a owl:DatatypeProperty ;\n    rdfs:label \"net price\" ;\n    rdfs:comment \"The net price of an invoice item.\" ;\n    rdfs:domain :InvoiceItem ;\n    rdfs:range xsd:decimal .\n\n:invoiceAmount a owl:DatatypeProperty ;\n    rdfs:label \"invoice amount\" ;\n    rdfs:comment \"The total amount of the invoice.\" ;\n    rdfs:domain :Invoice ;\n    rdfs:range xsd:decimal .\n\n:invoiceNumber a owl:DatatypeProperty ;\n    rdfs:label \"invoice number\" ;\n    rdfs:comment \"The invoice number.\" ;\n    rdfs:domain :Invoice ;\n    rdfs:range xsd:string .\n\n:invoiceDetailText a owl:DatatypeProperty ;\n    rdfs:label \"invoice detail text\" ;\n    rdfs:comment \"Textual details about an invoice.\" ;\n    rdfs:domain :InvoiceDetail ;\n    rdfs:range xsd:string .\n\n#################################################################\n#    Complex Axioms & Restrictions\n#################################################################\n[ a owl:Restriction ; owl:onProperty :hasRole ; owl:someValuesFrom :Role ; rdfs:subClassOf :UserOrganizationRoleInInvoice ] .\n",
+  "iterations": [
+    {
+      "iteration": 1,
+      "syntax_validation": {
+        "valid": true
+      },
+      "pitfall_validation": {
+        "has_pitfalls": true,
+        "pitfall_count": 2,
+        "pitfalls": [
+          {
+            "code": "P13",
+            "description": "Inverse relationships not explicitly declared",
+            "affected_elements": [
+              "hasAddress",
+              "involvesOrganizationRole",
+              "hasInvoice",
+              "hasInvoiceDetail",
+              "itemRefersTo",
+              "assignedToBusinessProcess",
+              "hasBuyer",
+              "hasItem",
+              "hasOrganization",
+              "hasRole"
+            ]
+          },
+          {
+            "code": "P24",
+            "description": "Recursive definition: Invoice owl:equivalentClass [ a owl:Restriction ; owl:onProperty :hasInvoice ; owl:allValuesFrom :Invoice ]"
+          }
+        ]
+      },
+      "fixes_applied": "Will add owl:inverseOf for all object properties. Will remove the recursive owl:equivalentClass axiom for Invoice."
+    }
+  ],
+  "refinement_plan_1": {
+    "analysis": "Review feedback highlights two CQs needing improvement: CQ5 (organization info extensibility) and CQ13 (file format validity/mandatory fields). High-priority: explicitly model file format validity requirements, possibly with OWL restrictions or SHACL. Medium-priority: enrich Organization with more extensible metadata (e.g., tax ID, contact info) or add OrganizationDetail class. Also, to improve quality, introduce General Class Axioms (GCAs) for concepts like BuyerOrganization, and deepen the class hierarchy (e.g., subclasses for Organization and Item). Constraint adherence is good; no major violations. Pitfall history: recursive equivalentClass axiom for Invoice was removed, and all inverses are present. Plan: 1) Add OrganizationDetail class and link, plus new org properties (tax ID, contact info, etc.); 2) Add GCA for BuyerOrganization; 3) Add subclasses (Company, Supplier, Customer under Organization; Product, Service under Item); 4) Model file format validity with OWL restrictions (e.g., required properties on Invoice, Organization); 5) Ensure every property/class has annotation; 6) Validate and fix as needed."
+  }
+}
