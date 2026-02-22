@@ -125,7 +125,7 @@ def get_gaih_openai_llm(model: str):
     """
     # Models that require init_llm instead of ChatOpenAI
     legacy_models = ["gpt-4o", "gpt-4o-mini", "o1", "o1-mini", "o1-preview"]
-
+    print("Generating LLM object using: " + model)
     if model in legacy_models:
         return init_llm(model, max_tokens=4096)
     elif model.startswith("gpt-5"):
@@ -154,23 +154,24 @@ def call_gaih_openai(model: str, prompt: str) -> str:
     """
     llm_openai = get_gaih_openai_llm(model)
     response = llm_openai.invoke(prompt).content
+
     return str(response)
 
 
-def get_gaih_anthropic_llm(model: str):
+def get_gaih_anthropic_llm(model: str = "opus"):
     """
     Get a LangChain-compatible LLM object for Anthropic/Claude via GenAIHub.
     Uses ChatOpenAI with the Anthropic model name.
     For use with create_react_agent.
 
     Args:
-        model: The model name to use (e.g., 'anthropic--claude-4.5-sonnet')
+        model: The model variant to use ('haiku', 'sonnet', or 'opus'). Defaults to 'opus'.
 
     Returns:
         A LangChain-compatible LLM object (not invoked)
     """
-    model_name_amazon = "anthropic--claude-4.5-sonnet"
-    model_id_amazon = "anthropic.claude-4.5-sonnet-v1:0"
+    model_name_amazon = f"anthropic--claude-4.5-{model}"
+    model_id_amazon = f"anthropic.claude-4.5-{model}-v1:0"
 
     llm_claude = init_llm(
         model_name=model_name_amazon,

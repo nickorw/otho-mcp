@@ -12,7 +12,7 @@ from pathlib import Path
 from typing import Any, Dict, List, TypedDict
 
 from langchain.tools import tool
-from langchain_core.messages import HumanMessage
+from langchain_core.messages import HumanMessage, SystemMessage
 from langgraph.prebuilt import create_react_agent
 
 from src.agents.tools import validate_syntax_tool
@@ -130,28 +130,28 @@ def create_agent_tools(
     @tool
     def update_scratchpad(key: str, value: Any) -> Dict[str, bool]:
         """
-        Update agent's persistent working memory (scratchpad) with a key-value pair("plan", <yourplan>).
+        Update agent's persistent working memory (scratchpad) with a key-value pair.
 
-        Use this to track your planning, progress, and decisions.
+        IMPORTANT: You MUST provide BOTH 'key' AND 'value' parameters.
+
         Recommended keys:
         - 'plan': Your ontology structure plan
         - 'cq_coverage': Mapping of CQs to ontology elements
         - 'iterations': List of validation attempts and fixes
-        - 'current_owl_draft': Working version of ontology
+        - 'current_owl': Working version of ontology
         - 'notes': Your reasoning and observations
 
         Args:
-            key: The scratchpad key to update
-            value: The value to store (can be dict, list, string, etc.)
+            key: The scratchpad key to update (required)
+            value: The value to store (required) - can be dict, list, string, etc.
 
         Returns:
-            {"success": True, "key": key}
+            {"success": True}
 
-        Example:
-            update_scratchpad("plan", {
-                "classes": ["User", "Resource"],
-                "properties": [{"name": "uses", "type": "ObjectProperty"}]
-            })
+        Examples:
+            update_scratchpad(key: "plan", value:{"classes": ["User", "Resource"], "properties": ["uses"]})
+            update_scratchpad(key:"cq_coverage", value:{"CQ1": "User class answers this"})
+            update_scratchpad(key:"current_owl", value:"@prefix rdf: <http://...> ...")
         """
         workspace.update_scratchpad(key, value)
         return {"success": True}
@@ -313,7 +313,177 @@ def create_agent_tools(
             if os.path.exists(temp_path):
                 os.unlink(temp_path)
 
-    # Return all 6 tools
+    @tool
+    def ask_edifact_expert(question: str, context: str = "") -> Dict[str, Any]:
+        """
+        Ask the EDIFACT domain expert a specific question.
+
+        Use this during planning or when you need clarification on EDIFACT concepts,
+        cardinality rules, or segment structures. Optionally provide context
+        (a snippet, plan excerpt, or class definition) for more precise answers.
+
+        WHEN TO USE:
+        - During planning: Clarify EDIFACT segment structures and qualifiers
+        - When designing classes: Verify cardinality against EANCOM rules
+        - When uncertain: Ask about specific D96A requirements
+
+        IMPORTANT: Limited to 5 calls per session. Use wisely for critical questions.
+
+        Args:
+            question: Your specific question about EDIFACT modeling
+            context: Optional - relevant snippet, plan, or definition to discuss
+                     (if empty, expert answers based on question alone)
+
+        Returns:
+            {
+                "expert_response": str,  # The domain expert's analysis
+                "consultation_logged": bool
+            }
+
+        Examples:
+            ask_edifact_expert("Which NAD qualifiers distinguish Buyer from Supplier?")
+            ask_edifact_expert("Is this structure correct?", ":Buyer a owl:Class...")
+        """
+        # Check call limit (max 5 calls per session)
+        MAX_EXPERT_CALLS = 5
+        consultation_count = workspace.scratchpad.get("expert_consultations", 0)
+        if consultation_count >= MAX_EXPERT_CALLS:
+            return {
+                "expert_response": f"ERROR: Maximum expert consultations ({MAX_EXPERT_CALLS}) reached. You have already consulted the expert {consultation_count} times. Please proceed with the information you have.",
+                "consultation_logged": False,
+                "calls_remaining": 0,
+            }
+
+        # Load domain expert prompt
+        expert_system_prompt = prompt_manager.get_prompt_template(
+            "edifact_domain_expert"
+        )
+
+        # Build consultation message
+        if context:
+            user_message = (
+                f"## Question\n{question}\n\n## Content to Review\n```\n{context}\n```"
+            )
+        else:
+            user_message = f"## Question\n{question}"
+
+        # Make LLM call with expert persona
+
+        expert_llm = get_gaih_anthropic_llm(model="sonnet")
+
+        response = expert_llm.invoke(
+            [
+                SystemMessage(content=expert_system_prompt),
+                HumanMessage(content=user_message),
+            ]
+        )
+
+        # Log consultation to workspace for tracking
+        workspace.update_scratchpad("expert_consultations", consultation_count + 1)
+        calls_remaining = MAX_EXPERT_CALLS - (consultation_count + 1)
+
+        return {
+            "expert_response": response.content,
+            "consultation_logged": True,
+            "calls_remaining": calls_remaining,
+        }
+
+    @tool
+    def audit_owl_with_expert() -> Dict[str, Any]:
+        """
+        Request a full semantic audit of your current ontology from the EDIFACT expert.
+
+        The expert will read your current OWL from the workspace and provide a
+        comprehensive audit against D96A EANCOM standards. Use this BEFORE calling
+        save_final_ontology to catch semantic issues.
+
+        No parameters needed - reads from workspace automatically.
+
+        WHEN TO USE:
+        - After generating complete OWL code
+        - Before calling save_final_ontology
+        - When you want comprehensive feedback on the entire ontology
+
+        IMPORTANT: Limited to 3 audits per session. Use wisely.
+
+        Returns:
+            {
+                "audit_findings": str,       # Comprehensive audit report
+                "owl_reviewed_length": int,  # Characters of OWL reviewed
+                "consultation_logged": bool
+            }
+        """
+        # Check audit limit (max 3 audits per session - these are expensive)
+        MAX_AUDIT_CALLS = 3
+        audit_count = workspace.scratchpad.get("expert_audits", 0)
+        if audit_count >= MAX_AUDIT_CALLS:
+            return {
+                "audit_findings": f"ERROR: Maximum expert audits ({MAX_AUDIT_CALLS}) reached. You have already performed {audit_count} audits. Please proceed with the feedback you have received.",
+                "owl_reviewed_length": 0,
+                "consultation_logged": False,
+                "audits_remaining": 0,
+            }
+
+        # Get current OWL from workspace
+        current_owl = workspace.generated_owl
+        if not current_owl:
+            # Try scratchpad if generated_owl is empty
+            current_owl = workspace.scratchpad.get("current_owl", "")
+
+        if not current_owl:
+            return {
+                "audit_findings": "ERROR: No OWL content found in workspace. Generate OWL first using update_scratchpad(key: 'current_owl', value: '<your owl code>') or save via save_final_ontology.",
+                "owl_reviewed_length": 0,
+                "consultation_logged": False,
+            }
+
+        # Load domain expert prompt
+        expert_system_prompt = prompt_manager.get_prompt_template(
+            "edifact_domain_expert"
+        )
+
+        # Build audit request
+        user_message = f"""## Full Ontology Audit Request
+
+            Please perform a comprehensive semantic audit of the following OWL ontology against D96A EANCOM INVOIC standards.
+
+            Check for:
+            1. Flattening errors (distinct EDIFACT concepts merged incorrectly)
+            2. Missing qualifier distinctions (NAD+BY vs NAD+SU, DTM qualifiers, etc.)
+            3. Cardinality violations against EANCOM business rules
+            4. Data type constraints (GLN numeric n13, etc.)
+            5. Missing mandatory segments or properties
+
+            ## OWL Ontology to Audit
+            ```turtle
+            {current_owl}
+            ```
+
+            Provide specific issues found and recommendations for improvement."""
+
+        # Make LLM call with expert persona
+
+        expert_llm = get_gaih_anthropic_llm(model="sonnet")
+
+        response = expert_llm.invoke(
+            [
+                SystemMessage(content=expert_system_prompt),
+                HumanMessage(content=user_message),
+            ]
+        )
+
+        # Log audit to workspace for tracking (separate counter from consultations)
+        workspace.update_scratchpad("expert_audits", audit_count + 1)
+        audits_remaining = MAX_AUDIT_CALLS - (audit_count + 1)
+
+        return {
+            "audit_findings": response.content,
+            "owl_reviewed_length": len(current_owl),
+            "consultation_logged": True,
+            "audits_remaining": audits_remaining,
+        }
+
+    # Return all 8 tools
     return [
         update_scratchpad,
         read_scratchpad,
@@ -321,6 +491,8 @@ def create_agent_tools(
         validate_syntax_tool,
         check_pitfalls_tool,
         save_final_ontology,
+        ask_edifact_expert,
+        audit_owl_with_expert,
     ]
 
 
@@ -445,7 +617,7 @@ def ontology_generation_agent(state: StateDict) -> StateDict:
     )
 
     # Get LLM for React agent
-    # generator_model = "anthropic--claude-4.5-opus"
+    # generator_model = "sonnet"
     # llm = get_gaih_anthropic_llm(model=generator_model)
 
     generator_model = "gpt-4.1"
@@ -893,8 +1065,7 @@ This is refinement iteration {review_iteration}. A previous review was provided:
     review_prompt = prompt_manager.format_prompt("advisory_review", **context)
 
     # Single LLM call for review
-    # generator_model = "anthropic--claude-4.5-opus"
-    # llm = get_gaih_anthropic_llm(model=generator_model)
+    # llm = get_gaih_anthropic_llm(model="sonnet")
 
     # generator_model = "gemini-2.5-flash"
     # llm = get_gaih_google_llm(model=generator_model)
