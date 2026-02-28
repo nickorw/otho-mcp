@@ -1,8 +1,11 @@
 import argparse
 import os
 import sys
+import time
+import json
 from pathlib import Path
 from typing import Any, Dict, List, TypedDict
+from datetime import datetime
 
 import dotenv
 import langgraph
@@ -12,10 +15,13 @@ from rdflib import Graph
 from src.models.requirement_models import CompetencyQuestion, Story
 from src.prompts.prompt_manager import PromptManager
 from src.reviewers.reviewer import OopsPitfallReviewer, RDFSyntaxReviewer
+from src.reviewers.reasoner_validator import HermitReasonerValidator, PelletReasonerValidator
 from src.utils.excel_processor import get_story_by_id
 from src.utils.file_handler import load_existing_owl_files, save_text_file
 from src.utils.llm_manager import call_llm
 from src.utils.oops_parser import format_pitfalls_for_feedback, parse_oops_response
+from src.utils.validation_logger import ValidationLogger
+from src.utils.timing import format_duration
 
 ###########################################
 ########### Foundational Setup ############
@@ -25,7 +31,7 @@ from src.utils.oops_parser import format_pitfalls_for_feedback, parse_oops_respo
 dotenv.load_dotenv()
 
 ########### LLM Configuration ###########
-llm_type = "google"
+llm_type = "openai"
 
 
 ########### Prompt Manager Initialization ###########
@@ -53,6 +59,12 @@ class OntoAgentState(TypedDict, total=False):
     invalid_owl: str  # Added for error handling
     pitfall_feedback: str  # Formatted pitfall feedback for LLM
     retry_count: int  # Track correction attempts
+    log_timestamp: str  # Shared timestamp for logs
+    story_start_time: float  # Timing for benchmarking
+    story_duration_seconds: float  # Total duration
+    story_duration_formatted: str  # Formatted duration
+    syntax_time_seconds: float  # Syntax validation timing
+    oops_time_seconds: float  # OOPS validation timing
 
 
 #############################
@@ -63,6 +75,16 @@ class OntoAgentState(TypedDict, total=False):
 ##### Node to load story object into state
 def get_story_node(state: OntoAgentState) -> OntoAgentState:
     story_id = state.get("story_id", "")
+
+    # Add timestamp and timing
+    log_timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    story_start_time = time.time()
+
+    print(f"\n{'=' * 60}")
+    print(f"Loading Story: {story_id}")
+    print(f"Run Timestamp: {log_timestamp}")
+    print(f"{'=' * 60}\n")
+
     story = get_story_by_id(story_id)
     cqs = (
         list(story.competency_questions) if story and story.competency_questions else []
@@ -72,6 +94,8 @@ def get_story_node(state: OntoAgentState) -> OntoAgentState:
         "story_object": story,
         "unprocessed_cqs": cqs,
         "processed_owls": [],
+        "log_timestamp": log_timestamp,
+        "story_start_time": story_start_time,
     }
 
 
@@ -199,14 +223,31 @@ def validate_combined_owl_node(state: OntoAgentState) -> OntoAgentState:
     syntax_reviewer = RDFSyntaxReviewer()
     story_id = state.get("story_id", "")
 
+    # Initialize validation logger
+    combined_owl = state.get("combined_owl", "")
+    timestamp = state.get("log_timestamp") or datetime.now().strftime("%Y%m%d_%H%M%S")
+    validation_logger = ValidationLogger(
+        story_id=story_id,
+        log_dir="logs",
+        timestamp=timestamp
+    )
+    validation_logger.log_start(ontology_size=len(combined_owl))
+
     try:
         print("Validating combined OWL for Story ID:", story_id)
 
-        combined_owl = state.get("combined_owl", "")
-
-        # Syntax validation
+        # Syntax validation with timing
+        syntax_start_time = time.time()
         syntax_validation_result = syntax_reviewer.review_owl_content(combined_owl)
+        syntax_time_seconds = time.time() - syntax_start_time
         print("Syntax Validation Result:", syntax_validation_result)
+
+        syntax_valid = syntax_validation_result == "OK"
+        validation_logger.log_syntax_validation(
+            is_valid=syntax_valid,
+            execution_time_seconds=syntax_time_seconds,
+            error=None if syntax_valid else syntax_validation_result,
+        )
 
         if syntax_validation_result != "OK":
             print("Syntax validation failed!")
@@ -217,7 +258,8 @@ def validate_combined_owl_node(state: OntoAgentState) -> OntoAgentState:
                 "pitfall_feedback": f"Syntax Error: {syntax_validation_result}",
             }
 
-        # Validate Pitfalls using turtle file
+        # Validate Pitfalls using turtle file with timing
+        oops_start_time = time.time()
         owl_file_path = os.path.join(
             "data", "output", f"{story_id}_combined_turtle.owl"
         )
@@ -229,15 +271,25 @@ def validate_combined_owl_node(state: OntoAgentState) -> OntoAgentState:
             pitfalls=pitfalls,
             output_format="XML",
         )
+        oops_time_seconds = time.time() - oops_start_time
 
         # Parse OOPS response
         pitfall_data = parse_oops_response(pitfall_validation_result)
+        has_pitfalls = pitfall_data.get("has_pitfalls", False)
+        pitfall_count = pitfall_data.get("pitfall_count", 0)
+        pitfalls_list = pitfall_data.get("pitfalls", [])
+
+        validation_logger.log_pitfall_detection(
+            has_pitfalls=has_pitfalls,
+            pitfall_count=pitfall_count,
+            execution_time_seconds=oops_time_seconds,
+            pitfalls=pitfalls_list,
+        )
 
         # Format pitfall feedback for potential correction
         pitfall_feedback = format_pitfalls_for_feedback(pitfall_data)
 
         # Determine if validation passed
-        has_pitfalls = pitfall_data.get("has_pitfalls", False)
         validation_ok = not has_pitfalls
 
         if has_pitfalls:
@@ -264,11 +316,15 @@ def validate_combined_owl_node(state: OntoAgentState) -> OntoAgentState:
         save_text_file(oops_result_file, validation_result)
         print(f"Saved validation results to: {oops_result_file}")
 
+        # Note: ValidationLogger will be completed and saved by final_reasoner_validation_node
+
         return {
             **state,
             "combined_validation": validation_result,
             "combined_validation_ok": validation_ok,
             "pitfall_feedback": pitfall_feedback if has_pitfalls else "",
+            "syntax_time_seconds": syntax_time_seconds,
+            "oops_time_seconds": oops_time_seconds,
         }
 
     except Exception as e:
@@ -279,6 +335,167 @@ def validate_combined_owl_node(state: OntoAgentState) -> OntoAgentState:
             "combined_validation_ok": False,
             "pitfall_feedback": f"Validation exception: {str(e)}",
         }
+
+
+##### Node for final reasoner validation (Hermit + Pellet)
+def final_reasoner_validation_node(state: OntoAgentState) -> OntoAgentState:
+    """Add reasoner validation (Hermit + Pellet) as Pillar 3."""
+    story_id = state.get("story_id", "")
+    combined_owl = state.get("combined_owl", "")
+
+    if not combined_owl:
+        print("\n⚠ No ontology to validate")
+        return state
+
+    timestamp = state.get("log_timestamp") or datetime.now().strftime("%Y%m%d_%H%M%S")
+
+    print(f"\n{'=' * 60}")
+    print(f"FINAL REASONER VALIDATION FOR {story_id}")
+    print(f"{'=' * 60}\n")
+
+    # Load existing validation log to append reasoners
+    log_json_path = f"logs/{story_id}_validation_{timestamp}.json"
+
+    try:
+        if os.path.exists(log_json_path):
+            with open(log_json_path, "r") as f:
+                existing_log = json.load(f)
+                validation_results = existing_log.get("validation_results", {})
+                if not validation_results:
+                    validation_results = {
+                        "timestamp": timestamp,
+                        "story_id": story_id,
+                        "ontology_size_chars": len(combined_owl),
+                    }
+        else:
+            validation_results = {
+                "timestamp": timestamp,
+                "story_id": story_id,
+                "ontology_size_chars": len(combined_owl),
+            }
+    except Exception as e:
+        print(f"Warning: Could not load existing log: {e}")
+        validation_results = {
+            "timestamp": timestamp,
+            "story_id": story_id,
+            "ontology_size_chars": len(combined_owl),
+        }
+
+    # Get RDF/XML
+    rdfxml_path = "data/output/xml_combined_owl.xml"
+    if not os.path.exists(rdfxml_path):
+        print(f"⚠ RDF/XML not found - skipping reasoners")
+        return state
+
+    print("3️⃣  Reasoning Consistency")
+    print("-" * 60)
+
+    # Hermit
+    print("  🧠 Hermit reasoner...")
+    hermit_validator = HermitReasonerValidator(rdfxml_path=rdfxml_path)
+    hermit_result = hermit_validator.validate()
+    validation_results["hermit"] = hermit_result
+
+    if hermit_result["is_consistent"]:
+        print(f"    ✓ PASSED ({hermit_result['execution_time_seconds']:.3f}s)")
+    else:
+        print(f"    ✗ FAILED ({hermit_result['execution_time_seconds']:.3f}s)")
+
+    # Pellet
+    print("  🧠 Pellet reasoner...")
+    pellet_validator = PelletReasonerValidator(rdfxml_path=rdfxml_path)
+    pellet_result = pellet_validator.validate()
+    validation_results["pellet"] = pellet_result
+
+    if pellet_result["is_consistent"]:
+        print(f"    ✓ PASSED ({pellet_result['execution_time_seconds']:.3f}s)\n")
+    else:
+        print(f"    ✗ FAILED ({pellet_result['execution_time_seconds']:.3f}s)\n")
+
+    # Aggregate
+    reasoners_passed = (
+        hermit_result["is_consistent"] and pellet_result["is_consistent"]
+    )
+    total_time = (
+        hermit_result["execution_time_seconds"] +
+        pellet_result["execution_time_seconds"]
+    )
+
+    syntax_valid = validation_results.get("syntax", {}).get("valid", True)
+    has_pitfalls = validation_results.get("oops", {}).get("has_pitfalls", False)
+    pitfall_count = validation_results.get("oops", {}).get("pitfall_count", 0)
+
+    all_passed = syntax_valid and not has_pitfalls and reasoners_passed
+
+    validation_results["aggregate"] = {
+        "all_validators_passed": all_passed,
+        "total_execution_time_seconds": round(total_time, 3),
+    }
+
+    # Save JSON
+    os.makedirs("data/output/validations", exist_ok=True)
+    val_json = f"data/output/validations/{story_id}_validation_{timestamp}.json"
+    with open(val_json, "w") as f:
+        json.dump(validation_results, f, indent=2)
+    print(f"✓ Validation JSON: {val_json}")
+
+    # Re-create logger and save complete logs
+    validation_logger = ValidationLogger(
+        story_id=story_id,
+        log_dir="logs",
+        timestamp=timestamp
+    )
+    validation_logger.log_start(ontology_size=len(combined_owl))
+
+    # Re-log syntax and OOPS
+    if "syntax" in validation_results:
+        validation_logger.log_syntax_validation(
+            is_valid=validation_results["syntax"].get("valid", False),
+            execution_time_seconds=validation_results["syntax"].get("execution_time_seconds", 0),
+            error=validation_results["syntax"].get("error"),
+        )
+
+    if "oops" in validation_results:
+        validation_logger.log_pitfall_detection(
+            has_pitfalls=validation_results["oops"].get("has_pitfalls", False),
+            pitfall_count=validation_results["oops"].get("pitfall_count", 0),
+            execution_time_seconds=validation_results["oops"].get("execution_time_seconds", 0),
+            pitfalls=validation_results["oops"].get("pitfalls", []),
+        )
+
+    # Log reasoners
+    validation_logger.log_reasoning_start()
+    validation_logger.log_reasoner_validation("Hermit", hermit_result)
+    validation_logger.log_reasoner_validation("Pellet", pellet_result)
+
+    # Get individual timing values for log_summary
+    syntax_time = state.get("syntax_time_seconds", 0)
+    oops_time = state.get("oops_time_seconds", 0)
+    hermit_time = hermit_result["execution_time_seconds"]
+    pellet_time = pellet_result["execution_time_seconds"]
+
+    validation_logger.log_summary(
+        syntax_valid=syntax_valid,
+        has_pitfalls=has_pitfalls,
+        pitfall_count=pitfall_count,
+        hermit_consistent=hermit_result["is_consistent"],
+        pellet_consistent=pellet_result["is_consistent"],
+        syntax_time_seconds=syntax_time,
+        oops_time_seconds=oops_time,
+        hermit_time_seconds=hermit_time,
+        pellet_time_seconds=pellet_time,
+        iteration_count=0,  # Main branch has no iterations
+    )
+    validation_logger.save_json_log()
+
+    print(f"✓ Complete logs: {validation_logger.get_log_paths()['text_log']}")
+    print(f"{'=' * 60}\n")
+
+    return {
+        **state,
+        "reasoner_validation": validation_results,
+        "reasoners_passed": reasoners_passed,
+    }
 
 
 ##### Node to correct OWL based on pitfall feedback
@@ -324,8 +541,59 @@ def correct_owl_pitfalls_node(state: OntoAgentState) -> OntoAgentState:
     }
 
 
+def create_generator_log_node(state: OntoAgentState) -> OntoAgentState:
+    """Create minimal generator log for analyze_logs.py."""
+    story_id = state.get("story_id", "")
+    timestamp = state.get("log_timestamp") or datetime.now().strftime("%Y%m%d_%H%M%S")
+
+    story_start_time = state.get("story_start_time")
+    if story_start_time:
+        duration_seconds = time.time() - story_start_time
+        duration_formatted = format_duration(duration_seconds)
+    else:
+        duration_seconds = 0
+        duration_formatted = "0s"
+
+    combined_owl = state.get("combined_owl", "")
+
+    generator_log = {
+        "story_id": story_id,
+        "timestamp": timestamp,
+        "duration_seconds": duration_seconds,
+        "duration_formatted": duration_formatted,
+        "ontology_saved": len(combined_owl) > 0,
+        "ontology_size_chars": len(combined_owl),
+        "workflow_type": "main_branch_sequential",
+        "iterations": [],
+    }
+
+    log_path = f"logs/{story_id}_generator_{timestamp}.json"
+    with open(log_path, "w") as f:
+        json.dump(generator_log, f, indent=2)
+
+    print(f"✓ Generator log: {log_path}")
+    return state
+
+
 def end_node(state: OntoAgentState) -> OntoAgentState:
-    print(f"Workflow complete for story {state.get('story_id', '')}")
+    story_id = state.get("story_id", "")
+
+    story_start_time = state.get("story_start_time")
+    if story_start_time:
+        duration = time.time() - story_start_time
+        duration_fmt = format_duration(duration)
+
+        print(f"\n{'=' * 60}")
+        print(f"WORKFLOW COMPLETE FOR {story_id}")
+        print(f"Duration: {duration_fmt}")
+        print(f"{'=' * 60}\n")
+
+        return {
+            **state,
+            "story_duration_seconds": duration,
+            "story_duration_formatted": duration_fmt,
+        }
+
     return state
 
 
@@ -340,15 +608,15 @@ def validate_and_store_owl_branch(state: OntoAgentState) -> str:
 def validate_combined_owl_branch(state: OntoAgentState) -> str:
     """Branch logic after combined OWL validation"""
     if state.get("combined_validation_ok", False):
-        # Validation passed - end workflow
-        return "end"
+        # Validation passed - proceed to reasoner validation
+        return "final_reasoner_validation"
     else:
         # Validation failed - check retry count
         retry_count = state.get("retry_count", 0)
         max_retries = 5
         if retry_count >= max_retries:
-            print(f"Max retries ({max_retries}) reached. Ending workflow.")
-            return "end"
+            print(f"Max retries ({max_retries}) reached. Proceeding to reasoner validation.")
+            return "final_reasoner_validation"
         # Still have retries left - correct the OWL
         return "correct_owl_pitfalls"
 
@@ -364,6 +632,8 @@ graph.add_node("validate_and_store_owl", validate_and_store_owl_node)
 graph.add_node("combine_owls", combine_owls_node)
 graph.add_node("validate_combined_owl", validate_combined_owl_node)
 graph.add_node("correct_owl_pitfalls", correct_owl_pitfalls_node)
+graph.add_node("final_reasoner_validation", final_reasoner_validation_node)
+graph.add_node("create_generator_log", create_generator_log_node)
 graph.add_node("end", end_node)
 
 ######################################
@@ -377,6 +647,8 @@ graph.add_conditional_edges("validate_and_store_owl", validate_and_store_owl_bra
 graph.add_edge("combine_owls", "validate_combined_owl")
 graph.add_conditional_edges("validate_combined_owl", validate_combined_owl_branch)
 graph.add_edge("correct_owl_pitfalls", "validate_combined_owl")
+graph.add_edge("final_reasoner_validation", "create_generator_log")
+graph.add_edge("create_generator_log", "end")
 
 graph.set_finish_point("end")
 
