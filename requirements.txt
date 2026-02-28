@@ -9,3 +9,4 @@ requests
 unittest
 pytest
 python-dotenv
+owlready2
