@@ -953,6 +953,29 @@ def generate_report(
             report.append(f"  OOPS Passed Rate: {story_data['oops_passed_rate']:.2f}%")
         report.append("")
 
+        # Per-run Validation Results Table
+        report.append("PER-RUN VALIDATION RESULTS")
+        report.append("-" * 80)
+        # Table header
+        report.append(
+            f"{'Timestamp':<20} | {'Syntax':^8} | {'OOPS':^8} | {'Hermit':^8} | {'Pellet':^8}"
+        )
+        report.append("-" * 62)
+        # Sort by timestamp and add each row
+        sorted_metrics = sorted(validation_metrics, key=lambda x: x["timestamp"])
+        for m in sorted_metrics:
+            timestamp = m["timestamp"]
+            syntax = "  ✓" if m["syntax_valid"] else "  x"
+            oops = "  ✓" if not m["oops_has_pitfalls"] else "  x"
+            hermit = "  ✓" if m["hermit_consistent"] else "  x"
+            pellet = "  ✓" if m["pellet_consistent"] else "  x"
+            report.append(
+                f"{timestamp:<20} | {syntax:^8} | {oops:^8} | {hermit:^8} | {pellet:^8}"
+            )
+        report.append("")
+        report.append("Legend: ✓ = passed, x = failed")
+        report.append("")
+
     report.append("=" * 80)
     report.append("END OF REPORT")
     report.append("=" * 80)
