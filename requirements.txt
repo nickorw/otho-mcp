@@ -8,3 +8,4 @@ google-genai
 requests
 unittest
 pytest
+python-dotenv

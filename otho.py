@@ -689,6 +689,12 @@ if __name__ == "__main__":
         action="store_true",
         help="Skip CQ generation and jump directly to combination phase. Loads existing OWL files.",
     )
+    parser.add_argument(
+        "--repeat",
+        type=int,
+        metavar="N",
+        help="Run the specified story N times without sharing context between runs.",
+    )
 
     args = parser.parse_args()
     story_id = args.story_id
@@ -699,7 +705,22 @@ if __name__ == "__main__":
     # Compile the workflow graph
     app = graph.compile()
 
-    if args.skip_to_combine:
+    # Repeat mode: run single story N times without sharing context
+    if args.repeat:
+        print(
+            f"REPEAT MODE: Running story '{story_id}' {args.repeat} time(s) without shared context\n"
+        )
+
+        for iteration in range(1, args.repeat + 1):
+            print(
+                f"\n{'=' * 60}\nSINGLE STORY RUN {iteration}/{args.repeat} - {story_id}\n{'=' * 60}"
+            )
+
+            # Each invocation gets a fresh state with no shared context
+            initial_state: OntoAgentState = {"story_id": story_id}
+            app.invoke(initial_state, config={"recursion_limit": 125})
+
+    elif args.skip_to_combine:
         # Skip-to-combine mode: Load existing OWL files and start at combine_owls
         try:
             print("Loading existing OWL files...")
