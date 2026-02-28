@@ -140,12 +140,16 @@ def extract_metrics(log_data):
                         metrics["pitfalls_list"].append(pitfall_details)
 
     # Check if final ontology was saved
-    metrics["ontology_saved"] = bool(workspace_state.get("generated_owl"))
+    # Try workspace_state first (agent branches), then top-level (main branch)
+    metrics["ontology_saved"] = bool(
+        workspace_state.get("generated_owl") or log_data.get("ontology_saved", False)
+    )
 
     # Calculate duration if available
+    # Try from timestamps first, then use top-level duration_seconds (main branch)
     metrics["duration_seconds"] = calculate_duration_seconds(
         metrics["start_time"], metrics["end_time"]
-    )
+    ) or log_data.get("duration_seconds", 0)
 
     # Extract tool usage from metadata
     tool_names = metadata.get("tool_names", [])

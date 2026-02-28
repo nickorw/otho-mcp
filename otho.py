@@ -387,6 +387,23 @@ def final_reasoner_validation_node(state: OntoAgentState) -> OntoAgentState:
         print(f"⚠ RDF/XML not found - skipping reasoners")
         return state
 
+    # Add syntax and OOPS results to validation_results (from state)
+    syntax_time = state.get("syntax_time_seconds", 0)
+    oops_time = state.get("oops_time_seconds", 0)
+
+    validation_results["syntax"] = {
+        "valid": validation_results.get("syntax", {}).get("valid", True),
+        "execution_time_seconds": syntax_time,
+        "error": None,
+    }
+
+    validation_results["oops"] = {
+        "has_pitfalls": validation_results.get("oops", {}).get("has_pitfalls", False),
+        "pitfall_count": validation_results.get("oops", {}).get("pitfall_count", 0),
+        "execution_time_seconds": oops_time,
+        "pitfalls": validation_results.get("oops", {}).get("pitfalls", []),
+    }
+
     print("3️⃣  Reasoning Consistency")
     print("-" * 60)
 
