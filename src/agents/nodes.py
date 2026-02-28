@@ -27,6 +27,7 @@ from src.utils.excel_processor import get_story_by_id
 from src.utils.file_handler import save_text_file
 from src.utils.llm_manager import get_gaih_openai_llm
 from src.utils.oops_parser import parse_oops_response
+from src.utils.validation_logger import ValidationLogger
 
 # Initialize prompt manager
 prompt_manager = PromptManager(prompts_file_path=Path("src/prompts/prompts.yaml"))
@@ -350,6 +351,15 @@ def validate_and_save_node(state: StateDict) -> StateDict:
     # Final syntax check
     print("Running final syntax validation...")
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+
+    # Initialize validation logger
+    validation_logger = ValidationLogger(
+        story_id=story_id,
+        log_dir="logs",
+        timestamp=timestamp
+    )
+    validation_logger.log_start(ontology_size=len(generated_owl))
+
     validation_results = {
         "timestamp": timestamp,
         "story_id": story_id,
@@ -365,19 +375,25 @@ def validate_and_save_node(state: StateDict) -> StateDict:
 
     start_time = time.time()
     syntax_result = RDFSyntaxReviewer().review_owl_content(generated_owl)
-    syntax_time_ms = int((time.time() - start_time) * 1000)
+    syntax_time_seconds = round(time.time() - start_time, 3)
     syntax_valid = syntax_result == "OK"
 
     validation_results["syntax"] = {
         "valid": syntax_valid,
-        "execution_time_ms": syntax_time_ms,
+        "execution_time_seconds": syntax_time_seconds,
         "error": None if syntax_valid else syntax_result,
     }
 
+    validation_logger.log_syntax_validation(
+        is_valid=syntax_valid,
+        execution_time_seconds=syntax_time_seconds,
+        error=None if syntax_valid else syntax_result,
+    )
+
     if syntax_valid:
-        print(f"✓ Syntax validation PASSED ({syntax_time_ms}ms)\n")
+        print(f"✓ Syntax validation PASSED ({syntax_time_seconds}s)\n")
     else:
-        print(f"✗ Syntax validation FAILED ({syntax_time_ms}ms)")
+        print(f"✗ Syntax validation FAILED ({syntax_time_seconds}s)")
         print(f"  Error: {syntax_result}\n")
 
     # ============================================================
@@ -414,7 +430,7 @@ def validate_and_save_node(state: StateDict) -> StateDict:
     pitfall_result = pitfall_reviewer.review_owl_content(
         owl_content=generated_owl, pitfalls=pitfalls, output_format="XML"
     )
-    oops_time_ms = int((time.time() - start_time) * 1000)
+    oops_time_seconds = round(time.time() - start_time, 3)
 
     pitfall_data = parse_oops_response(pitfall_result)
     has_pitfalls = pitfall_data.get("has_pitfalls", False)
@@ -423,14 +439,21 @@ def validate_and_save_node(state: StateDict) -> StateDict:
     validation_results["oops"] = {
         "has_pitfalls": has_pitfalls,
         "pitfall_count": pitfall_count,
-        "execution_time_ms": oops_time_ms,
+        "execution_time_seconds": oops_time_seconds,
         "pitfalls": pitfall_data.get("pitfalls", []),
     }
 
+    validation_logger.log_pitfall_detection(
+        has_pitfalls=has_pitfalls,
+        pitfall_count=pitfall_count,
+        execution_time_seconds=oops_time_seconds,
+        pitfalls=pitfall_data.get("pitfalls", []),
+    )
+
     if not has_pitfalls:
-        print(f"✓ Pitfall check PASSED - No pitfalls detected ({oops_time_ms}ms)\n")
+        print(f"✓ Pitfall check PASSED - No pitfalls detected ({oops_time_seconds}s)\n")
     else:
-        print(f"⚠ Pitfall check: Found {pitfall_count} pitfall(s) ({oops_time_ms}ms)")
+        print(f"⚠ Pitfall check: Found {pitfall_count} pitfall(s) ({oops_time_seconds}s)")
         pitfall_codes = [p.get("code", "") for p in pitfall_data.get("pitfalls", [])]
         print(f"  Pitfalls: {', '.join(pitfall_codes)}\n")
 
@@ -439,6 +462,7 @@ def validate_and_save_node(state: StateDict) -> StateDict:
     # ============================================================
     print("3️⃣  Reasoning Consistency")
     print("-" * 60)
+    validation_logger.log_reasoning_start()
 
     # 3a. Hermit Reasoner (reads RDF/XML file created by OOPS)
     print("  → Hermit Reasoner...")
@@ -446,14 +470,15 @@ def validate_and_save_node(state: StateDict) -> StateDict:
     hermit_result = hermit_validator.validate()
 
     validation_results["hermit"] = hermit_result
+    validation_logger.log_reasoner_validation("Hermit", hermit_result)
 
     if hermit_result["is_consistent"]:
         print(
-            f"    ✓ PASSED - Ontology is consistent ({hermit_result['execution_time_ms']}ms)"
+            f"    ✓ PASSED - Ontology is consistent ({hermit_result['execution_time_seconds']:.3f}s)"
         )
     else:
         print(
-            f"    ✗ FAILED - Inconsistencies detected ({hermit_result['execution_time_ms']}ms)"
+            f"    ✗ FAILED - Inconsistencies detected ({hermit_result['execution_time_seconds']:.3f}s)"
         )
         if hermit_result.get("inconsistent_classes"):
             print(f"    Inconsistent classes: {hermit_result['inconsistent_classes']}")
@@ -466,14 +491,15 @@ def validate_and_save_node(state: StateDict) -> StateDict:
     pellet_result = pellet_validator.validate()
 
     validation_results["pellet"] = pellet_result
+    validation_logger.log_reasoner_validation("Pellet", pellet_result)
 
     if pellet_result["is_consistent"]:
         print(
-            f"    ✓ PASSED - Ontology is consistent ({pellet_result['execution_time_ms']}ms)\n"
+            f"    ✓ PASSED - Ontology is consistent ({pellet_result['execution_time_seconds']:.3f}s)\n"
         )
     else:
         print(
-            f"    ✗ FAILED - Inconsistencies detected ({pellet_result['execution_time_ms']}ms)"
+            f"    ✗ FAILED - Inconsistencies detected ({pellet_result['execution_time_seconds']:.3f}s)"
         )
         if pellet_result.get("inconsistent_classes"):
             print(f"    Inconsistent classes: {pellet_result['inconsistent_classes']}")
@@ -483,11 +509,11 @@ def validate_and_save_node(state: StateDict) -> StateDict:
     # ============================================================
     # AGGREGATE RESULTS
     # ============================================================
-    total_time_ms = (
-        syntax_time_ms
-        + oops_time_ms
-        + hermit_result["execution_time_ms"]
-        + pellet_result["execution_time_ms"]
+    total_time_seconds = (
+        syntax_time_seconds
+        + oops_time_seconds
+        + hermit_result["execution_time_seconds"]
+        + pellet_result["execution_time_seconds"]
     )
 
     all_passed = (
@@ -499,7 +525,7 @@ def validate_and_save_node(state: StateDict) -> StateDict:
 
     validation_results["aggregate"] = {
         "all_validators_passed": all_passed,
-        "total_execution_time_ms": total_time_ms,
+        "total_execution_time_seconds": round(total_time_seconds, 3),
     }
 
     # ============================================================
@@ -538,22 +564,37 @@ def validate_and_save_node(state: StateDict) -> StateDict:
     print("VALIDATION SUMMARY")
     print(f"{'=' * 60}")
     print(
-        f"1. Syntax:    {'✓ PASSED' if syntax_valid else '✗ FAILED'} ({syntax_time_ms}ms)"
+        f"1. Syntax:    {'✓ PASSED' if syntax_valid else '✗ FAILED'} ({syntax_time_seconds}s)"
     )
     print(
-        f"2. OOPS:      {'✓ PASSED' if not has_pitfalls else f'⚠ {pitfall_count} pitfalls'} ({oops_time_ms}ms)"
+        f"2. OOPS:      {'✓ PASSED' if not has_pitfalls else f'⚠ {pitfall_count} pitfalls'} ({oops_time_seconds}s)"
     )
     print(
-        f"3. Hermit:    {'✓ PASSED' if hermit_result['is_consistent'] else '✗ FAILED'} ({hermit_result['execution_time_ms']}ms)"
+        f"3. Hermit:    {'✓ PASSED' if hermit_result['is_consistent'] else '✗ FAILED'} ({hermit_result['execution_time_seconds']:.3f}s)"
     )
     print(
-        f"4. Pellet:    {'✓ PASSED' if pellet_result['is_consistent'] else '✗ FAILED'} ({pellet_result['execution_time_ms']}ms)"
+        f"4. Pellet:    {'✓ PASSED' if pellet_result['is_consistent'] else '✗ FAILED'} ({pellet_result['execution_time_seconds']:.3f}s)"
     )
     print("-" * 60)
     print(f"Overall:      {'✅ ALL PASSED' if all_passed else '❌ VALIDATION FAILED'}")
-    print(f"Total time:   {total_time_ms}ms ({total_time_ms / 1000:.2f}s)")
+    print(f"Total time:   {total_time_seconds:.3f}s")
     print(f"Iterations:   {state.get('iteration_count', 0)}")
     print(f"{'=' * 60}\n")
+
+    # Save validation logger
+    validation_logger.log_summary(
+        syntax_valid=syntax_valid,
+        has_pitfalls=has_pitfalls,
+        pitfall_count=pitfall_count,
+        hermit_consistent=hermit_result["is_consistent"],
+        pellet_consistent=pellet_result["is_consistent"],
+        syntax_time_seconds=syntax_time_seconds,
+        oops_time_seconds=oops_time_seconds,
+        hermit_time_seconds=hermit_result["execution_time_seconds"],
+        pellet_time_seconds=pellet_result["execution_time_seconds"],
+        iteration_count=state.get('iteration_count', 0),
+    )
+    validation_logger.save_json_log()
 
     return {
         **state,
