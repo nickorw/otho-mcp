@@ -445,11 +445,11 @@ def ontology_generation_agent(state: StateDict) -> StateDict:
     )
 
     # Get LLM for React agent
-    generator_model = "anthropic--claude-4.5-opus"
-    llm = get_gaih_anthropic_llm(model=generator_model)
+    # generator_model = "anthropic--claude-4.5-opus"
+    # llm = get_gaih_anthropic_llm(model=generator_model)
 
-    # generator_model = "gpt-4.1"
-    # llm = get_gaih_openai_llm(model=generator_model)
+    generator_model = "gpt-4.1"
+    llm = get_gaih_openai_llm(model=generator_model)
 
     # generator_model = "gemini-2.5-flash"
     # llm = get_gaih_google_llm(model=generator_model)
@@ -893,13 +893,13 @@ This is refinement iteration {review_iteration}. A previous review was provided:
     review_prompt = prompt_manager.format_prompt("advisory_review", **context)
 
     # Single LLM call for review
-    generator_model = "anthropic--claude-4.5-opus"
-    llm = get_gaih_anthropic_llm(model=generator_model)
+    # generator_model = "anthropic--claude-4.5-opus"
+    # llm = get_gaih_anthropic_llm(model=generator_model)
 
     # generator_model = "gemini-2.5-flash"
     # llm = get_gaih_google_llm(model=generator_model)
 
-    # llm = get_gaih_openai_llm(model="gpt-4.1")
+    llm = get_gaih_openai_llm(model="gpt-4.1")
 
     print(f"Invoking reviewer LLM (iteration {review_iteration})...")
     review_response = llm.invoke(review_prompt)
