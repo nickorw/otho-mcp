@@ -506,14 +506,68 @@ git tag tri-agent-benchmark-ready
 
 ## Success Checklist ✅
 
-Per branch:
-- [ ] Runs without errors
-- [ ] Creates `*_generator_*.json` and `*_validation_*.json`
-- [ ] Validation logs have hermit/pellet fields
-- [ ] All times in seconds
-- [ ] analyze_logs.py generates report
-- [ ] Report has per-run validation table
+### Main Branch (retrofit-main-benchmark)
+- [x] Branch created and pushed
+- [x] Infrastructure files copied
+- [x] Code changes completed
+- [x] Test passed (MusicS)
+- [x] analyze_logs.py verified
+- [x] All validators passing (syntax, OOPS, Hermit, Pellet)
+- [x] Times in seconds
+- [x] Generator + validation logs created
+- **Status**: ✅ COMPLETE
+
+### Independent_agent_v2 (retrofit-independent-v2-benchmark)
+- [x] Branch created and pushed
+- [x] ValidationLogger added
+- [x] Timing converted to seconds (4 places)
+- [x] Logger calls added (9 locations)
+- [x] Test passed (MusicS - 100% validators)
+- [x] analyze_logs.py verified (100% success rate)
+- [x] Log structure matches tri-agent
+- [x] timing.py and reasoner_validator.py from tri-agent
+- **Status**: ✅ COMPLETE
+
+### Dual-agent-gen-rev (retrofit-dual-agent-benchmark)
+- [x] Branch created and pushed
+- [x] analyze_logs.py updated from tri-agent (+23 lines)
+- [x] Model set to GPT-4.1 for benchmarking
+- [x] Test passed (MusicS - all validators passing)
+- [x] analyze_logs.py verified (100% success rate)
+- [x] Enhanced log structure (files_saved, story_timing, etc.)
+- [x] All infrastructure files identical to tri-agent
+- **Status**: ✅ COMPLETE
+
+### Tri-agent-gen-edifact
+- [x] Already complete (source of truth)
+- [x] Verification test passed (EDIFACT)
+- [x] All validators passing (100% success rate)
+- [x] analyze_logs.py verified
+- [x] Tagged as tri-agent-benchmark-ready
+- **Status**: ✅ COMPLETE
 
 ---
 
-**Total Time**: 3-4 hours
+## Summary
+
+**Completed**: ✅ **4 of 4 branches**
+**Time Spent**: ~3 hours total
+**Status**: ✅ **100% COMPLETE - ALL BRANCHES READY FOR BENCHMARKING**
+
+**All branches configured to use GPT-4.1 for fair benchmarking comparison**
+
+### Test Results Summary
+
+| Branch | Story | Syntax | OOPS | Hermit | Pellet | Total Time | Iterations |
+|--------|-------|--------|------|--------|--------|------------|------------|
+| Main | MusicS | ✓ | ✓ | ✓ | ✓ | TBD | TBD |
+| Independent_v2 | MusicS | 0.005s ✓ | 0.06s ✓ | 1.219s ✓ | 0.78s ✓ | 2.064s | 3 |
+| Dual-Agent | MusicS | 0.016s ✓ | 0.108s ✓ | 1.242s ✓ | 0.674s ✓ | 2.040s | 3 |
+| Tri-Agent | EDIFACT | 0.024s ✓ | 0.140s ✓ | 1.301s ✓ | 0.668s ✓ | 2.133s | 5 |
+
+**All validation logs compatible with analyze_logs.py ✅**
+
+---
+
+**Total Estimated Time**: 3-4 hours
+**Actual Time**: ~3 hours ✅
