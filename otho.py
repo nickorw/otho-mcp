@@ -199,6 +199,7 @@ def validate_and_store_owl_node(state: OntoAgentState) -> OntoAgentState:
 def combine_owls_node(state: OntoAgentState) -> OntoAgentState:
     print("Combining OWLs for Story ID:", state.get("story_id", ""))
     story_id = state.get("story_id", "")
+    timestamp = state.get("log_timestamp") or datetime.now().strftime("%Y%m%d_%H%M%S")
     processed_owls = state.get("processed_owls") or []
     concatenated_owl = "\n".join([owl for _, owl in processed_owls])
     save_text_file(f"data/output/{story_id}_concat.owl", concatenated_owl)
@@ -213,7 +214,8 @@ def combine_owls_node(state: OntoAgentState) -> OntoAgentState:
     combined_owl = call_llm(llm_type, combination_prompt)
 
     print("Combined, saving OWLs file")
-    save_text_file(f"data/output/{story_id}_combined_turtle.owl", combined_owl)
+    os.makedirs("data/output/ontologies", exist_ok=True)
+    save_text_file(f"data/output/ontologies/{story_id}_combined_turtle_{timestamp}.owl", combined_owl)
     return {**state, "combined_owl": combined_owl}
 
 
@@ -258,16 +260,13 @@ def validate_combined_owl_node(state: OntoAgentState) -> OntoAgentState:
                 "pitfall_feedback": f"Syntax Error: {syntax_validation_result}",
             }
 
-        # Validate Pitfalls using turtle file with timing
+        # Validate Pitfalls using combined OWL content directly
         oops_start_time = time.time()
-        owl_file_path = os.path.join(
-            "data", "output", f"{story_id}_combined_turtle.owl"
-        )
         pitfalls = [
             "2,3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 19, 20, 21, 22, 24, 25, 25, 26, 27, 28, 29"
         ]
-        pitfall_validation_result = pitfall_reviewer.review_owl_file(
-            owl_file_path=owl_file_path,
+        pitfall_validation_result = pitfall_reviewer.review_owl_content(
+            owl_content=combined_owl,
             pitfalls=pitfalls,
             output_format="XML",
         )
@@ -541,6 +540,8 @@ def correct_owl_pitfalls_node(state: OntoAgentState) -> OntoAgentState:
     # Call LLM to fix the OWL
     corrected_owl = call_llm(llm_type, correction_prompt)
 
+    timestamp = state.get("log_timestamp") or datetime.now().strftime("%Y%m%d_%H%M%S")
+
     # Save the corrected version
     correction_file = (
         f"data/output/{story_id}_combined_turtle_correction_{retry_count + 1}.owl"
@@ -548,8 +549,9 @@ def correct_owl_pitfalls_node(state: OntoAgentState) -> OntoAgentState:
     save_text_file(correction_file, corrected_owl)
     print(f"Saved correction attempt to: {correction_file}")
 
-    # Also update the main combined file
-    save_text_file(f"data/output/{story_id}_combined_turtle.owl", corrected_owl)
+    # Also update the main combined file with timestamp
+    os.makedirs("data/output/ontologies", exist_ok=True)
+    save_text_file(f"data/output/ontologies/{story_id}_combined_turtle_{timestamp}.owl", corrected_owl)
 
     return {
         **state,
@@ -711,7 +713,35 @@ if __name__ == "__main__":
             f"REPEAT MODE: Running story '{story_id}' {args.repeat} time(s) without shared context\n"
         )
 
+        def cleanup_intermediate_files(story_id: str):
+            """Clean up intermediate working files from previous run."""
+            import glob
+
+            # Remove individual CQ files
+            for f in glob.glob(f"data/output/{story_id}_*.owl"):
+                if not f.endswith("_combined_turtle.owl"):  # Don't remove finals in root
+                    try:
+                        os.remove(f)
+                    except:
+                        pass
+
+            # Remove specific working files
+            working_files = [
+                "data/output/xml_combined_owl.xml",
+                "data/output/debug_owl_content_turtle_combined_owl.xml",
+            ]
+            for f in working_files:
+                try:
+                    os.remove(f)
+                except:
+                    pass
+
         for iteration in range(1, args.repeat + 1):
+            # Clean up intermediate files before each run (except first)
+            if iteration > 1:
+                print(f"\nCleaning up intermediate files from previous run...")
+                cleanup_intermediate_files(story_id)
+
             print(
                 f"\n{'=' * 60}\nSINGLE STORY RUN {iteration}/{args.repeat} - {story_id}\n{'=' * 60}"
             )
