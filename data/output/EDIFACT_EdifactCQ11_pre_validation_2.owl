@@ -1,0 +1,77 @@
+@prefix : <http://example.org/invoice-ontology#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+
+### Classes
+
+:Cl_Document a owl:Class .
+
+:Cl_Invoice a owl:Class ;
+    rdfs:subClassOf :Cl_Document .
+
+:Cl_Amount a owl:Class .
+
+:Cl_InvoiceAmountReification a owl:Class ;
+    rdfs:comment "Pivot class to reify the relationship between an invoice and its amount." .
+
+### Class Hierarchies
+
+:Cl_Invoice rdfs:subClassOf :Cl_Document .
+
+:Cl_InvoiceAmountReification rdfs:comment "Pivot class to reify the relationship between an invoice and its amount." .
+
+### Properties
+
+:hasInvoice a owl:ObjectProperty ;
+    rdfs:domain :Cl_InvoiceAmountReification ;
+    rdfs:range :Cl_Invoice ;
+    rdfs:comment "Links the reification node to the invoice." .
+
+:hasAmount a owl:ObjectProperty ;
+    rdfs:domain :Cl_InvoiceAmountReification ;
+    rdfs:range :Cl_Amount ;
+    rdfs:comment "Links the reification node to the amount." .
+
+:amountValue a owl:DatatypeProperty ;
+    rdfs:domain :Cl_Amount ;
+    rdfs:range xsd:decimal ;
+    rdfs:comment "The numeric value of the amount." .
+
+:amountCurrency a owl:DatatypeProperty ;
+    rdfs:domain :Cl_Amount ;
+    rdfs:range xsd:string ;
+    rdfs:comment "The currency of the amount, e.g., USD, EUR." .
+
+### Restrictions
+
+:Cl_InvoiceAmountReification owl:equivalentClass [
+    rdf:type owl:Class ;
+    owl:intersectionOf (
+        [ rdf:type owl:Restriction ; owl:onProperty :hasInvoice ; owl:someValuesFrom :Cl_Invoice ]
+        [ rdf:type owl:Restriction ; owl:onProperty :hasAmount ; owl:someValuesFrom :Cl_Amount ]
+    )
+] .
+
+### Disjointness
+
+:Cl_Invoice owl:disjointWith :Cl_Amount .
+:Cl_InvoiceAmountReification owl:disjointWith :Cl_Invoice .
+:Cl_InvoiceAmountReification owl:disjointWith :Cl_Amount .
+
+### Example Individual (for illustration, not required by question)
+
+#:Invoice123 a :Cl_Invoice .
+#:Amount123 a :Cl_Amount ;
+#    :amountValue "1000.00"^^xsd:decimal ;
+#    :amountCurrency "USD" .
+#:InvoiceAmountReif123 a :Cl_InvoiceAmountReification ;
+#    :hasInvoice :Invoice123 ;
+#    :hasAmount :Amount123 .
+
+### Notes
+
+# This ontology allows answering the competency question "What is the invoice amount of the invoice?"
+# by querying for the :amountValue of the :Cl_Amount linked via :Cl_InvoiceAmountReification
+# to a given :Cl_Invoice.

@@ -1,0 +1,87 @@
+2026-03-01 23:24:50 | INFO     | ============================================================
+2026-03-01 23:24:50 | INFO     | Validation Logger Initialized for EDIFACT
+2026-03-01 23:24:50 | INFO     | Log files: EDIFACT_validation_20260301_231957.log
+2026-03-01 23:24:50 | INFO     | Timestamp: 20260301_231957
+2026-03-01 23:24:50 | INFO     | ============================================================
+2026-03-01 23:24:50 | INFO     | 
+Starting final validation for EDIFACT
+2026-03-01 23:24:50 | DEBUG    | Ontology size: 24290 characters
+2026-03-01 23:24:50 | INFO     | 
+============================================================
+2026-03-01 23:24:50 | INFO     | PILLAR 1: SYNTAX VALIDATION (RDFLib)
+2026-03-01 23:24:50 | INFO     | ============================================================
+2026-03-01 23:24:50 | INFO     | ✓ Syntax validation PASSED (0.000s)
+2026-03-01 23:24:50 | DEBUG    | No syntax errors detected in RDF/Turtle parsing
+2026-03-01 23:24:50 | INFO     | 
+============================================================
+2026-03-01 23:24:50 | INFO     | PILLAR 2: PITFALL DETECTION (OOPS)
+2026-03-01 23:24:50 | INFO     | ============================================================
+2026-03-01 23:24:50 | INFO     | ✓ Pitfall check PASSED - No pitfalls detected (0.000s)
+2026-03-01 23:24:50 | DEBUG    | All checked OOPS pitfall categories passed successfully
+2026-03-01 23:24:50 | INFO     | 
+============================================================
+2026-03-01 23:24:50 | INFO     | PILLAR 3: REASONING CONSISTENCY
+2026-03-01 23:24:50 | INFO     | ============================================================
+2026-03-01 23:24:50 | DEBUG    | Checking logical consistency with OWL 2 DL reasoners (Hermit & Pellet)
+2026-03-01 23:24:50 | INFO     | 
+  → Hermit Reasoner
+2026-03-01 23:24:50 | INFO     |   --------------------------------------------------------
+2026-03-01 23:24:50 | ERROR    |   ✗ FAILED - Inconsistencies detected (0.327s)
+2026-03-01 23:24:50 | ERROR    | 
+  Error Details:
+2026-03-01 23:24:50 | ERROR    |     Java error message is:
+2026-03-01 23:24:50 | ERROR    |     Exception in thread "main" org.semanticweb.HermiT.datatypes.UnsupportedDatatypeException: HermiT supports all and only the datatypes of the OWL 2 datatype map, see 
+2026-03-01 23:24:50 | ERROR    |     http://www.w3.org/TR/owl2-syntax/#Datatype_Maps. 
+2026-03-01 23:24:50 | ERROR    |     The datatype 'http://www.w3.org/2001/XMLSchema#date' is not part of the OWL 2 datatype map and 
+2026-03-01 23:24:50 | ERROR    |     no custom datatype definition is given; 
+2026-03-01 23:24:50 | ERROR    |     therefore, HermiT cannot handle this datatype.
+2026-03-01 23:24:50 | ERROR    |     	at org.semanticweb.HermiT.datatypes.DatatypeRegistry.getDatatypeHandlerFor(Unknown Source)
+2026-03-01 23:24:50 | ERROR    |     	at org.semanticweb.HermiT.datatypes.DatatypeRegistry.getDatatypeHandlerFor(Unknown Source)
+2026-03-01 23:24:50 | ERROR    |     	at org.semanticweb.HermiT.datatypes.DatatypeRegistry.validateDatatypeRestriction(Unknown Source)
+2026-03-01 23:24:50 | ERROR    |     	at org.semanticweb.HermiT.structural.OWLClausification$DataRangeConverter.visit(Unknown Source)
+2026-03-01 23:24:50 | ERROR    |     	at uk.ac.manchester.cs.owl.owlapi.OWLDatatypeImpl.accept(OWLDatatypeImpl.java:343)
+2026-03-01 23:24:50 | ERROR    |     	at org.semanticweb.HermiT.structural.OWLClausification$DataRangeConverter.convertDataRange(Unknown Source)
+2026-03-01 23:24:50 | ERROR    |     	at org.semanticweb.HermiT.structural.OWLClausification$NormalizedAxiomClausifier.visit(Unknown Source)
+2026-03-01 23:24:50 | ERROR    |     	at uk.ac.manchester.cs.owl.owlapi.OWLDataAllValuesFromImpl.accept(OWLDataAllValuesFromImpl.java:99)
+2026-03-01 23:24:50 | ERROR    |     	at org.semanticweb.HermiT.structural.OWLClausification.clausify(Unknown Source)
+2026-03-01 23:24:50 | ERROR    |     	at org.semanticweb.HermiT.structural.OWLClausification.preprocessAndClausify(Unknown Source)
+2026-03-01 23:24:50 | ERROR    |     	at org.semanticweb.HermiT.Reasoner.loadOntology(Reasoner.java:117)
+2026-03-01 23:24:50 | ERROR    |     	at org.semanticweb.HermiT.Reasoner.<init>(Reasoner.java:108)
+2026-03-01 23:24:50 | ERROR    |     	at org.semanticweb.HermiT.Reasoner.<init>(Reasoner.java:86)
+2026-03-01 23:24:50 | ERROR    |     	at org.semanticweb.HermiT.cli.CommandLine.main(CommandLine.java:830)
+2026-03-01 23:24:50 | ERROR    |     
+2026-03-01 23:24:50 | INFO     | 
+  → Pellet Reasoner
+2026-03-01 23:24:50 | INFO     |   --------------------------------------------------------
+2026-03-01 23:24:50 | ERROR    |   ✗ FAILED - Inconsistencies detected (0.622s)
+2026-03-01 23:24:50 | ERROR    | 
+  Inconsistent Classes (8 found):
+2026-03-01 23:24:50 | ERROR    |     - xml_combined_owl.xml.Cl_ProcessAssignment
+2026-03-01 23:24:50 | ERROR    |     - xml_combined_owl.xml.Cl_OrganizationInvoiceParticipation
+2026-03-01 23:24:50 | ERROR    |     - xml_combined_owl.xml.Cl_Organization
+2026-03-01 23:24:50 | ERROR    |     - xml_combined_owl.xml.Cl_EDIFACTMessage
+2026-03-01 23:24:50 | ERROR    |     - owl.Nothing
+2026-03-01 23:24:50 | ERROR    |     - xml_combined_owl.xml.Cl_ProvidedInformation
+2026-03-01 23:24:50 | ERROR    |     - xml_combined_owl.xml.Cl_Invoice
+2026-03-01 23:24:50 | ERROR    |     - xml_combined_owl.xml.Cl_InvoiceListing
+2026-03-01 23:24:50 | ERROR    | 
+  These classes contain logical contradictions that make them unsatisfiable.
+2026-03-01 23:24:50 | INFO     | 
+============================================================
+2026-03-01 23:24:50 | INFO     | VALIDATION SUMMARY
+2026-03-01 23:24:50 | INFO     | ============================================================
+2026-03-01 23:24:50 | INFO     | 1. Syntax (RDFLib):    ✓ PASSED (0.000s)
+2026-03-01 23:24:50 | INFO     | 2. OOPS Pitfalls:      ✓ PASSED (0.000s)
+2026-03-01 23:24:50 | INFO     | 3. Hermit Reasoner:    ✗ FAILED (0.327s)
+2026-03-01 23:24:50 | ERROR    |    └─ Logical inconsistencies found - check inconsistent classes above
+2026-03-01 23:24:50 | INFO     | 4. Pellet Reasoner:    ✗ FAILED (0.622s)
+2026-03-01 23:24:50 | ERROR    |    └─ Logical inconsistencies found - check inconsistent classes above
+2026-03-01 23:24:50 | INFO     | ------------------------------------------------------------
+2026-03-01 23:24:50 | ERROR    | Overall Result:        ❌ VALIDATION FAILED
+2026-03-01 23:24:50 | ERROR    |                        Issues found: Hermit inconsistencies, Pellet inconsistencies
+2026-03-01 23:24:50 | INFO     | ------------------------------------------------------------
+2026-03-01 23:24:50 | INFO     | Total Validation Time: 0.949s
+2026-03-01 23:24:50 | INFO     | Agent Iterations:      0
+2026-03-01 23:24:50 | INFO     | ============================================================
+2026-03-01 23:24:50 | INFO     | 
+✓ Validation JSON log saved: logs/EDIFACT_validation_20260301_231957.json
