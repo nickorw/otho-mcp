@@ -1,0 +1,98 @@
+{
+  "iteration": 1,
+  "timestamp": "2026-03-01T22:51:25.966229",
+  "cq_coverage": {
+    "fully_covered": [
+      "CQ1",
+      "CQ2",
+      "CQ3",
+      "CQ4",
+      "CQ6",
+      "CQ7",
+      "CQ9",
+      "CQ10",
+      "CQ11",
+      "CQ12",
+      "CQ13",
+      "CQ14"
+    ],
+    "partially_covered": [
+      {
+        "cq": "CQ5",
+        "missing": "No explicit properties for organization attributes beyond address and identifier; lacks contact details, VAT numbers, etc.",
+        "coverage_percent": 60
+      },
+      {
+        "cq": "CQ8",
+        "missing": "No detailed properties for Item (e.g., description, SKU, classification); only structure present.",
+        "coverage_percent": 50
+      }
+    ],
+    "not_covered": [],
+    "coverage_score": 0.9,
+    "details": "Most CQs are addressed directly by classes and properties (e.g., InvoiceMessage, Organization, AgentRole, Address, LineItem, Price). Some CQs (5, 8) lack sufficient granularity for full answer."
+  },
+  "constraint_adherence": {
+    "reification_correct": true,
+    "owl2_compliant": true,
+    "annotations_complete": true,
+    "directionality_correct": true,
+    "pivot_class_structure_correct": true,
+    "issues": []
+  },
+  "quality_metrics": {
+    "hierarchy_depth": 4,
+    "uses_restrictions": false,
+    "uses_gcas": false,
+    "uses_equivalence": false,
+    "property_characteristics_defined": true,
+    "disjointness_axioms": true,
+    "overall_score": 0.78,
+    "strengths": [
+      "Well-structured class hierarchy (Envelope \u2192 Message \u2192 InvoiceMessage)",
+      "Comprehensive object/data property modeling",
+      "Clear separation of pivot classes and roles",
+      "All entities and properties are annotated"
+    ],
+    "weaknesses": [
+      "No use of owl:someValuesFrom or owl:allValuesFrom restrictions for cardinality or type constraints",
+      "No general class axioms or equivalence definitions for complex concepts",
+      "Disjointness only applied to a few class pairs"
+    ]
+  },
+  "validator_predictions": {
+    "likely_oops_pitfalls": [
+      "P4: Missing domain or range in some properties (if any were omitted in future extensions)",
+      "P7: Missing disjointness for all sibling classes (e.g., Segment subclasses, AgentRole variants)"
+    ],
+    "reasoner_risks": [],
+    "confidence": "high"
+  },
+  "improvement_suggestions": [
+    {
+      "priority": "high",
+      "category": "CQ Coverage",
+      "suggestion": "Enrich Organization and Item classes with additional properties (e.g., for CQ5: VAT number, contact info; for CQ8: item description, classification, SKU).",
+      "expected_impact": "Full coverage for CQs 5 and 8; more detailed organizational and product information."
+    },
+    {
+      "priority": "medium",
+      "category": "Quality",
+      "suggestion": "Add cardinality and type restrictions (owl:someValuesFrom, owl:allValuesFrom) to key properties (e.g., each InvoiceMessage must have exactly one Header, Detail, and Summary section).",
+      "expected_impact": "Stronger validation, improved data consistency."
+    },
+    {
+      "priority": "medium",
+      "category": "Quality",
+      "suggestion": "Define General Class Axioms (GCAs) and equivalence classes for concepts like Buyer, Seller, or InvoiceMessage with required structure.",
+      "expected_impact": "Enables automated reasoning for role inference and document completeness."
+    },
+    {
+      "priority": "low",
+      "category": "Quality",
+      "suggestion": "Increase disjointness coverage among sibling classes (e.g., all Segment subclasses, all AgentRole variants).",
+      "expected_impact": "Reduces risk of instance ambiguity."
+    }
+  ],
+  "summary": "The ontology provides a solid structural representation of UN/EDIFACT invoices, with excellent CQ coverage and strong alignment to best practices for roles and document decomposition. Quality could be further enhanced by enriching organizational and item details, adding logical restrictions, and improving disjointness and axiomatization."
+}

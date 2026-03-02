@@ -1,0 +1,131 @@
+{
+  "iteration": 2,
+  "timestamp": "2026-03-01T22:11:11.622111",
+  "cq_coverage": {
+    "fully_covered": [
+      "CQ1",
+      "CQ2",
+      "CQ3",
+      "CQ4",
+      "CQ6",
+      "CQ7",
+      "CQ8",
+      "CQ9",
+      "CQ10",
+      "CQ11",
+      "CQ12",
+      "CQ14"
+    ],
+    "partially_covered": [
+      {
+        "cq": "CQ5",
+        "missing": "Organization class lacks explicit data properties for organization details (e.g., name, contact info, legal entity type, etc.). Only organizational involvement and identifiers are modeled. Cannot answer 'what information is displayed about the involved organizations' beyond their identity and GLN.",
+        "coverage_percent": 70
+      },
+      {
+        "cq": "CQ13",
+        "missing": "No OWL or SHACL constraints enforce the presence of all mandatory fields as per D96A/EN 16931-1 (e.g., buyer GLN, invoice amount, tax, etc.). Only invoice number has a cardinality restriction.",
+        "coverage_percent": 60
+      }
+    ],
+    "not_covered": [],
+    "coverage_score": 0.92,
+    "details": "The ontology continues to provide solid structural support for most CQs, especially those relating to document hierarchy, organizational roles, items, and invoice details. However, CQ5 is still only partially addressed due to the absence of detailed organization attributes, and CQ13 remains only partially covered as validation constraints for mandatory fields are still missing."
+  },
+  "constraint_adherence": {
+    "reification_correct": true,
+    "owl2_compliant": false,
+    "annotations_complete": true,
+    "directionality_correct": true,
+    "pivot_class_structure_correct": true,
+    "issues": [
+      "Non-OWL2 datatype used: xsd:date (in hasDate property of HeaderSection). Only xsd:dateTime is permitted in OWL 2 DL. This can cause reasoner failures (Hermit/Pellet)."
+    ]
+  },
+  "quality_metrics": {
+    "hierarchy_depth": 4,
+    "uses_restrictions": true,
+    "uses_gcas": false,
+    "uses_equivalence": false,
+    "property_characteristics_defined": true,
+    "disjointness_axioms": true,
+    "overall_score": 0.85,
+    "strengths": [
+      "Well-structured class hierarchy with clear separation of document layers",
+      "Consistent use of object/data property characteristics and inverses",
+      "Disjointness and disjointUnion axioms for core document sections",
+      "Reification pattern for organization roles is well-applied"
+    ],
+    "weaknesses": [
+      "No General Class Axioms or equivalentClass axioms for complex roles or concepts",
+      "Organization and Item classes lack rich attributes (e.g., organization name, type, item codes)",
+      "No SHACL or OWL-based validation for mandatory fields (except for invoice number)",
+      "Critical datatype violation (xsd:date) affects OWL 2 DL compliance"
+    ]
+  },
+  "validator_predictions": {
+    "likely_oops_pitfalls": [
+      "P7 (Missing domain or range for some inverse properties if not explicitly declared)",
+      "P28 (Potential lack of explicit inverse functional for some identifiers)",
+      "P20 (Use of non-standard datatypes: xsd:date)"
+    ],
+    "reasoner_risks": [
+      "Hermit and Pellet will reject the ontology due to use of xsd:date (OWL 2 DL violation)"
+    ],
+    "confidence": "very high"
+  },
+  "improvement_suggestions": [
+    {
+      "priority": "high",
+      "category": "OWL 2 Compliance",
+      "suggestion": "Replace xsd:date with xsd:dateTime for the :hasDate property and any other temporal properties.",
+      "expected_impact": "Restores full OWL 2 DL compatibility and reasoner operability."
+    },
+    {
+      "priority": "high",
+      "category": "CQ Coverage",
+      "suggestion": "Add explicit data properties to the Organization class for organization name, legal form, contact information, and other relevant attributes to fully answer CQ5.",
+      "expected_impact": "Enables comprehensive retrieval of organization information, meeting business and regulatory requirements."
+    },
+    {
+      "priority": "high",
+      "category": "Constraint Adherence",
+      "suggestion": "Implement OWL restrictions or SHACL shapes to enforce the presence of all mandatory fields per D96A and EN 16931-1 (e.g., buyer GLN, invoice amount, tax, etc.), not just invoice number.",
+      "expected_impact": "Enables automated validation and compliance with regulatory standards (CQ13)."
+    },
+    {
+      "priority": "medium",
+      "category": "Quality",
+      "suggestion": "Define General Class Axioms (GCAs) or owl:equivalentClass for key role-based concepts (e.g., BuyerOrganizationRole as an OrganizationRoleInInvoice with hasRole Buyer).",
+      "expected_impact": "Improves reasoning and expressiveness for queries involving roles."
+    },
+    {
+      "priority": "medium",
+      "category": "Quality",
+      "suggestion": "Enrich the Item class with additional attributes such as product codes, descriptions, and classification information.",
+      "expected_impact": "Supports more detailed queries about invoiced items and improves interoperability."
+    },
+    {
+      "priority": "low",
+      "category": "Enrichment",
+      "suggestion": "Add rdfs:seeAlso links to external ontologies (e.g., P2P-O, EN 16931-1, or relevant code lists) and provide more example individuals.",
+      "expected_impact": "Facilitates interoperability, reuse, and onboarding for new users."
+    }
+  ],
+  "improvement_tracking": {
+    "suggestions_addressed": [],
+    "suggestions_ignored": [
+      "Add explicit data properties for organization details (CQ5)",
+      "Add OWL restrictions or SHACL shapes for all mandatory fields (CQ13)",
+      "Replace xsd:date with xsd:dateTime for OWL 2 compliance",
+      "Define GCAs or equivalentClass for role-based concepts",
+      "Enrich Organization and Item classes with additional attributes",
+      "Add rdfs:seeAlso links and examples"
+    ],
+    "quality_delta": "+0.00",
+    "coverage_delta": "+0.00",
+    "overall_progress": "poor",
+    "notes": "No substantive improvements were made since the last iteration. All previous high-priority and medium-priority suggestions remain unaddressed, and a critical OWL 2 DL violation (use of xsd:date) was introduced, which will prevent reasoning and standard tool compatibility."
+  },
+  "summary": "The ontology maintains a robust structural foundation and continues to answer most competency questions, but no progress was made on previous review suggestions. The introduction of a non-OWL2 datatype (xsd:date) is a critical issue. To achieve compliance and full scenario coverage, it is essential to add organization attributes, validation constraints, and correct datatype usage. Quality and coverage scores remain unchanged, and validator compatibility has regressed."
+}

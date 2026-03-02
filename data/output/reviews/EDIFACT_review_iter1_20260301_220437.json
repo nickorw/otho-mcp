@@ -1,0 +1,104 @@
+{
+  "iteration": 1,
+  "timestamp": "2026-03-01T22:07:54.292435",
+  "cq_coverage": {
+    "fully_covered": [
+      "CQ1",
+      "CQ2",
+      "CQ3",
+      "CQ4",
+      "CQ6",
+      "CQ7",
+      "CQ9",
+      "CQ10",
+      "CQ11",
+      "CQ12",
+      "CQ13",
+      "CQ14"
+    ],
+    "partially_covered": [
+      {
+        "cq": "CQ5",
+        "missing": "No direct data properties for organization attributes like contact details, registration numbers, or phone/email; only Address is modeled.",
+        "coverage_percent": 70
+      },
+      {
+        "cq": "CQ8",
+        "missing": "No explicit data properties for item description, unit of measure, or product codes.",
+        "coverage_percent": 60
+      }
+    ],
+    "not_covered": [],
+    "coverage_score": 0.92,
+    "details": "The ontology covers almost all competency questions. Participant roles, invoice structure, and itemization are well modeled. Some details for organization and item attributes are missing or underspecified."
+  },
+  "constraint_adherence": {
+    "reification_correct": true,
+    "owl2_compliant": true,
+    "annotations_complete": true,
+    "directionality_correct": true,
+    "pivot_class_structure_correct": true,
+    "issues": []
+  },
+  "quality_metrics": {
+    "hierarchy_depth": 4,
+    "uses_restrictions": true,
+    "uses_gcas": false,
+    "uses_equivalence": false,
+    "property_characteristics_defined": true,
+    "disjointness_axioms": true,
+    "overall_score": 0.85,
+    "strengths": [
+      "Rich, multi-level class hierarchy with clear subclassing",
+      "Correct use of reification for N-ary relations",
+      "Functional properties and inverses well defined",
+      "Disjointness between key classes"
+    ],
+    "weaknesses": [
+      "No General Class Axioms for complex class definitions",
+      "No owl:equivalentClass axioms for necessary/sufficient conditions",
+      "Limited data properties for organization and item details"
+    ]
+  },
+  "validator_predictions": {
+    "likely_oops_pitfalls": [
+      "P4: Missing domain or range in some properties (none detected here, but monitor for future extensions)",
+      "P7: Missing disjointness between some sibling classes (e.g., AgentRole, Identifier, may need more explicit disjointness as model grows)"
+    ],
+    "reasoner_risks": [],
+    "confidence": "high"
+  },
+  "improvement_suggestions": [
+    {
+      "priority": "high",
+      "category": "CQ Coverage",
+      "suggestion": "Add data properties to Organization for typical business attributes (e.g., legalName, taxID, contactEmail, phone).",
+      "expected_impact": "Enables full coverage for CQ5 and richer querying of organization information."
+    },
+    {
+      "priority": "high",
+      "category": "CQ Coverage",
+      "suggestion": "Add data properties to Item for description, unitOfMeasure, productCode, and other relevant attributes.",
+      "expected_impact": "Completes CQ8 and supports more granular item queries."
+    },
+    {
+      "priority": "medium",
+      "category": "Quality",
+      "suggestion": "Introduce General Class Axioms (GCAs) to formally define classes like Buyer and Seller using role restrictions.",
+      "expected_impact": "Improves reasoning and classification of participant roles."
+    },
+    {
+      "priority": "medium",
+      "category": "Quality",
+      "suggestion": "Add owl:equivalentClass axioms for classes with necessary and sufficient conditions (e.g., define InvoiceMessage via its required sections and participant roles).",
+      "expected_impact": "Enables more powerful reasoning and validation."
+    },
+    {
+      "priority": "low",
+      "category": "Quality",
+      "suggestion": "Expand disjointness axioms to more sibling classes (e.g., AgentRole, Identifier, Price, Tax).",
+      "expected_impact": "Prevents logical conflicts as the ontology grows."
+    }
+  ],
+  "summary": "This ontology provides a strong foundation for modeling UN/EDIFACT invoice messages, with robust structural coverage and correct use of reification and property characteristics. Most competency questions are fully addressed, but richer data properties for organizations and items are needed to achieve full coverage and enable more detailed queries. Quality could be further improved by adding GCAs and equivalence axioms."
+}

@@ -1,0 +1,103 @@
+{
+  "iteration": 1,
+  "timestamp": "2026-03-01T22:59:41.446461",
+  "cq_coverage": {
+    "fully_covered": [
+      "CQ1",
+      "CQ2",
+      "CQ3",
+      "CQ4",
+      "CQ6",
+      "CQ7",
+      "CQ8",
+      "CQ9",
+      "CQ10",
+      "CQ11",
+      "CQ12",
+      "CQ14"
+    ],
+    "partially_covered": [
+      {
+        "cq": "CQ5",
+        "missing": "Organization information is limited to name and identifiers; legal form, contact info, and other EN 16931-1 attributes are missing.",
+        "coverage_percent": 60
+      },
+      {
+        "cq": "CQ13",
+        "missing": "No explicit encoding of mandatory/optional fields or file format validity rules; SHACL constraints are referenced but not modeled.",
+        "coverage_percent": 50
+      }
+    ],
+    "not_covered": [],
+    "coverage_score": 0.92,
+    "details": "Most CQs are structurally answerable using the provided classes and properties. CQ5 and CQ13 lack some detailed attributes and explicit constraint modeling, but the core data structures are present for the majority of queries."
+  },
+  "constraint_adherence": {
+    "reification_correct": true,
+    "owl2_compliant": true,
+    "annotations_complete": true,
+    "directionality_correct": true,
+    "pivot_class_structure_correct": true,
+    "issues": []
+  },
+  "quality_metrics": {
+    "hierarchy_depth": 3,
+    "uses_restrictions": true,
+    "uses_gcas": false,
+    "uses_equivalence": false,
+    "property_characteristics_defined": true,
+    "disjointness_axioms": true,
+    "overall_score": 0.85,
+    "strengths": [
+      "Well-structured class hierarchy with clear subclassing",
+      "Consistent use of functional properties and inverses",
+      "Good use of restrictions for cardinality and section requirements"
+    ],
+    "weaknesses": [
+      "No general class axioms (GCAs) for advanced semantic definitions",
+      "No use of owl:equivalentClass for necessary/sufficient conditions",
+      "Disjointness is only partial (not a complete partition of key classes)"
+    ]
+  },
+  "validator_predictions": {
+    "likely_oops_pitfalls": [
+      "P4 (Missing domain or range)",
+      "P7 (Missing inverse for some properties, though most are present)"
+    ],
+    "reasoner_risks": [],
+    "confidence": "high"
+  },
+  "improvement_suggestions": [
+    {
+      "priority": "high",
+      "category": "CQ Coverage",
+      "suggestion": "Enhance Organization and Address with additional properties (e.g., legal form, contact info, VAT ID) to fully cover CQ5 and EN 16931-1 requirements.",
+      "expected_impact": "Improved coverage and interoperability for all queries related to organization data."
+    },
+    {
+      "priority": "high",
+      "category": "CQ Coverage",
+      "suggestion": "Model file format validity constraints and mandatory fields (e.g., via SHACL shapes or OWL restrictions) to address CQ13.",
+      "expected_impact": "Enables automated validation and ensures compliance with EDIFACT and EN 16931-1."
+    },
+    {
+      "priority": "medium",
+      "category": "Quality",
+      "suggestion": "Introduce GCAs or owl:equivalentClass axioms for classes like InvoiceMessage and LineItem to capture necessary and sufficient conditions.",
+      "expected_impact": "Stronger semantic definitions and easier query formulation."
+    },
+    {
+      "priority": "medium",
+      "category": "Quality",
+      "suggestion": "Expand disjointness axioms to cover more class partitions (e.g., all segment types, all participant types).",
+      "expected_impact": "Reduces risk of unintended class overlap and improves reasoning performance."
+    },
+    {
+      "priority": "low",
+      "category": "Quality",
+      "suggestion": "Add more descriptive comments and rdfs:seeAlso links to external standards (e.g., EN 16931-1, P2P-O).",
+      "expected_impact": "Improves human readability and interoperability."
+    }
+  ],
+  "summary": "This ontology provides a robust and compliant foundation for representing EDIFACT invoice messages, with strong coverage of the business document structure and participant roles. While most competency questions are answerable, further enrichment of organization attributes and explicit constraint modeling will be needed to achieve full coverage and validation support. The ontology is well-structured, annotations are complete, and no OWL 2 compliance issues are present."
+}

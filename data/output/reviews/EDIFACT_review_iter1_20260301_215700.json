@@ -1,0 +1,111 @@
+{
+  "iteration": 1,
+  "timestamp": "2026-03-01T21:58:51.030472",
+  "cq_coverage": {
+    "fully_covered": [
+      "CQ1",
+      "CQ2",
+      "CQ3",
+      "CQ4",
+      "CQ6",
+      "CQ7",
+      "CQ9",
+      "CQ11",
+      "CQ12",
+      "CQ14"
+    ],
+    "partially_covered": [
+      {
+        "cq": "CQ5",
+        "missing": "Organization attributes (beyond address and GLN) are not modeled, such as contact details or legal name.",
+        "coverage_percent": 70
+      },
+      {
+        "cq": "CQ8",
+        "missing": "Item details (beyond price and quantity) are not modeled, e.g. description, product code.",
+        "coverage_percent": 60
+      },
+      {
+        "cq": "CQ10",
+        "missing": "Invoice details are distributed across sections but lack explicit grouping or summary class.",
+        "coverage_percent": 75
+      },
+      {
+        "cq": "CQ13",
+        "missing": "No explicit modeling of mandatory fields or SHACL constraints; ontology does not enforce validity requirements.",
+        "coverage_percent": 65
+      }
+    ],
+    "not_covered": [],
+    "coverage_score": 0.82,
+    "details": "Most CQs are addressed through clear class/property structures for invoices, organizations, roles, items, and sections. Partial gaps remain for detailed item/organization info and validation logic."
+  },
+  "constraint_adherence": {
+    "reification_correct": true,
+    "owl2_compliant": true,
+    "annotations_complete": true,
+    "directionality_correct": true,
+    "pivot_class_structure_correct": true,
+    "issues": []
+  },
+  "quality_metrics": {
+    "hierarchy_depth": 3,
+    "uses_restrictions": false,
+    "uses_gcas": false,
+    "uses_equivalence": false,
+    "property_characteristics_defined": true,
+    "disjointness_axioms": true,
+    "overall_score": 0.75,
+    "strengths": [
+      "Clear hierarchical structure",
+      "Disjointness and disjoint unions used",
+      "Functional properties and inverses defined"
+    ],
+    "weaknesses": [
+      "No use of OWL restrictions (someValuesFrom/allValuesFrom)",
+      "No general class axioms or equivalence definitions",
+      "No advanced validation constraints (e.g., SHACL or OWL cardinality)"
+    ]
+  },
+  "validator_predictions": {
+    "likely_oops_pitfalls": [
+      "P4: Missing domain or range for some properties (all covered here)",
+      "P7: Lack of equivalence or necessary/sufficient class definitions"
+    ],
+    "reasoner_risks": [],
+    "confidence": "high"
+  },
+  "improvement_suggestions": [
+    {
+      "priority": "high",
+      "category": "CQ Coverage",
+      "suggestion": "Add additional data properties for Organization (e.g., legal name, contact info) and Item (e.g., description, product code) to fully address CQ5 and CQ8.",
+      "expected_impact": "Improved coverage for competency questions about organization and item details."
+    },
+    {
+      "priority": "high",
+      "category": "CQ Coverage",
+      "suggestion": "Introduce SHACL shapes or OWL cardinality restrictions to enforce mandatory fields and file validity for CQ13.",
+      "expected_impact": "Semantic validation and compliance with EDIFACT/EN 16931-1 requirements."
+    },
+    {
+      "priority": "medium",
+      "category": "Quality",
+      "suggestion": "Add OWL restrictions (someValuesFrom/allValuesFrom) for properties like hasItem, hasOrganizationRole to clarify expected structure.",
+      "expected_impact": "Better formalization and reasoning support."
+    },
+    {
+      "priority": "medium",
+      "category": "Quality",
+      "suggestion": "Define equivalence axioms or general class axioms for key classes (e.g., InvoiceMessage as message with specific segments).",
+      "expected_impact": "Enables richer reasoning and validation."
+    },
+    {
+      "priority": "low",
+      "category": "Optional Enrichment",
+      "suggestion": "Expand Address class with structured properties (street, city, postal code, country) for completeness.",
+      "expected_impact": "Improved expressiveness for address-related queries."
+    }
+  ],
+  "summary": "The ontology offers clear coverage for most business document CQs and models EDIFACT structure well, with proper use of reification and pivot classes. Quality is solid but lacks advanced OWL constructs and enforcement of mandatory fields. Improvements should focus on richer item/organization details and formal validation constraints."
+}

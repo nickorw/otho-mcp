@@ -1,0 +1,104 @@
+{
+  "iteration": 1,
+  "timestamp": "2026-03-01T22:10:46.751903",
+  "cq_coverage": {
+    "fully_covered": [
+      "CQ1",
+      "CQ2",
+      "CQ3",
+      "CQ4",
+      "CQ6",
+      "CQ7",
+      "CQ8",
+      "CQ9",
+      "CQ10",
+      "CQ11",
+      "CQ12",
+      "CQ14"
+    ],
+    "partially_covered": [
+      {
+        "cq": "CQ5",
+        "missing": "No explicit data properties for organization details (e.g., contact info, legal entity type, etc.)",
+        "coverage_percent": 70
+      },
+      {
+        "cq": "CQ13",
+        "missing": "No explicit SHACL or OWL restrictions enforcing D96A/EN 16931-1 required fields; only some cardinality constraints present",
+        "coverage_percent": 60
+      }
+    ],
+    "not_covered": [],
+    "coverage_score": 0.92,
+    "details": "Most CQs are directly supported by the class/property structure. CQ5 and CQ13 are only partially addressed due to missing fine-grained organization attributes and lack of explicit constraints for mandatory fields."
+  },
+  "constraint_adherence": {
+    "reification_correct": true,
+    "owl2_compliant": true,
+    "annotations_complete": true,
+    "directionality_correct": true,
+    "pivot_class_structure_correct": true,
+    "issues": []
+  },
+  "quality_metrics": {
+    "hierarchy_depth": 4,
+    "uses_restrictions": true,
+    "uses_gcas": false,
+    "uses_equivalence": false,
+    "property_characteristics_defined": true,
+    "disjointness_axioms": true,
+    "overall_score": 0.85,
+    "strengths": [
+      "Rich, multi-level class hierarchy",
+      "Comprehensive use of object/data property characteristics",
+      "Good use of reification for organization roles in invoice context",
+      "Disjointness and disjointUnion for key structural classes"
+    ],
+    "weaknesses": [
+      "No GCAs or equivalentClass axioms for complex concepts",
+      "Limited enrichment of organization and item attributes",
+      "No SHACL or OWL-based validation for mandatory data fields"
+    ]
+  },
+  "validator_predictions": {
+    "likely_oops_pitfalls": [
+      "P7 (Missing domain/range for some inverses if not explicitly declared)",
+      "P28 (Potential lack of explicit inverse functional for some identifiers)"
+    ],
+    "reasoner_risks": [],
+    "confidence": "high"
+  },
+  "improvement_suggestions": [
+    {
+      "priority": "high",
+      "category": "CQ Coverage",
+      "suggestion": "Add explicit data properties for organization details (e.g., name, legal form, contact info) to fully answer CQ5.",
+      "expected_impact": "Enables full retrieval of organization information as required by the scenario."
+    },
+    {
+      "priority": "high",
+      "category": "Constraint Adherence",
+      "suggestion": "Add OWL restrictions or SHACL shapes to enforce mandatory fields as per D96A and EN 16931-1 (e.g., invoice number, buyer GLN, total amount).",
+      "expected_impact": "Enables automated validation and compliance with standards (CQ13)."
+    },
+    {
+      "priority": "medium",
+      "category": "Quality",
+      "suggestion": "Define General Class Axioms (GCAs) or owl:equivalentClass for key concepts (e.g., BuyerOrganizationRole as an OrganizationRoleInInvoice with hasRole Buyer).",
+      "expected_impact": "Improves reasoning and query expressiveness for roles."
+    },
+    {
+      "priority": "medium",
+      "category": "Quality",
+      "suggestion": "Enrich Item and Organization classes with additional attributes (e.g., product codes, organization type).",
+      "expected_impact": "Improves descriptive power and supports more detailed queries."
+    },
+    {
+      "priority": "low",
+      "category": "Enrichment",
+      "suggestion": "Add more examples and rdfs:seeAlso links to external ontologies (e.g., P2P-O, EN 16931-1 URIs).",
+      "expected_impact": "Facilitates interoperability and reuse."
+    }
+  ],
+  "summary": "The ontology provides a strong structural foundation for UN/EDIFACT invoice modeling, with robust class and property hierarchies and correct use of reification for organizational roles. Most competency questions are well-covered, though explicit organization attributes and mandatory field constraints are lacking. Quality is high, but further enrichment and validation constraints are recommended for full scenario compliance."
+}

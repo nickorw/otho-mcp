@@ -1,0 +1,99 @@
+{
+  "iteration": 1,
+  "timestamp": "2026-03-01T22:03:59.689180",
+  "cq_coverage": {
+    "fully_covered": [
+      "CQ1",
+      "CQ2",
+      "CQ3",
+      "CQ4",
+      "CQ6",
+      "CQ7",
+      "CQ9",
+      "CQ10",
+      "CQ11",
+      "CQ12",
+      "CQ13",
+      "CQ14"
+    ],
+    "partially_covered": [
+      {
+        "cq": "CQ5",
+        "missing": "No explicit modeling of all organization-related information such as contact details, organization type, or legal name; only address and identifier are modeled.",
+        "coverage_percent": 70
+      },
+      {
+        "cq": "CQ8",
+        "missing": "Item information is generic; no properties for item description, product code, or unit of measure.",
+        "coverage_percent": 60
+      }
+    ],
+    "not_covered": [],
+    "coverage_score": 0.92,
+    "details": "Most CQs are directly answerable via the class/property structure (e.g., invoices, roles, organizations, line items, prices, invoice numbers, and business process assignment). Some details about organizations and items are only partially modeled (CQ5, CQ8)."
+  },
+  "constraint_adherence": {
+    "reification_correct": true,
+    "owl2_compliant": true,
+    "annotations_complete": true,
+    "directionality_correct": true,
+    "pivot_class_structure_correct": true,
+    "issues": []
+  },
+  "quality_metrics": {
+    "hierarchy_depth": 3,
+    "uses_restrictions": true,
+    "uses_gcas": false,
+    "uses_equivalence": true,
+    "property_characteristics_defined": true,
+    "disjointness_axioms": true,
+    "overall_score": 0.85,
+    "strengths": [
+      "Comprehensive class/property hierarchy reflecting EDIFACT structure",
+      "Good use of functional/inverse properties and restrictions",
+      "Clear reification via RoleAssignment"
+    ],
+    "weaknesses": [
+      "No General Class Axioms (GCAs) for advanced reasoning",
+      "Disjointness is only partial (not all sibling classes disjoint)",
+      "Limited modeling of item and organization attributes"
+    ]
+  },
+  "validator_predictions": {
+    "likely_oops_pitfalls": [
+      "P4: Missing domain or range in some inverse properties (though most are present)",
+      "P7: Only partial disjointness among classes"
+    ],
+    "reasoner_risks": [
+      "Hermit may warn on equivalence restriction if further complex GCAs are added without careful modeling"
+    ],
+    "confidence": "high"
+  },
+  "improvement_suggestions": [
+    {
+      "priority": "high",
+      "category": "CQ Coverage",
+      "suggestion": "Expand the Organization and Item classes with additional properties (e.g., legalName, contactPoint, itemDescription, unitOfMeasure) to fully answer CQ5 and CQ8.",
+      "expected_impact": "Full coverage for organization and item information questions."
+    },
+    {
+      "priority": "medium",
+      "category": "Quality",
+      "suggestion": "Add General Class Axioms (GCAs) to define complex concepts (e.g., define Buyer as an Organization with a RoleAssignment where hasAgentRole is BuyerRole).",
+      "expected_impact": "Improved reasoning and query power."
+    },
+    {
+      "priority": "medium",
+      "category": "Quality",
+      "suggestion": "Declare additional disjointness axioms among sibling classes (e.g., InvoiceHeader, InvoiceDetail, InvoiceSummary).",
+      "expected_impact": "Improved logical clarity and error detection."
+    },
+    {
+      "priority": "low",
+      "category": "Enrichment",
+      "suggestion": "Model temporal validity for roles and assignments (e.g., effective dates).",
+      "expected_impact": "Support for advanced temporal queries."
+    }
+  ],
+  "summary": "The ontology robustly models the core EDIFACT invoice structure, roles, and validation patterns, with strong CQ coverage and good adherence to OWL 2 best practices. Some enhancement is needed for richer organization/item attributes and advanced axiomatization, but the current model provides a solid, validator-friendly foundation for procurement interoperability."
+}

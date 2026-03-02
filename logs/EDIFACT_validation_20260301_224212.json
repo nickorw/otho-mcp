@@ -1,0 +1,86 @@
+{
+  "story_id": "EDIFACT",
+  "timestamp": "20260301_224212",
+  "start_time": "2026-03-01T22:45:26.097908",
+  "ontology_size_chars": 13196,
+  "validation_results": {
+    "syntax": {
+      "valid": true,
+      "execution_time_seconds": 0.019,
+      "error": null,
+      "error_type": null
+    },
+    "oops": {
+      "has_pitfalls": false,
+      "pitfall_count": 0,
+      "execution_time_seconds": 0.107,
+      "pitfalls": [],
+      "pitfall_codes": [],
+      "pitfall_names": []
+    },
+    "hermit": {
+      "reasoner": "Hermit",
+      "is_consistent": true,
+      "execution_time_seconds": 0.78,
+      "inconsistent_classes": [],
+      "inconsistent_classes_count": 0,
+      "error": null,
+      "error_type": null
+    },
+    "pellet": {
+      "reasoner": "Pellet",
+      "is_consistent": true,
+      "execution_time_seconds": 0.504,
+      "inconsistent_classes": [],
+      "inconsistent_classes_count": 0,
+      "error": null,
+      "error_type": null
+    },
+    "aggregate": {
+      "all_validators_passed": true,
+      "total_execution_time_seconds": 1.411,
+      "validation_breakdown": {
+        "syntax_valid": true,
+        "oops_passed": true,
+        "oops_pitfall_count": 0,
+        "hermit_consistent": true,
+        "pellet_consistent": true
+      },
+      "timing_breakdown_seconds": {
+        "syntax": 0.019,
+        "oops": 0.107,
+        "hermit": 0.78,
+        "pellet": 0.504,
+        "total": 1.411
+      }
+    }
+  },
+  "files_saved": [
+    {
+      "path": "data/output/ontologies/EDIFACT_ontology_20260301_224212.owl",
+      "description": "Ontology",
+      "timestamp": "2026-03-01T22:45:27.715025"
+    },
+    {
+      "path": "data/output/validations/EDIFACT_validation_20260301_224212.xml",
+      "description": "OOPS XML results",
+      "timestamp": "2026-03-01T22:45:27.715445"
+    },
+    {
+      "path": "data/output/validations/EDIFACT_validation_20260301_224212.json",
+      "description": "Validation metrics JSON",
+      "timestamp": "2026-03-01T22:45:27.715734"
+    },
+    {
+      "path": "data/output/scratchpads/EDIFACT_scratchpad_20260301_224212.json",
+      "description": "Agent scratchpad",
+      "timestamp": "2026-03-01T22:45:27.716291"
+    }
+  ],
+  "end_time": "2026-03-01T22:45:27.716566",
+  "iteration_count": 3,
+  "story_timing": {
+    "duration_seconds": 195.27,
+    "duration_formatted": "3m 15s"
+  }
+}

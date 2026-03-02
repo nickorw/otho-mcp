@@ -1,0 +1,108 @@
+{
+  "iteration": 1,
+  "timestamp": "2026-03-01T22:48:42.309443",
+  "cq_coverage": {
+    "fully_covered": [
+      "CQ1",
+      "CQ2",
+      "CQ3",
+      "CQ4",
+      "CQ6",
+      "CQ7",
+      "CQ8",
+      "CQ9",
+      "CQ10",
+      "CQ11",
+      "CQ12",
+      "CQ14"
+    ],
+    "partially_covered": [
+      {
+        "cq": "CQ5",
+        "missing": "No explicit property to enumerate all displayed organization info; relies on generic hasName, hasAddress, hasIdentifier, but lacks grouping or completeness constraints.",
+        "coverage_percent": 70
+      },
+      {
+        "cq": "CQ13",
+        "missing": "No explicit encoding of mandatory/optional fields or SHACL constraints for file validity; only implicit via class structure.",
+        "coverage_percent": 60
+      }
+    ],
+    "not_covered": [],
+    "coverage_score": 0.88,
+    "details": "Most CQs are fully addressed by the ontology structure, including roles, items, prices, and invoice metadata. Partial gaps exist for completeness of organization display info and explicit file validity requirements."
+  },
+  "constraint_adherence": {
+    "reification_correct": true,
+    "owl2_compliant": false,
+    "annotations_complete": true,
+    "directionality_correct": true,
+    "pivot_class_structure_correct": true,
+    "issues": [
+      "Non-OWL2 datatype: xsd:date used in hasDate (should be xsd:dateTime)",
+      "No SHACL or OWL cardinality constraints to enforce required elements"
+    ]
+  },
+  "quality_metrics": {
+    "hierarchy_depth": 3,
+    "uses_restrictions": true,
+    "uses_gcas": false,
+    "uses_equivalence": true,
+    "property_characteristics_defined": true,
+    "disjointness_axioms": true,
+    "overall_score": 0.82,
+    "strengths": [
+      "Rich and well-labeled class/property hierarchy",
+      "Good use of pivot classes for roles and line items",
+      "Functional and inverse properties defined"
+    ],
+    "weaknesses": [
+      "No GCAs for advanced axiomatization",
+      "No explicit cardinality or SHACL constraints for validation",
+      "One datatype violation (xsd:date)"
+    ]
+  },
+  "validator_predictions": {
+    "likely_oops_pitfalls": [
+      "P4 (Missing domain or range in some properties, but not observed here)",
+      "P7 (Use of non-standard datatypes: xsd:date)"
+    ],
+    "reasoner_risks": [
+      "Hermit and Pellet will fail on xsd:date datatype"
+    ],
+    "confidence": "high"
+  },
+  "improvement_suggestions": [
+    {
+      "priority": "high",
+      "category": "OWL2 Compliance",
+      "suggestion": "Replace all uses of xsd:date in data properties (notably hasDate) with xsd:dateTime to ensure OWL 2 DL compatibility.",
+      "expected_impact": "Ontology will load in all standard OWL 2 reasoners and pass validator checks."
+    },
+    {
+      "priority": "high",
+      "category": "CQ Coverage",
+      "suggestion": "For CQ13, explicitly model mandatory/optional fields and validation constraints using SHACL or OWL cardinalities to represent file format validity.",
+      "expected_impact": "Supports automated validation and completeness queries."
+    },
+    {
+      "priority": "medium",
+      "category": "CQ Coverage",
+      "suggestion": "For CQ5, aggregate organization display info via a grouping class or view, or document all relevant properties for organization display.",
+      "expected_impact": "Improved queryability and documentation for organization info."
+    },
+    {
+      "priority": "medium",
+      "category": "Quality",
+      "suggestion": "Introduce General Class Axioms (GCAs) to define complex classes (e.g., an InvoiceMessage with both Buyer and Seller assignments).",
+      "expected_impact": "Enables richer inferencing and semantic validation."
+    },
+    {
+      "priority": "low",
+      "category": "Quality",
+      "suggestion": "Expand disjointness axioms to further unrelated classes (e.g., AgentRole disjointWith Segment).",
+      "expected_impact": "Reduces risk of logical incoherence."
+    }
+  ],
+  "summary": "The ontology provides strong coverage for UN/EDIFACT invoice semantics, roles, and structure, with good use of pivot classes and restrictions. The main blocking issue is the use of xsd:date, which is not OWL 2 compliant and must be replaced with xsd:dateTime. CQ coverage is high, but explicit modeling of validation constraints and richer axiomatization would further improve quality and usability."
+}

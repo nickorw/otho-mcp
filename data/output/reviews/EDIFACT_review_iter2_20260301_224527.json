@@ -1,0 +1,110 @@
+{
+  "iteration": 2,
+  "timestamp": "2026-03-01T22:49:20.890315",
+  "cq_coverage": {
+    "fully_covered": [
+      "CQ1",
+      "CQ2",
+      "CQ3",
+      "CQ4",
+      "CQ6",
+      "CQ7",
+      "CQ8",
+      "CQ9",
+      "CQ10",
+      "CQ11",
+      "CQ12",
+      "CQ14"
+    ],
+    "partially_covered": [
+      {
+        "cq": "CQ5",
+        "missing": "No explicit grouping or completeness constraint for all displayed organization information. Organization info can be retrieved via hasName, hasAddress, hasIdentifier, but there is no aggregate class or property set for 'displayed info', nor cardinality or completeness constraints.",
+        "coverage_percent": 70
+      },
+      {
+        "cq": "CQ13",
+        "missing": "No explicit modeling of mandatory/optional fields or SHACL/OWL cardinality constraints for file format validity. The ontology structure implies requirements, but does not enforce them. No SHACL shapes provided.",
+        "coverage_percent": 60
+      }
+    ],
+    "not_covered": [],
+    "coverage_score": 0.88,
+    "details": "All core CQs about invoice structure, roles, items, and identifiers are fully supported. Partial gaps remain for completeness of organization display information (CQ5) and explicit validation of file format requirements (CQ13), as there are no grouping constructs or SHACL/OWL constraints for required fields."
+  },
+  "constraint_adherence": {
+    "reification_correct": true,
+    "owl2_compliant": true,
+    "annotations_complete": true,
+    "directionality_correct": true,
+    "pivot_class_structure_correct": true,
+    "issues": []
+  },
+  "quality_metrics": {
+    "hierarchy_depth": 3,
+    "uses_restrictions": true,
+    "uses_gcas": false,
+    "uses_equivalence": true,
+    "property_characteristics_defined": true,
+    "disjointness_axioms": true,
+    "overall_score": 0.82,
+    "strengths": [
+      "Rich and well-labeled class/property hierarchy",
+      "Good use of pivot classes for roles and line items",
+      "Functional and inverse properties defined",
+      "OWL 2 datatype compliance achieved"
+    ],
+    "weaknesses": [
+      "No GCAs for advanced axiomatization",
+      "No explicit SHACL or OWL cardinality constraints for validation",
+      "Partial CQ coverage for organization info and file validity"
+    ]
+  },
+  "validator_predictions": {
+    "likely_oops_pitfalls": [],
+    "reasoner_risks": [],
+    "confidence": "high"
+  },
+  "improvement_suggestions": [
+    {
+      "priority": "high",
+      "category": "CQ Coverage",
+      "suggestion": "For CQ13, explicitly model mandatory and optional fields using OWL cardinality restrictions or, preferably, SHACL shapes. This will allow automated validation of file format validity and completeness.",
+      "expected_impact": "Supports validation and ensures all required fields are present for EDIFACT/EN 16931-1 compliance."
+    },
+    {
+      "priority": "medium",
+      "category": "CQ Coverage",
+      "suggestion": "For CQ5, introduce a grouping class or documented property set (e.g., OrganizationDisplayInfo) that aggregates all organization information relevant for display, and consider completeness constraints.",
+      "expected_impact": "Improves queryability and clarity for organization-related queries."
+    },
+    {
+      "priority": "medium",
+      "category": "Quality",
+      "suggestion": "Add General Class Axioms (GCAs) to formally define invoices with both Buyer and Seller roles, and potentially other complex business constraints.",
+      "expected_impact": "Enables richer semantic validation and inferencing."
+    },
+    {
+      "priority": "low",
+      "category": "Quality",
+      "suggestion": "Expand disjointness axioms to cover additional unrelated classes (e.g., AgentRole disjointWith Segment, BusinessProcess, etc.).",
+      "expected_impact": "Reduces logical incoherence risk and improves ontology robustness."
+    }
+  ],
+  "improvement_tracking": {
+    "suggestions_addressed": [
+      "Replace all uses of xsd:date in data properties (notably hasDate) with xsd:dateTime to ensure OWL 2 DL compatibility."
+    ],
+    "suggestions_ignored": [
+      "For CQ13, explicitly model mandatory/optional fields and validation constraints using SHACL or OWL cardinalities to represent file format validity.",
+      "For CQ5, aggregate organization display info via a grouping class or view, or document all relevant properties for organization display.",
+      "Introduce General Class Axioms (GCAs) to define complex classes (e.g., an InvoiceMessage with both Buyer and Seller assignments).",
+      "Expand disjointness axioms to further unrelated classes (e.g., AgentRole disjointWith Segment)."
+    ],
+    "quality_delta": "+0.00",
+    "coverage_delta": "+0.00",
+    "overall_progress": "good",
+    "notes": "The critical OWL 2 datatype violation (use of xsd:date) was fixed, resolving reasoner compatibility issues. However, other high- and medium-priority suggestions about validation constraints, richer axiomatization, and CQ5 grouping were not addressed. Quality and coverage scores remain unchanged, but the ontology is now technically compliant and stable."
+  },
+  "summary": "The ontology is now fully OWL 2 DL compliant and maintains strong coverage for invoice structure, roles, and items. While the critical datatype issue is resolved, key improvements regarding validation constraints and richer modeling for organization info and business rules are still outstanding. The ontology is robust and usable for most queries, but lacks advanced semantic validation and some CQ completeness."
+}

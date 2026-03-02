@@ -1,0 +1,103 @@
+{
+  "iteration": 1,
+  "timestamp": "2026-03-01T22:37:10.023022",
+  "cq_coverage": {
+    "fully_covered": [
+      "CQ1",
+      "CQ2",
+      "CQ3",
+      "CQ4",
+      "CQ6",
+      "CQ7",
+      "CQ8",
+      "CQ9",
+      "CQ10",
+      "CQ11",
+      "CQ12",
+      "CQ14"
+    ],
+    "partially_covered": [
+      {
+        "cq": "CQ5",
+        "missing": "No explicit properties for detailed organization information beyond address and identifier; no contact, legal form, or other details.",
+        "coverage_percent": 70
+      },
+      {
+        "cq": "CQ13",
+        "missing": "Ontology does not encode mandatory/optional status of fields or provide SHACL/OWL constraints for file validity.",
+        "coverage_percent": 50
+      }
+    ],
+    "not_covered": [],
+    "coverage_score": 0.92,
+    "details": "Ontology answers most CQs via explicit classes and properties. CQ5 and CQ13 are only partially addressed due to missing detailed organization info and lack of constraint formalization for file validity."
+  },
+  "constraint_adherence": {
+    "reification_correct": true,
+    "owl2_compliant": true,
+    "annotations_complete": true,
+    "directionality_correct": true,
+    "pivot_class_structure_correct": true,
+    "issues": []
+  },
+  "quality_metrics": {
+    "hierarchy_depth": 4,
+    "uses_restrictions": false,
+    "uses_gcas": false,
+    "uses_equivalence": false,
+    "property_characteristics_defined": true,
+    "disjointness_axioms": true,
+    "overall_score": 0.78,
+    "strengths": [
+      "Well-structured class/property hierarchy",
+      "Extensive use of functional properties and inverses",
+      "Good disjointness axioms for major sections"
+    ],
+    "weaknesses": [
+      "No use of GCAs or equivalence axioms",
+      "No advanced OWL restrictions (e.g., cardinality, value constraints)",
+      "No formal encoding of mandatory/optional fields"
+    ]
+  },
+  "validator_predictions": {
+    "likely_oops_pitfalls": [
+      "P4 (Missing domain or range for some properties)",
+      "P7 (Missing disjointness for AgentRole subclasses if extended)"
+    ],
+    "reasoner_risks": [],
+    "confidence": "high"
+  },
+  "improvement_suggestions": [
+    {
+      "priority": "high",
+      "category": "CQ Coverage",
+      "suggestion": "Add further organization details (e.g., contact info, legal form, VAT ID) to fully answer CQ5.",
+      "expected_impact": "Complete coverage for organization-related queries."
+    },
+    {
+      "priority": "high",
+      "category": "Constraint Adherence",
+      "suggestion": "Formally represent mandatory/optional status of invoice elements (e.g., via OWL cardinality or SHACL shapes) to address CQ13.",
+      "expected_impact": "Enables automated file validity checking and full CQ13 coverage."
+    },
+    {
+      "priority": "medium",
+      "category": "Quality",
+      "suggestion": "Introduce General Class Axioms and equivalence axioms for key concepts (e.g., define Buyer as OrganizationRoleAssignment with hasRole Buyer and inInvoice some InvoiceMessage).",
+      "expected_impact": "Improves reasoning and semantic richness."
+    },
+    {
+      "priority": "medium",
+      "category": "Quality",
+      "suggestion": "Add OWL restrictions (cardinality, value constraints) on key properties (e.g., InvoiceMessage must have exactly one HeaderSection, DetailSection, SummarySection).",
+      "expected_impact": "Stronger logical model, better validation."
+    },
+    {
+      "priority": "low",
+      "category": "Quality",
+      "suggestion": "Extend disjointness axioms to AgentRole subclasses and other mutually exclusive concepts.",
+      "expected_impact": "Prevents logical overlap/confusion in future extensions."
+    }
+  ],
+  "summary": "The ontology provides strong structural coverage for EDIFACT invoice messages and supports nearly all competency questions, with well-modeled roles and sections. However, it lacks advanced OWL constructs such as GCAs, equivalence axioms, and formal constraint encoding, which limits its reasoning and validation power. Addressing these will further improve completeness and interoperability."
+}

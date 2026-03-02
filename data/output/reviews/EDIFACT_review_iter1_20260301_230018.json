@@ -1,0 +1,97 @@
+{
+  "iteration": 1,
+  "timestamp": "2026-03-01T23:03:17.261425",
+  "cq_coverage": {
+    "fully_covered": [
+      "CQ1",
+      "CQ2",
+      "CQ3",
+      "CQ4",
+      "CQ6",
+      "CQ7",
+      "CQ9",
+      "CQ10",
+      "CQ11",
+      "CQ12",
+      "CQ13",
+      "CQ14"
+    ],
+    "partially_covered": [
+      {
+        "cq": "CQ5",
+        "missing": "No explicit linkage of which organization attributes are displayed; lacks modeling of attribute-level access or display context.",
+        "coverage_percent": 60
+      },
+      {
+        "cq": "CQ8",
+        "missing": "Item information is present (itemDescription), but no explicit modeling of units, codes, or classification details.",
+        "coverage_percent": 70
+      }
+    ],
+    "not_covered": [],
+    "coverage_score": 0.92,
+    "details": "The ontology robustly covers almost all CQs through its class/property structure, especially for invoice structure, organizational roles, line items, and amounts. Partial coverage on CQ5 and CQ8 due to lack of explicit modeling for attribute display context and item classification details."
+  },
+  "constraint_adherence": {
+    "reification_correct": true,
+    "owl2_compliant": true,
+    "annotations_complete": true,
+    "directionality_correct": true,
+    "pivot_class_structure_correct": true,
+    "issues": []
+  },
+  "quality_metrics": {
+    "hierarchy_depth": 3,
+    "uses_restrictions": true,
+    "uses_gcas": false,
+    "uses_equivalence": false,
+    "property_characteristics_defined": true,
+    "disjointness_axioms": true,
+    "overall_score": 0.83,
+    "strengths": [
+      "Rich, well-labeled hierarchy reflecting EDIFACT structure",
+      "Correct use of role reification and functional properties",
+      "Comprehensive annotation coverage"
+    ],
+    "weaknesses": [
+      "No use of General Class Axioms (GCAs) or equivalence axioms for necessary/sufficient definitions",
+      "Limited modeling of attribute-level contexts (e.g., what info is 'displayed')",
+      "No explicit item classification or unit modeling"
+    ]
+  },
+  "validator_predictions": {
+    "likely_oops_pitfalls": [
+      "P7 (Missing domain or range in some properties if extended)",
+      "P16 (Lack of equivalence axioms for some classes)"
+    ],
+    "reasoner_risks": [],
+    "confidence": "high"
+  },
+  "improvement_suggestions": [
+    {
+      "priority": "high",
+      "category": "CQ Coverage",
+      "suggestion": "For CQ5, introduce a mechanism (e.g., an 'OrganizationAttribute' class or annotation) to specify which organization attributes are displayed or relevant in the invoice context.",
+      "expected_impact": "Full coverage for information display queries; improved semantic clarity."
+    },
+    {
+      "priority": "medium",
+      "category": "CQ Coverage",
+      "suggestion": "For CQ8, extend the Item class with properties for units of measurement, product codes, and classification schemes (e.g., hasUnit, hasProductCode, hasClassification).",
+      "expected_impact": "Improved expressivity and alignment with EN 16931-1 and P2P-O standards."
+    },
+    {
+      "priority": "medium",
+      "category": "Quality",
+      "suggestion": "Introduce owl:equivalentClass axioms for classes like InvoiceMessage to provide necessary and sufficient conditions (e.g., InvoiceMessage \u2261 Message and containsSegment some InvoiceHeader and ...).",
+      "expected_impact": "Enables more robust reasoning and validation."
+    },
+    {
+      "priority": "low",
+      "category": "Quality",
+      "suggestion": "Consider modeling tax breakdowns and currency explicitly in the Price and InvoiceSummary classes.",
+      "expected_impact": "Greater detail for financial queries and compliance."
+    }
+  ],
+  "summary": "The ontology demonstrates strong coverage of the EDIFACT invoice domain, with well-structured classes, correct reification, and OWL 2 compliance. Most competency questions are fully addressed, though improvements are needed for modeling what information is displayed about organizations and for richer item details. Quality is high, with only minor weaknesses in advanced axiomatization and attribute context modeling."
+}

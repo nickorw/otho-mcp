@@ -1,0 +1,103 @@
+{
+  "iteration": 1,
+  "timestamp": "2026-03-01T22:41:33.968738",
+  "cq_coverage": {
+    "fully_covered": [
+      "CQ1",
+      "CQ2",
+      "CQ3",
+      "CQ4",
+      "CQ6",
+      "CQ7",
+      "CQ8",
+      "CQ9",
+      "CQ10",
+      "CQ11",
+      "CQ12",
+      "CQ14"
+    ],
+    "partially_covered": [
+      {
+        "cq": "CQ5",
+        "missing": "No explicit data property or structure for all organization-related information (e.g., contact details, tax numbers, etc.) beyond address and name.",
+        "coverage_percent": 65
+      },
+      {
+        "cq": "CQ13",
+        "missing": "No formal representation of mandatory/optional fields or validation rules (e.g., SHACL or OWL restrictions for required properties).",
+        "coverage_percent": 50
+      }
+    ],
+    "not_covered": [],
+    "coverage_score": 0.93,
+    "details": "Almost all CQs are directly answerable via the class/property structure. CQ5 and CQ13 lack full coverage due to missing modeling of comprehensive organization info and file format constraints."
+  },
+  "constraint_adherence": {
+    "reification_correct": true,
+    "owl2_compliant": true,
+    "annotations_complete": true,
+    "directionality_correct": true,
+    "pivot_class_structure_correct": true,
+    "issues": []
+  },
+  "quality_metrics": {
+    "hierarchy_depth": 3,
+    "uses_restrictions": false,
+    "uses_gcas": false,
+    "uses_equivalence": false,
+    "property_characteristics_defined": true,
+    "disjointness_axioms": true,
+    "overall_score": 0.78,
+    "strengths": [
+      "Clear, deep class hierarchy",
+      "Consistent use of functional and inverse properties",
+      "Good use of disjointness and disjoint unions"
+    ],
+    "weaknesses": [
+      "No GCAs or equivalence axioms for advanced reasoning",
+      "No OWL restrictions or formal cardinality constraints",
+      "No SHACL or OWL validation for required fields"
+    ]
+  },
+  "validator_predictions": {
+    "likely_oops_pitfalls": [
+      "P4: Missing domain or range for some properties (none found, but always check)",
+      "P7: Missing or incomplete disjointness for some sibling classes"
+    ],
+    "reasoner_risks": [],
+    "confidence": "high"
+  },
+  "improvement_suggestions": [
+    {
+      "priority": "high",
+      "category": "CQ Coverage",
+      "suggestion": "Expand Organization and Address modeling to include all mandatory and recommended attributes per UN/EDIFACT and EN 16931-1 (e.g., tax ID, contact info, legal entity type).",
+      "expected_impact": "Full coverage for CQ5 and improved semantic interoperability."
+    },
+    {
+      "priority": "high",
+      "category": "Validation/Constraints",
+      "suggestion": "Add OWL cardinality restrictions or SHACL shapes to encode required fields and value constraints for mandatory segments and data elements (e.g., InvoiceMessage must have exactly one invoice number, at least one OrganizationRoleAssignment).",
+      "expected_impact": "Enables automated validation and full CQ13 coverage."
+    },
+    {
+      "priority": "medium",
+      "category": "Quality",
+      "suggestion": "Introduce General Class Axioms and equivalence definitions (e.g., define BuyerRole as an AgentRole with a specific role identifier).",
+      "expected_impact": "Supports advanced reasoning and robust CQ answering."
+    },
+    {
+      "priority": "medium",
+      "category": "Quality",
+      "suggestion": "Provide example individuals and instance data for key classes to support CQ demonstration and testing.",
+      "expected_impact": "Improves practical usability and onboarding."
+    },
+    {
+      "priority": "low",
+      "category": "Enrichment",
+      "suggestion": "Consider aligning classes and properties with existing ontologies (e.g., P2P-O, FOAF, schema.org, org) via owl:equivalentClass/property or rdfs:seeAlso.",
+      "expected_impact": "Facilitates interoperability and reuse."
+    }
+  ],
+  "summary": "This ontology provides a solid, OWL 2-compliant foundation for modeling UN/EDIFACT invoice messages and their structure. Coverage of key business questions is high, with clear class hierarchies and good annotation practice. To reach full CQ and validation coverage, further modeling of organization attributes and explicit constraints is needed, along with advanced axioms for richer reasoning."
+}

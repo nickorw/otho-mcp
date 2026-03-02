@@ -1,0 +1,111 @@
+{
+  "iteration": 1,
+  "timestamp": "2026-03-01T22:53:49.034126",
+  "cq_coverage": {
+    "fully_covered": [
+      "CQ1",
+      "CQ2",
+      "CQ3",
+      "CQ4",
+      "CQ6",
+      "CQ7",
+      "CQ9",
+      "CQ11",
+      "CQ12",
+      "CQ14"
+    ],
+    "partially_covered": [
+      {
+        "cq": "CQ5",
+        "missing": "No explicit modeling of all organization-related information (e.g., contact details, legal form, etc.)",
+        "coverage_percent": 70
+      },
+      {
+        "cq": "CQ8",
+        "missing": "Item details are only partially modeled (e.g., no explicit properties for item description, code, or classification)",
+        "coverage_percent": 60
+      },
+      {
+        "cq": "CQ10",
+        "missing": "Invoice details such as payment terms, delivery terms, or currency are not modeled",
+        "coverage_percent": 60
+      },
+      {
+        "cq": "CQ13",
+        "missing": "Mandatory/optional field constraints and D96A directory conformance not explicitly encoded",
+        "coverage_percent": 50
+      }
+    ],
+    "not_covered": [],
+    "coverage_score": 0.85,
+    "details": "The ontology covers most CQs through its class/property structure, especially for core invoice, organization, item, and amount queries. Some details (organizational info, item metadata, mandatory field rules) are only partially covered."
+  },
+  "constraint_adherence": {
+    "reification_correct": true,
+    "owl2_compliant": true,
+    "annotations_complete": true,
+    "directionality_correct": true,
+    "pivot_class_structure_correct": true,
+    "issues": []
+  },
+  "quality_metrics": {
+    "hierarchy_depth": 3,
+    "uses_restrictions": true,
+    "uses_gcas": false,
+    "uses_equivalence": false,
+    "property_characteristics_defined": true,
+    "disjointness_axioms": true,
+    "overall_score": 0.8,
+    "strengths": [
+      "Rich, multi-level class hierarchy reflecting EDIFACT structure",
+      "Systematic use of functional properties and inverses",
+      "Good use of owl:Restriction for key relations"
+    ],
+    "weaknesses": [
+      "No GCAs or equivalence axioms for complex class definitions",
+      "Disjointness only partially covers the model (e.g., AgentRole vs. RoleAssignment not disjoint)",
+      "No modeling of cardinality or value constraints for mandatory/optional fields"
+    ]
+  },
+  "validator_predictions": {
+    "likely_oops_pitfalls": [
+      "P4 (Missing domain or range)",
+      "P7 (Lack of equivalence axioms for class definitions)"
+    ],
+    "reasoner_risks": [],
+    "confidence": "high"
+  },
+  "improvement_suggestions": [
+    {
+      "priority": "high",
+      "category": "CQ Coverage",
+      "suggestion": "Enrich organization modeling (CQ5) by adding properties for contact info, registration, and legal form; add item metadata (description, code, classification) to support CQ8.",
+      "expected_impact": "Completes coverage for queries about organizations and items."
+    },
+    {
+      "priority": "high",
+      "category": "Constraint Modeling",
+      "suggestion": "Introduce SHACL shapes or OWL cardinality restrictions to encode mandatory/optional fields and D96A directory compliance for CQ13.",
+      "expected_impact": "Enables automated validation and conformance checking."
+    },
+    {
+      "priority": "medium",
+      "category": "Quality",
+      "suggestion": "Add GCAs and equivalence axioms for classes like Buyer, Seller, or InvoiceMessage based on role assignments.",
+      "expected_impact": "Improves reasoning and semantic richness."
+    },
+    {
+      "priority": "medium",
+      "category": "Disjointness",
+      "suggestion": "Add further disjointness axioms (e.g., AgentRole vs. RoleAssignment, Item vs. Price) for clarity.",
+      "expected_impact": "Reduces risk of unintended class overlap."
+    },
+    {
+      "priority": "low",
+      "category": "Documentation",
+      "suggestion": "Add example individuals and usage notes for key classes and properties.",
+      "expected_impact": "Improves ontology usability and onboarding."
+    }
+  ],
+  "summary": "This ontology provides a well-structured representation of EDIFACT invoices, organizations, and roles, with strong coverage for core business queries and good OWL 2 compliance. Coverage of organization and item details, as well as explicit constraint modeling, should be improved to reach full competency. The quality of the hierarchy and restrictions is high, but further enrichment with GCAs and equivalence would enhance reasoning and validation."
+}

@@ -1,0 +1,103 @@
+{
+  "iteration": 1,
+  "timestamp": "2026-03-01T22:19:05.914867",
+  "cq_coverage": {
+    "fully_covered": [
+      "CQ1",
+      "CQ2",
+      "CQ3",
+      "CQ4",
+      "CQ6",
+      "CQ7",
+      "CQ8",
+      "CQ9",
+      "CQ10",
+      "CQ11",
+      "CQ12",
+      "CQ14"
+    ],
+    "partially_covered": [
+      {
+        "cq": "CQ5",
+        "missing": "No explicit properties for organization contact details, tax ID, or other attributes beyond address and GLN",
+        "coverage_percent": 70
+      },
+      {
+        "cq": "CQ13",
+        "missing": "No explicit modeling of required/optional fields or SHACL/OWL cardinality constraints for mandatory D96A fields",
+        "coverage_percent": 60
+      }
+    ],
+    "not_covered": [],
+    "coverage_score": 0.9,
+    "details": "Most CQs are directly answerable via well-defined classes and properties for invoices, organizations, roles, items, prices, and process assignment. However, details about organization info and file format validity are only partially modeled."
+  },
+  "constraint_adherence": {
+    "reification_correct": true,
+    "owl2_compliant": true,
+    "annotations_complete": true,
+    "directionality_correct": true,
+    "pivot_class_structure_correct": true,
+    "issues": []
+  },
+  "quality_metrics": {
+    "hierarchy_depth": 3,
+    "uses_restrictions": false,
+    "uses_gcas": false,
+    "uses_equivalence": false,
+    "property_characteristics_defined": true,
+    "disjointness_axioms": true,
+    "overall_score": 0.78,
+    "strengths": [
+      "Clear and deep class hierarchy",
+      "Thorough use of inverse properties and disjointness",
+      "Comprehensive annotation coverage"
+    ],
+    "weaknesses": [
+      "No use of OWL class restrictions (e.g., cardinality, value constraints)",
+      "No general class axioms or equivalence definitions",
+      "File format validity not formally constrained"
+    ]
+  },
+  "validator_predictions": {
+    "likely_oops_pitfalls": [
+      "P4: Missing domain or range in some properties (none found here, but always verify)",
+      "P7: Lack of formal restrictions or cardinalities"
+    ],
+    "reasoner_risks": [],
+    "confidence": "high"
+  },
+  "improvement_suggestions": [
+    {
+      "priority": "high",
+      "category": "CQ Coverage",
+      "suggestion": "Add additional data properties to Organization (e.g., taxID, contactName, email) to fully answer CQ5 about organization information.",
+      "expected_impact": "Complete coverage for organization-related queries."
+    },
+    {
+      "priority": "high",
+      "category": "Constraints",
+      "suggestion": "Model mandatory and optional fields for InvoiceMessage and related entities using OWL cardinality restrictions (minCardinality, someValuesFrom) or supplement with SHACL for file format validity (CQ13).",
+      "expected_impact": "Ensures data completeness and supports automated validation."
+    },
+    {
+      "priority": "medium",
+      "category": "Quality",
+      "suggestion": "Introduce OWL restrictions (e.g., on hasItem, hasAddress) and consider defining equivalence classes for key concepts (e.g., BuyerOrganization \u2261 Organization and playsRole some (involvesRole value Buyer)).",
+      "expected_impact": "Stronger logical definition and reasoning support."
+    },
+    {
+      "priority": "medium",
+      "category": "Quality",
+      "suggestion": "Add general class axioms (GCAs) to define more complex relationships, e.g., an InvoiceMessage with at least one Item and one Buyer.",
+      "expected_impact": "Improves expressivity and automated checking."
+    },
+    {
+      "priority": "low",
+      "category": "Enrichment",
+      "suggestion": "Consider aligning classes with EN 16931-1 and P2P-O URIs for semantic interoperability.",
+      "expected_impact": "Eases integration with external standards."
+    }
+  ],
+  "summary": "The ontology provides a robust and well-structured model for UN/EDIFACT invoice messages, organizations, and roles, with strong CQ coverage and good annotation practice. However, it lacks advanced OWL constructs such as restrictions, equivalence, and GCAs, and does not yet formally constrain required fields for file validity. Addressing these gaps will yield a more complete and validator-friendly ontology."
+}

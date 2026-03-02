@@ -1,0 +1,99 @@
+{
+  "iteration": 1,
+  "timestamp": "2026-03-01T22:22:18.961784",
+  "cq_coverage": {
+    "fully_covered": [
+      "CQ1",
+      "CQ2",
+      "CQ3",
+      "CQ4",
+      "CQ6",
+      "CQ7",
+      "CQ8",
+      "CQ9",
+      "CQ11",
+      "CQ12",
+      "CQ13",
+      "CQ14"
+    ],
+    "partially_covered": [
+      {
+        "cq": "CQ5",
+        "missing": "No explicit properties for organization attributes beyond Address, Identifier, and Role; details like contact info, tax ID, or organization name are not modeled as data properties.",
+        "coverage_percent": 70
+      },
+      {
+        "cq": "CQ10",
+        "missing": "Invoice details are only partially covered: issue/due dates, reference numbers, and other header fields are not explicitly modeled as separate properties.",
+        "coverage_percent": 60
+      }
+    ],
+    "not_covered": [],
+    "coverage_score": 0.93,
+    "details": "Most competency questions are addressed via classes such as InvoiceMessage, OrganizationInRole, InvoiceLineItem, and associated properties. Some details about organizations and invoice metadata are only partially modeled, but the core structure supports all main CQs."
+  },
+  "constraint_adherence": {
+    "reification_correct": true,
+    "owl2_compliant": true,
+    "annotations_complete": true,
+    "directionality_correct": true,
+    "pivot_class_structure_correct": true,
+    "issues": []
+  },
+  "quality_metrics": {
+    "hierarchy_depth": 3,
+    "uses_restrictions": true,
+    "uses_gcas": false,
+    "uses_equivalence": false,
+    "property_characteristics_defined": true,
+    "disjointness_axioms": true,
+    "overall_score": 0.82,
+    "strengths": [
+      "Rich and deep class hierarchy with domain-specific classes",
+      "Good use of object and data property restrictions",
+      "Comprehensive annotation coverage"
+    ],
+    "weaknesses": [
+      "No General Class Axioms (GCAs)",
+      "No use of owl:equivalentClass for necessary/sufficient definitions",
+      "Limited modeling of organization and invoice metadata details"
+    ]
+  },
+  "validator_predictions": {
+    "likely_oops_pitfalls": [
+      "P4 (Missing domain or range)",
+      "P7 (Missing inverse properties for some relations)"
+    ],
+    "reasoner_risks": [
+      "Possible performance issues with many inverse and functional properties; otherwise no critical risks"
+    ],
+    "confidence": "high"
+  },
+  "improvement_suggestions": [
+    {
+      "priority": "high",
+      "category": "CQ Coverage",
+      "suggestion": "Add explicit data properties for organization metadata (e.g., organizationName, taxIdentifier, contactDetails) and for invoice header fields (e.g., referenceNumber, dueDate, paymentTerms) to fully address CQ5 and CQ10.",
+      "expected_impact": "Complete coverage of all CQs and richer data extraction for downstream applications."
+    },
+    {
+      "priority": "medium",
+      "category": "Quality",
+      "suggestion": "Introduce GCAs (General Class Axioms) or owl:equivalentClass axioms to define key classes (e.g., BuyerRole, InvoiceLine) in terms of their necessary and sufficient conditions.",
+      "expected_impact": "Improved reasoning, validation, and semantic clarity."
+    },
+    {
+      "priority": "medium",
+      "category": "Quality",
+      "suggestion": "Expand disjointness axioms to cover more mutually exclusive classes (e.g., AgentRole vs. Segment, Item vs. Address) for stricter validation.",
+      "expected_impact": "Reduced risk of data modeling errors."
+    },
+    {
+      "priority": "low",
+      "category": "Optional enrichment",
+      "suggestion": "Add further annotation properties such as rdfs:seeAlso or skos:definition for external standards alignment (e.g., EN 16931-1 references).",
+      "expected_impact": "Improved documentation and interoperability."
+    }
+  ],
+  "summary": "The ontology demonstrates strong coverage of the EDIFACT invoice domain, with robust class and property hierarchies and effective use of OWL 2 constructs. All major competency questions are addressed, though some metadata details are only partially modeled. The design is compliant with OWL 2 DL and best practices, with clear paths for further enrichment and formalization."
+}

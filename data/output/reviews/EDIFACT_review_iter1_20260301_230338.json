@@ -1,0 +1,97 @@
+{
+  "iteration": 1,
+  "timestamp": "2026-03-01T23:06:29.807916",
+  "cq_coverage": {
+    "fully_covered": [
+      "CQ1",
+      "CQ2",
+      "CQ3",
+      "CQ4",
+      "CQ6",
+      "CQ7",
+      "CQ8",
+      "CQ9",
+      "CQ10",
+      "CQ11",
+      "CQ12",
+      "CQ14"
+    ],
+    "partially_covered": [
+      {
+        "cq": "CQ5",
+        "missing": "No explicit modeling of all organization attributes beyond address and identifier; some organization info (e.g., contact, legal status) not captured.",
+        "coverage_percent": 70
+      },
+      {
+        "cq": "CQ13",
+        "missing": "No formal encoding of D96A/EN 16931-1 mandatory fields or validation constraints (e.g., required identifiers, logical consistency).",
+        "coverage_percent": 60
+      }
+    ],
+    "not_covered": [],
+    "coverage_score": 0.93,
+    "details": "Nearly all CQs are answerable with the current classes and properties. CQ5 and CQ13 are partially covered due to missing detailed organization attributes and lack of explicit mandatory field constraints."
+  },
+  "constraint_adherence": {
+    "reification_correct": true,
+    "owl2_compliant": true,
+    "annotations_complete": true,
+    "directionality_correct": true,
+    "pivot_class_structure_correct": true,
+    "issues": []
+  },
+  "quality_metrics": {
+    "hierarchy_depth": 3,
+    "uses_restrictions": true,
+    "uses_gcas": false,
+    "uses_equivalence": false,
+    "property_characteristics_defined": true,
+    "disjointness_axioms": true,
+    "overall_score": 0.83,
+    "strengths": [
+      "Well-structured class hierarchy with clear separation of concerns",
+      "Good use of OWL restrictions for required sections and assignments",
+      "Comprehensive use of property characteristics and disjointness"
+    ],
+    "weaknesses": [
+      "No use of General Class Axioms (GCAs)",
+      "No equivalence axioms for complex class definitions",
+      "Limited modeling of organization and item attributes beyond minimal fields"
+    ]
+  },
+  "validator_predictions": {
+    "likely_oops_pitfalls": [
+      "P4: Missing domain or range in some object properties (none detected, but double-check if ontology is extended)",
+      "P7: Lack of equivalence axioms for complex classes"
+    ],
+    "reasoner_risks": [],
+    "confidence": "high"
+  },
+  "improvement_suggestions": [
+    {
+      "priority": "high",
+      "category": "CQ Coverage",
+      "suggestion": "Model additional organization attributes (e.g., contact info, legal entity type, VAT ID) and item details (e.g., classification, unit of measure) to fully answer CQ5 and similar queries.",
+      "expected_impact": "Improves completeness for organization- and item-related questions."
+    },
+    {
+      "priority": "high",
+      "category": "CQ Coverage/Constraint",
+      "suggestion": "Define explicit SHACL or OWL cardinality constraints for mandatory fields required by EN 16931-1 and D96A (e.g., invoice number, dates, identifiers).",
+      "expected_impact": "Enables automated validation and full CQ13 coverage."
+    },
+    {
+      "priority": "medium",
+      "category": "Quality",
+      "suggestion": "Introduce General Class Axioms (GCAs) and/or owl:equivalentClass for core constructs such as InvoiceMessage or OrganizationRoleAssignment.",
+      "expected_impact": "Enables richer reasoning and more robust ontology structure."
+    },
+    {
+      "priority": "low",
+      "category": "Modeling",
+      "suggestion": "Add further disjointness axioms between more sibling classes and consider using disjoint unions for sections.",
+      "expected_impact": "Improves logical clarity and validation."
+    }
+  ],
+  "summary": "The ontology demonstrates strong structural modeling of UN/EDIFACT invoices, organizations, roles, and line items, with nearly complete CQ coverage and strict OWL 2 compliance. Some minor gaps remain in detailed organization attributes and formalization of mandatory field constraints. Quality is high, but could be further improved with GCAs, equivalence axioms, and richer attribute modeling."
+}

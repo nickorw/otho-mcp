@@ -1,0 +1,109 @@
+{
+  "iteration": 2,
+  "timestamp": "2026-03-01T23:07:06.102150",
+  "cq_coverage": {
+    "fully_covered": [
+      "CQ1",
+      "CQ2",
+      "CQ3",
+      "CQ4",
+      "CQ6",
+      "CQ7",
+      "CQ8",
+      "CQ9",
+      "CQ10",
+      "CQ11",
+      "CQ12",
+      "CQ14"
+    ],
+    "partially_covered": [
+      {
+        "cq": "CQ5",
+        "missing": "Organization information is still limited: only address and identifier are modeled. No contact info, legal entity type, VAT ID, or other business-relevant attributes present.",
+        "coverage_percent": 70
+      },
+      {
+        "cq": "CQ13",
+        "missing": "Ontology does not encode mandatory field constraints (e.g., invoice number, date, buyer/seller identifiers) as cardinality or value restrictions. No SHACL or OWL cardinality constraints for required fields.",
+        "coverage_percent": 60
+      }
+    ],
+    "not_covered": [],
+    "coverage_score": 0.93,
+    "details": "Coverage remains nearly complete for all CQs except for CQ5 (organization details) and CQ13 (mandatory field validation), which are only partially addressed. No progress on explicit modeling of additional attributes or constraints."
+  },
+  "constraint_adherence": {
+    "reification_correct": true,
+    "owl2_compliant": true,
+    "annotations_complete": true,
+    "directionality_correct": true,
+    "pivot_class_structure_correct": true,
+    "issues": []
+  },
+  "quality_metrics": {
+    "hierarchy_depth": 3,
+    "uses_restrictions": true,
+    "uses_gcas": false,
+    "uses_equivalence": false,
+    "property_characteristics_defined": true,
+    "disjointness_axioms": true,
+    "overall_score": 0.83,
+    "strengths": [
+      "Clear, well-structured class hierarchy",
+      "Comprehensive use of object/data property characteristics and disjointness",
+      "Good use of OWL restrictions for required structure"
+    ],
+    "weaknesses": [
+      "No General Class Axioms (GCAs) or equivalence axioms for core classes",
+      "No additional organization/item attributes",
+      "No formalization of mandatory field constraints"
+    ]
+  },
+  "validator_predictions": {
+    "likely_oops_pitfalls": [
+      "P7: Lack of equivalence axioms for complex classes"
+    ],
+    "reasoner_risks": [],
+    "confidence": "high"
+  },
+  "improvement_suggestions": [
+    {
+      "priority": "high",
+      "category": "CQ Coverage",
+      "suggestion": "Expand organization modeling: add properties for contact info (e.g., email, phone), legal entity type, VAT ID, and other relevant business attributes. Similarly, enrich item modeling with classification, unit of measure, etc.",
+      "expected_impact": "Enables full CQ5 coverage and richer knowledge graph queries."
+    },
+    {
+      "priority": "high",
+      "category": "CQ Coverage/Constraint",
+      "suggestion": "Add cardinality restrictions or SHACL constraints for mandatory fields (e.g., invoice number, date, buyer/seller identifiers) as per EN 16931-1 and D96A.",
+      "expected_impact": "Enables automated validation and full CQ13 coverage."
+    },
+    {
+      "priority": "medium",
+      "category": "Quality",
+      "suggestion": "Introduce General Class Axioms (GCAs) and owl:equivalentClass for key constructs like InvoiceMessage and OrganizationRoleAssignment.",
+      "expected_impact": "Improves reasoning and ontology robustness."
+    },
+    {
+      "priority": "low",
+      "category": "Modeling",
+      "suggestion": "Consider using owl:disjointUnionOf for sections and further disjointness among sibling classes.",
+      "expected_impact": "Improves logical clarity and validation."
+    }
+  ],
+  "summary": "The ontology maintains a strong structural foundation, with clear modeling of invoices, roles, and line items and very high coverage of competency questions. However, none of the previous review's high-priority suggestions were implemented: organization and item attributes remain minimal, and there are still no explicit constraints for mandatory fields. Quality and coverage scores are unchanged. Further progress requires addressing these gaps.",
+  "improvement_tracking": {
+    "suggestions_addressed": [],
+    "suggestions_ignored": [
+      "Model additional organization/item attributes for CQ5",
+      "Define explicit SHACL or OWL cardinality constraints for mandatory fields for CQ13",
+      "Introduce GCAs and equivalence axioms",
+      "Add further disjointness axioms/disjoint unions"
+    ],
+    "quality_delta": "+0.00",
+    "coverage_delta": "+0.00",
+    "overall_progress": "fair",
+    "notes": "No substantive improvements since last iteration; all high-priority suggestions remain unaddressed, so coverage and quality are unchanged. The ontology is stable and correct but needs further enrichment for full business utility."
+  }
+}

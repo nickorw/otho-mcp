@@ -1,72 +1,85 @@
 {
   "generator_analysis": {
-    "total_runs": 5,
+    "total_runs": 20,
     "overall": {
       "success_rate": 100.0,
-      "total_successes": 5,
+      "total_successes": 20,
       "total_failures": 0,
-      "avg_iterations": 1.4,
-      "median_iterations": 1,
-      "max_iterations": 2,
+      "avg_iterations": 2.25,
+      "median_iterations": 2.0,
+      "max_iterations": 5,
       "min_iterations": 1,
-      "avg_duration_seconds": 175.9441546,
-      "median_duration_seconds": 178.729011,
-      "max_duration_seconds": 189.238084,
-      "min_duration_seconds": 157.243315,
-      "avg_messages": 4,
-      "median_messages": 4,
-      "avg_tool_calls": 1,
-      "median_tool_calls": 1
+      "avg_duration_seconds": 180.10074805,
+      "median_duration_seconds": 166.9638495,
+      "max_duration_seconds": 304.119699,
+      "min_duration_seconds": 124.25006,
+      "avg_messages": 6,
+      "median_messages": 6.0,
+      "avg_tool_calls": 2,
+      "median_tool_calls": 2.0
     },
     "by_story": {
-      "MusicS": {
-        "run_count": 5,
+      "EDIFACT": {
+        "run_count": 20,
         "success_rate": 100.0,
-        "successes": 5,
+        "successes": 20,
         "failures": 0,
-        "avg_iterations": 1.4,
-        "median_iterations": 1,
-        "avg_duration_seconds": 175.9441546
+        "avg_iterations": 2.25,
+        "median_iterations": 2.0,
+        "avg_duration_seconds": 180.10074805
       }
     },
     "pitfalls_analysis": {
       "most_common": [
         [
           "P13",
-          3
+          6
+        ],
+        [
+          "P20",
+          2
+        ],
+        [
+          "P04",
+          1
         ]
       ],
-      "total_pitfall_occurrences": 3,
-      "unique_pitfalls": 1
+      "total_pitfall_occurrences": 9,
+      "unique_pitfalls": 3
     },
     "tool_usage": {
-      "total_calls": 63,
+      "total_calls": 324,
       "by_tool": {
-        "update_scratchpad": 38,
-        "validate_syntax_tool": 10,
-        "check_pitfalls_tool": 10,
-        "save_final_ontology": 5
+        "update_scratchpad": 178,
+        "validate_syntax_tool": 53,
+        "check_pitfalls_tool": 53,
+        "save_final_ontology": 20,
+        "read_full_context": 20
       }
     },
-    "temporal_analysis": {}
+    "temporal_analysis": {
+      "first_10_success_rate": 100.0,
+      "last_10_success_rate": 100.0,
+      "improvement": 0.0
+    }
   },
   "validation_analysis": {
-    "total_validations": 5,
+    "total_validations": 20,
     "overall": {
       "all_passed_rate": 100.0,
-      "all_passed_count": 5,
-      "syntax_valid_count": 5,
+      "all_passed_count": 20,
+      "syntax_valid_count": 20,
       "syntax_valid_rate": 100.0,
-      "oops_passed_count": 5,
+      "oops_passed_count": 20,
       "oops_passed_rate": 100.0,
-      "oops_no_critical_important_count": 5,
+      "oops_no_critical_important_count": 20,
       "oops_no_critical_important_rate": 100.0,
       "oops_only_minor_count": 0,
       "oops_only_minor_rate": 0.0
     },
     "by_story": {
-      "MusicS": {
-        "validation_count": 5,
+      "EDIFACT": {
+        "validation_count": 20,
         "all_passed_rate": 100.0,
         "hermit_consistent_rate": 100.0,
         "pellet_consistent_rate": 100.0,
@@ -74,11 +87,11 @@
       }
     },
     "reasoner_analysis": {
-      "hermit_consistent_count": 5,
+      "hermit_consistent_count": 20,
       "hermit_consistent_rate": 100.0,
-      "pellet_consistent_count": 5,
+      "pellet_consistent_count": 20,
       "pellet_consistent_rate": 100.0,
-      "both_consistent_count": 5,
+      "both_consistent_count": 20,
       "both_consistent_rate": 100.0,
       "hermit_error_count": 0,
       "pellet_error_count": 0,
@@ -93,14 +106,14 @@
       "unique_pitfalls": 0
     },
     "timing_analysis": {
-      "hermit_avg_seconds": 0.6594,
-      "hermit_median_seconds": 0.646,
-      "pellet_avg_seconds": 0.5962000000000001,
-      "pellet_median_seconds": 0.519,
-      "syntax_avg_seconds": 0.013600000000000001,
-      "oops_avg_seconds": 0.0798,
-      "total_avg_seconds": 1.3492,
-      "total_median_seconds": 1.234
+      "hermit_avg_seconds": 0.73385,
+      "hermit_median_seconds": 0.708,
+      "pellet_avg_seconds": 0.6665,
+      "pellet_median_seconds": 0.51,
+      "syntax_avg_seconds": 0.02025,
+      "oops_avg_seconds": 0.09665,
+      "total_avg_seconds": 1.5173,
+      "total_median_seconds": 1.3825
     }
   }
 }

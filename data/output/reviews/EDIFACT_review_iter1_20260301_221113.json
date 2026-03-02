@@ -1,0 +1,111 @@
+{
+  "iteration": 1,
+  "timestamp": "2026-03-01T22:13:06.964016",
+  "cq_coverage": {
+    "fully_covered": [
+      "CQ1",
+      "CQ2",
+      "CQ3",
+      "CQ4",
+      "CQ6",
+      "CQ7",
+      "CQ9",
+      "CQ11",
+      "CQ12",
+      "CQ14"
+    ],
+    "partially_covered": [
+      {
+        "cq": "CQ5",
+        "missing": "No explicit property or class for displaying all organization information; Address and Identifier are present but not linked to all relevant organization attributes.",
+        "coverage_percent": 60
+      },
+      {
+        "cq": "CQ8",
+        "missing": "Item details are limited; lacks explicit properties for item description, classification, or attributes beyond price and quantity.",
+        "coverage_percent": 70
+      },
+      {
+        "cq": "CQ10",
+        "missing": "Invoice details such as payment terms, currency, or reference numbers are not explicitly modeled.",
+        "coverage_percent": 60
+      },
+      {
+        "cq": "CQ13",
+        "missing": "Mandatory elements are referenced, but the ontology lacks explicit cardinality constraints or SHACL shapes to enforce file validity.",
+        "coverage_percent": 70
+      }
+    ],
+    "not_covered": [],
+    "coverage_score": 0.88,
+    "details": "Most CQs are directly answerable via class/property structure. Some CQs require more detailed modeling of item/organization attributes and explicit constraints for full coverage."
+  },
+  "constraint_adherence": {
+    "reification_correct": true,
+    "owl2_compliant": true,
+    "annotations_complete": true,
+    "directionality_correct": true,
+    "pivot_class_structure_correct": true,
+    "issues": []
+  },
+  "quality_metrics": {
+    "hierarchy_depth": 3,
+    "uses_restrictions": false,
+    "uses_gcas": false,
+    "uses_equivalence": false,
+    "property_characteristics_defined": true,
+    "disjointness_axioms": true,
+    "overall_score": 0.78,
+    "strengths": [
+      "Clear separation of pivot classes and roles",
+      "Functional/inverse property use",
+      "Good use of disjointness"
+    ],
+    "weaknesses": [
+      "No use of restrictions (e.g., cardinality, value constraints)",
+      "No GCAs or equivalence axioms for complex class definitions",
+      "Limited attribute modeling for items and organizations"
+    ]
+  },
+  "validator_predictions": {
+    "likely_oops_pitfalls": [
+      "P4: Missing domain or range in some inverse properties (but mostly defined here)",
+      "P7: Lack of necessary and sufficient conditions for class definitions"
+    ],
+    "reasoner_risks": [],
+    "confidence": "high"
+  },
+  "improvement_suggestions": [
+    {
+      "priority": "high",
+      "category": "CQ Coverage",
+      "suggestion": "Expand item and organization modeling: Add properties for item description, classification, unit of measure, and organization contact details. Link Address and Identifier more explicitly to OrganizationRoleAssignment.",
+      "expected_impact": "Enables full answers to CQ5, CQ8, and CQ10."
+    },
+    {
+      "priority": "high",
+      "category": "CQ Coverage/Constraint",
+      "suggestion": "Add cardinality constraints (via owl:Restriction or SHACL) for mandatory segments and elements (e.g., InvoiceHeader must have exactly one invoice number and date).",
+      "expected_impact": "Improves CQ13 coverage and supports automatic validation."
+    },
+    {
+      "priority": "medium",
+      "category": "Quality",
+      "suggestion": "Introduce GCAs and equivalence axioms, e.g., define BuyerRole as an AgentRole played by an OrganizationRoleAssignment linked to the InvoiceMessage.",
+      "expected_impact": "Enables reasoning and richer class definitions."
+    },
+    {
+      "priority": "medium",
+      "category": "Quality",
+      "suggestion": "Add more advanced restrictions (e.g., allValuesFrom, someValuesFrom) to clarify property usage and expected value types.",
+      "expected_impact": "Improves ontology clarity and validation."
+    },
+    {
+      "priority": "low",
+      "category": "Enrichment",
+      "suggestion": "Add additional annotations (skos:definition, examples) for improved documentation.",
+      "expected_impact": "Better usability and comprehension."
+    }
+  ],
+  "summary": "The ontology provides a solid structural foundation for modeling UN/EDIFACT invoices and covers most competency questions. However, it lacks detailed attribute modeling for items and organizations, and does not use advanced OWL constructs such as restrictions, GCAs, or equivalence axioms. Adding these features and explicit constraints will improve CQ coverage, reasoning capability, and validator robustness."
+}

@@ -1,0 +1,88 @@
+{
+  "iteration": 1,
+  "timestamp": "2026-03-01T22:16:50.808834",
+  "cq_coverage": {
+    "fully_covered": [
+      "CQ1",
+      "CQ2",
+      "CQ3",
+      "CQ4",
+      "CQ6",
+      "CQ7",
+      "CQ8",
+      "CQ9",
+      "CQ10",
+      "CQ11",
+      "CQ12",
+      "CQ13",
+      "CQ14"
+    ],
+    "partially_covered": [],
+    "not_covered": [],
+    "coverage_score": 1.0,
+    "details": "All competency questions are addressed by appropriate classes and properties. RoleAssignment pattern, InvoiceMessage structure, and data properties for identifiers, addresses, and invoice details enable direct answers to all CQs."
+  },
+  "constraint_adherence": {
+    "reification_correct": true,
+    "owl2_compliant": true,
+    "annotations_complete": true,
+    "directionality_correct": true,
+    "pivot_class_structure_correct": true,
+    "issues": []
+  },
+  "quality_metrics": {
+    "hierarchy_depth": 3,
+    "uses_restrictions": true,
+    "uses_gcas": false,
+    "uses_equivalence": false,
+    "property_characteristics_defined": true,
+    "disjointness_axioms": true,
+    "overall_score": 0.87,
+    "strengths": [
+      "Rich and deep class hierarchy (3 levels)",
+      "Good use of restrictions for cardinality and role assignment",
+      "All classes and properties are annotated",
+      "Use of disjointness axioms for structural clarity"
+    ],
+    "weaknesses": [
+      "No General Class Axioms (GCAs) for advanced reasoning",
+      "No use of owl:equivalentClass for necessary and sufficient definitions",
+      "Disjoint unions could be added for Invoice sections"
+    ]
+  },
+  "validator_predictions": {
+    "likely_oops_pitfalls": [
+      "P7 (Missing domain/range for some properties if new ones are added)",
+      "P4 (Lack of equivalence axioms for advanced querying)"
+    ],
+    "reasoner_risks": [],
+    "confidence": "high"
+  },
+  "improvement_suggestions": [
+    {
+      "priority": "medium",
+      "category": "Quality",
+      "suggestion": "Introduce owl:equivalentClass axioms for classes like InvoiceMessage (e.g., define as a Message with header, detail, and summary).",
+      "expected_impact": "Improved reasoning and query precision"
+    },
+    {
+      "priority": "medium",
+      "category": "Quality",
+      "suggestion": "Add General Class Axioms (GCAs) to capture complex business rules (e.g., 'Every InvoiceMessage with a Buyer RoleAssignment must have an Organization with a GLN identifier').",
+      "expected_impact": "Enables advanced validation and semantic inference"
+    },
+    {
+      "priority": "medium",
+      "category": "Quality",
+      "suggestion": "Consider using DisjointUnion axioms for InvoiceHeader, InvoiceDetail, and InvoiceSummary to enforce partitioning.",
+      "expected_impact": "Prevents structural overlap and ambiguity"
+    },
+    {
+      "priority": "low",
+      "category": "Enrichment",
+      "suggestion": "Enrich Address with optional region/state and contact properties.",
+      "expected_impact": "Greater expressiveness for international scenarios"
+    }
+  ],
+  "summary": "The ontology is well-structured, covers all competency questions, and adheres to OWL 2 DL and best practices. Quality is high, with strong use of restrictions and annotations, though advanced axioms and equivalence definitions could further improve semantic rigor and reasoning support."
+}
