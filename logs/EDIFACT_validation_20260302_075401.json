@@ -1,0 +1,127 @@
+{
+  "story_id": "EDIFACT",
+  "timestamp": "20260302_075401",
+  "start_time": "2026-03-02T08:09:57.468375",
+  "ontology_size_chars": 26082,
+  "validation_results": {
+    "syntax": {
+      "valid": true,
+      "execution_time_seconds": 0.242,
+      "error": null,
+      "error_type": null
+    },
+    "oops": {
+      "has_pitfalls": true,
+      "pitfall_count": 3,
+      "execution_time_seconds": 0.123,
+      "pitfalls": [
+        {
+          "code": "P12",
+          "name": "Equivalent properties not explicitly declared",
+          "description": "The ontology lacks information about equivalent properties (owl:equivalentProperty) in the cases of duplicated relationships and/or attributes.\t",
+          "importance": "Important",
+          "num_affected": 2,
+          "affected_elements": []
+        },
+        {
+          "code": "P20",
+          "name": "Misusing ontology annotations",
+          "description": "The contents of some annotation properties are swapped or misused. This pitfall might affect annotation properties related to natural language information (for example, annotations for naming such as rdfs:label or for providing descriptions such as rdfs:comment). Other types of annotation could also be affected as temporal, versioning information, among others.\t",
+          "importance": "Minor",
+          "num_affected": 4,
+          "affected_elements": [
+            "http://www.example.org/ontology#isNAD_DeliveryPartyOf",
+            "http://www.example.org/ontology#isRoleOfOrganizationIn",
+            "http://www.example.org/ontology#isSegmentGroup1Of",
+            "http://www.example.org/ontology#isSegmentGroup2Of"
+          ]
+        },
+        {
+          "code": "P22",
+          "name": "Using different naming conventions in the ontology",
+          "description": "The ontology elements are not named following the same convention (for example CamelCase or use of delimiters as \"-\" or \"_\") . Some notions about naming conventions are provided in [2].\t",
+          "importance": "Minor",
+          "num_affected": 1,
+          "affected_elements": [
+            "http://www.example.org/ontology#PRI_Price",
+            "http://www.example.org/ontology#CompositeDataElement"
+          ]
+        }
+      ],
+      "pitfall_codes": [
+        "P12",
+        "P20",
+        "P22"
+      ],
+      "pitfall_names": [
+        "Equivalent properties not explicitly declared",
+        "Misusing ontology annotations",
+        "Using different naming conventions in the ontology"
+      ]
+    },
+    "hermit": {
+      "reasoner": "Hermit",
+      "is_consistent": true,
+      "execution_time_seconds": 1.107,
+      "inconsistent_classes": [],
+      "inconsistent_classes_count": 0,
+      "error": null,
+      "error_type": null
+    },
+    "pellet": {
+      "reasoner": "Pellet",
+      "is_consistent": true,
+      "execution_time_seconds": 1.126,
+      "inconsistent_classes": [],
+      "inconsistent_classes_count": 0,
+      "error": null,
+      "error_type": null
+    },
+    "aggregate": {
+      "all_validators_passed": false,
+      "total_execution_time_seconds": 2.598,
+      "validation_breakdown": {
+        "syntax_valid": true,
+        "oops_passed": false,
+        "oops_pitfall_count": 3,
+        "hermit_consistent": true,
+        "pellet_consistent": true
+      },
+      "timing_breakdown_seconds": {
+        "syntax": 0.242,
+        "oops": 0.123,
+        "hermit": 1.107,
+        "pellet": 1.126,
+        "total": 2.598
+      }
+    }
+  },
+  "files_saved": [
+    {
+      "path": "data/output/ontologies/EDIFACT_ontology_20260302_075401.owl",
+      "description": "Ontology",
+      "timestamp": "2026-03-02T08:10:00.285875"
+    },
+    {
+      "path": "data/output/validations/EDIFACT_validation_20260302_075401.xml",
+      "description": "OOPS XML results",
+      "timestamp": "2026-03-02T08:10:00.286231"
+    },
+    {
+      "path": "data/output/validations/EDIFACT_validation_20260302_075401.json",
+      "description": "Validation metrics JSON",
+      "timestamp": "2026-03-02T08:10:00.286580"
+    },
+    {
+      "path": "data/output/scratchpads/EDIFACT_scratchpad_20260302_075401.json",
+      "description": "Agent scratchpad",
+      "timestamp": "2026-03-02T08:10:00.287404"
+    }
+  ],
+  "end_time": "2026-03-02T08:10:00.287646",
+  "iteration_count": 3,
+  "story_timing": {
+    "duration_seconds": 958.93,
+    "duration_formatted": "15m 59s"
+  }
+}

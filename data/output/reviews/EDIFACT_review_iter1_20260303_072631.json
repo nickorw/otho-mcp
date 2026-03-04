@@ -1,0 +1,108 @@
+{
+  "iteration": 1,
+  "timestamp": "2026-03-03T07:52:08.196752",
+  "cq_coverage": {
+    "fully_covered": [
+      "CQ1",
+      "CQ2",
+      "CQ3",
+      "CQ4",
+      "CQ6",
+      "CQ7",
+      "CQ8",
+      "CQ9",
+      "CQ11",
+      "CQ12",
+      "CQ13",
+      "CQ14"
+    ],
+    "partially_covered": [
+      {
+        "cq": "CQ5",
+        "missing": "Ontology lacks explicit properties detailing organization attributes beyond address and identifier.",
+        "coverage_percent": 70
+      },
+      {
+        "cq": "CQ10",
+        "missing": "Invoice details are fragmented across classes; no explicit grouping or linking class for all details.",
+        "coverage_percent": 60
+      }
+    ],
+    "not_covered": [],
+    "coverage_score": 0.92,
+    "details": "Most CQs are directly supported via classes and properties, especially invoice structure, roles, and itemization. Partial gaps exist for organization info display and holistic invoice detail grouping."
+  },
+  "constraint_adherence": {
+    "reification_correct": true,
+    "owl2_compliant": true,
+    "annotations_complete": true,
+    "directionality_correct": true,
+    "pivot_class_structure_correct": false,
+    "issues": [
+      "Pivot class :InvoiceLineItemDetail is subclassed by :LineItem, violating best practice (pivot classes should not be subclassed by component classes)."
+    ]
+  },
+  "quality_metrics": {
+    "hierarchy_depth": 4,
+    "uses_restrictions": true,
+    "uses_gcas": false,
+    "uses_equivalence": true,
+    "property_characteristics_defined": false,
+    "disjointness_axioms": true,
+    "overall_score": 0.82,
+    "strengths": [
+      "Deep hierarchy reflecting EDIFACT structure",
+      "Good use of restrictions and equivalence axioms",
+      "Disjointness between key role and address classes"
+    ],
+    "weaknesses": [
+      "No GCAs for complex role assignments or business process linkage",
+      "No property characteristics (e.g., functional, inverse functional)",
+      "Pivot class structure violation"
+    ]
+  },
+  "validator_predictions": {
+    "likely_oops_pitfalls": [
+      "P4: Missing domain or range for some properties",
+      "P7: Inappropriate subclassing of pivot classes"
+    ],
+    "reasoner_risks": [
+      "Hermit/Pellet may flag subclassing of pivot classes as a modeling error",
+      "Complex restrictions may slow reasoning but are not fatal"
+    ],
+    "confidence": "high"
+  },
+  "improvement_suggestions": [
+    {
+      "priority": "high",
+      "category": "Constraint Adherence",
+      "suggestion": "Remove subclass relationship between :LineItem and :InvoiceLineItemDetail; instead, link via object properties.",
+      "expected_impact": "Restores pivot class best practice and improves validator compatibility."
+    },
+    {
+      "priority": "high",
+      "category": "CQ Coverage",
+      "suggestion": "Add explicit properties for organization details (e.g., contact info, registration number) to fully answer CQ5.",
+      "expected_impact": "Enables full coverage for queries about organization information."
+    },
+    {
+      "priority": "medium",
+      "category": "Quality",
+      "suggestion": "Define property characteristics (e.g., functional, inverse functional) for key identifiers and reference numbers.",
+      "expected_impact": "Improves reasoning and data integrity."
+    },
+    {
+      "priority": "medium",
+      "category": "Quality",
+      "suggestion": "Introduce GCAs to define complex relationships, such as linking invoices to business processes via role assignments.",
+      "expected_impact": "Enhances semantic richness and query expressiveness."
+    },
+    {
+      "priority": "low",
+      "category": "CQ Coverage",
+      "suggestion": "Create a class or property grouping all invoice details for CQ10.",
+      "expected_impact": "Facilitates holistic retrieval of invoice information."
+    }
+  ],
+  "summary": "The ontology demonstrates strong coverage of EDIFACT invoice structure and business roles, with rich hierarchy and good use of restrictions and annotations. Key improvements are needed in pivot class modeling and organization detail properties to achieve full CQ coverage and validator compatibility. Overall, the ontology is robust but requires targeted refinements for best practice compliance and enhanced semantic depth."
+}

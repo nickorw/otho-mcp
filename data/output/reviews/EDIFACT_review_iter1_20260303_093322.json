@@ -1,0 +1,97 @@
+{
+  "iteration": 1,
+  "timestamp": "2026-03-03T09:39:38.663462",
+  "cq_coverage": {
+    "fully_covered": [
+      "CQ1",
+      "CQ2",
+      "CQ3",
+      "CQ4",
+      "CQ6",
+      "CQ7",
+      "CQ9",
+      "CQ10",
+      "CQ11",
+      "CQ12",
+      "CQ13",
+      "CQ14"
+    ],
+    "partially_covered": [
+      {
+        "cq": "CQ5",
+        "missing": "No explicit properties capturing the full set of organization-related information (e.g., contact details, legal identifiers, multiple addresses per role).",
+        "coverage_percent": 60
+      },
+      {
+        "cq": "CQ8",
+        "missing": "Item class lacks explicit properties for item description, classification, or attributes beyond price and quantity.",
+        "coverage_percent": 70
+      }
+    ],
+    "not_covered": [],
+    "coverage_score": 0.9,
+    "details": "Most CQs are fully addressed by the ontology structure, including invoices, roles, amounts, and business process assignment. CQ5 and CQ8 are only partially addressed due to insufficient modeling of organization and item details."
+  },
+  "constraint_adherence": {
+    "reification_correct": true,
+    "owl2_compliant": true,
+    "annotations_complete": true,
+    "directionality_correct": true,
+    "pivot_class_structure_correct": true,
+    "issues": []
+  },
+  "quality_metrics": {
+    "hierarchy_depth": 4,
+    "uses_restrictions": true,
+    "uses_gcas": false,
+    "uses_equivalence": false,
+    "property_characteristics_defined": true,
+    "disjointness_axioms": true,
+    "overall_score": 0.83,
+    "strengths": [
+      "Deep class hierarchy reflecting EDIFACT structure",
+      "Good use of owl:someValuesFrom restrictions for InvoiceMessage",
+      "Comprehensive annotation coverage"
+    ],
+    "weaknesses": [
+      "No use of General Class Axioms (GCAs) or owl:equivalentClass for richer semantics",
+      "Limited disjointness beyond Invoice sections and Agent Roles",
+      "Lack of advanced axiomatization for business rules (e.g., item price summation)"
+    ]
+  },
+  "validator_predictions": {
+    "likely_oops_pitfalls": [
+      "P4: Missing domain or range in some properties (though most are defined, careful review needed for completeness)",
+      "P7: Lack of equivalence or necessary/sufficient conditions on key classes"
+    ],
+    "reasoner_risks": [],
+    "confidence": "high"
+  },
+  "improvement_suggestions": [
+    {
+      "priority": "high",
+      "category": "CQ Coverage",
+      "suggestion": "Expand the Organization and Item classes with additional properties (e.g., legal name, contact info, multiple address types, item description, classification codes) to fully answer CQ5 and CQ8.",
+      "expected_impact": "Full coverage for organization and item-related queries; improved interoperability"
+    },
+    {
+      "priority": "high",
+      "category": "Quality",
+      "suggestion": "Introduce General Class Axioms (GCAs) and/or owl:equivalentClass definitions for key concepts (e.g., define InvoiceMessage as a Message that hasHeader, hasDetail, hasSummary, and at least one role assignment).",
+      "expected_impact": "Stronger reasoning support and validation of document structure"
+    },
+    {
+      "priority": "medium",
+      "category": "Validation",
+      "suggestion": "Model validation constraints (e.g., SHACL shapes or OWL restrictions) for numeric summation (item prices = invoice total) and mandatory identifier presence.",
+      "expected_impact": "Enables automated validation and compliance checking"
+    },
+    {
+      "priority": "low",
+      "category": "Enrichment",
+      "suggestion": "Consider aligning classes with external standards (e.g., P2P-O, EN 16931-1, schema.org) via owl:equivalentClass or rdfs:seeAlso annotations.",
+      "expected_impact": "Improved semantic interoperability"
+    }
+  ],
+  "summary": "The ontology offers a robust structural foundation for modeling EDIFACT INVOIC messages, with strong coverage of most competency questions and good compliance with OWL 2 and ontology design best practices. The main gaps are in the detailed modeling of organizations and items, and a lack of advanced axiomatization for business rules and validation constraints. Addressing these will significantly enhance completeness and reasoning power."
+}

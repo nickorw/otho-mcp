@@ -1,0 +1,394 @@
+{
+  "plan": {
+    "classes": [
+      "InterchangeEnvelope",
+      "Message",
+      "INVOICMessage",
+      "Segment",
+      "BGMSegment",
+      "NADSegment",
+      "DTMSegment",
+      "DTM137DocumentDate",
+      "DTM35DeliveryDate",
+      "DTM11DespatchDate",
+      "MOASegment",
+      "MOA77InvoiceAmount",
+      "MOA176TotalTax",
+      "LINSegment",
+      "QTYSegment",
+      "PRISegment",
+      "TAXSegment",
+      "CompositeDataElement",
+      "SimpleDataElement",
+      "Invoice",
+      "Organization",
+      "AgentRole",
+      "Address",
+      "InvoiceHeader",
+      "InvoiceDetail",
+      "InvoiceSummary",
+      "Item",
+      "Price",
+      "Tax",
+      "BusinessProcess",
+      "Identifier",
+      "GlobalLocationNumber",
+      "LineItem",
+      "OrganizationRoleAssignment",
+      "NADBuyer",
+      "NADSupplier",
+      "NADDeliveryParty"
+    ],
+    "pivot_classes": [
+      "OrganizationRoleAssignment"
+    ],
+    "hierarchy": {
+      "subClassOf": [
+        [
+          "INVOICMessage",
+          "Message"
+        ],
+        [
+          "BGMSegment",
+          "Segment"
+        ],
+        [
+          "NADSegment",
+          "Segment"
+        ],
+        [
+          "DTMSegment",
+          "Segment"
+        ],
+        [
+          "DTM137DocumentDate",
+          "DTMSegment"
+        ],
+        [
+          "DTM35DeliveryDate",
+          "DTMSegment"
+        ],
+        [
+          "DTM11DespatchDate",
+          "DTMSegment"
+        ],
+        [
+          "MOASegment",
+          "Segment"
+        ],
+        [
+          "MOA77InvoiceAmount",
+          "MOASegment"
+        ],
+        [
+          "MOA176TotalTax",
+          "MOASegment"
+        ],
+        [
+          "LINSegment",
+          "Segment"
+        ],
+        [
+          "QTYSegment",
+          "Segment"
+        ],
+        [
+          "PRISegment",
+          "Segment"
+        ],
+        [
+          "TAXSegment",
+          "Segment"
+        ],
+        [
+          "InvoiceHeader",
+          "CompositeDataElement"
+        ],
+        [
+          "InvoiceDetail",
+          "CompositeDataElement"
+        ],
+        [
+          "InvoiceSummary",
+          "CompositeDataElement"
+        ],
+        [
+          "LineItem",
+          "Item"
+        ],
+        [
+          "GlobalLocationNumber",
+          "Identifier"
+        ],
+        [
+          "NADBuyer",
+          "NADSegment"
+        ],
+        [
+          "NADSupplier",
+          "NADSegment"
+        ],
+        [
+          "NADDeliveryParty",
+          "NADSegment"
+        ]
+      ],
+      "disjointWith": [
+        [
+          "InterchangeEnvelope",
+          "Message"
+        ],
+        [
+          "Organization",
+          "Address"
+        ],
+        [
+          "Segment",
+          "CompositeDataElement"
+        ],
+        [
+          "InvoiceHeader",
+          "InvoiceDetail"
+        ],
+        [
+          "InvoiceHeader",
+          "InvoiceSummary"
+        ],
+        [
+          "InvoiceDetail",
+          "InvoiceSummary"
+        ],
+        [
+          "DTMSegment",
+          "MOASegment"
+        ],
+        [
+          "DTMSegment",
+          "LINSegment"
+        ],
+        [
+          "DTMSegment",
+          "QTYSegment"
+        ],
+        [
+          "DTMSegment",
+          "PRISegment"
+        ],
+        [
+          "DTMSegment",
+          "TAXSegment"
+        ]
+      ],
+      "disjointUnion": []
+    },
+    "properties": [
+      {
+        "object": "hasMessage",
+        "domain": "InterchangeEnvelope",
+        "range": "Message",
+        "characteristics": [
+          "Functional"
+        ]
+      },
+      {
+        "object": "containsSegment",
+        "domain": "Message",
+        "range": "Segment",
+        "characteristics": []
+      },
+      {
+        "object": "hasCompositeElement",
+        "domain": "Segment",
+        "range": "CompositeDataElement",
+        "characteristics": []
+      },
+      {
+        "object": "hasSimpleElement",
+        "domain": "CompositeDataElement",
+        "range": "SimpleDataElement",
+        "characteristics": []
+      },
+      {
+        "object": "identifiesInvoice",
+        "domain": "BGMSegment",
+        "range": "Invoice",
+        "characteristics": [
+          "Functional"
+        ]
+      },
+      {
+        "object": "involvesOrganization",
+        "domain": "Invoice",
+        "range": "OrganizationRoleAssignment",
+        "characteristics": []
+      },
+      {
+        "object": "hasRole",
+        "domain": "OrganizationRoleAssignment",
+        "range": "AgentRole",
+        "characteristics": [
+          "Functional"
+        ]
+      },
+      {
+        "object": "assignedOrganization",
+        "domain": "OrganizationRoleAssignment",
+        "range": "Organization",
+        "characteristics": [
+          "Functional"
+        ]
+      },
+      {
+        "object": "hasAddress",
+        "domain": "Organization",
+        "range": "Address",
+        "characteristics": [
+          "Functional"
+        ]
+      },
+      {
+        "object": "hasIdentifier",
+        "domain": "Organization",
+        "range": "Identifier",
+        "characteristics": []
+      },
+      {
+        "object": "hasLineItem",
+        "domain": "InvoiceDetail",
+        "range": "LineItem",
+        "characteristics": []
+      },
+      {
+        "object": "hasItem",
+        "domain": "LineItem",
+        "range": "Item",
+        "characteristics": [
+          "Functional"
+        ]
+      },
+      {
+        "object": "hasPrice",
+        "domain": "LineItem",
+        "range": "Price",
+        "characteristics": [
+          "Functional"
+        ]
+      },
+      {
+        "object": "hasNetPrice",
+        "domain": "Price",
+        "range": "xsd:decimal",
+        "characteristics": [
+          "Functional"
+        ]
+      },
+      {
+        "object": "hasQuantity",
+        "domain": "LineItem",
+        "range": "xsd:integer",
+        "characteristics": [
+          "Functional"
+        ]
+      },
+      {
+        "object": "hasTax",
+        "domain": "InvoiceSummary",
+        "range": "Tax",
+        "characteristics": []
+      },
+      {
+        "object": "hasInvoiceAmount",
+        "domain": "MOA77InvoiceAmount",
+        "range": "xsd:decimal",
+        "characteristics": [
+          "Functional"
+        ]
+      },
+      {
+        "object": "hasTotalTax",
+        "domain": "MOA176TotalTax",
+        "range": "xsd:decimal",
+        "characteristics": [
+          "Functional"
+        ]
+      },
+      {
+        "object": "hasInvoiceNumber",
+        "domain": "InvoiceHeader",
+        "range": "xsd:string",
+        "characteristics": [
+          "Functional"
+        ]
+      },
+      {
+        "object": "hasDocumentDate",
+        "domain": "DTM137DocumentDate",
+        "range": "xsd:string",
+        "characteristics": [
+          "Functional"
+        ]
+      },
+      {
+        "object": "hasDeliveryDate",
+        "domain": "DTM35DeliveryDate",
+        "range": "xsd:string",
+        "characteristics": [
+          "Functional"
+        ]
+      },
+      {
+        "object": "hasDespatchDate",
+        "domain": "DTM11DespatchDate",
+        "range": "xsd:string",
+        "characteristics": [
+          "Functional"
+        ]
+      },
+      {
+        "object": "assignedToBusinessProcess",
+        "domain": "Invoice",
+        "range": "BusinessProcess",
+        "characteristics": []
+      }
+    ]
+  },
+  "cq_coverage": {
+    "CQ1": "INVOICMessage class, hasMessage (InterchangeEnvelope\u2192Message), containsSegment (Message\u2192Segment), identifiesInvoice (BGMSegment\u2192Invoice), LINSegment for line items.",
+    "CQ2": "involvesOrganization (Invoice\u2192OrganizationRoleAssignment), assignedOrganization (OrganizationRoleAssignment\u2192Organization), NADSegment with qualifier subclasses (NADBuyer, NADSupplier, NADDeliveryParty).",
+    "CQ3": "hasRole (OrganizationRoleAssignment\u2192AgentRole), assignedOrganization (OrganizationRoleAssignment\u2192Organization), NADSegment qualifiers.",
+    "CQ4": "involvesOrganization (Invoice\u2192OrganizationRoleAssignment), hasRole (OrganizationRoleAssignment\u2192AgentRole:Buyer), assignedOrganization (OrganizationRoleAssignment\u2192Organization), NADBuyer.",
+    "CQ5": "Organization class, hasAddress, hasIdentifier, assignedOrganization (OrganizationRoleAssignment\u2192Organization), NADSegment qualifiers.",
+    "CQ6": "hasAddress (Organization\u2192Address), hasRole (OrganizationRoleAssignment\u2192AgentRole:Buyer), NADBuyer.",
+    "CQ7": "hasLineItem (InvoiceDetail\u2192LineItem), hasItem (LineItem\u2192Item), LINSegment.",
+    "CQ8": "Item class, hasNetPrice (Price), hasQuantity (LineItem), hasPrice (LineItem\u2192Price), PRISegment, QTYSegment.",
+    "CQ9": "hasNetPrice (Price\u2192xsd:decimal), PRISegment.",
+    "CQ10": "InvoiceHeader, InvoiceDetail, InvoiceSummary classes, MOASegment, hasInvoiceAmount, hasInvoiceNumber, DTM137DocumentDate, DTM35DeliveryDate, DTM11DespatchDate.",
+    "CQ11": "hasInvoiceAmount (MOA77InvoiceAmount\u2192xsd:decimal), MOASegment.",
+    "CQ12": "hasInvoiceNumber (InvoiceHeader\u2192xsd:string), BGMSegment.",
+    "CQ13": "All classes and properties representing required D96A segments/elements; identifiers, mandatory attributes, role assignments, logical consistency; LINSegment, QTYSegment, PRISegment, TAXSegment, DTM137DocumentDate, MOA77InvoiceAmount, MOA176TotalTax.",
+    "CQ14": "assignedToBusinessProcess (Invoice\u2192BusinessProcess)"
+  },
+  "expert_consultations": 5,
+  "notes": "Expanded plan now includes all mandatory D96A INVOIC segments and qualifier subclasses for DTM, NAD, MOA, LIN, QTY, PRI, TAX. CQ coverage is mapped to these new classes and properties. Next step: regenerate OWL code with these extensions, including proper hierarchy, inverse properties, and annotations.",
+  "current_owl": "@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n@prefix owl: <http://www.w3.org/2002/07/owl#> .\n@prefix : <http://www.example.org/ontology#> .\n\n:EDIFACT_INVOIC_Story a owl:Ontology ;\n    rdfs:label \"EDIFACT INVOIC Ontology for D96A Story\" ;\n    rdfs:comment \"Ontology capturing the structure of EDIFACT INVOIC messages, segments, qualifiers, and D96A requirements as described in the provided story.\" .\n\n# Classes\n:InterchangeEnvelope a owl:Class ;\n    rdfs:label \"Interchange Envelope\" ;\n    rdfs:comment \"Envelope containing EDIFACT messages.\" .\n\n:Message a owl:Class ;\n    rdfs:label \"Message\" ;\n    rdfs:comment \"A generic EDIFACT message.\" .\n\n:INVOICMessage a owl:Class ;\n    rdfs:label \"INVOIC Message\" ;\n    rdfs:comment \"Invoice message conforming to EDIFACT D96A.\" ;\n    rdfs:subClassOf :Message .\n\n:Segment a owl:Class ;\n    rdfs:label \"Segment\" ;\n    rdfs:comment \"A segment within an EDIFACT message.\" .\n\n:BGMSegment a owl:Class ;\n    rdfs:label \"BGM Segment\" ;\n    rdfs:comment \"Beginning of Message segment for document identification.\" ;\n    rdfs:subClassOf :Segment .\n\n:NADSegment a owl:Class ;\n    rdfs:label \"NAD Segment\" ;\n    rdfs:comment \"Name and Address segment for participant details.\" ;\n    rdfs:subClassOf :Segment .\n\n:NADBuyer a owl:Class ;\n    rdfs:label \"NAD Buyer\" ;\n    rdfs:comment \"NAD segment for Buyer role.\" ;\n    rdfs:subClassOf :NADSegment .\n\n:NADSupplier a owl:Class ;\n    rdfs:label \"NAD Supplier\" ;\n    rdfs:comment \"NAD segment for Supplier role.\" ;\n    rdfs:subClassOf :NADSegment .\n\n:NADDeliveryParty a owl:Class ;\n    rdfs:label \"NAD Delivery Party\" ;\n    rdfs:comment \"NAD segment for Delivery Party role.\" ;\n    rdfs:subClassOf :NADSegment .\n\n:DTMSegment a owl:Class ;\n    rdfs:label \"DTM Segment\" ;\n    rdfs:comment \"Date/Time/Period segment.\" ;\n    rdfs:subClassOf :Segment .\n\n:DTM137DocumentDate a owl:Class ;\n    rdfs:label \"DTM 137 Document Date\" ;\n    rdfs:comment \"DTM segment for Document Date (qualifier 137).\" ;\n    rdfs:subClassOf :DTMSegment .\n\n:DTM35DeliveryDate a owl:Class ;\n    rdfs:label \"DTM 35 Delivery Date\" ;\n    rdfs:comment \"DTM segment for Delivery Date (qualifier 35).\" ;\n    rdfs:subClassOf :DTMSegment .\n\n:DTM11DespatchDate a owl:Class ;\n    rdfs:label \"DTM 11 Despatch Date\" ;\n    rdfs:comment \"DTM segment for Despatch Date (qualifier 11).\" ;\n    rdfs:subClassOf :DTMSegment .\n\n:MOASegment a owl:Class ;\n    rdfs:label \"MOA Segment\" ;\n    rdfs:comment \"Monetary Amount segment.\" ;\n    rdfs:subClassOf :Segment .\n\n:MOA77InvoiceAmount a owl:Class ;\n    rdfs:label \"MOA 77 Invoice Amount\" ;\n    rdfs:comment \"MOA segment for Invoice Amount (qualifier 77).\" ;\n    rdfs:subClassOf :MOASegment .\n\n:MOA176TotalTax a owl:Class ;\n    rdfs:label \"MOA 176 Total Tax\" ;\n    rdfs:comment \"MOA segment for Total Tax (qualifier 176).\" ;\n    rdfs:subClassOf :MOASegment .\n\n:LINSegment a owl:Class ;\n    rdfs:label \"LIN Segment\" ;\n    rdfs:comment \"Line Item segment.\" ;\n    rdfs:subClassOf :Segment .\n\n:QTYSegment a owl:Class ;\n    rdfs:label \"QTY Segment\" ;\n    rdfs:comment \"Quantity segment.\" ;\n    rdfs:subClassOf :Segment .\n\n:PRISegment a owl:Class ;\n    rdfs:label \"PRI Segment\" ;\n    rdfs:comment \"Price segment.\" ;\n    rdfs:subClassOf :Segment .\n\n:TAXSegment a owl:Class ;\n    rdfs:label \"TAX Segment\" ;\n    rdfs:comment \"Tax segment.\" ;\n    rdfs:subClassOf :Segment .\n\n:CompositeDataElement a owl:Class ;\n    rdfs:label \"Composite Data Element\" ;\n    rdfs:comment \"Composite element grouping simple data elements.\" .\n\n:SimpleDataElement a owl:Class ;\n    rdfs:label \"Simple Data Element\" ;\n    rdfs:comment \"Atomic data element in EDIFACT segments.\" .\n\n:Invoice a owl:Class ;\n    rdfs:label \"Invoice\" ;\n    rdfs:comment \"Invoice represented in an INVOIC message.\" .\n\n:Organization a owl:Class ;\n    rdfs:label \"Organization\" ;\n    rdfs:comment \"Any organization involved in the invoice.\" .\n\n:AgentRole a owl:Class ;\n    rdfs:label \"Agent Role\" ;\n    rdfs:comment \"Role played by an organization in a transaction (e.g. Buyer, Supplier, Delivery Party).\" .\n\n:Address a owl:Class ;\n    rdfs:label \"Address\" ;\n    rdfs:comment \"Address associated with an organization.\" .\n\n:InvoiceHeader a owl:Class ;\n    rdfs:label \"Invoice Header\" ;\n    rdfs:comment \"Header section of an invoice message.\" ;\n    rdfs:subClassOf :CompositeDataElement .\n\n:InvoiceDetail a owl:Class ;\n    rdfs:label \"Invoice Detail\" ;\n    rdfs:comment \"Detail section listing line items in the invoice.\" ;\n    rdfs:subClassOf :CompositeDataElement .\n\n:InvoiceSummary a owl:Class ;\n    rdfs:label \"Invoice Summary\" ;\n    rdfs:comment \"Summary section providing totals and taxes.\" ;\n    rdfs:subClassOf :CompositeDataElement .\n\n:Item a owl:Class ;\n    rdfs:label \"Item\" ;\n    rdfs:comment \"An item sold in the invoice.\" .\n\n:LineItem a owl:Class ;\n    rdfs:label \"Line Item\" ;\n    rdfs:comment \"A line item in the invoice detail section.\" ;\n    rdfs:subClassOf :Item .\n\n:Price a owl:Class ;\n    rdfs:label \"Price\" ;\n    rdfs:comment \"Net price of an item.\" .\n\n:Tax a owl:Class ;\n    rdfs:label \"Tax\" ;\n    rdfs:comment \"Tax applied in the invoice summary.\" .\n\n:BusinessProcess a owl:Class ;\n    rdfs:label \"Business Process\" ;\n    rdfs:comment \"Business process assigned to an invoice.\" .\n\n:Identifier a owl:Class ;\n    rdfs:label \"Identifier\" ;\n    rdfs:comment \"Generic identifier for organizations or documents.\" .\n\n:GlobalLocationNumber a owl:Class ;\n    rdfs:label \"Global Location Number\" ;\n    rdfs:comment \"GLN used to uniquely identify organizations.\" ;\n    rdfs:subClassOf :Identifier .\n\n:OrganizationRoleAssignment a owl:Class ;\n    rdfs:label \"Organization Role Assignment\" ;\n    rdfs:comment \"Pivot class linking an organization to a role within an invoice.\" .\n\n# Property definitions\n:hasMessage a owl:ObjectProperty , owl:FunctionalProperty ;\n    rdfs:label \"has Message\" ;\n    rdfs:comment \"Links an Interchange Envelope to its contained Message.\" ;\n    rdfs:domain :InterchangeEnvelope ;\n    rdfs:range :Message ;\n    owl:inverseOf :isMessageOf .\n\n:isMessageOf a owl:ObjectProperty ;\n    rdfs:label \"is Message Of Interchange Envelope\" ;\n    rdfs:comment \"Indicates that a Message is contained within an Interchange Envelope.\" ;\n    rdfs:domain :Message ;\n    rdfs:range :InterchangeEnvelope .\n\n:containsSegment a owl:ObjectProperty ;\n    rdfs:label \"contains Segment\" ;\n    rdfs:comment \"Links a Message to its segments.\" ;\n    rdfs:domain :Message ;\n    rdfs:range :Segment ;\n    owl:inverseOf :isSegmentOf .\n\n:isSegmentOf a owl:ObjectProperty ;\n    rdfs:label \"is Segment Of Message\" ;\n    rdfs:comment \"Indicates that a Segment is part of a Message.\" ;\n    rdfs:domain :Segment ;\n    rdfs:range :Message .\n\n:hasCompositeElement a owl:ObjectProperty ;\n    rdfs:label \"has Composite Element\" ;\n    rdfs:comment \"Links a Segment to its composite data elements.\" ;\n    rdfs:domain :Segment ;\n    rdfs:range :CompositeDataElement ;\n    owl:inverseOf :isCompositeElementOf .\n\n:isCompositeElementOf a owl:ObjectProperty ;\n    rdfs:label \"is Composite Element Of Segment\" ;\n    rdfs:comment \"Indicates that a Composite Data Element is part of a Segment.\" ;\n    rdfs:domain :CompositeDataElement ;\n    rdfs:range :Segment .\n\n:hasSimpleElement a owl:ObjectProperty ;\n    rdfs:label \"has Simple Element\" ;\n    rdfs:comment \"Links a Composite Data Element to its simple data elements.\" ;\n    rdfs:domain :CompositeDataElement ;\n    rdfs:range :SimpleDataElement ;\n    owl:inverseOf :isSimpleElementOf .\n\n:isSimpleElementOf a owl:ObjectProperty ;\n    rdfs:label \"is Simple Element Of Composite Data Element\" ;\n    rdfs:comment \"Indicates that a Simple Data Element is part of a Composite Data Element.\" ;\n    rdfs:domain :SimpleDataElement ;\n    rdfs:range :CompositeDataElement .\n\n:identifiesInvoice a owl:ObjectProperty , owl:FunctionalProperty ;\n    rdfs:label \"identifies Invoice\" ;\n    rdfs:comment \"Links a BGM Segment to the Invoice it identifies.\" ;\n    rdfs:domain :BGMSegment ;\n    rdfs:range :Invoice ;\n    owl:inverseOf :isIdentifiedBy .\n\n:isIdentifiedBy a owl:ObjectProperty ;\n    rdfs:label \"is Identified By BGM Segment\" ;\n    rdfs:comment \"Indicates that an Invoice is identified by a BGM Segment.\" ;\n    rdfs:domain :Invoice ;\n    rdfs:range :BGMSegment .\n\n:involvesOrganization a owl:ObjectProperty ;\n    rdfs:label \"involves Organization\" ;\n    rdfs:comment \"Links an Invoice to its OrganizationRoleAssignment instances.\" ;\n    rdfs:domain :Invoice ;\n    rdfs:range :OrganizationRoleAssignment ;\n    owl:inverseOf :isOrganizationInvolvedIn .\n\n:isOrganizationInvolvedIn a owl:ObjectProperty ;\n    rdfs:label \"is Organization Involved In Invoice\" ;\n    rdfs:comment \"Indicates that an OrganizationRoleAssignment is part of an Invoice.\" ;\n    rdfs:domain :OrganizationRoleAssignment ;\n    rdfs:range :Invoice .\n\n:hasRole a owl:ObjectProperty , owl:FunctionalProperty ;\n    rdfs:label \"has Role\" ;\n    rdfs:comment \"Links an OrganizationRoleAssignment to an AgentRole.\" ;\n    rdfs:domain :OrganizationRoleAssignment ;\n    rdfs:range :AgentRole ;\n    owl:inverseOf :isRoleOfAssignment .\n\n:isRoleOfAssignment a owl:ObjectProperty ;\n    rdfs:label \"is Role Of OrganizationRoleAssignment\" ;\n    rdfs:comment \"Indicates that an AgentRole is part of an OrganizationRoleAssignment.\" ;\n    rdfs:domain :AgentRole ;\n    rdfs:range :OrganizationRoleAssignment .\n\n:assignedOrganization a owl:ObjectProperty , owl:FunctionalProperty ;\n    rdfs:label \"assigned Organization\" ;\n    rdfs:comment \"Links an OrganizationRoleAssignment to an Organization.\" ;\n    rdfs:domain :OrganizationRoleAssignment ;\n    rdfs:range :Organization ;\n    owl:inverseOf :isAssignmentOfOrganization .\n\n:isAssignmentOfOrganization a owl:ObjectProperty ;\n    rdfs:label \"is Assignment Of OrganizationRoleAssignment\" ;\n    rdfs:comment \"Indicates that an Organization is part of an OrganizationRoleAssignment.\" ;\n    rdfs:domain :Organization ;\n    rdfs:range :OrganizationRoleAssignment .\n\n:hasAddress a owl:ObjectProperty , owl:FunctionalProperty ;\n    rdfs:label \"has Address\" ;\n    rdfs:comment \"Links an Organization to its Address.\" ;\n    rdfs:domain :Organization ;\n    rdfs:range :Address ;\n    owl:inverseOf :isAddressOf .\n\n:isAddressOf a owl:ObjectProperty ;\n    rdfs:label \"is Address Of Organization\" ;\n    rdfs:comment \"Indicates that an Address is associated with an Organization.\" ;\n    rdfs:domain :Address ;\n    rdfs:range :Organization .\n\n:hasIdentifier a owl:ObjectProperty ;\n    rdfs:label \"has Identifier\" ;\n    rdfs:comment \"Links an Organization to its Identifier(s).\" ;\n    rdfs:domain :Organization ;\n    rdfs:range :Identifier ;\n    owl:inverseOf :isIdentifierOf .\n\n:isIdentifierOf a owl:ObjectProperty ;\n    rdfs:label \"is Identifier Of Organization\" ;\n    rdfs:comment \"Indicates that an Identifier is associated with an Organization.\" ;\n    rdfs:domain :Identifier ;\n    rdfs:range :Organization .\n\n:hasLineItem a owl:ObjectProperty ;\n    rdfs:label \"has Line Item\" ;\n    rdfs:comment \"Links an InvoiceDetail to its line items.\" ;\n    rdfs:domain :InvoiceDetail ;\n    rdfs:range :LineItem ;\n    owl:inverseOf :isLineItemOf .\n\n:isLineItemOf a owl:ObjectProperty ;\n    rdfs:label \"is Line Item Of InvoiceDetail\" ;\n    rdfs:comment \"Indicates that a LineItem is part of an InvoiceDetail.\" ;\n    rdfs:domain :LineItem ;\n    rdfs:range :InvoiceDetail .\n\n:hasItem a owl:ObjectProperty , owl:FunctionalProperty ;\n    rdfs:label \"has Item\" ;\n    rdfs:comment \"Links a LineItem to its Item.\" ;\n    rdfs:domain :LineItem ;\n    rdfs:range :Item ;\n    owl:inverseOf :isItemOfLine .\n\n:isItemOfLine a owl:ObjectProperty ;\n    rdfs:label \"is Item Of LineItem\" ;\n    rdfs:comment \"Indicates that an Item is part of a LineItem.\" ;\n    rdfs:domain :Item ;\n    rdfs:range :LineItem .\n\n:hasPrice a owl:ObjectProperty , owl:FunctionalProperty ;\n    rdfs:label \"has Price\" ;\n    rdfs:comment \"Links a LineItem to its Price.\" ;\n    rdfs:domain :LineItem ;\n    rdfs:range :Price ;\n    owl:inverseOf :isPriceOfLine .\n\n:isPriceOfLine a owl:ObjectProperty ;\n    rdfs:label \"is Price Of LineItem\" ;\n    rdfs:comment \"Indicates that a Price is part of a LineItem.\" ;\n    rdfs:domain :Price ;\n    rdfs:range :LineItem .\n\n:hasNetPrice a owl:DatatypeProperty , owl:FunctionalProperty ;\n    rdfs:label \"has Net Price\" ;\n    rdfs:comment \"Net price value for an item.\" ;\n    rdfs:domain :Price ;\n    rdfs:range xsd:decimal .\n\n:hasQuantity a owl:DatatypeProperty , owl:FunctionalProperty ;\n    rdfs:label \"has Quantity\" ;\n    rdfs:comment \"Quantity for a line item.\" ;\n    rdfs:domain :LineItem ;\n    rdfs:range xsd:integer .\n\n:hasTax a owl:ObjectProperty ;\n    rdfs:label \"has Tax\" ;\n    rdfs:comment \"Links an InvoiceSummary to its Tax.\" ;\n    rdfs:domain :InvoiceSummary ;\n    rdfs:range :Tax ;\n    owl:inverseOf :isTaxOfSummary .\n\n:isTaxOfSummary a owl:ObjectProperty ;\n    rdfs:label \"is Tax Of InvoiceSummary\" ;\n    rdfs:comment \"Indicates that a Tax is part of an InvoiceSummary.\" ;\n    rdfs:domain :Tax ;\n    rdfs:range :InvoiceSummary .\n\n:hasInvoiceAmount a owl:DatatypeProperty , owl:FunctionalProperty ;\n    rdfs:label \"has Invoice Amount\" ;\n    rdfs:comment \"Total invoice amount in the summary.\" ;\n    rdfs:domain :MOA77InvoiceAmount ;\n    rdfs:range xsd:decimal .\n\n:hasTotalTax a owl:DatatypeProperty , owl:FunctionalProperty ;\n    rdfs:label \"has Total Tax\" ;\n    rdfs:comment \"Total tax amount in the summary.\" ;\n    rdfs:domain :MOA176TotalTax ;\n    rdfs:range xsd:decimal .\n\n:hasInvoiceNumber a owl:DatatypeProperty , owl:FunctionalProperty ;\n    rdfs:label \"has Invoice Number\" ;\n    rdfs:comment \"Invoice number in the header.\" ;\n    rdfs:domain :InvoiceHeader ;\n    rdfs:range xsd:string .\n\n:hasDocumentDate a owl:DatatypeProperty , owl:FunctionalProperty ;\n    rdfs:label \"has Document Date\" ;\n    rdfs:comment \"Document date in the header.\" ;\n    rdfs:domain :DTM137DocumentDate ;\n    rdfs:range xsd:string .\n\n:hasDeliveryDate a owl:DatatypeProperty , owl:FunctionalProperty ;\n    rdfs:label \"has Delivery Date\" ;\n    rdfs:comment \"Delivery date in the header.\" ;\n    rdfs:domain :DTM35DeliveryDate ;\n    rdfs:range xsd:string .\n\n:hasDespatchDate a owl:DatatypeProperty , owl:FunctionalProperty ;\n    rdfs:label \"has Despatch Date\" ;\n    rdfs:comment \"Despatch date in the header.\" ;\n    rdfs:domain :DTM11DespatchDate ;\n    rdfs:range xsd:string .\n\n:assignedToBusinessProcess a owl:ObjectProperty ;\n    rdfs:label \"assigned to Business Process\" ;\n    rdfs:comment \"Assigns an invoice to a business process.\" ;\n    rdfs:domain :Invoice ;\n    rdfs:range :BusinessProcess ;\n    owl:inverseOf :isBusinessProcessOf .\n\n:isBusinessProcessOf a owl:ObjectProperty ;\n    rdfs:label \"is Business Process Of Invoice\" ;\n    rdfs:comment \"Indicates that a BusinessProcess is associated with an Invoice.\" ;\n    rdfs:domain :BusinessProcess ;\n    rdfs:range :Invoice .\n\n# Disjointness axioms\n:InterchangeEnvelope owl:disjointWith :Message .\n:Organization owl:disjointWith :Address .\n:Segment owl:disjointWith :CompositeDataElement .\n:InvoiceHeader owl:disjointWith :InvoiceDetail .\n:InvoiceHeader owl:disjointWith :InvoiceSummary .\n:InvoiceDetail owl:disjointWith :InvoiceSummary .\n:DTMSegment owl:disjointWith :MOASegment .\n:DTMSegment owl:disjointWith :LINSegment .\n:DTMSegment owl:disjointWith :QTYSegment .\n:DTMSegment owl:disjointWith :PRISegment .\n:DTMSegment owl:disjointWith :TAXSegment .\n",
+  "iterations": [
+    {
+      "attempt": 1,
+      "result": "Syntax validation failed: RDF syntax error at line 118. Problem with property characteristics (owl:FunctionalProperty, owl:TransitiveProperty) being used as predicates instead of rdf:type. Fix: Replace 'owl:FunctionalProperty .' with '[ rdf:type owl:FunctionalProperty ] .' for property characteristics."
+    },
+    {
+      "attempt": 2,
+      "result": "Syntax valid. Pitfalls found: (1) Inverse relationships not declared for most object properties (P13, minor); (2) Recursive definitions for Supplier and Buyer (P24, important); (3) Wrong transitive relationship for containsSegment (P29, critical). Fix: Remove transitivity from containsSegment, remove recursive definitions, add owl:inverseOf for all object properties."
+    },
+    {
+      "attempt": 3,
+      "result": "Syntax valid. Pitfall found: Misusing ontology annotations (P20, minor) in some inverse properties. Fix: Review rdfs:label and rdfs:comment for all inverse properties, ensure proper natural language content."
+    },
+    {
+      "attempt": 4,
+      "result": "Syntax valid. No pitfalls detected. All D96A segment classes and qualifier subclasses added. Ontology ready for final save."
+    }
+  ],
+  "expert_audits": 2,
+  "refinement_plan_1": "Analysis of Review Feedback (Iteration 1):\n\nHigh-priority suggestions:\n1. Add explicit properties for organization attributes (contact details, legal identifiers, warehouse addresses) to improve CQ5 coverage. This will require:\n   - Extending the Address class to distinguish headquarters vs. warehouse addresses.\n   - Adding contact detail properties (e.g., phone, email, contact person).\n   - Adding properties for legal identifiers (e.g., VAT ID, company registration number).\n2. Introduce OWL restrictions (minCardinality, allValuesFrom) or SHACL shapes to enforce mandatory fields for file format validity (CQ13). Specifically:\n   - Add OWL restrictions to InvoiceHeader (must have invoice number, document date).\n   - Enforce at least one buyer organization (with identifier).\n   - Enforce presence of line items, net price, and total tax in InvoiceDetail/Summary.\n\nMedium-priority:\n3. Add General Class Axioms (GCAs) and equivalence axioms:\n   - Invoice as intersection of header, detail, summary.\n   - OrganizationRoleAssignment as combination of Organization and AgentRole.\n\nLow-priority:\n4. Expand business process modeling and add more granular segment/element classes.\n\nConstraint violations to fix:\n- Add OWL restrictions for required fields (minCardinality, allValuesFrom).\n- Ensure domain/range completeness for new properties.\n\nPlan of action:\n- Extend Organization and Address classes with new properties.\n- Add new datatype properties for contact details and legal identifiers.\n- Add OWL restrictions to enforce mandatory fields for file format validity.\n- Add equivalence axioms for Invoice and OrganizationRoleAssignment.\n- Preserve existing correct elements and annotations."
+}

@@ -1,0 +1,202 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix : <http://www.example.org/ontology#> .
+
+<http://www.example.org/ontology#storyid> a owl:Ontology ;
+    rdfs:label "EDIFACT D96A Invoice Ontology" ;
+    rdfs:comment "A profoundly structured OWL2 ontology for UN/EDIFACT D96A Invoice (INVOIC) messages, supporting EN 16931-1 and P2P-O alignment." .
+
+#################################################################
+# Classes
+#################################################################
+
+:InterchangeEnvelope a owl:Class ;
+    rdfs:label "Interchange Envelope" ;
+    rdfs:comment "The top-level envelope containing one or more EDIFACT messages." .
+
+:Message a owl:Class ;
+    rdfs:label "Message" ;
+    rdfs:comment "A generic EDIFACT message." .
+
+:InvoiceMessage a owl:Class ;
+    rdfs:label "Invoice Message" ;
+    rdfs:comment "An EDIFACT INVOIC message, a subclass of Message." ;
+    rdfs:subClassOf :Message .
+
+:Segment a owl:Class ;
+    rdfs:label "Segment" ;
+    rdfs:comment "A segment within an EDIFACT message." .
+
+:BGMSegment a owl:Class ;
+    rdfs:label "BGM Segment" ;
+    rdfs:comment "Beginning of Message segment for document identification." ;
+    rdfs:subClassOf :Segment , :CompositeDataElement .
+
+:NADSegment a owl:Class ;
+    rdfs:label "NAD Segment" ;
+    rdfs:comment "Name and Address segment for participant details." ;
+    rdfs:subClassOf :Segment , :CompositeDataElement .
+
+:DTMSegment a owl:Class ;
+    rdfs:label "DTM Segment" ;
+    rdfs:comment "Date/Time/Period segment. Contains qualifier and value." ;
+    rdfs:subClassOf :Segment , :CompositeDataElement .
+
+:MOASegment a owl:Class ;
+    rdfs:label "MOA Segment" ;
+    rdfs:comment "Monetary Amount segment. Contains qualifier and amount value." ;
+    rdfs:subClassOf :Segment , :CompositeDataElement .
+
+:RFFSegment a owl:Class ;
+    rdfs:label "RFF Segment" ;
+    rdfs:comment "Reference segment for reference numbers." ;
+    rdfs:subClassOf :Segment , :CompositeDataElement .
+
+:LOCSegment a owl:Class ;
+    rdfs:label "LOC Segment" ;
+    rdfs:comment "Location segment for delivery or other locations." ;
+    rdfs:subClassOf :Segment , :CompositeDataElement .
+
+:LINSegment a owl:Class ;
+    rdfs:label "LIN Segment" ;
+    rdfs:comment "Line Item segment." ;
+    rdfs:subClassOf :Segment , :CompositeDataElement .
+
+:PRISegment a owl:Class ;
+    rdfs:label "PRI Segment" ;
+    rdfs:comment "Price segment." ;
+    rdfs:subClassOf :Segment , :CompositeDataElement .
+
+:QTYSegment a owl:Class ;
+    rdfs:label "QTY Segment" ;
+    rdfs:comment "Quantity segment." ;
+    rdfs:subClassOf :Segment , :CompositeDataElement .
+
+:TAXSegment a owl:Class ;
+    rdfs:label "TAX Segment" ;
+    rdfs:comment "Tax segment." ;
+    rdfs:subClassOf :Segment , :CompositeDataElement .
+
+:CUXSegment a owl:Class ;
+    rdfs:label "CUX Segment" ;
+    rdfs:comment "Currency segment." ;
+    rdfs:subClassOf :Segment , :CompositeDataElement .
+
+:UNSSegment a owl:Class ;
+    rdfs:label "UNS Segment" ;
+    rdfs:comment "Section control segment (header/detail/summary separator)." ;
+    rdfs:subClassOf :Segment , :CompositeDataElement .
+
+:CompositeDataElement a owl:Class ;
+    rdfs:label "Composite Data Element" ;
+    rdfs:comment "A composite data element within a segment." ;
+    rdfs:subClassOf :Segment .
+
+:SimpleDataElement a owl:Class ;
+    rdfs:label "Simple Data Element" ;
+    rdfs:comment "A simple data element within a composite or segment." ;
+    rdfs:subClassOf :CompositeDataElement .
+
+:InvoiceHeader a owl:Class ;
+    rdfs:label "Invoice Header" ;
+    rdfs:comment "Header section of an invoice message." ;
+    rdfs:subClassOf :CompositeDataElement .
+
+:InvoiceDetail a owl:Class ;
+    rdfs:label "Invoice Detail" ;
+    rdfs:comment "Detail section of an invoice message." ;
+    rdfs:subClassOf :CompositeDataElement .
+
+:InvoiceSummary a owl:Class ;
+    rdfs:label "Invoice Summary" ;
+    rdfs:comment "Summary section of an invoice message." ;
+    rdfs:subClassOf :CompositeDataElement .
+
+:Organization a owl:Class ;
+    rdfs:label "Organization" ;
+    rdfs:comment "A legal entity involved in the transaction." .
+
+:AgentRole a owl:Class ;
+    rdfs:label "Agent Role" ;
+    rdfs:comment "A role played by an organization (e.g., Buyer, Supplier, Delivery Party)." .
+
+:Address a owl:Class ;
+    rdfs:label "Address" ;
+    rdfs:comment "A postal or physical address." ;
+    rdfs:subClassOf :CompositeDataElement .
+
+:LineItem a owl:Class ;
+    rdfs:label "Line Item" ;
+    rdfs:comment "An itemized entry in the invoice detail section." ;
+    rdfs:subClassOf :CompositeDataElement .
+
+:Item a owl:Class ;
+    rdfs:label "Item" ;
+    rdfs:comment "A product or good referenced in the invoice." ;
+    rdfs:subClassOf :CompositeDataElement .
+
+:Price a owl:Class ;
+    rdfs:label "Price" ;
+    rdfs:comment "A price associated with an item or invoice." ;
+    rdfs:subClassOf :CompositeDataElement .
+
+:Tax a owl:Class ;
+    rdfs:label "Tax" ;
+    rdfs:comment "A tax applied to the invoice or line item." ;
+    rdfs:subClassOf :CompositeDataElement .
+
+:ReferenceNumber a owl:Class ;
+    rdfs:label "Reference Number" ;
+    rdfs:comment "A reference number for the invoice or related documents." ;
+    rdfs:subClassOf :CompositeDataElement .
+
+:BusinessProcess a owl:Class ;
+    rdfs:label "Business Process" ;
+    rdfs:comment "A business process such as Purchase-to-Pay." .
+
+:ValidationConstraint a owl:Class ;
+    rdfs:label "Validation Constraint" ;
+    rdfs:comment "A constraint for validation, e.g., SHACL shape." .
+
+:GLNIdentifier a owl:Class ;
+    rdfs:label "GLN Identifier" ;
+    rdfs:comment "A Global Location Number identifier." ;
+    rdfs:subClassOf :SimpleDataElement .
+
+:EN16931Alignment a owl:Class ;
+    rdfs:label "EN 16931 Alignment" ;
+    rdfs:comment "Alignment to EN 16931-1 semantic model." .
+
+:P2POAlignment a owl:Class ;
+    rdfs:label "P2P-O Alignment" ;
+    rdfs:comment "Alignment to Purchase-to-Pay Ontology (P2P-O)." .
+
+:RoleAssignment a owl:Class ;
+    rdfs:label "Role Assignment" ;
+    rdfs:comment "A reified relationship linking an organization to a role in the invoice context." .
+
+# Disjointness axioms as separate triples
+:CompositeDataElement owl:disjointWith :SimpleDataElement .
+:Organization owl:disjointWith :AgentRole .
+:Organization owl:disjointWith :BusinessProcess .
+:Organization owl:disjointWith :ValidationConstraint .
+:Organization owl:disjointWith :RoleAssignment .
+:EN16931Alignment owl:disjointWith :P2POAlignment .
+:P2POAlignment owl:disjointWith :EN16931Alignment .
+:BusinessProcess owl:disjointWith :Organization .
+:ValidationConstraint owl:disjointWith :Organization .
+:RoleAssignment owl:disjointWith :Organization .
+
+# Connect unconnected classes
+:InterchangeEnvelope :containsMessage :Message .
+:Message :hasSegment :Segment .
+:Organization :hasAddress :Address .
+:AgentRole :assignedTo :Organization .
+:RoleAssignment :hasAgentRole :AgentRole .
+:RoleAssignment :hasParticipant :Organization .
+:EN16931Alignment :alignsWith :InvoiceMessage .
+:P2POAlignment :alignsWith :InvoiceMessage .
+:BusinessProcess :processes :InvoiceMessage .
+:ValidationConstraint :validates :InvoiceMessage .

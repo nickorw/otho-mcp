@@ -1,0 +1,114 @@
+{
+  "iteration": 2,
+  "timestamp": "2026-03-03T09:18:47.918500",
+  "cq_coverage": {
+    "fully_covered": [
+      "CQ1",
+      "CQ2",
+      "CQ3",
+      "CQ4",
+      "CQ6",
+      "CQ7",
+      "CQ8",
+      "CQ9",
+      "CQ10",
+      "CQ11",
+      "CQ12",
+      "CQ14"
+    ],
+    "partially_covered": [
+      {
+        "cq": "CQ5",
+        "missing": "No explicit modeling of organization attributes beyond Address and GLNIdentifier. No properties for contact info, legal identifiers, or warehouse details. NADSegment is present but not linked to additional organization info.",
+        "coverage_percent": 70
+      },
+      {
+        "cq": "CQ13",
+        "missing": "ValidationConstraint class exists, but no OWL property restrictions or SHACL shapes for mandatory D96A directory fields. No explicit constraints enforcing presence of invoice number, GLN, or document date.",
+        "coverage_percent": 60
+      }
+    ],
+    "not_covered": [],
+    "coverage_score": 0.93,
+    "details": "The ontology continues to provide robust coverage for most CQs, especially those related to invoice structure, roles, items, and business process assignment. Partial gaps remain for organization information display and explicit file format validation constraints."
+  },
+  "constraint_adherence": {
+    "reification_correct": true,
+    "owl2_compliant": true,
+    "annotations_complete": true,
+    "directionality_correct": true,
+    "pivot_class_structure_correct": true,
+    "issues": []
+  },
+  "quality_metrics": {
+    "hierarchy_depth": 4,
+    "uses_restrictions": true,
+    "uses_gcas": false,
+    "uses_equivalence": true,
+    "property_characteristics_defined": true,
+    "disjointness_axioms": true,
+    "overall_score": 0.87,
+    "strengths": [
+      "Deep, well-structured class hierarchy reflecting EDIFACT and business process",
+      "Clear use of owl:equivalentClass for necessary and sufficient conditions",
+      "Consistent use of functional properties and inverses",
+      "Disjointness and disjoint unions are present"
+    ],
+    "weaknesses": [
+      "No GCAs for cross-class constraints (e.g., enforcing buyer/delivery party presence)",
+      "Limited explicit modeling of mandatory EDIFACT/D96A validation constraints",
+      "No explicit SHACL shapes or OWL property restrictions for file format validity"
+    ]
+  },
+  "validator_predictions": {
+    "likely_oops_pitfalls": [
+      "P7: Inverse properties may be redundant if not used in practice",
+      "P13: Missing constraints for mandatory fields"
+    ],
+    "reasoner_risks": [
+      "Complex intersection restrictions may slow Hermit/Pellet",
+      "No non-standard datatypes detected, so no critical failures expected"
+    ],
+    "confidence": "high"
+  },
+  "improvement_suggestions": [
+    {
+      "priority": "high",
+      "category": "CQ Coverage",
+      "suggestion": "Add explicit properties for organization attributes (e.g., contact info, legal identifiers, warehouse details) and link them to Organization and NADSegment to fully answer CQ5.",
+      "expected_impact": "Complete coverage for organization information display queries."
+    },
+    {
+      "priority": "high",
+      "category": "Constraint",
+      "suggestion": "Define OWL property restrictions or add SHACL shapes for mandatory EDIFACT/D96A fields (e.g., invoice number, GLN, document date) to fully answer CQ13.",
+      "expected_impact": "Stronger validation support and compliance with file format requirements."
+    },
+    {
+      "priority": "medium",
+      "category": "Quality",
+      "suggestion": "Implement General Class Axioms (GCAs) for cross-class constraints, such as ensuring every Invoice has at least one BuyerRole and DeliveryPartyRole assignment.",
+      "expected_impact": "Richer axiomatization and improved reasoning."
+    },
+    {
+      "priority": "low",
+      "category": "Enrichment",
+      "suggestion": "Add optional properties for temporal context (e.g., transaction time, period validity) and further subclassing for AgentRole.",
+      "expected_impact": "Enhanced expressiveness and future-proofing."
+    }
+  ],
+  "summary": "The ontology remains robust and well-structured, with strong coverage of most competency questions and sound use of OWL 2 modeling patterns. However, it did not address previous suggestions regarding explicit organization attribute modeling and mandatory validation constraints. Quality and coverage scores are unchanged, and no new issues were introduced. Further enrichment and constraint refinement are still required for full CQ and standards compliance.",
+  "improvement_tracking": {
+    "suggestions_addressed": [],
+    "suggestions_ignored": [
+      "Add explicit properties for organization attributes and link to NADSegment (CQ5)",
+      "Define OWL property restrictions or SHACL shapes for mandatory fields (CQ13)",
+      "Implement GCAs for buyer/delivery party constraints",
+      "Add temporal context properties and AgentRole subclassing"
+    ],
+    "quality_delta": "+0.00",
+    "coverage_delta": "+0.00",
+    "overall_progress": "fair",
+    "notes": "No substantive changes were implemented since iteration 1. The ontology retains its strengths but has not improved in CQ coverage or constraint rigor. All prior high-priority suggestions remain outstanding."
+  }
+}

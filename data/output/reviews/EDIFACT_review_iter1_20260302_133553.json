@@ -1,0 +1,103 @@
+{
+  "iteration": 1,
+  "timestamp": "2026-03-02T14:01:52.296471",
+  "cq_coverage": {
+    "fully_covered": [
+      "CQ1",
+      "CQ2",
+      "CQ3",
+      "CQ4",
+      "CQ6",
+      "CQ7",
+      "CQ9",
+      "CQ11",
+      "CQ12",
+      "CQ13",
+      "CQ14"
+    ],
+    "partially_covered": [
+      {
+        "cq": "CQ5",
+        "missing": "Ontology lacks explicit properties for displaying organization information beyond address and identifier; no details such as contact info, legal entity, etc.",
+        "coverage_percent": 70
+      },
+      {
+        "cq": "CQ8",
+        "missing": "Ontology provides basic item info (Item, Price, Quantity) but lacks detailed properties for item attributes (e.g., description, SKU, unit of measure).",
+        "coverage_percent": 60
+      },
+      {
+        "cq": "CQ10",
+        "missing": "Ontology covers header, detail, and summary sections, but lacks explicit properties for all invoice details (e.g., payment terms, currency, status).",
+        "coverage_percent": 75
+      }
+    ],
+    "not_covered": [],
+    "coverage_score": 0.87,
+    "details": "The ontology covers most CQs directly through its classes and properties, especially those relating to invoice structure, organization roles, and itemization. Some CQs (e.g., information about organizations and items) are only partially covered due to missing detailed properties."
+  },
+  "constraint_adherence": {
+    "reification_correct": true,
+    "owl2_compliant": true,
+    "annotations_complete": true,
+    "directionality_correct": true,
+    "pivot_class_structure_correct": true,
+    "issues": []
+  },
+  "quality_metrics": {
+    "hierarchy_depth": 4,
+    "uses_restrictions": true,
+    "uses_gcas": false,
+    "uses_equivalence": true,
+    "property_characteristics_defined": true,
+    "disjointness_axioms": true,
+    "overall_score": 0.82,
+    "strengths": [
+      "Rich class hierarchy reflects EDIFACT structure",
+      "Comprehensive use of restrictions and equivalence axioms",
+      "Disjointness axioms between key classes"
+    ],
+    "weaknesses": [
+      "No general class axioms (GCAs) for advanced reasoning",
+      "Limited detail in some properties (e.g., item and organization attributes)"
+    ]
+  },
+  "validator_predictions": {
+    "likely_oops_pitfalls": [
+      "P4 (Missing domain/range for some properties, but mostly addressed)",
+      "P7 (Lack of GCAs)"
+    ],
+    "reasoner_risks": [
+      "Complex intersection restrictions may slow Hermit or Pellet",
+      "No high-priority datatype violations detected"
+    ],
+    "confidence": "high"
+  },
+  "improvement_suggestions": [
+    {
+      "priority": "high",
+      "category": "CQ Coverage",
+      "suggestion": "Expand organization and item modeling: Add properties such as hasLegalEntity, hasContactInfo, hasItemDescription, hasSKU, hasUnitOfMeasure to fully answer CQ5 and CQ8.",
+      "expected_impact": "Complete coverage for queries about organization and item details."
+    },
+    {
+      "priority": "medium",
+      "category": "Quality",
+      "suggestion": "Introduce GCAs to formalize business logic, e.g., define Buyer as an Organization with AgentRole 'Buyer' in a Pivot_OrganizationRoleAssignment.",
+      "expected_impact": "Improved reasoning and richer axiomatization."
+    },
+    {
+      "priority": "medium",
+      "category": "CQ Coverage",
+      "suggestion": "Add explicit properties to HeaderSection and SummarySection for payment terms, currency, and invoice status to fully answer CQ10.",
+      "expected_impact": "More complete invoice detail queries."
+    },
+    {
+      "priority": "low",
+      "category": "Quality",
+      "suggestion": "Consider adding symmetric/transitive property characteristics where relevant (e.g., for business process relations).",
+      "expected_impact": "Minor improvement in expressivity."
+    }
+  ],
+  "summary": "The ontology provides a strong structural representation of EDIFACT invoices, with good coverage of business roles, itemization, and compliance constraints. Most competency questions are well supported, but coverage for organizational and item details could be improved. Quality is high, with robust hierarchy and restrictions, though GCAs and detailed properties are recommended for further enhancement."
+}

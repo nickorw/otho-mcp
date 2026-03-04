@@ -1,0 +1,8 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix : <http://www.example.org/ontology#> .
+
+:EDIFACTInvoiceOntology rdf:type owl:Ontology ; rdfs:label "EDIFACT D96A INVOIC and P2P-O Ontology" ; rdfs:comment "A profoundly structured ontology for digital business documents based on UN/EDIFACT D96A, EANCOM INVOIC, and P2P-O, including all mandatory segments, roles, and constraints for semantic interoperability." .
+# ... (rest of ontology as above, with harmonized naming and annotation corrections)

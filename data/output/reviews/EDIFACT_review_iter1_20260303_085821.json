@@ -1,0 +1,101 @@
+{
+  "iteration": 1,
+  "timestamp": "2026-03-03T09:18:03.513428",
+  "cq_coverage": {
+    "fully_covered": [
+      "CQ1",
+      "CQ2",
+      "CQ3",
+      "CQ4",
+      "CQ6",
+      "CQ7",
+      "CQ8",
+      "CQ9",
+      "CQ10",
+      "CQ11",
+      "CQ12",
+      "CQ14"
+    ],
+    "partially_covered": [
+      {
+        "cq": "CQ5",
+        "missing": "No explicit property for listing all displayed information about organizations (e.g., contact details, identifiers, attributes)",
+        "coverage_percent": 70
+      },
+      {
+        "cq": "CQ13",
+        "missing": "ValidationConstraint class is present, but no explicit SHACL or mandatory property axioms for D96A directory requirements",
+        "coverage_percent": 60
+      }
+    ],
+    "not_covered": [],
+    "coverage_score": 0.93,
+    "details": "Most CQs are addressed by the ontology's class/property structure, especially through Invoice, OrganizationRoleAssignment, and Segment hierarchy. Partial gaps for organization attribute display and explicit validation constraints for file format compliance."
+  },
+  "constraint_adherence": {
+    "reification_correct": true,
+    "owl2_compliant": true,
+    "annotations_complete": true,
+    "directionality_correct": true,
+    "pivot_class_structure_correct": true,
+    "issues": []
+  },
+  "quality_metrics": {
+    "hierarchy_depth": 4,
+    "uses_restrictions": true,
+    "uses_gcas": false,
+    "uses_equivalence": true,
+    "property_characteristics_defined": true,
+    "disjointness_axioms": true,
+    "overall_score": 0.87,
+    "strengths": [
+      "Deep hierarchy reflecting EDIFACT structure",
+      "Good use of necessary and sufficient conditions via equivalentClass",
+      "Consistent use of functional properties and inverses",
+      "Disjointness and disjoint unions present"
+    ],
+    "weaknesses": [
+      "No GCAs for complex cross-class constraints",
+      "Limited explicit modeling of mandatory EDIFACT/D96A validation constraints",
+      "No explicit SHACL shapes or OWL property restrictions for file format validity"
+    ]
+  },
+  "validator_predictions": {
+    "likely_oops_pitfalls": [
+      "P4: Missing domain or range for some properties (none detected here, but always check)",
+      "P7: Inverse properties may be redundant if not used in practice"
+    ],
+    "reasoner_risks": [
+      "Complex intersection restrictions may slow Hermit/Pellet",
+      "No non-standard datatypes detected, so no critical failures expected"
+    ],
+    "confidence": "high"
+  },
+  "improvement_suggestions": [
+    {
+      "priority": "high",
+      "category": "CQ Coverage",
+      "suggestion": "Add explicit properties for organization attributes (e.g., contact info, legal identifiers, warehouse details) and link them to Organization and NADSegment to fully answer CQ5.",
+      "expected_impact": "Complete coverage for organization information display queries."
+    },
+    {
+      "priority": "high",
+      "category": "Constraint",
+      "suggestion": "Define OWL property restrictions or add SHACL shapes for mandatory EDIFACT/D96A fields (e.g., invoice number, GLN, document date) to fully answer CQ13.",
+      "expected_impact": "Stronger validation support and compliance with file format requirements."
+    },
+    {
+      "priority": "medium",
+      "category": "Quality",
+      "suggestion": "Implement General Class Axioms (GCAs) for cross-class constraints, such as ensuring every Invoice has at least one BuyerRole and DeliveryPartyRole assignment.",
+      "expected_impact": "Richer axiomatization and improved reasoning."
+    },
+    {
+      "priority": "low",
+      "category": "Enrichment",
+      "suggestion": "Add optional properties for temporal context (e.g., transaction time, period validity) and further subclassing for AgentRole.",
+      "expected_impact": "Enhanced expressiveness and future-proofing."
+    }
+  ],
+  "summary": "The ontology provides robust coverage of the EDIFACT invoice domain, with strong hierarchical modeling and good use of OWL 2 constructs. Most competency questions are fully addressed, but explicit organization attribute modeling and validation constraints require improvement. Overall, the ontology is high quality and ready for further enrichment and constraint refinement."
+}

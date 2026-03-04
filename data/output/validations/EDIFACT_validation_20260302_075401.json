@@ -1,0 +1,67 @@
+{
+  "timestamp": "20260302_075401",
+  "story_id": "EDIFACT",
+  "ontology_size_chars": 26082,
+  "syntax": {
+    "valid": true,
+    "execution_time_seconds": 0.242,
+    "error": null
+  },
+  "oops": {
+    "has_pitfalls": true,
+    "pitfall_count": 3,
+    "execution_time_seconds": 0.123,
+    "pitfalls": [
+      {
+        "code": "P12",
+        "name": "Equivalent properties not explicitly declared",
+        "description": "The ontology lacks information about equivalent properties (owl:equivalentProperty) in the cases of duplicated relationships and/or attributes.\t",
+        "importance": "Important",
+        "num_affected": 2,
+        "affected_elements": []
+      },
+      {
+        "code": "P20",
+        "name": "Misusing ontology annotations",
+        "description": "The contents of some annotation properties are swapped or misused. This pitfall might affect annotation properties related to natural language information (for example, annotations for naming such as rdfs:label or for providing descriptions such as rdfs:comment). Other types of annotation could also be affected as temporal, versioning information, among others.\t",
+        "importance": "Minor",
+        "num_affected": 4,
+        "affected_elements": [
+          "http://www.example.org/ontology#isNAD_DeliveryPartyOf",
+          "http://www.example.org/ontology#isRoleOfOrganizationIn",
+          "http://www.example.org/ontology#isSegmentGroup1Of",
+          "http://www.example.org/ontology#isSegmentGroup2Of"
+        ]
+      },
+      {
+        "code": "P22",
+        "name": "Using different naming conventions in the ontology",
+        "description": "The ontology elements are not named following the same convention (for example CamelCase or use of delimiters as \"-\" or \"_\") . Some notions about naming conventions are provided in [2].\t",
+        "importance": "Minor",
+        "num_affected": 1,
+        "affected_elements": [
+          "http://www.example.org/ontology#PRI_Price",
+          "http://www.example.org/ontology#CompositeDataElement"
+        ]
+      }
+    ]
+  },
+  "hermit": {
+    "is_consistent": true,
+    "inconsistent_classes": [],
+    "execution_time_seconds": 1.107,
+    "error": null,
+    "reasoner": "Hermit"
+  },
+  "pellet": {
+    "is_consistent": true,
+    "inconsistent_classes": [],
+    "execution_time_seconds": 1.126,
+    "error": null,
+    "reasoner": "Pellet"
+  },
+  "aggregate": {
+    "all_validators_passed": false,
+    "total_execution_time_seconds": 2.598
+  }
+}

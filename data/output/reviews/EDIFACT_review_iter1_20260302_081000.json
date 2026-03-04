@@ -1,0 +1,97 @@
+{
+  "iteration": 1,
+  "timestamp": "2026-03-02T08:25:38.955775",
+  "cq_coverage": {
+    "fully_covered": [
+      "CQ1",
+      "CQ2",
+      "CQ3",
+      "CQ4",
+      "CQ6",
+      "CQ7",
+      "CQ8",
+      "CQ9",
+      "CQ10",
+      "CQ11",
+      "CQ12",
+      "CQ14"
+    ],
+    "partially_covered": [
+      {
+        "cq": "CQ5",
+        "missing": "Ontology provides organization and address, but lacks explicit properties for displaying all relevant attributes such as contact details, legal identifiers, and warehouse addresses.",
+        "coverage_percent": 70
+      },
+      {
+        "cq": "CQ13",
+        "missing": "Ontology does not specify mandatory/optional fields or validation constraints for file format compliance (e.g., SHACL shapes or OWL restrictions on required properties).",
+        "coverage_percent": 60
+      }
+    ],
+    "not_covered": [],
+    "coverage_score": 0.9,
+    "details": "Most CQs are directly answerable via classes and properties such as Invoice, Organization, AgentRole, Address, LineItem, Price, and InvoiceHeader/Detail/Summary. Partial gaps exist in organization attribute completeness and file format validation constraints."
+  },
+  "constraint_adherence": {
+    "reification_correct": true,
+    "owl2_compliant": true,
+    "annotations_complete": true,
+    "directionality_correct": true,
+    "pivot_class_structure_correct": true,
+    "issues": []
+  },
+  "quality_metrics": {
+    "hierarchy_depth": 4,
+    "uses_restrictions": false,
+    "uses_gcas": false,
+    "uses_equivalence": false,
+    "property_characteristics_defined": true,
+    "disjointness_axioms": true,
+    "overall_score": 0.78,
+    "strengths": [
+      "Rich and deep class hierarchy reflecting EDIFACT structure",
+      "Functional and inverse properties defined",
+      "Disjointness axioms provided"
+    ],
+    "weaknesses": [
+      "No use of OWL restrictions (e.g., cardinality, value constraints)",
+      "No General Class Axioms (GCAs) or equivalence axioms for complex definitions",
+      "Limited modeling of validation constraints (e.g., SHACL or OWL restrictions for mandatory fields)"
+    ]
+  },
+  "validator_predictions": {
+    "likely_oops_pitfalls": [
+      "P4: Missing domain/range constraints on some properties",
+      "P7: Lack of explicit validation for mandatory fields"
+    ],
+    "reasoner_risks": [],
+    "confidence": "high"
+  },
+  "improvement_suggestions": [
+    {
+      "priority": "high",
+      "category": "CQ Coverage",
+      "suggestion": "Add explicit properties for organization attributes such as contact details, legal identifiers, and warehouse addresses; extend Address and Identifier classes as needed.",
+      "expected_impact": "Improved coverage for CQ5 and more expressive organization representation."
+    },
+    {
+      "priority": "high",
+      "category": "Constraint Adherence",
+      "suggestion": "Introduce OWL restrictions (minCardinality, allValuesFrom) or SHACL shapes to enforce mandatory fields for file format validity (e.g., invoice number, buyer identifier).",
+      "expected_impact": "Better coverage for CQ13 and improved validator compatibility."
+    },
+    {
+      "priority": "medium",
+      "category": "Quality",
+      "suggestion": "Add GCAs and equivalence axioms for key classes (e.g., Invoice as intersection of header, detail, summary; OrganizationRoleAssignment as combination of Organization and AgentRole).",
+      "expected_impact": "Richer logical structure and improved reasoning capabilities."
+    },
+    {
+      "priority": "low",
+      "category": "Optional Enrichment",
+      "suggestion": "Expand class hierarchy for business process modeling and introduce more granular segment/element classes.",
+      "expected_impact": "Greater expressiveness and alignment with EN 16931-1 and P2P-O."
+    }
+  ],
+  "summary": "The ontology provides a comprehensive structural representation of EDIFACT INVOIC messages and covers most competency questions with a rich class hierarchy and functional properties. However, it lacks advanced OWL constructs, validation constraints, and full attribute modeling for organizations. Improvements should focus on mandatory field enforcement, richer axiomatization, and more detailed organization attributes."
+}
