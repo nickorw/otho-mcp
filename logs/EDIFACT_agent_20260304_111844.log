@@ -1,0 +1,12 @@
+2026-03-04 11:18:44 | INFO     | ============================================================
+2026-03-04 11:18:44 | INFO     | Agent Logger Initialized for EDIFACT
+2026-03-04 11:18:44 | INFO     | Log files: EDIFACT_agent_20260304_111844.log
+2026-03-04 11:18:44 | INFO     | ============================================================
+2026-03-04 11:18:44 | INFO     | Starting React agent execution
+2026-03-04 11:18:44 | DEBUG    | Prompt length: 7776 characters
+2026-03-04 11:18:44 | DEBUG    | Tools available: 5
+2026-03-04 11:18:44 | DEBUG    |   - update_scratchpad
+2026-03-04 11:18:44 | DEBUG    |   - read_scratchpad
+2026-03-04 11:18:44 | DEBUG    |   - validate_syntax_tool
+2026-03-04 11:18:44 | DEBUG    |   - check_pitfalls_tool
+2026-03-04 11:18:44 | DEBUG    |   - save_final_ontology

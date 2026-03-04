@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<oops:OOPSResponse xmlns:oops="http://www.oeg-upm.net/oops">
+<oops:Warning>
+<oops:Name>WARNING: the following classes do not have rdf:type owl:Class or equivalent.</oops:Name>
+<oops:NumberAffectedElements>4</oops:NumberAffectedElements>
+<oops:Affects>
+<oops:AffectedElement>http://www.example.org/ontology#hasSection</oops:AffectedElement>
+<oops:AffectedElement>http://www.example.org/ontology#hasSection</oops:AffectedElement>
+<oops:AffectedElement>http://www.example.org/ontology#hasSection</oops:AffectedElement>
+<oops:AffectedElement>http://www.example.org/ontology#isSectionOf</oops:AffectedElement>
+</oops:Affects>
+</oops:Warning>
+</oops:OOPSResponse>

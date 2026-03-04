@@ -1,0 +1,358 @@
+{
+  "plan": {
+    "Concept Extraction": {
+      "Classes": [
+        "InterchangeEnvelope",
+        "EdifactMessage",
+        "InvoiceMessage",
+        "Segment",
+        "CompositeDataElement",
+        "SimpleDataElement",
+        "Organization",
+        "AgentRole",
+        "Address",
+        "Item",
+        "Price",
+        "LineItem",
+        "HeaderSection",
+        "DetailSection",
+        "SummarySection",
+        "BusinessProcess"
+      ],
+      "Pivot Classes": [
+        "OrganizationRoleAssignment"
+      ]
+    },
+    "Hierarchy Plan": {
+      "subClassOf": [
+        [
+          "InvoiceMessage",
+          "EdifactMessage"
+        ],
+        [
+          "EdifactMessage",
+          "InterchangeEnvelope"
+        ],
+        [
+          "HeaderSection",
+          "Segment"
+        ],
+        [
+          "DetailSection",
+          "Segment"
+        ],
+        [
+          "SummarySection",
+          "Segment"
+        ],
+        [
+          "LineItem",
+          "DetailSection"
+        ],
+        [
+          "Price",
+          "SimpleDataElement"
+        ]
+      ],
+      "disjointWith": [
+        [
+          "Organization",
+          "Item"
+        ],
+        [
+          "Address",
+          "Organization"
+        ],
+        [
+          "Segment",
+          "Organization"
+        ],
+        [
+          "AgentRole",
+          "Organization"
+        ],
+        [
+          "BusinessProcess",
+          "InvoiceMessage"
+        ]
+      ],
+      "DisjointUnion": [
+        [
+          "Segment",
+          "HeaderSection",
+          "DetailSection",
+          "SummarySection"
+        ]
+      ]
+    },
+    "Properties": {
+      "ObjectProperties": [
+        {
+          "name": "containsMessage",
+          "domain": "InterchangeEnvelope",
+          "range": "EdifactMessage",
+          "characteristics": [
+            "Functional"
+          ],
+          "inverse": "isContainedInEnvelope"
+        },
+        {
+          "name": "containsSegment",
+          "domain": "EdifactMessage",
+          "range": "Segment",
+          "characteristics": [
+            "Functional"
+          ],
+          "inverse": "isContainedInMessage"
+        },
+        {
+          "name": "hasSection",
+          "domain": "InvoiceMessage",
+          "range": "Segment",
+          "characteristics": [
+            "Functional"
+          ]
+        },
+        {
+          "name": "hasLineItem",
+          "domain": "DetailSection",
+          "range": "LineItem",
+          "characteristics": [
+            "Functional"
+          ]
+        },
+        {
+          "name": "hasCompositeElement",
+          "domain": "Segment",
+          "range": "CompositeDataElement",
+          "characteristics": []
+        },
+        {
+          "name": "hasSimpleElement",
+          "domain": "CompositeDataElement",
+          "range": "SimpleDataElement",
+          "characteristics": []
+        },
+        {
+          "name": "playsRole",
+          "domain": "Organization",
+          "range": "OrganizationRoleAssignment",
+          "characteristics": []
+        },
+        {
+          "name": "involvesRole",
+          "domain": "InvoiceMessage",
+          "range": "OrganizationRoleAssignment",
+          "characteristics": []
+        },
+        {
+          "name": "hasAgentRole",
+          "domain": "OrganizationRoleAssignment",
+          "range": "AgentRole",
+          "characteristics": [
+            "Functional"
+          ]
+        },
+        {
+          "name": "hasRoleAddress",
+          "domain": "OrganizationRoleAssignment",
+          "range": "Address",
+          "characteristics": [
+            "Functional"
+          ]
+        },
+        {
+          "name": "hasRoleIdentifier",
+          "domain": "OrganizationRoleAssignment",
+          "range": "SimpleDataElement",
+          "characteristics": []
+        }
+      ],
+      "DataProperties": [
+        {
+          "name": "hasInvoiceNumber",
+          "domain": "InvoiceMessage",
+          "range": "xsd:string"
+        },
+        {
+          "name": "hasInvoiceAmount",
+          "domain": "InvoiceMessage",
+          "range": "xsd:decimal"
+        },
+        {
+          "name": "hasDate",
+          "domain": "HeaderSection",
+          "range": "xsd:dateTime"
+        },
+        {
+          "name": "hasReferenceNumber",
+          "domain": "HeaderSection",
+          "range": "xsd:string"
+        },
+        {
+          "name": "hasName",
+          "domain": "Organization",
+          "range": "xsd:string"
+        },
+        {
+          "name": "hasGLN",
+          "domain": "Organization",
+          "range": "xsd:string"
+        },
+        {
+          "name": "hasAddressLine",
+          "domain": "Address",
+          "range": "xsd:string"
+        },
+        {
+          "name": "hasPostalCode",
+          "domain": "Address",
+          "range": "xsd:string"
+        },
+        {
+          "name": "hasCity",
+          "domain": "Address",
+          "range": "xsd:string"
+        },
+        {
+          "name": "hasCountryCode",
+          "domain": "Address",
+          "range": "xsd:string"
+        },
+        {
+          "name": "hasItemName",
+          "domain": "Item",
+          "range": "xsd:string"
+        },
+        {
+          "name": "hasNetPrice",
+          "domain": "LineItem",
+          "range": "xsd:decimal"
+        },
+        {
+          "name": "hasQuantity",
+          "domain": "LineItem",
+          "range": "xsd:decimal"
+        },
+        {
+          "name": "hasTaxAmount",
+          "domain": "SummarySection",
+          "range": "xsd:decimal"
+        }
+      ]
+    },
+    "CQ Coverage Verification": {
+      "CQ1": [
+        "EdifactMessage",
+        "containsMessage",
+        "InvoiceMessage"
+      ],
+      "CQ2": [
+        "Organization",
+        "involvesRole",
+        "OrganizationRoleAssignment"
+      ],
+      "CQ3": [
+        "OrganizationRoleAssignment",
+        "hasAgentRole",
+        "Organization"
+      ],
+      "CQ4": [
+        "AgentRole",
+        "hasAgentRole",
+        "OrganizationRoleAssignment"
+      ],
+      "CQ5": [
+        "Organization",
+        "hasName",
+        "hasGLN",
+        "hasRoleAddress"
+      ],
+      "CQ6": [
+        "Address",
+        "hasRoleAddress",
+        "OrganizationRoleAssignment"
+      ],
+      "CQ7": [
+        "LineItem",
+        "hasLineItem",
+        "Item"
+      ],
+      "CQ8": [
+        "Item",
+        "hasItemName",
+        "LineItem"
+      ],
+      "CQ9": [
+        "LineItem",
+        "hasNetPrice"
+      ],
+      "CQ10": [
+        "InvoiceMessage",
+        "HeaderSection",
+        "DetailSection",
+        "SummarySection"
+      ],
+      "CQ11": [
+        "InvoiceMessage",
+        "hasInvoiceAmount"
+      ],
+      "CQ12": [
+        "InvoiceMessage",
+        "hasInvoiceNumber"
+      ],
+      "CQ13": [
+        "SimpleDataElement",
+        "mandatory identifiers"
+      ],
+      "CQ14": [
+        "InvoiceMessage",
+        "BusinessProcess"
+      ]
+    }
+  },
+  "cq_coverage": {
+    "CQ1": "EdifactMessage (containsMessage) links to InvoiceMessage instances, which are the invoices listed in a message.",
+    "CQ2": "Organization entities are related to an InvoiceMessage via OrganizationRoleAssignment (involvesRole), showing all involved organizations.",
+    "CQ3": "OrganizationRoleAssignment and hasAgentRole property specify the role of a given Organization in an InvoiceMessage context.",
+    "CQ4": "AgentRole class and its assignment to OrganizationRoleAssignment (and thus to Organization) allow querying which organization is the buyer.",
+    "CQ5": "Organization class with hasName, hasGLN, and hasRoleAddress (via OrganizationRoleAssignment) properties provide organization details.",
+    "CQ6": "Address class linked through hasRoleAddress from OrganizationRoleAssignment provides the address of the buyer.",
+    "CQ7": "LineItem class (hasLineItem) and its link to Item class enumerate the items sold in the invoice.",
+    "CQ8": "Item class with hasItemName and its association to LineItem provides details about items sold.",
+    "CQ9": "LineItem class with hasNetPrice property provides the net price of items sold in the invoice.",
+    "CQ10": "InvoiceMessage class is structured into HeaderSection, DetailSection, and SummarySection, which collectively provide invoice details.",
+    "CQ11": "InvoiceMessage hasInvoiceAmount property provides the invoice amount.",
+    "CQ12": "InvoiceMessage hasInvoiceNumber property provides the invoice number.",
+    "CQ13": "SimpleDataElement class and data properties (hasInvoiceNumber, hasGLN, etc.) represent mandatory identifiers for file format validity.",
+    "CQ14": "InvoiceMessage is linked to BusinessProcess via an object property (e.g., isPartOfProcess or similar) to indicate the business process assignment."
+  },
+  "notes": "Planning phase complete. All classes, hierarchy, properties, and CQ mappings are structured. Proceeding to generate complete OWL ontology in Turtle syntax, ensuring all required annotations, prefixes, ontology declaration, and compliance with constraints.",
+  "current_owl": "@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n@prefix owl: <http://www.w3.org/2002/07/owl#> .\n@prefix : <http://www.example.org/ontology#> .\n\n<http://www.example.org/ontology#UNEDIFACTInvoiceStory> a owl:Ontology ;\n    rdfs:label \"UN/EDIFACT Invoice Ontology\" ;\n    rdfs:comment \"Ontology for representing UN/EDIFACT invoice messages, roles, and procurement scenarios for semantic interoperability.\" .\n\n#################################################################\n# Classes\n#################################################################\n:InterchangeEnvelope a owl:Class ;\n    rdfs:label \"Interchange Envelope\" ;\n    rdfs:comment \"The top-level container for EDIFACT messages.\" .\n:EdifactMessage a owl:Class ;\n    rdfs:label \"EDIFACT Message\" ;\n    rdfs:comment \"A message contained in an Interchange Envelope.\" .\n:InvoiceMessage a owl:Class ;\n    rdfs:label \"Invoice Message\" ;\n    rdfs:comment \"A message representing an invoice (e.g., INVOIC).\" ;\n    rdfs:subClassOf :EdifactMessage .\n:Segment a owl:Class ;\n    rdfs:label \"Segment\" ;\n    rdfs:comment \"A segment within an EDIFACT message.\" ;\n    owl:disjointUnionOf [ rdf:first :HeaderSection ; rdf:rest [ rdf:first :DetailSection ; rdf:rest [ rdf:first :SummarySection ; rdf:rest rdf:nil ]]] .\n:HeaderSection a owl:Class ;\n    rdfs:label \"Header Section\" ;\n    rdfs:comment \"The header section of an invoice message.\" ;\n    rdfs:subClassOf :Segment .\n:DetailSection a owl:Class ;\n    rdfs:label \"Detail Section\" ;\n    rdfs:comment \"The detail section listing line items.\" ;\n    rdfs:subClassOf :Segment .\n:SummarySection a owl:Class ;\n    rdfs:label \"Summary Section\" ;\n    rdfs:comment \"The summary section providing totals.\" ;\n    rdfs:subClassOf :Segment .\n:CompositeDataElement a owl:Class ;\n    rdfs:label \"Composite Data Element\" ;\n    rdfs:comment \"A composite data element within a segment.\" .\n:SimpleDataElement a owl:Class ;\n    rdfs:label \"Simple Data Element\" ;\n    rdfs:comment \"A simple data element, such as an identifier or code.\" .\n:Organization a owl:Class ;\n    rdfs:label \"Organization\" ;\n    rdfs:comment \"An organization involved in a transaction.\" ;\n    owl:disjointWith :Item, :Address, :Segment, :AgentRole .\n:AgentRole a owl:Class ;\n    rdfs:label \"Agent Role\" ;\n    rdfs:comment \"A role played by an organization in a transaction (e.g., buyer, seller).\" .\n:OrganizationRoleAssignment a owl:Class ;\n    rdfs:label \"Organization Role Assignment\" ;\n    rdfs:comment \"A pivot class representing the assignment of a role and attributes to an organization within a message context.\" .\n:Address a owl:Class ;\n    rdfs:label \"Address\" ;\n    rdfs:comment \"A postal address associated with an organization role.\" .\n:Item a owl:Class ;\n    rdfs:label \"Item\" ;\n    rdfs:comment \"A product or service being transacted.\" .\n:LineItem a owl:Class ;\n    rdfs:label \"Line Item\" ;\n    rdfs:comment \"A line item in the detail section of an invoice.\" ;\n    rdfs:subClassOf :DetailSection .\n:Price a owl:Class ;\n    rdfs:label \"Price\" ;\n    rdfs:comment \"A price value associated with an item or line item.\" .\n:BusinessProcess a owl:Class ;\n    rdfs:label \"Business Process\" ;\n    rdfs:comment \"A business process to which an invoice can be assigned.\" ;\n    owl:disjointWith :InvoiceMessage .\n\n#################################################################\n# Object Properties\n#################################################################\n:containsMessage a owl:ObjectProperty, owl:FunctionalProperty ;\n    rdfs:label \"contains message\" ;\n    rdfs:comment \"Relates an InterchangeEnvelope to its contained EDIFACT messages.\" ;\n    rdfs:domain :InterchangeEnvelope ;\n    rdfs:range :EdifactMessage ;\n    owl:inverseOf :isContainedInEnvelope .\n:isContainedInEnvelope a owl:ObjectProperty ;\n    rdfs:label \"is contained in envelope\" ;\n    rdfs:comment \"Relates an EDIFACT message to its containing InterchangeEnvelope.\" ;\n    rdfs:domain :EdifactMessage ;\n    rdfs:range :InterchangeEnvelope ;\n    owl:inverseOf :containsMessage .\n:containsSegment a owl:ObjectProperty, owl:FunctionalProperty ;\n    rdfs:label \"contains segment\" ;\n    rdfs:comment \"Relates an EDIFACT message to its segments.\" ;\n    rdfs:domain :EdifactMessage ;\n    rdfs:range :Segment ;\n    owl:inverseOf :isContainedInMessage .\n:isContainedInMessage a owl:ObjectProperty ;\n    rdfs:label \"is contained in message\" ;\n    rdfs:comment \"Relates a Segment to the EDIFACT message it is contained in.\" ;\n    rdfs:domain :Segment ;\n    rdfs:range :EdifactMessage ;\n    owl:inverseOf :containsSegment .\n:hasSection a owl:ObjectProperty, owl:FunctionalProperty ;\n    rdfs:label \"has section\" ;\n    rdfs:comment \"Relates an InvoiceMessage to its sections (header, detail, summary).\" ;\n    rdfs:domain :InvoiceMessage ;\n    rdfs:range :Segment ;\n    owl:inverseOf :isSectionOf .\n:isSectionOf a owl:ObjectProperty ;\n    rdfs:label \"is section of\" ;\n    rdfs:comment \"Relates a Segment to the InvoiceMessage it is a section of.\" ;\n    rdfs:domain :Segment ;\n    rdfs:range :InvoiceMessage ;\n    owl:inverseOf :hasSection .\n:hasLineItem a owl:ObjectProperty, owl:FunctionalProperty ;\n    rdfs:label \"has line item\" ;\n    rdfs:comment \"Relates a detail section to its line items.\" ;\n    rdfs:domain :DetailSection ;\n    rdfs:range :LineItem ;\n    owl:inverseOf :isLineItemOf .\n:isLineItemOf a owl:ObjectProperty ;\n    rdfs:label \"is line item of\" ;\n    rdfs:comment \"Relates a LineItem to the DetailSection it belongs to.\" ;\n    rdfs:domain :LineItem ;\n    rdfs:range :DetailSection ;\n    owl:inverseOf :hasLineItem .\n:hasCompositeElement a owl:ObjectProperty ;\n    rdfs:label \"has composite element\" ;\n    rdfs:comment \"Relates a segment to its composite data elements.\" ;\n    rdfs:domain :Segment ;\n    rdfs:range :CompositeDataElement ;\n    owl:inverseOf :isCompositeElementOf .\n:isCompositeElementOf a owl:ObjectProperty ;\n    rdfs:label \"is composite element of\" ;\n    rdfs:comment \"Relates a CompositeDataElement to the Segment it belongs to.\" ;\n    rdfs:domain :CompositeDataElement ;\n    rdfs:range :Segment ;\n    owl:inverseOf :hasCompositeElement .\n:hasSimpleElement a owl:ObjectProperty ;\n    rdfs:label \"has simple element\" ;\n    rdfs:comment \"Relates a composite data element to its simple data elements.\" ;\n    rdfs:domain :CompositeDataElement ;\n    rdfs:range :SimpleDataElement ;\n    owl:inverseOf :isSimpleElementOf .\n:isSimpleElementOf a owl:ObjectProperty ;\n    rdfs:label \"is simple element of\" ;\n    rdfs:comment \"Relates a SimpleDataElement to the CompositeDataElement it belongs to.\" ;\n    rdfs:domain :SimpleDataElement ;\n    rdfs:range :CompositeDataElement ;\n    owl:inverseOf :hasSimpleElement .\n:playsRole a owl:ObjectProperty ;\n    rdfs:label \"plays role\" ;\n    rdfs:comment \"Relates an organization to a role assignment.\" ;\n    rdfs:domain :Organization ;\n    rdfs:range :OrganizationRoleAssignment ;\n    owl:inverseOf :isRoleOf .\n:isRoleOf a owl:ObjectProperty ;\n    rdfs:label \"is role of\" ;\n    rdfs:comment \"Relates an OrganizationRoleAssignment to the Organization it is assigned to.\" ;\n    rdfs:domain :OrganizationRoleAssignment ;\n    rdfs:range :Organization ;\n    owl:inverseOf :playsRole .\n:involvesRole a owl:ObjectProperty ;\n    rdfs:label \"involves role\" ;\n    rdfs:comment \"Relates an invoice message to a role assignment for an organization.\" ;\n    rdfs:domain :InvoiceMessage ;\n    rdfs:range :OrganizationRoleAssignment ;\n    owl:inverseOf :isRoleInvolvedIn .\n:isRoleInvolvedIn a owl:ObjectProperty ;\n    rdfs:label \"is role involved in\" ;\n    rdfs:comment \"Relates an OrganizationRoleAssignment to the InvoiceMessage it is involved in.\" ;\n    rdfs:domain :OrganizationRoleAssignment ;\n    rdfs:range :InvoiceMessage ;\n    owl:inverseOf :involvesRole .\n:hasAgentRole a owl:ObjectProperty, owl:FunctionalProperty ;\n    rdfs:label \"has agent role\" ;\n    rdfs:comment \"Relates a role assignment to an agent role.\" ;\n    rdfs:domain :OrganizationRoleAssignment ;\n    rdfs:range :AgentRole ;\n    owl:inverseOf :isAgentRoleOf .\n:isAgentRoleOf a owl:ObjectProperty ;\n    rdfs:label \"is agent role of\" ;\n    rdfs:comment \"Relates an AgentRole to the OrganizationRoleAssignment it is assigned to.\" ;\n    rdfs:domain :AgentRole ;\n    rdfs:range :OrganizationRoleAssignment ;\n    owl:inverseOf :hasAgentRole .\n:hasRoleAddress a owl:ObjectProperty, owl:FunctionalProperty ;\n    rdfs:label \"has role address\" ;\n    rdfs:comment \"Relates a role assignment to an address.\" ;\n    rdfs:domain :OrganizationRoleAssignment ;\n    rdfs:range :Address ;\n    owl:inverseOf :isRoleAddressOf .\n:isRoleAddressOf a owl:ObjectProperty ;\n    rdfs:label \"is role address of\" ;\n    rdfs:comment \"Relates an Address to the OrganizationRoleAssignment it is assigned to.\" ;\n    rdfs:domain :Address ;\n    rdfs:range :OrganizationRoleAssignment ;\n    owl:inverseOf :hasRoleAddress .\n:hasRoleIdentifier a owl:ObjectProperty ;\n    rdfs:label \"has role identifier\" ;\n    rdfs:comment \"Relates a role assignment to a simple data element (e.g., GLN).\" ;\n    rdfs:domain :OrganizationRoleAssignment ;\n    rdfs:range :SimpleDataElement ;\n    owl:inverseOf :isRoleIdentifierOf .\n:isRoleIdentifierOf a owl:ObjectProperty ;\n    rdfs:label \"is role identifier of\" ;\n    rdfs:comment \"Relates a SimpleDataElement to the OrganizationRoleAssignment it identifies.\" ;\n    rdfs:domain :SimpleDataElement ;\n    rdfs:range :OrganizationRoleAssignment ;\n    owl:inverseOf :hasRoleIdentifier .\n:hasItem a owl:ObjectProperty ;\n    rdfs:label \"has item\" ;\n    rdfs:comment \"Relates a line item to an item.\" ;\n    rdfs:domain :LineItem ;\n    rdfs:range :Item ;\n    owl:inverseOf :isItemOf .\n:isItemOf a owl:ObjectProperty ;\n    rdfs:label \"is item of\" ;\n    rdfs:comment \"Relates an Item to the LineItem it is part of.\" ;\n    rdfs:domain :Item ;\n    rdfs:range :LineItem ;\n    owl:inverseOf :hasItem .\n:isPartOfProcess a owl:ObjectProperty ;\n    rdfs:label \"is part of process\" ;\n    rdfs:comment \"Relates an invoice message to a business process.\" ;\n    rdfs:domain :InvoiceMessage ;\n    rdfs:range :BusinessProcess ;\n    owl:inverseOf :hasProcessPart .\n:hasProcessPart a owl:ObjectProperty ;\n    rdfs:label \"has process part\" ;\n    rdfs:comment \"Relates a BusinessProcess to the InvoiceMessage it contains.\" ;\n    rdfs:domain :BusinessProcess ;\n    rdfs:range :InvoiceMessage ;\n    owl:inverseOf :isPartOfProcess .\n:hasPrice a owl:ObjectProperty ;\n    rdfs:label \"has price\" ;\n    rdfs:comment \"Relates a LineItem to its Price.\" ;\n    rdfs:domain :LineItem ;\n    rdfs:range :Price ;\n    owl:inverseOf :isPriceOf .\n:isPriceOf a owl:ObjectProperty ;\n    rdfs:label \"is price of\" ;\n    rdfs:comment \"Relates a Price to the LineItem it is associated with.\" ;\n    rdfs:domain :Price ;\n    rdfs:range :LineItem ;\n    owl:inverseOf :hasPrice .\n\n#################################################################\n# Data Properties\n#################################################################\n:hasInvoiceNumber a owl:DatatypeProperty ;\n    rdfs:label \"has invoice number\" ;\n    rdfs:comment \"The invoice number of an invoice message.\" ;\n    rdfs:domain :InvoiceMessage ;\n    rdfs:range xsd:string .\n:hasInvoiceAmount a owl:DatatypeProperty ;\n    rdfs:label \"has invoice amount\" ;\n    rdfs:comment \"The total amount of the invoice.\" ;\n    rdfs:domain :InvoiceMessage ;\n    rdfs:range xsd:decimal .\n:hasDate a owl:DatatypeProperty ;\n    rdfs:label \"has date\" ;\n    rdfs:comment \"A date associated with the header section.\" ;\n    rdfs:domain :HeaderSection ;\n    rdfs:range xsd:dateTime .\n:hasReferenceNumber a owl:DatatypeProperty ;\n    rdfs:label \"has reference number\" ;\n    rdfs:comment \"A reference number in the header section.\" ;\n    rdfs:domain :HeaderSection ;\n    rdfs:range xsd:string .\n:hasName a owl:DatatypeProperty ;\n    rdfs:label \"has name\" ;\n    rdfs:comment \"The name of an organization.\" ;\n    rdfs:domain :Organization ;\n    rdfs:range xsd:string .\n:hasGLN a owl:DatatypeProperty ;\n    rdfs:label \"has GLN\" ;\n    rdfs:comment \"The Global Location Number (GLN) of an organization.\" ;\n    rdfs:domain :Organization ;\n    rdfs:range xsd:string .\n:hasAddressLine a owl:DatatypeProperty ;\n    rdfs:label \"has address line\" ;\n    rdfs:comment \"A line of a postal address.\" ;\n    rdfs:domain :Address ;\n    rdfs:range xsd:string .\n:hasPostalCode a owl:DatatypeProperty ;\n    rdfs:label \"has postal code\" ;\n    rdfs:comment \"The postal code of an address.\" ;\n    rdfs:domain :Address ;\n    rdfs:range xsd:string .\n:hasCity a owl:DatatypeProperty ;\n    rdfs:label \"has city\" ;\n    rdfs:comment \"The city of an address.\" ;\n    rdfs:domain :Address ;\n    rdfs:range xsd:string .\n:hasCountryCode a owl:DatatypeProperty ;\n    rdfs:label \"has country code\" ;\n    rdfs:comment \"The country code of an address.\" ;\n    rdfs:domain :Address ;\n    rdfs:range xsd:string .\n:hasItemName a owl:DatatypeProperty ;\n    rdfs:label \"has item name\" ;\n    rdfs:comment \"The name of an item.\" ;\n    rdfs:domain :Item ;\n    rdfs:range xsd:string .\n:hasNetPrice a owl:DatatypeProperty ;\n    rdfs:label \"has net price\" ;\n    rdfs:comment \"The net price of a line item.\" ;\n    rdfs:domain :LineItem ;\n    rdfs:range xsd:decimal .\n:hasQuantity a owl:DatatypeProperty ;\n    rdfs:label \"has quantity\" ;\n    rdfs:comment \"The quantity of an item in a line item.\" ;\n    rdfs:domain :LineItem ;\n    rdfs:range xsd:decimal .\n:hasTaxAmount a owl:DatatypeProperty ;\n    rdfs:label \"has tax amount\" ;\n    rdfs:comment \"The total tax amount in the summary section.\" ;\n    rdfs:domain :SummarySection ;\n    rdfs:range xsd:decimal .\n\n#################################################################\n# Restrictions & GCAs\n#################################################################\n:OrganizationRoleAssignment rdfs:subClassOf [\n    a owl:Restriction ;\n    owl:onProperty :hasAgentRole ;\n    owl:cardinality \"1\"^^xsd:nonNegativeInteger\n] , [\n    a owl:Restriction ;\n    owl:onProperty :hasRoleAddress ;\n    owl:cardinality \"1\"^^xsd:nonNegativeInteger\n] .\n:LineItem rdfs:subClassOf [\n    a owl:Restriction ;\n    owl:onProperty :hasItem ;\n    owl:someValuesFrom :Item\n] .\n:InvoiceMessage rdfs:subClassOf [\n    a owl:Restriction ;\n    owl:onProperty :involvesRole ;\n    owl:someValuesFrom :OrganizationRoleAssignment\n] .\n:InvoiceMessage rdfs:subClassOf [\n    a owl:Restriction ;\n    owl:onProperty :hasSection ;\n    owl:someValuesFrom :Segment\n] .\n:InvoiceMessage rdfs:subClassOf [\n    a owl:Restriction ;\n    owl:onProperty :isPartOfProcess ;\n    owl:maxCardinality \"1\"^^xsd:nonNegativeInteger\n] .\n",
+  "iterations": [
+    {
+      "iteration": 1,
+      "syntax_result": "Invalid - RDF syntax error at Segment owl:disjointUnionOf (:HeaderSection :DetailSection :SummarySection).",
+      "pitfall_result": "Validation Exception - Failed to convert Turtle to RDF/XML at Segment owl:disjointUnionOf (:HeaderSection :DetailSection :SummarySection).",
+      "fix_applied": "Correcting disjointUnionOf usage. Turtle syntax requires owl:disjointUnionOf to be used as a property, not as a directive. Will use a blank node for Segment and attach owl:disjointUnionOf property."
+    },
+    {
+      "iteration": 2,
+      "syntax_result": "Invalid - RDF syntax error at owl:disjointUnionOf ( :HeaderSection :DetailSection :SummarySection ) .",
+      "pitfall_result": "Validation Exception - Failed to convert Turtle to RDF/XML at owl:disjointUnionOf ( :HeaderSection :DetailSection :SummarySection ) .",
+      "fix_applied": "Error persists. Will use correct blank node syntax: :Segment owl:disjointUnionOf [ rdf:first :HeaderSection ; rdf:rest [ rdf:first :DetailSection ; rdf:rest [ rdf:first :SummarySection ; rdf:rest rdf:nil ]]] ."
+    },
+    {
+      "iteration": 3,
+      "syntax_result": "Valid",
+      "pitfall_result": "3 pitfalls: P04 (Unconnected class: Price), P13 (Missing inverses for 11 object properties), P20 (Annotation misuse for isContainedInMessage, isContainedInEnvelope)",
+      "fix_applied": "Will connect Price class (e.g., via hasPrice property on LineItem), add missing owl:inverseOf declarations for all object properties, and check rdfs:label/comment annotations for isContainedInMessage and isContainedInEnvelope."
+    },
+    {
+      "iteration": 4,
+      "syntax_result": "Valid",
+      "pitfall_result": "No pitfalls detected. All issues resolved.",
+      "fix_applied": "Added hasPrice property to connect Price, declared all missing owl:inverseOf properties, and checked annotation comments for clarity."
+    }
+  ]
+}

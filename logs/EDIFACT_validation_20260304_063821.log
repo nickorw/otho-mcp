@@ -1,0 +1,66 @@
+2026-03-04 06:38:21 | INFO     | ============================================================
+2026-03-04 06:38:21 | INFO     | Validation Logger Initialized for EDIFACT
+2026-03-04 06:38:21 | INFO     | Log files: EDIFACT_validation_20260304_063821.log
+2026-03-04 06:38:21 | INFO     | Timestamp: 20260304_063821
+2026-03-04 06:38:21 | INFO     | ============================================================
+2026-03-04 06:38:21 | INFO     | 
+Starting final validation for EDIFACT
+2026-03-04 06:38:21 | DEBUG    | Ontology size: 9177 characters
+2026-03-04 06:38:21 | INFO     | 
+============================================================
+2026-03-04 06:38:21 | INFO     | PILLAR 1: SYNTAX VALIDATION (RDFLib)
+2026-03-04 06:38:21 | INFO     | ============================================================
+2026-03-04 06:38:21 | INFO     | ✓ Syntax validation PASSED (0.012s)
+2026-03-04 06:38:21 | DEBUG    | No syntax errors detected in RDF/Turtle parsing
+2026-03-04 06:38:21 | INFO     | 
+============================================================
+2026-03-04 06:38:21 | INFO     | PILLAR 2: PITFALL DETECTION (OOPS)
+2026-03-04 06:38:21 | INFO     | ============================================================
+2026-03-04 06:38:21 | INFO     | ✓ Pitfall check PASSED - No pitfalls detected (0.053s)
+2026-03-04 06:38:21 | DEBUG    | All checked OOPS pitfall categories passed successfully
+2026-03-04 06:38:21 | INFO     | 
+============================================================
+2026-03-04 06:38:21 | INFO     | PILLAR 3: REASONING CONSISTENCY
+2026-03-04 06:38:21 | INFO     | ============================================================
+2026-03-04 06:38:21 | DEBUG    | Checking logical consistency with OWL 2 DL reasoners (Hermit & Pellet)
+2026-03-04 06:38:22 | INFO     | 
+  → Hermit Reasoner
+2026-03-04 06:38:22 | INFO     |   --------------------------------------------------------
+2026-03-04 06:38:22 | ERROR    |   ✗ FAILED - Inconsistencies detected (0.612s)
+2026-03-04 06:38:22 | ERROR    | 
+  Inconsistent Classes (3 found):
+2026-03-04 06:38:22 | ERROR    |     - ontology.Price
+2026-03-04 06:38:22 | ERROR    |     - owl.Nothing
+2026-03-04 06:38:22 | ERROR    |     - ontology.Organization
+2026-03-04 06:38:22 | ERROR    | 
+  These classes contain logical contradictions that make them unsatisfiable.
+2026-03-04 06:38:22 | INFO     | 
+  → Pellet Reasoner
+2026-03-04 06:38:22 | INFO     |   --------------------------------------------------------
+2026-03-04 06:38:22 | ERROR    |   ✗ FAILED - Inconsistencies detected (0.514s)
+2026-03-04 06:38:22 | ERROR    | 
+  Inconsistent Classes (3 found):
+2026-03-04 06:38:22 | ERROR    |     - ontology.Price
+2026-03-04 06:38:22 | ERROR    |     - owl.Nothing
+2026-03-04 06:38:22 | ERROR    |     - ontology.Organization
+2026-03-04 06:38:22 | ERROR    | 
+  These classes contain logical contradictions that make them unsatisfiable.
+2026-03-04 06:38:22 | INFO     | 
+============================================================
+2026-03-04 06:38:22 | INFO     | VALIDATION SUMMARY
+2026-03-04 06:38:22 | INFO     | ============================================================
+2026-03-04 06:38:22 | INFO     | 1. Syntax (RDFLib):    ✓ PASSED (0.012s)
+2026-03-04 06:38:22 | INFO     | 2. OOPS Pitfalls:      ✓ PASSED (0.053s)
+2026-03-04 06:38:22 | INFO     | 3. Hermit Reasoner:    ✗ FAILED (0.612s)
+2026-03-04 06:38:22 | ERROR    |    └─ Logical inconsistencies found - check inconsistent classes above
+2026-03-04 06:38:22 | INFO     | 4. Pellet Reasoner:    ✗ FAILED (0.514s)
+2026-03-04 06:38:22 | ERROR    |    └─ Logical inconsistencies found - check inconsistent classes above
+2026-03-04 06:38:22 | INFO     | ------------------------------------------------------------
+2026-03-04 06:38:22 | ERROR    | Overall Result:        ❌ VALIDATION FAILED
+2026-03-04 06:38:22 | ERROR    |                        Issues found: Hermit inconsistencies, Pellet inconsistencies
+2026-03-04 06:38:22 | INFO     | ------------------------------------------------------------
+2026-03-04 06:38:22 | INFO     | Total Validation Time: 1.191s
+2026-03-04 06:38:22 | INFO     | Agent Iterations:      2
+2026-03-04 06:38:22 | INFO     | ============================================================
+2026-03-04 06:38:22 | INFO     | 
+✓ Validation JSON log saved: logs/EDIFACT_validation_20260304_063821.json

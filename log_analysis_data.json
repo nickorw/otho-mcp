@@ -1,0 +1,92 @@
+{
+  "generator_analysis": {
+    "total_runs": 0,
+    "overall": {
+      "success_rate": 0,
+      "total_successes": 0,
+      "total_failures": 0
+    },
+    "by_story": {},
+    "pitfalls_analysis": {
+      "most_common": [],
+      "total_pitfall_occurrences": 0,
+      "unique_pitfalls": 0
+    },
+    "tool_usage": {
+      "total_calls": 0,
+      "by_tool": {}
+    },
+    "temporal_analysis": {}
+  },
+  "validation_analysis": {
+    "total_validations": 20,
+    "overall": {
+      "all_passed_rate": 85.0,
+      "all_passed_count": 17,
+      "syntax_valid_count": 20,
+      "syntax_valid_rate": 100.0,
+      "oops_passed_count": 20,
+      "oops_passed_rate": 100.0,
+      "oops_no_critical_important_count": 20,
+      "oops_no_critical_important_rate": 100.0,
+      "oops_only_minor_count": 0,
+      "oops_only_minor_rate": 0.0
+    },
+    "by_story": {
+      "EDIFACT": {
+        "validation_count": 20,
+        "all_passed_rate": 85.0,
+        "hermit_consistent_rate": 85.0,
+        "pellet_consistent_rate": 85.0,
+        "oops_passed_rate": 100.0
+      }
+    },
+    "reasoner_analysis": {
+      "hermit_consistent_count": 17,
+      "hermit_consistent_rate": 85.0,
+      "pellet_consistent_count": 17,
+      "pellet_consistent_rate": 85.0,
+      "both_consistent_count": 17,
+      "both_consistent_rate": 85.0,
+      "hermit_error_count": 0,
+      "pellet_error_count": 0,
+      "hermit_error_messages": {},
+      "pellet_error_messages": {},
+      "hermit_inconsistent_classes": [
+        "ontology.Buyer",
+        "ontology.Organization",
+        "ontology.Price",
+        "ontology.DeliveryParty",
+        "ontology.AgentRole",
+        "ontology.OrganizationRoleAssignment",
+        "ontology.RoleAssignment",
+        "owl.Nothing"
+      ],
+      "pellet_inconsistent_classes": [
+        "ontology.Buyer",
+        "ontology.Organization",
+        "ontology.Price",
+        "ontology.DeliveryParty",
+        "ontology.AgentRole",
+        "ontology.OrganizationRoleAssignment",
+        "ontology.RoleAssignment",
+        "owl.Nothing"
+      ]
+    },
+    "oops_analysis": {
+      "most_common_pitfalls": [],
+      "total_pitfall_occurrences": 0,
+      "unique_pitfalls": 0
+    },
+    "timing_analysis": {
+      "hermit_avg_seconds": 0.73555,
+      "hermit_median_seconds": 0.725,
+      "pellet_avg_seconds": 0.8425,
+      "pellet_median_seconds": 0.599,
+      "syntax_avg_seconds": 0.01205,
+      "oops_avg_seconds": 0.092,
+      "total_avg_seconds": 1.6821,
+      "total_median_seconds": 1.5514999999999999
+    }
+  }
+}

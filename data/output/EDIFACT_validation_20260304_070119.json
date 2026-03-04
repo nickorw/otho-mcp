@@ -1,0 +1,34 @@
+{
+  "timestamp": "20260304_070119",
+  "story_id": "EDIFACT",
+  "ontology_size_chars": 15446,
+  "syntax": {
+    "valid": true,
+    "execution_time_seconds": 0.012,
+    "error": null
+  },
+  "oops": {
+    "has_pitfalls": false,
+    "pitfall_count": 0,
+    "execution_time_seconds": 0.103,
+    "pitfalls": []
+  },
+  "hermit": {
+    "is_consistent": true,
+    "inconsistent_classes": [],
+    "execution_time_seconds": 0.786,
+    "error": null,
+    "reasoner": "Hermit"
+  },
+  "pellet": {
+    "is_consistent": true,
+    "inconsistent_classes": [],
+    "execution_time_seconds": 0.539,
+    "error": null,
+    "reasoner": "Pellet"
+  },
+  "aggregate": {
+    "all_validators_passed": true,
+    "total_execution_time_seconds": 1.44
+  }
+}

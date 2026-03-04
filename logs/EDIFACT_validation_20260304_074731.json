@@ -1,0 +1,73 @@
+{
+  "story_id": "EDIFACT",
+  "timestamp": "20260304_074731",
+  "start_time": "2026-03-04T07:47:31.146128",
+  "ontology_size_chars": 16408,
+  "validation_results": {
+    "syntax": {
+      "valid": true,
+      "execution_time_seconds": 0.013,
+      "error": null,
+      "error_type": null
+    },
+    "oops": {
+      "has_pitfalls": false,
+      "pitfall_count": 0,
+      "execution_time_seconds": 0.061,
+      "pitfalls": [],
+      "pitfall_codes": [],
+      "pitfall_names": []
+    },
+    "hermit": {
+      "reasoner": "Hermit",
+      "is_consistent": false,
+      "execution_time_seconds": 0.827,
+      "inconsistent_classes": [
+        "ontology.DeliveryParty",
+        "ontology.OrganizationRoleAssignment",
+        "ontology.Buyer",
+        "owl.Nothing",
+        "ontology.AgentRole"
+      ],
+      "inconsistent_classes_count": 5,
+      "error": null,
+      "error_type": null
+    },
+    "pellet": {
+      "reasoner": "Pellet",
+      "is_consistent": false,
+      "execution_time_seconds": 1.042,
+      "inconsistent_classes": [
+        "ontology.OrganizationRoleAssignment",
+        "ontology.Buyer",
+        "owl.Nothing",
+        "ontology.AgentRole",
+        "ontology.DeliveryParty"
+      ],
+      "inconsistent_classes_count": 5,
+      "error": null,
+      "error_type": null
+    },
+    "aggregate": {
+      "all_validators_passed": false,
+      "total_execution_time_seconds": 1.943,
+      "validation_breakdown": {
+        "syntax_valid": true,
+        "oops_passed": true,
+        "oops_pitfall_count": 0,
+        "hermit_consistent": false,
+        "pellet_consistent": false
+      },
+      "timing_breakdown_seconds": {
+        "syntax": 0.013,
+        "oops": 0.061,
+        "hermit": 0.827,
+        "pellet": 1.042,
+        "total": 1.943
+      }
+    }
+  },
+  "files_saved": [],
+  "end_time": "2026-03-04T07:47:33.314666",
+  "iteration_count": 2
+}
