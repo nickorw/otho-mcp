@@ -1,0 +1,128 @@
+================================================================================
+OTHO AGENT LOG ANALYSIS - COMPREHENSIVE REPORT
+================================================================================
+
+OVERALL SUMMARY (Generator Runs)
+--------------------------------------------------------------------------------
+Total Runs Analyzed: 0
+Total Successes: 0
+Total Failures: 0
+Overall Success Rate: 0.00%
+
+PER-STORY ANALYSIS (Generator)
+--------------------------------------------------------------------------------
+
+PITFALLS ANALYSIS (Generator)
+--------------------------------------------------------------------------------
+Total Pitfall Occurrences: 0
+Unique Pitfalls Encountered: 0
+
+Most Common Pitfalls:
+
+TOOL USAGE ANALYSIS
+--------------------------------------------------------------------------------
+Total Tool Calls: 0
+
+Tool Call Breakdown:
+
+================================================================================
+VALIDATION ANALYSIS (Reasoner Results)
+================================================================================
+
+OVERALL VALIDATION SUMMARY
+--------------------------------------------------------------------------------
+Total Validations: 20
+All Validators Passed: 17 (85.00%)
+Syntax Valid: 20 (100.00%)
+OOPS Passed (No Pitfalls): 20 (100.00%)
+OOPS Passed (No Critical/Important): 20 (100.00%)
+Reasoners Passed (Both Consistent): 17 (85.00%)
+
+REASONER VALIDATION RESULTS
+--------------------------------------------------------------------------------
+Hermit Consistent: 17 (85.00%)
+Pellet Consistent: 17 (85.00%)
+Both Reasoners Consistent: 17 (85.00%)
+Hermit Errors: 0
+Pellet Errors: 0
+
+Hermit Inconsistent Classes:
+  - ontology.Buyer
+  - ontology.Organization
+  - ontology.Price
+  - ontology.DeliveryParty
+  - ontology.AgentRole
+  - ontology.OrganizationRoleAssignment
+  - ontology.RoleAssignment
+  - owl.Nothing
+
+Pellet Inconsistent Classes:
+  - ontology.Buyer
+  - ontology.Organization
+  - ontology.Price
+  - ontology.DeliveryParty
+  - ontology.AgentRole
+  - ontology.OrganizationRoleAssignment
+  - ontology.RoleAssignment
+  - owl.Nothing
+
+OOPS PITFALLS (Validation)
+--------------------------------------------------------------------------------
+Total Pitfall Occurrences: 0
+Unique Pitfalls: 0
+
+Severity Breakdown:
+  Runs Passed (No Pitfalls): 20 (100.00%)
+  Runs Passed (No Critical/Important): 20 (100.00%)
+  Runs with Only Minor Pitfalls: 0 (0.00%)
+
+Most Common Pitfalls:
+
+VALIDATION TIMING ANALYSIS
+--------------------------------------------------------------------------------
+Hermit Avg Time: 0.736s (median: 0.725s)
+Pellet Avg Time: 0.843s (median: 0.599s)
+Syntax Avg Time: 0.012s
+OOPS Avg Time: 0.092s
+Total Validation Avg Time: 1.682s
+
+PER-STORY VALIDATION ANALYSIS
+--------------------------------------------------------------------------------
+
+EDIFACT:
+  Validations: 20
+  All Passed Rate: 85.00%
+  Hermit Consistent Rate: 85.00%
+  Pellet Consistent Rate: 85.00%
+  OOPS Passed Rate: 100.00%
+
+PER-RUN VALIDATION RESULTS
+--------------------------------------------------------------------------------
+Timestamp            |  Syntax  |   OOPS   |  Hermit  |  Pellet 
+--------------------------------------------------------------
+20260304_062606      |     ✓    |     ✓    |     ✓    |     ✓   
+20260304_063345      |     ✓    |     ✓    |     ✓    |     ✓   
+20260304_063821      |     ✓    |     ✓    |     x    |     x   
+20260304_070119      |     ✓    |     ✓    |     ✓    |     ✓   
+20260304_071618      |     ✓    |     ✓    |     ✓    |     ✓   
+20260304_071919      |     ✓    |     ✓    |     ✓    |     ✓   
+20260304_072404      |     ✓    |     ✓    |     ✓    |     ✓   
+20260304_072939      |     ✓    |     ✓    |     ✓    |     ✓   
+20260304_073706      |     ✓    |     ✓    |     ✓    |     ✓   
+20260304_074731      |     ✓    |     ✓    |     x    |     x   
+20260304_075320      |     ✓    |     ✓    |     ✓    |     ✓   
+20260304_075831      |     ✓    |     ✓    |     ✓    |     ✓   
+20260304_085410      |     ✓    |     ✓    |     ✓    |     ✓   
+20260304_090528      |     ✓    |     ✓    |     ✓    |     ✓   
+20260304_092221      |     ✓    |     ✓    |     ✓    |     ✓   
+20260304_093001      |     ✓    |     ✓    |     ✓    |     ✓   
+20260304_094903      |     ✓    |     ✓    |     ✓    |     ✓   
+20260304_110544      |     ✓    |     ✓    |     x    |     x   
+20260304_111526      |     ✓    |     ✓    |     ✓    |     ✓   
+20260304_112519      |     ✓    |     ✓    |     ✓    |     ✓   
+
+Legend: ✓ = passed, x = failed
+
+================================================================================
+END OF REPORT
+================================================================================

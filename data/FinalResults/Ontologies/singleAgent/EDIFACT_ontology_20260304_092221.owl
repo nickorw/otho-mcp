@@ -1,0 +1,351 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix : <http://www.example.org/ontology#> .
+
+<http://www.example.org/ontology#UNEDIFACTInvoiceStory> a owl:Ontology ;
+    rdfs:label "UN/EDIFACT Invoice Ontology" ;
+    rdfs:comment "Ontology for representing UN/EDIFACT invoice messages, roles, and procurement scenarios for semantic interoperability." .
+
+#################################################################
+# Classes
+#################################################################
+:InterchangeEnvelope a owl:Class ;
+    rdfs:label "Interchange Envelope" ;
+    rdfs:comment "The top-level container for EDIFACT messages." .
+:EdifactMessage a owl:Class ;
+    rdfs:label "EDIFACT Message" ;
+    rdfs:comment "A message contained in an Interchange Envelope." .
+:InvoiceMessage a owl:Class ;
+    rdfs:label "Invoice Message" ;
+    rdfs:comment "A message representing an invoice (e.g., INVOIC)." ;
+    rdfs:subClassOf :EdifactMessage .
+:Segment a owl:Class ;
+    rdfs:label "Segment" ;
+    rdfs:comment "A segment within an EDIFACT message." ;
+    owl:disjointUnionOf [ rdf:first :HeaderSection ; rdf:rest [ rdf:first :DetailSection ; rdf:rest [ rdf:first :SummarySection ; rdf:rest rdf:nil ]]] .
+:HeaderSection a owl:Class ;
+    rdfs:label "Header Section" ;
+    rdfs:comment "The header section of an invoice message." ;
+    rdfs:subClassOf :Segment .
+:DetailSection a owl:Class ;
+    rdfs:label "Detail Section" ;
+    rdfs:comment "The detail section listing line items." ;
+    rdfs:subClassOf :Segment .
+:SummarySection a owl:Class ;
+    rdfs:label "Summary Section" ;
+    rdfs:comment "The summary section providing totals." ;
+    rdfs:subClassOf :Segment .
+:CompositeDataElement a owl:Class ;
+    rdfs:label "Composite Data Element" ;
+    rdfs:comment "A composite data element within a segment." .
+:SimpleDataElement a owl:Class ;
+    rdfs:label "Simple Data Element" ;
+    rdfs:comment "A simple data element, such as an identifier or code." .
+:Organization a owl:Class ;
+    rdfs:label "Organization" ;
+    rdfs:comment "An organization involved in a transaction." ;
+    owl:disjointWith :Item, :Address, :Segment, :AgentRole .
+:AgentRole a owl:Class ;
+    rdfs:label "Agent Role" ;
+    rdfs:comment "A role played by an organization in a transaction (e.g., buyer, seller)." .
+:OrganizationRoleAssignment a owl:Class ;
+    rdfs:label "Organization Role Assignment" ;
+    rdfs:comment "A pivot class representing the assignment of a role and attributes to an organization within a message context." .
+:Address a owl:Class ;
+    rdfs:label "Address" ;
+    rdfs:comment "A postal address associated with an organization role." .
+:Item a owl:Class ;
+    rdfs:label "Item" ;
+    rdfs:comment "A product or service being transacted." .
+:LineItem a owl:Class ;
+    rdfs:label "Line Item" ;
+    rdfs:comment "A line item in the detail section of an invoice." ;
+    rdfs:subClassOf :DetailSection .
+:Price a owl:Class ;
+    rdfs:label "Price" ;
+    rdfs:comment "A price value associated with an item or line item." .
+:BusinessProcess a owl:Class ;
+    rdfs:label "Business Process" ;
+    rdfs:comment "A business process to which an invoice can be assigned." ;
+    owl:disjointWith :InvoiceMessage .
+
+#################################################################
+# Object Properties
+#################################################################
+:containsMessage a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:label "contains message" ;
+    rdfs:comment "Relates an InterchangeEnvelope to its contained EDIFACT messages." ;
+    rdfs:domain :InterchangeEnvelope ;
+    rdfs:range :EdifactMessage ;
+    owl:inverseOf :isContainedInEnvelope .
+:isContainedInEnvelope a owl:ObjectProperty ;
+    rdfs:label "is contained in envelope" ;
+    rdfs:comment "Relates an EDIFACT message to its containing InterchangeEnvelope." ;
+    rdfs:domain :EdifactMessage ;
+    rdfs:range :InterchangeEnvelope ;
+    owl:inverseOf :containsMessage .
+:containsSegment a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:label "contains segment" ;
+    rdfs:comment "Relates an EDIFACT message to its segments." ;
+    rdfs:domain :EdifactMessage ;
+    rdfs:range :Segment ;
+    owl:inverseOf :isContainedInMessage .
+:isContainedInMessage a owl:ObjectProperty ;
+    rdfs:label "is contained in message" ;
+    rdfs:comment "Relates a Segment to the EDIFACT message it is contained in." ;
+    rdfs:domain :Segment ;
+    rdfs:range :EdifactMessage ;
+    owl:inverseOf :containsSegment .
+:hasSection a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:label "has section" ;
+    rdfs:comment "Relates an InvoiceMessage to its sections (header, detail, summary)." ;
+    rdfs:domain :InvoiceMessage ;
+    rdfs:range :Segment ;
+    owl:inverseOf :isSectionOf .
+:isSectionOf a owl:ObjectProperty ;
+    rdfs:label "is section of" ;
+    rdfs:comment "Relates a Segment to the InvoiceMessage it is a section of." ;
+    rdfs:domain :Segment ;
+    rdfs:range :InvoiceMessage ;
+    owl:inverseOf :hasSection .
+:hasLineItem a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:label "has line item" ;
+    rdfs:comment "Relates a detail section to its line items." ;
+    rdfs:domain :DetailSection ;
+    rdfs:range :LineItem ;
+    owl:inverseOf :isLineItemOf .
+:isLineItemOf a owl:ObjectProperty ;
+    rdfs:label "is line item of" ;
+    rdfs:comment "Relates a LineItem to the DetailSection it belongs to." ;
+    rdfs:domain :LineItem ;
+    rdfs:range :DetailSection ;
+    owl:inverseOf :hasLineItem .
+:hasCompositeElement a owl:ObjectProperty ;
+    rdfs:label "has composite element" ;
+    rdfs:comment "Relates a segment to its composite data elements." ;
+    rdfs:domain :Segment ;
+    rdfs:range :CompositeDataElement ;
+    owl:inverseOf :isCompositeElementOf .
+:isCompositeElementOf a owl:ObjectProperty ;
+    rdfs:label "is composite element of" ;
+    rdfs:comment "Relates a CompositeDataElement to the Segment it belongs to." ;
+    rdfs:domain :CompositeDataElement ;
+    rdfs:range :Segment ;
+    owl:inverseOf :hasCompositeElement .
+:hasSimpleElement a owl:ObjectProperty ;
+    rdfs:label "has simple element" ;
+    rdfs:comment "Relates a composite data element to its simple data elements." ;
+    rdfs:domain :CompositeDataElement ;
+    rdfs:range :SimpleDataElement ;
+    owl:inverseOf :isSimpleElementOf .
+:isSimpleElementOf a owl:ObjectProperty ;
+    rdfs:label "is simple element of" ;
+    rdfs:comment "Relates a SimpleDataElement to the CompositeDataElement it belongs to." ;
+    rdfs:domain :SimpleDataElement ;
+    rdfs:range :CompositeDataElement ;
+    owl:inverseOf :hasSimpleElement .
+:playsRole a owl:ObjectProperty ;
+    rdfs:label "plays role" ;
+    rdfs:comment "Relates an organization to a role assignment." ;
+    rdfs:domain :Organization ;
+    rdfs:range :OrganizationRoleAssignment ;
+    owl:inverseOf :isRoleOf .
+:isRoleOf a owl:ObjectProperty ;
+    rdfs:label "is role of" ;
+    rdfs:comment "Relates an OrganizationRoleAssignment to the Organization it is assigned to." ;
+    rdfs:domain :OrganizationRoleAssignment ;
+    rdfs:range :Organization ;
+    owl:inverseOf :playsRole .
+:involvesRole a owl:ObjectProperty ;
+    rdfs:label "involves role" ;
+    rdfs:comment "Relates an invoice message to a role assignment for an organization." ;
+    rdfs:domain :InvoiceMessage ;
+    rdfs:range :OrganizationRoleAssignment ;
+    owl:inverseOf :isRoleInvolvedIn .
+:isRoleInvolvedIn a owl:ObjectProperty ;
+    rdfs:label "is role involved in" ;
+    rdfs:comment "Relates an OrganizationRoleAssignment to the InvoiceMessage it is involved in." ;
+    rdfs:domain :OrganizationRoleAssignment ;
+    rdfs:range :InvoiceMessage ;
+    owl:inverseOf :involvesRole .
+:hasAgentRole a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:label "has agent role" ;
+    rdfs:comment "Relates a role assignment to an agent role." ;
+    rdfs:domain :OrganizationRoleAssignment ;
+    rdfs:range :AgentRole ;
+    owl:inverseOf :isAgentRoleOf .
+:isAgentRoleOf a owl:ObjectProperty ;
+    rdfs:label "is agent role of" ;
+    rdfs:comment "Relates an AgentRole to the OrganizationRoleAssignment it is assigned to." ;
+    rdfs:domain :AgentRole ;
+    rdfs:range :OrganizationRoleAssignment ;
+    owl:inverseOf :hasAgentRole .
+:hasRoleAddress a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:label "has role address" ;
+    rdfs:comment "Relates a role assignment to an address." ;
+    rdfs:domain :OrganizationRoleAssignment ;
+    rdfs:range :Address ;
+    owl:inverseOf :isRoleAddressOf .
+:isRoleAddressOf a owl:ObjectProperty ;
+    rdfs:label "is role address of" ;
+    rdfs:comment "Relates an Address to the OrganizationRoleAssignment it is assigned to." ;
+    rdfs:domain :Address ;
+    rdfs:range :OrganizationRoleAssignment ;
+    owl:inverseOf :hasRoleAddress .
+:hasRoleIdentifier a owl:ObjectProperty ;
+    rdfs:label "has role identifier" ;
+    rdfs:comment "Relates a role assignment to a simple data element (e.g., GLN)." ;
+    rdfs:domain :OrganizationRoleAssignment ;
+    rdfs:range :SimpleDataElement ;
+    owl:inverseOf :isRoleIdentifierOf .
+:isRoleIdentifierOf a owl:ObjectProperty ;
+    rdfs:label "is role identifier of" ;
+    rdfs:comment "Relates a SimpleDataElement to the OrganizationRoleAssignment it identifies." ;
+    rdfs:domain :SimpleDataElement ;
+    rdfs:range :OrganizationRoleAssignment ;
+    owl:inverseOf :hasRoleIdentifier .
+:hasItem a owl:ObjectProperty ;
+    rdfs:label "has item" ;
+    rdfs:comment "Relates a line item to an item." ;
+    rdfs:domain :LineItem ;
+    rdfs:range :Item ;
+    owl:inverseOf :isItemOf .
+:isItemOf a owl:ObjectProperty ;
+    rdfs:label "is item of" ;
+    rdfs:comment "Relates an Item to the LineItem it is part of." ;
+    rdfs:domain :Item ;
+    rdfs:range :LineItem ;
+    owl:inverseOf :hasItem .
+:isPartOfProcess a owl:ObjectProperty ;
+    rdfs:label "is part of process" ;
+    rdfs:comment "Relates an invoice message to a business process." ;
+    rdfs:domain :InvoiceMessage ;
+    rdfs:range :BusinessProcess ;
+    owl:inverseOf :hasProcessPart .
+:hasProcessPart a owl:ObjectProperty ;
+    rdfs:label "has process part" ;
+    rdfs:comment "Relates a BusinessProcess to the InvoiceMessage it contains." ;
+    rdfs:domain :BusinessProcess ;
+    rdfs:range :InvoiceMessage ;
+    owl:inverseOf :isPartOfProcess .
+:hasPrice a owl:ObjectProperty ;
+    rdfs:label "has price" ;
+    rdfs:comment "Relates a LineItem to its Price." ;
+    rdfs:domain :LineItem ;
+    rdfs:range :Price ;
+    owl:inverseOf :isPriceOf .
+:isPriceOf a owl:ObjectProperty ;
+    rdfs:label "is price of" ;
+    rdfs:comment "Relates a Price to the LineItem it is associated with." ;
+    rdfs:domain :Price ;
+    rdfs:range :LineItem ;
+    owl:inverseOf :hasPrice .
+
+#################################################################
+# Data Properties
+#################################################################
+:hasInvoiceNumber a owl:DatatypeProperty ;
+    rdfs:label "has invoice number" ;
+    rdfs:comment "The invoice number of an invoice message." ;
+    rdfs:domain :InvoiceMessage ;
+    rdfs:range xsd:string .
+:hasInvoiceAmount a owl:DatatypeProperty ;
+    rdfs:label "has invoice amount" ;
+    rdfs:comment "The total amount of the invoice." ;
+    rdfs:domain :InvoiceMessage ;
+    rdfs:range xsd:decimal .
+:hasDate a owl:DatatypeProperty ;
+    rdfs:label "has date" ;
+    rdfs:comment "A date associated with the header section." ;
+    rdfs:domain :HeaderSection ;
+    rdfs:range xsd:dateTime .
+:hasReferenceNumber a owl:DatatypeProperty ;
+    rdfs:label "has reference number" ;
+    rdfs:comment "A reference number in the header section." ;
+    rdfs:domain :HeaderSection ;
+    rdfs:range xsd:string .
+:hasName a owl:DatatypeProperty ;
+    rdfs:label "has name" ;
+    rdfs:comment "The name of an organization." ;
+    rdfs:domain :Organization ;
+    rdfs:range xsd:string .
+:hasGLN a owl:DatatypeProperty ;
+    rdfs:label "has GLN" ;
+    rdfs:comment "The Global Location Number (GLN) of an organization." ;
+    rdfs:domain :Organization ;
+    rdfs:range xsd:string .
+:hasAddressLine a owl:DatatypeProperty ;
+    rdfs:label "has address line" ;
+    rdfs:comment "A line of a postal address." ;
+    rdfs:domain :Address ;
+    rdfs:range xsd:string .
+:hasPostalCode a owl:DatatypeProperty ;
+    rdfs:label "has postal code" ;
+    rdfs:comment "The postal code of an address." ;
+    rdfs:domain :Address ;
+    rdfs:range xsd:string .
+:hasCity a owl:DatatypeProperty ;
+    rdfs:label "has city" ;
+    rdfs:comment "The city of an address." ;
+    rdfs:domain :Address ;
+    rdfs:range xsd:string .
+:hasCountryCode a owl:DatatypeProperty ;
+    rdfs:label "has country code" ;
+    rdfs:comment "The country code of an address." ;
+    rdfs:domain :Address ;
+    rdfs:range xsd:string .
+:hasItemName a owl:DatatypeProperty ;
+    rdfs:label "has item name" ;
+    rdfs:comment "The name of an item." ;
+    rdfs:domain :Item ;
+    rdfs:range xsd:string .
+:hasNetPrice a owl:DatatypeProperty ;
+    rdfs:label "has net price" ;
+    rdfs:comment "The net price of a line item." ;
+    rdfs:domain :LineItem ;
+    rdfs:range xsd:decimal .
+:hasQuantity a owl:DatatypeProperty ;
+    rdfs:label "has quantity" ;
+    rdfs:comment "The quantity of an item in a line item." ;
+    rdfs:domain :LineItem ;
+    rdfs:range xsd:decimal .
+:hasTaxAmount a owl:DatatypeProperty ;
+    rdfs:label "has tax amount" ;
+    rdfs:comment "The total tax amount in the summary section." ;
+    rdfs:domain :SummarySection ;
+    rdfs:range xsd:decimal .
+
+#################################################################
+# Restrictions & GCAs
+#################################################################
+:OrganizationRoleAssignment rdfs:subClassOf [
+    a owl:Restriction ;
+    owl:onProperty :hasAgentRole ;
+    owl:cardinality "1"^^xsd:nonNegativeInteger
+] , [
+    a owl:Restriction ;
+    owl:onProperty :hasRoleAddress ;
+    owl:cardinality "1"^^xsd:nonNegativeInteger
+] .
+:LineItem rdfs:subClassOf [
+    a owl:Restriction ;
+    owl:onProperty :hasItem ;
+    owl:someValuesFrom :Item
+] .
+:InvoiceMessage rdfs:subClassOf [
+    a owl:Restriction ;
+    owl:onProperty :involvesRole ;
+    owl:someValuesFrom :OrganizationRoleAssignment
+] .
+:InvoiceMessage rdfs:subClassOf [
+    a owl:Restriction ;
+    owl:onProperty :hasSection ;
+    owl:someValuesFrom :Segment
+] .
+:InvoiceMessage rdfs:subClassOf [
+    a owl:Restriction ;
+    owl:onProperty :isPartOfProcess ;
+    owl:maxCardinality "1"^^xsd:nonNegativeInteger
+] .
