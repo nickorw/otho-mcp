@@ -1,0 +1,68 @@
+{
+  "timestamp": "20260301_215907",
+  "story_id": "EDIFACT",
+  "ontology_size_chars": 27019,
+  "syntax": {
+    "valid": true,
+    "execution_time_seconds": 0,
+    "error": null
+  },
+  "oops": {
+    "has_pitfalls": false,
+    "pitfall_count": 0,
+    "execution_time_seconds": 0,
+    "pitfalls": []
+  },
+  "hermit": {
+    "is_consistent": false,
+    "inconsistent_classes": [
+      "xml_combined_owl.xml.Cl_ItemDescription",
+      "xml_combined_owl.xml.Cl_ItemName",
+      "xml_combined_owl.xml.Cl_ItemSKU",
+      "xml_combined_owl.xml.Cl_Invoice",
+      "xml_combined_owl.xml.Cl_Document",
+      "xml_combined_owl.xml.Cl_ItemPrice",
+      "xml_combined_owl.xml.Cl_ItemCategory",
+      "owl.Nothing",
+      "xml_combined_owl.xml.Cl_InvoiceOrganizationRole",
+      "xml_combined_owl.xml.Cl_ItemSoldDate",
+      "xml_combined_owl.xml.Cl_InvoiceLine",
+      "xml_combined_owl.xml.Cl_Information",
+      "xml_combined_owl.xml.Cl_ItemImage",
+      "xml_combined_owl.xml.Cl_InvoiceAmount",
+      "xml_combined_owl.xml.Cl_ItemSoldQuantity",
+      "xml_combined_owl.xml.Cl_InvoiceDetail"
+    ],
+    "execution_time_seconds": 0.54,
+    "error": null,
+    "reasoner": "Hermit"
+  },
+  "pellet": {
+    "is_consistent": false,
+    "inconsistent_classes": [
+      "xml_combined_owl.xml.Cl_ItemDescription",
+      "xml_combined_owl.xml.Cl_ItemName",
+      "xml_combined_owl.xml.Cl_ItemSKU",
+      "xml_combined_owl.xml.Cl_Invoice",
+      "xml_combined_owl.xml.Cl_Document",
+      "xml_combined_owl.xml.Cl_ItemPrice",
+      "xml_combined_owl.xml.Cl_ItemCategory",
+      "owl.Nothing",
+      "xml_combined_owl.xml.Cl_InvoiceOrganizationRole",
+      "xml_combined_owl.xml.Cl_ItemSoldDate",
+      "xml_combined_owl.xml.Cl_InvoiceLine",
+      "xml_combined_owl.xml.Cl_Information",
+      "xml_combined_owl.xml.Cl_ItemImage",
+      "xml_combined_owl.xml.Cl_InvoiceAmount",
+      "xml_combined_owl.xml.Cl_ItemSoldQuantity",
+      "xml_combined_owl.xml.Cl_InvoiceDetail"
+    ],
+    "execution_time_seconds": 0.643,
+    "error": null,
+    "reasoner": "Pellet"
+  },
+  "aggregate": {
+    "all_validators_passed": false,
+    "total_execution_time_seconds": 1.183
+  }
+}

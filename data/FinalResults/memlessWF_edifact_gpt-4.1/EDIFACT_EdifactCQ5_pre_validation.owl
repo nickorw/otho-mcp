@@ -1,0 +1,189 @@
+@prefix : <http://example.org/ontology#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+#################################################################
+# Classes
+#################################################################
+
+:Cl_Organization a owl:Class ;
+    rdfs:label "Organization" ;
+    rdfs:comment "An entity such as a company, agency, or institution involved in the described scenario." .
+
+:Cl_OrganizationType a owl:Class ;
+    rdfs:label "Organization Type" ;
+    rdfs:comment "The classification or type of organization (e.g., government agency, private company)." .
+
+:Cl_OrganizationRole a owl:Class ;
+    rdfs:label "Organization Role" ;
+    rdfs:comment "A role played by an organization in a specific context or event." .
+
+:Cl_OrganizationInvolvement a owl:Class ;
+    rdfs:label "Organization Involvement" ;
+    rdfs:comment "A reification class representing the involvement of an organization in an event or context, capturing its role and additional information." .
+
+:Cl_ContactInfo a owl:Class ;
+    rdfs:label "Contact Information" ;
+    rdfs:comment "Contact details for an organization." .
+
+:Cl_OrganizationIdentifier a owl:Class ;
+    rdfs:label "Organization Identifier" ;
+    rdfs:comment "A unique identifier for an organization." .
+
+:Cl_OrganizationLocation a owl:Class ;
+    rdfs:label "Organization Location" ;
+    rdfs:comment "The physical or mailing address of the organization." .
+
+:Cl_OrganizationDescription a owl:Class ;
+    rdfs:label "Organization Description" ;
+    rdfs:comment "A textual description of the organization." .
+
+#################################################################
+# Hierarchies
+#################################################################
+
+:Cl_OrganizationIdentifier rdfs:subClassOf :Cl_Organization .
+:Cl_OrganizationLocation rdfs:subClassOf :Cl_Organization .
+:Cl_ContactInfo rdfs:subClassOf :Cl_Organization .
+:Cl_OrganizationDescription rdfs:subClassOf :Cl_Organization .
+
+#################################################################
+# Properties
+#################################################################
+
+:hasOrganizationType a owl:ObjectProperty ;
+    rdfs:domain :Cl_Organization ;
+    rdfs:range :Cl_OrganizationType ;
+    rdfs:label "has organization type" .
+
+:hasOrganizationRole a owl:ObjectProperty ;
+    rdfs:domain :Cl_OrganizationInvolvement ;
+    rdfs:range :Cl_OrganizationRole ;
+    rdfs:label "has organization role" .
+
+:involvesOrganization a owl:ObjectProperty ;
+    rdfs:domain :Cl_OrganizationInvolvement ;
+    rdfs:range :Cl_Organization ;
+    rdfs:label "involves organization" .
+
+:hasContactInfo a owl:ObjectProperty ;
+    rdfs:domain :Cl_Organization ;
+    rdfs:range :Cl_ContactInfo ;
+    rdfs:label "has contact info" .
+
+:hasOrganizationIdentifier a owl:ObjectProperty ;
+    rdfs:domain :Cl_Organization ;
+    rdfs:range :Cl_OrganizationIdentifier ;
+    rdfs:label "has organization identifier" .
+
+:hasOrganizationLocation a owl:ObjectProperty ;
+    rdfs:domain :Cl_Organization ;
+    rdfs:range :Cl_OrganizationLocation ;
+    rdfs:label "has organization location" .
+
+:hasDescription a owl:ObjectProperty ;
+    rdfs:domain :Cl_Organization ;
+    rdfs:range :Cl_OrganizationDescription ;
+    rdfs:label "has description" .
+
+:involvementDescription a owl:DatatypeProperty ;
+    rdfs:domain :Cl_OrganizationInvolvement ;
+    rdfs:range xsd:string ;
+    rdfs:label "involvement description" .
+
+:organizationName a owl:DatatypeProperty ;
+    rdfs:domain :Cl_Organization ;
+    rdfs:range xsd:string ;
+    rdfs:label "organization name" .
+
+:organizationShortName a owl:DatatypeProperty ;
+    rdfs:domain :Cl_Organization ;
+    rdfs:range xsd:string ;
+    rdfs:label "organization short name" .
+
+:identifierValue a owl:DatatypeProperty ;
+    rdfs:domain :Cl_OrganizationIdentifier ;
+    rdfs:range xsd:string ;
+    rdfs:label "identifier value" .
+
+:identifierType a owl:DatatypeProperty ;
+    rdfs:domain :Cl_OrganizationIdentifier ;
+    rdfs:range xsd:string ;
+    rdfs:label "identifier type" .
+
+:contactEmail a owl:DatatypeProperty ;
+    rdfs:domain :Cl_ContactInfo ;
+    rdfs:range xsd:string ;
+    rdfs:label "contact email" .
+
+:contactPhone a owl:DatatypeProperty ;
+    rdfs:domain :Cl_ContactInfo ;
+    rdfs:range xsd:string ;
+    rdfs:label "contact phone" .
+
+:contactWebsite a owl:DatatypeProperty ;
+    rdfs:domain :Cl_ContactInfo ;
+    rdfs:range xsd:string ;
+    rdfs:label "contact website" .
+
+:addressLine a owl:DatatypeProperty ;
+    rdfs:domain :Cl_OrganizationLocation ;
+    rdfs:range xsd:string ;
+    rdfs:label "address line" .
+
+:city a owl:DatatypeProperty ;
+    rdfs:domain :Cl_OrganizationLocation ;
+    rdfs:range xsd:string ;
+    rdfs:label "city" .
+
+:postalCode a owl:DatatypeProperty ;
+    rdfs:domain :Cl_OrganizationLocation ;
+    rdfs:range xsd:string ;
+    rdfs:label "postal code" .
+
+:country a owl:DatatypeProperty ;
+    rdfs:domain :Cl_OrganizationLocation ;
+    rdfs:range xsd:string ;
+    rdfs:label "country" .
+
+:descriptionText a owl:DatatypeProperty ;
+    rdfs:domain :Cl_OrganizationDescription ;
+    rdfs:range xsd:string ;
+    rdfs:label "description text" .
+
+#################################################################
+# Restrictions (examples)
+#################################################################
+
+:Cl_Organization
+    owl:equivalentClass [
+        rdf:type owl:Restriction ;
+        owl:onProperty :hasOrganizationType ;
+        owl:allValuesFrom :Cl_OrganizationType
+    ] ;
+    owl:equivalentClass [
+        rdf:type owl:Restriction ;
+        owl:onProperty :hasOrganizationIdentifier ;
+        owl:someValuesFrom :Cl_OrganizationIdentifier
+    ] .
+
+:Cl_OrganizationInvolvement
+    owl:equivalentClass [
+        rdf:type owl:Restriction ;
+        owl:onProperty :involvesOrganization ;
+        owl:allValuesFrom :Cl_Organization
+    ] ;
+    owl:equivalentClass [
+        rdf:type owl:Restriction ;
+        owl:onProperty :hasOrganizationRole ;
+        owl:someValuesFrom :Cl_OrganizationRole
+    ] .
+
+#################################################################
+# Disjointness
+#################################################################
+
+:Cl_OrganizationType owl:disjointWith :Cl_OrganizationRole .
+:Cl_ContactInfo owl:disjointWith :Cl_OrganizationLocation .
+:Cl_OrganizationIdentifier owl:disjointWith :Cl_OrganizationDescription .

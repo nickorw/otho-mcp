@@ -1,0 +1,84 @@
+2026-03-02 08:09:57 | INFO     | ============================================================
+2026-03-02 08:09:57 | INFO     | Validation Logger Initialized for EDIFACT
+2026-03-02 08:09:57 | INFO     | Log files: EDIFACT_validation_20260302_075401.log
+2026-03-02 08:09:57 | INFO     | Timestamp: 20260302_075401
+2026-03-02 08:09:57 | INFO     | ============================================================
+2026-03-02 08:09:57 | INFO     | 
+Starting final validation for EDIFACT
+2026-03-02 08:09:57 | DEBUG    | Ontology size: 26082 characters
+2026-03-02 08:09:57 | INFO     | 
+============================================================
+2026-03-02 08:09:57 | INFO     | PILLAR 1: SYNTAX VALIDATION (RDFLib)
+2026-03-02 08:09:57 | INFO     | ============================================================
+2026-03-02 08:09:57 | INFO     | ✓ Syntax validation PASSED (0.242s)
+2026-03-02 08:09:57 | DEBUG    | No syntax errors detected in RDF/Turtle parsing
+2026-03-02 08:09:57 | INFO     | 
+============================================================
+2026-03-02 08:09:57 | INFO     | PILLAR 2: PITFALL DETECTION (OOPS)
+2026-03-02 08:09:57 | INFO     | ============================================================
+2026-03-02 08:09:57 | WARNING  | ⚠ Pitfall check: Found 3 pitfall(s) (0.123s)
+2026-03-02 08:09:57 | WARNING  | Pitfall codes detected: P12, P20, P22
+2026-03-02 08:09:57 | WARNING  | 
+Detailed Pitfall Information:
+2026-03-02 08:09:57 | WARNING  | ------------------------------------------------------------
+2026-03-02 08:09:57 | WARNING  | 
+Pitfall #1: P12
+2026-03-02 08:09:57 | WARNING  |   Name: Equivalent properties not explicitly declared
+2026-03-02 08:09:57 | WARNING  |   Importance: Important
+2026-03-02 08:09:57 | WARNING  |   Description: The ontology lacks information about equivalent properties (owl:equivalentProperty) in the cases of duplicated relationships and/or attributes.	
+2026-03-02 08:09:57 | WARNING  |   Affected Elements: None specified
+2026-03-02 08:09:57 | WARNING  | 
+Pitfall #2: P20
+2026-03-02 08:09:57 | WARNING  |   Name: Misusing ontology annotations
+2026-03-02 08:09:57 | WARNING  |   Importance: Minor
+2026-03-02 08:09:57 | WARNING  |   Description: The contents of some annotation properties are swapped or misused. This pitfall might affect annotation properties related to natural language information (for example, annotations for naming such as rdfs:label or for providing descriptions such as rdfs:comment). Other types of annotation could also be affected as temporal, versioning information, among others.	
+2026-03-02 08:09:57 | WARNING  |   Affected Elements (4 total):
+2026-03-02 08:09:57 | WARNING  |     - http://www.example.org/ontology#isNAD_DeliveryPartyOf
+2026-03-02 08:09:57 | WARNING  |     - http://www.example.org/ontology#isRoleOfOrganizationIn
+2026-03-02 08:09:57 | WARNING  |     - http://www.example.org/ontology#isSegmentGroup1Of
+2026-03-02 08:09:57 | WARNING  |     - http://www.example.org/ontology#isSegmentGroup2Of
+2026-03-02 08:09:57 | WARNING  | 
+Pitfall #3: P22
+2026-03-02 08:09:57 | WARNING  |   Name: Using different naming conventions in the ontology
+2026-03-02 08:09:57 | WARNING  |   Importance: Minor
+2026-03-02 08:09:57 | WARNING  |   Description: The ontology elements are not named following the same convention (for example CamelCase or use of delimiters as "-" or "_") . Some notions about naming conventions are provided in [2].	
+2026-03-02 08:09:57 | WARNING  |   Affected Elements (2 total):
+2026-03-02 08:09:57 | WARNING  |     - http://www.example.org/ontology#PRI_Price
+2026-03-02 08:09:57 | WARNING  |     - http://www.example.org/ontology#CompositeDataElement
+2026-03-02 08:09:57 | INFO     | 
+============================================================
+2026-03-02 08:09:57 | INFO     | PILLAR 3: REASONING CONSISTENCY
+2026-03-02 08:09:57 | INFO     | ============================================================
+2026-03-02 08:09:57 | DEBUG    | Checking logical consistency with OWL 2 DL reasoners (Hermit & Pellet)
+2026-03-02 08:09:59 | INFO     | 
+  → Hermit Reasoner
+2026-03-02 08:09:59 | INFO     |   --------------------------------------------------------
+2026-03-02 08:09:59 | INFO     |   ✓ PASSED - Ontology is logically consistent (1.107s)
+2026-03-02 08:09:59 | DEBUG    |   Hermit found no logical inconsistencies or contradictions
+2026-03-02 08:10:00 | INFO     | 
+  → Pellet Reasoner
+2026-03-02 08:10:00 | INFO     |   --------------------------------------------------------
+2026-03-02 08:10:00 | INFO     |   ✓ PASSED - Ontology is logically consistent (1.126s)
+2026-03-02 08:10:00 | DEBUG    |   Pellet found no logical inconsistencies or contradictions
+2026-03-02 08:10:00 | INFO     | ✓ Ontology: data/output/ontologies/EDIFACT_ontology_20260302_075401.owl
+2026-03-02 08:10:00 | INFO     | ✓ OOPS XML results: data/output/validations/EDIFACT_validation_20260302_075401.xml
+2026-03-02 08:10:00 | INFO     | ✓ Validation metrics JSON: data/output/validations/EDIFACT_validation_20260302_075401.json
+2026-03-02 08:10:00 | INFO     | ✓ Agent scratchpad: data/output/scratchpads/EDIFACT_scratchpad_20260302_075401.json
+2026-03-02 08:10:00 | INFO     | 
+============================================================
+2026-03-02 08:10:00 | INFO     | VALIDATION SUMMARY
+2026-03-02 08:10:00 | INFO     | ============================================================
+2026-03-02 08:10:00 | INFO     | 1. Syntax (RDFLib):    ✓ PASSED (0.242s)
+2026-03-02 08:10:00 | INFO     | 2. OOPS Pitfalls:      ⚠ FAILED (3 pitfalls) (0.123s)
+2026-03-02 08:10:00 | WARNING  |    └─ 3 modeling pitfall(s) detected - check details above
+2026-03-02 08:10:00 | INFO     | 3. Hermit Reasoner:    ✓ PASSED (1.107s)
+2026-03-02 08:10:00 | INFO     | 4. Pellet Reasoner:    ✓ PASSED (1.126s)
+2026-03-02 08:10:00 | INFO     | ------------------------------------------------------------
+2026-03-02 08:10:00 | ERROR    | Overall Result:        ❌ VALIDATION FAILED
+2026-03-02 08:10:00 | ERROR    |                        Issues found: 3 pitfalls
+2026-03-02 08:10:00 | INFO     | ------------------------------------------------------------
+2026-03-02 08:10:00 | INFO     | Total Validation Time: 2.598s
+2026-03-02 08:10:00 | INFO     | Agent Iterations:      3
+2026-03-02 08:10:00 | INFO     | ============================================================
+2026-03-02 08:10:00 | INFO     | 
+✓ Validation JSON log saved: logs/EDIFACT_validation_20260302_075401.json

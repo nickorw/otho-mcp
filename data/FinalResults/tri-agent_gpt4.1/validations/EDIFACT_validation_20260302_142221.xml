@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<oops:OOPSResponse xmlns:oops="http://www.oeg-upm.net/oops">
+<oops:Pitfall>
+<oops:Code>P04</oops:Code><oops:Name>Creating unconnected ontology elements</oops:Name>
+<oops:Description>Ontology elements (classes, object properties and datatype properties) are created isolated, with no relation to the rest of the ontology.	</oops:Description>
+<oops:Importance>Minor</oops:Importance>
+<oops:NumberAffectedElements>10</oops:NumberAffectedElements>
+<oops:Affects>
+<oops:AffectedElement>http://www.example.org/ontology#AgentRole</oops:AffectedElement>
+<oops:AffectedElement>http://www.example.org/ontology#EN16931Alignment</oops:AffectedElement>
+<oops:AffectedElement>http://www.example.org/ontology#RoleAssignment</oops:AffectedElement>
+<oops:AffectedElement>http://www.example.org/ontology#Message</oops:AffectedElement>
+<oops:AffectedElement>http://www.example.org/ontology#BusinessProcess</oops:AffectedElement>
+<oops:AffectedElement>http://www.example.org/ontology#Organization</oops:AffectedElement>
+<oops:AffectedElement>http://www.example.org/ontology#InterchangeEnvelope</oops:AffectedElement>
+<oops:AffectedElement>http://www.example.org/ontology#P2POAlignment</oops:AffectedElement>
+<oops:AffectedElement>http://www.example.org/ontology#Segment</oops:AffectedElement>
+<oops:AffectedElement>http://www.example.org/ontology#ValidationConstraint</oops:AffectedElement>
+</oops:Affects>
+</oops:Pitfall>
+</oops:OOPSResponse>

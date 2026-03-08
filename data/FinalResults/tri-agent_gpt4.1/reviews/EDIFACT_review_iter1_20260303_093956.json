@@ -1,0 +1,114 @@
+{
+  "iteration": 1,
+  "timestamp": "2026-03-03T09:45:57.400267",
+  "cq_coverage": {
+    "fully_covered": [
+      "CQ1",
+      "CQ2",
+      "CQ3",
+      "CQ4",
+      "CQ6",
+      "CQ7",
+      "CQ8",
+      "CQ9",
+      "CQ10",
+      "CQ11",
+      "CQ12"
+    ],
+    "partially_covered": [
+      {
+        "cq": "CQ5",
+        "missing": "Not all organization attributes (e.g., contacts, tax IDs) are modeled; only names and addresses appear.",
+        "coverage_percent": 70
+      },
+      {
+        "cq": "CQ13",
+        "missing": "Some mandatory D96A fields and SHACL validation constraints are not explicitly modeled; file format validity is only partially enforceable.",
+        "coverage_percent": 60
+      },
+      {
+        "cq": "CQ14",
+        "missing": "Business process assignment is implied but not explicitly modeled (e.g., no direct link to a business process class or instance).",
+        "coverage_percent": 50
+      }
+    ],
+    "not_covered": [],
+    "coverage_score": 0.87,
+    "details": "Most CQs are addressed via classes for invoices, organizations, roles, items, and monetary values. Some attributes and process links are only implicit or partially modeled, especially for organization details, mandatory data constraints, and business process assignment."
+  },
+  "constraint_adherence": {
+    "reification_correct": true,
+    "owl2_compliant": true,
+    "annotations_complete": false,
+    "directionality_correct": true,
+    "pivot_class_structure_correct": true,
+    "issues": [
+      "Missing rdfs:label and rdfs:comment on several properties and some classes",
+      "Not all mandatory data properties are explicitly marked as required (e.g., via cardinality restrictions)",
+      "Some composite/pivot classes lack explicit disjointness"
+    ]
+  },
+  "quality_metrics": {
+    "hierarchy_depth": 4,
+    "uses_restrictions": true,
+    "uses_gcas": false,
+    "uses_equivalence": true,
+    "property_characteristics_defined": true,
+    "disjointness_axioms": false,
+    "overall_score": 0.82,
+    "strengths": [
+      "Rich class hierarchy reflecting EDIFACT structure (Interchange > Message > Segment > DataElement)",
+      "Appropriate use of restrictions for mandatory elements",
+      "Clear use of role modeling for organizations"
+    ],
+    "weaknesses": [
+      "No GCAs for complex role or process assignments",
+      "Disjointness between major classes (e.g., Segment vs. DataElement) is not asserted",
+      "Annotations are incomplete"
+    ]
+  },
+  "validator_predictions": {
+    "likely_oops_pitfalls": [
+      "P4 (Missing annotations)",
+      "P7 (Missing disjointness)"
+    ],
+    "reasoner_risks": [
+      "Complex restrictions may slow reasoning",
+      "Absence of some cardinality constraints may cause unintended inferences"
+    ],
+    "confidence": "high"
+  },
+  "improvement_suggestions": [
+    {
+      "priority": "high",
+      "category": "CQ Coverage",
+      "suggestion": "Add explicit properties and classes for all mandatory D96A fields and EN 16931-1 requirements (e.g., tax identifiers, document references, payment terms). Model these as datatype properties with cardinality restrictions.",
+      "expected_impact": "Full CQ coverage for mandatory information and file format validity."
+    },
+    {
+      "priority": "high",
+      "category": "Annotations",
+      "suggestion": "Ensure every class and property has rdfs:label and rdfs:comment for documentation and tool compatibility.",
+      "expected_impact": "Improved clarity and validator compatibility."
+    },
+    {
+      "priority": "medium",
+      "category": "Quality",
+      "suggestion": "Introduce disjointness axioms between major classes (e.g., Segment, CompositeElement, SimpleElement, OrganizationRole) and between role types.",
+      "expected_impact": "Reduces risk of unintended class overlaps and improves reasoning."
+    },
+    {
+      "priority": "medium",
+      "category": "Quality",
+      "suggestion": "Add General Class Axioms (GCAs) to define, e.g., that an Invoice with a buyer and a seller is an 'EDIFACTInvoice', or that a Message containing only INVOIC segments is an 'InvoiceMessage'.",
+      "expected_impact": "Richer and more precise class definitions."
+    },
+    {
+      "priority": "low",
+      "category": "CQ Coverage",
+      "suggestion": "Model business process assignment explicitly (e.g., link Invoice to a BusinessProcess class or instance).",
+      "expected_impact": "Directly answers CQ14 and improves process traceability."
+    }
+  ],
+  "summary": "The ontology demonstrates strong coverage of the EDIFACT INVOIC structure and the core P2P-O alignment, with most competency questions fully or mostly addressed. Key improvements are needed in annotation completeness, explicit modeling of all mandatory fields, and the addition of disjointness and richer axiomatization. No critical OWL 2 DL violations were found, and the ontology is well-structured for industrial use, but further refinement will enhance both semantic robustness and validator compatibility."
+}

@@ -1,0 +1,228 @@
+@prefix : <http://example.org/invoice#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+
+#################################################################
+# Classes
+#################################################################
+
+:Cl_Invoice a owl:Class ;
+    rdfs:label "Invoice" ;
+    rdfs:comment "A document issued to indicate and request payment for goods or services." .
+
+:Cl_InvoiceDetail a owl:Class ;
+    rdfs:label "Invoice Detail" ;
+    rdfs:comment "A reification class representing the details of an invoice, including items, quantities, prices, etc." .
+
+:Cl_InvoiceItem a owl:Class ;
+    rdfs:label "Invoice Item" ;
+    rdfs:comment "An item listed on an invoice." .
+
+:Cl_ProductOrService a owl:Class ;
+    rdfs:label "Product or Service" ;
+    rdfs:comment "The product or service being invoiced." .
+
+:Cl_Currency a owl:Class ;
+    rdfs:label "Currency" ;
+    rdfs:comment "The currency used in the invoice." .
+
+:Cl_ContactParty a owl:Class ;
+    rdfs:label "Contact Party" ;
+    rdfs:comment "A party involved in the invoice, such as buyer or seller." .
+
+:Cl_InvoiceStatus a owl:Class ;
+    rdfs:label "Invoice Status" ;
+    rdfs:comment "The status of the invoice (e.g., paid, unpaid, overdue)." .
+
+:Cl_Amount a owl:Class ;
+    rdfs:label "Amount" ;
+    rdfs:comment "An amount of money." .
+
+:Cl_Quantity a owl:Class ;
+    rdfs:label "Quantity" ;
+    rdfs:comment "A quantity of items or services." .
+
+:Cl_DateTime a owl:Class ;
+    rdfs:label "Date Time" ;
+    rdfs:comment "A date and time value." .
+
+#################################################################
+# Class Hierarchies
+#################################################################
+
+:Cl_InvoiceDetail rdfs:subClassOf :Cl_Invoice .
+:Cl_Amount rdfs:subClassOf :Cl_InvoiceDetail .
+:Cl_Quantity rdfs:subClassOf :Cl_InvoiceDetail .
+:Cl_InvoiceItem rdfs:subClassOf :Cl_InvoiceDetail .
+:Cl_ProductOrService rdfs:subClassOf :Cl_InvoiceItem .
+:Cl_Currency rdfs:subClassOf :Cl_Amount .
+
+#################################################################
+# Properties
+#################################################################
+
+:hasInvoiceDetail a owl:ObjectProperty ;
+    rdfs:domain :Cl_Invoice ;
+    rdfs:range :Cl_InvoiceDetail ;
+    rdfs:label "has invoice detail" ;
+    rdfs:comment "Links an invoice to its details." .
+
+:hasInvoiceItem a owl:ObjectProperty ;
+    rdfs:domain :Cl_InvoiceDetail ;
+    rdfs:range :Cl_InvoiceItem ;
+    rdfs:label "has invoice item" ;
+    rdfs:comment "Links invoice detail to its items." .
+
+:refersToProductOrService a owl:ObjectProperty ;
+    rdfs:domain :Cl_InvoiceItem ;
+    rdfs:range :Cl_ProductOrService ;
+    rdfs:label "refers to product or service" ;
+    rdfs:comment "Links invoice item to the product or service." .
+
+:hasQuantity a owl:ObjectProperty ;
+    rdfs:domain :Cl_InvoiceItem ;
+    rdfs:range :Cl_Quantity ;
+    rdfs:label "has quantity" ;
+    rdfs:comment "Specifies the quantity for an invoice item." .
+
+:hasUnitPrice a owl:ObjectProperty ;
+    rdfs:domain :Cl_InvoiceItem ;
+    rdfs:range :Cl_Amount ;
+    rdfs:label "has unit price" ;
+    rdfs:comment "Specifies the unit price for an invoice item." .
+
+:hasTotalAmount a owl:ObjectProperty ;
+    rdfs:domain :Cl_Invoice ;
+    rdfs:range :Cl_Amount ;
+    rdfs:label "has total amount" ;
+    rdfs:comment "The total amount of the invoice." .
+
+:hasCurrency a owl:ObjectProperty ;
+    rdfs:domain :Cl_Amount ;
+    rdfs:range :Cl_Currency ;
+    rdfs:label "has currency" ;
+    rdfs:comment "Specifies the currency for an amount." .
+
+:issuedTo a owl:ObjectProperty ;
+    rdfs:domain :Cl_Invoice ;
+    rdfs:range :Cl_ContactParty ;
+    rdfs:label "issued to" ;
+    rdfs:comment "The party to whom the invoice is issued." .
+
+:issuedBy a owl:ObjectProperty ;
+    rdfs:domain :Cl_Invoice ;
+    rdfs:range :Cl_ContactParty ;
+    rdfs:label "issued by" ;
+    rdfs:comment "The party who issued the invoice." .
+
+:hasInvoiceStatus a owl:ObjectProperty ;
+    rdfs:domain :Cl_Invoice ;
+    rdfs:range :Cl_InvoiceStatus ;
+    rdfs:label "has invoice status" ;
+    rdfs:comment "The status of the invoice." .
+
+:hasInvoiceDate a owl:ObjectProperty ;
+    rdfs:domain :Cl_Invoice ;
+    rdfs:range :Cl_DateTime ;
+    rdfs:label "has invoice date" ;
+    rdfs:comment "The date the invoice was issued." .
+
+:hasDueDate a owl:ObjectProperty ;
+    rdfs:domain :Cl_Invoice ;
+    rdfs:range :Cl_DateTime ;
+    rdfs:label "has due date" ;
+    rdfs:comment "The due date for the invoice payment." .
+
+:amountValue a owl:DatatypeProperty ;
+    rdfs:domain :Cl_Amount ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "amount value" ;
+    rdfs:comment "The value of an amount." .
+
+:quantityValue a owl:DatatypeProperty ;
+    rdfs:domain :Cl_Quantity ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "quantity value" ;
+    rdfs:comment "The value of a quantity." .
+
+:quantityUnit a owl:DatatypeProperty ;
+    rdfs:domain :Cl_Quantity ;
+    rdfs:range xsd:string ;
+    rdfs:label "quantity unit" ;
+    rdfs:comment "The unit of a quantity (e.g., pcs, hours)." .
+
+:currencyCode a owl:DatatypeProperty ;
+    rdfs:domain :Cl_Currency ;
+    rdfs:range xsd:string ;
+    rdfs:label "currency code" ;
+    rdfs:comment "The currency code (e.g., USD, EUR)." .
+
+:invoiceNumber a owl:DatatypeProperty ;
+    rdfs:domain :Cl_Invoice ;
+    rdfs:range xsd:string ;
+    rdfs:label "invoice number" ;
+    rdfs:comment "The unique identifier for the invoice." .
+
+:statusValue a owl:DatatypeProperty ;
+    rdfs:domain :Cl_InvoiceStatus ;
+    rdfs:range xsd:string ;
+    rdfs:label "status value" ;
+    rdfs:comment "The value of the invoice status (e.g., paid, unpaid)." .
+
+:dateTimeValue a owl:DatatypeProperty ;
+    rdfs:domain :Cl_DateTime ;
+    rdfs:range xsd:dateTime ;
+    rdfs:label "date time value" ;
+    rdfs:comment "The actual date and time value." .
+
+:partyName a owl:DatatypeProperty ;
+    rdfs:domain :Cl_ContactParty ;
+    rdfs:range xsd:string ;
+    rdfs:label "party name" ;
+    rdfs:comment "The name of the contact party." .
+
+#################################################################
+# Restrictions and Axioms
+#################################################################
+
+:Cl_Invoice owl:equivalentClass [
+    a owl:Restriction ;
+    owl:onProperty :hasInvoiceDetail ;
+    owl:someValuesFrom :Cl_InvoiceDetail
+] .
+
+:Cl_InvoiceDetail owl:equivalentClass [
+    a owl:Restriction ;
+    owl:onProperty :hasInvoiceItem ;
+    owl:someValuesFrom :Cl_InvoiceItem
+] .
+
+:Cl_InvoiceItem owl:equivalentClass [
+    a owl:Restriction ;
+    owl:onProperty :refersToProductOrService ;
+    owl:someValuesFrom :Cl_ProductOrService
+] .
+
+#################################################################
+# Disjointness
+#################################################################
+
+:Cl_Invoice owl:disjointWith :Cl_InvoiceItem, :Cl_InvoiceDetail, :Cl_ProductOrService, :Cl_ContactParty, :Cl_Currency, :Cl_InvoiceStatus, :Cl_Amount, :Cl_Quantity, :Cl_DateTime .
+
+:Cl_InvoiceDetail owl:disjointWith :Cl_InvoiceItem, :Cl_ProductOrService, :Cl_ContactParty, :Cl_Currency, :Cl_InvoiceStatus, :Cl_Amount, :Cl_Quantity, :Cl_DateTime .
+
+:Cl_InvoiceItem owl:disjointWith :Cl_ProductOrService, :Cl_ContactParty, :Cl_Currency, :Cl_InvoiceStatus, :Cl_Amount, :Cl_Quantity, :Cl_DateTime .
+
+:Cl_ProductOrService owl:disjointWith :Cl_ContactParty, :Cl_Currency, :Cl_InvoiceStatus, :Cl_Amount, :Cl_Quantity, :Cl_DateTime .
+
+:Cl_ContactParty owl:disjointWith :Cl_Currency, :Cl_InvoiceStatus, :Cl_Amount, :Cl_Quantity, :Cl_DateTime .
+
+:Cl_Currency owl:disjointWith :Cl_InvoiceStatus, :Cl_Amount, :Cl_Quantity, :Cl_DateTime .
+
+:Cl_InvoiceStatus owl:disjointWith :Cl_Amount, :Cl_Quantity, :Cl_DateTime .
+
+:Cl_Amount owl:disjointWith :Cl_Quantity, :Cl_DateTime .
+
+:Cl_Quantity owl:disjointWith :Cl_DateTime .

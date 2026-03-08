@@ -1,0 +1,86 @@
+{
+  "story_id": "EDIFACT",
+  "timestamp": "20260302_130930",
+  "start_time": "2026-03-02T13:35:51.354810",
+  "ontology_size_chars": 18083,
+  "validation_results": {
+    "syntax": {
+      "valid": true,
+      "execution_time_seconds": 0.011,
+      "error": null,
+      "error_type": null
+    },
+    "oops": {
+      "has_pitfalls": false,
+      "pitfall_count": 0,
+      "execution_time_seconds": 0.075,
+      "pitfalls": [],
+      "pitfall_codes": [],
+      "pitfall_names": []
+    },
+    "hermit": {
+      "reasoner": "Hermit",
+      "is_consistent": true,
+      "execution_time_seconds": 1.439,
+      "inconsistent_classes": [],
+      "inconsistent_classes_count": 0,
+      "error": null,
+      "error_type": null
+    },
+    "pellet": {
+      "reasoner": "Pellet",
+      "is_consistent": false,
+      "execution_time_seconds": 0.617,
+      "inconsistent_classes": [],
+      "inconsistent_classes_count": 0,
+      "error": "Java error message is:\nUnrecognized term: http://www.w3.org/2002/07/owl#FunctionalProperty\nUse -v for detail.\n",
+      "error_type": "reasoning_error"
+    },
+    "aggregate": {
+      "all_validators_passed": false,
+      "total_execution_time_seconds": 2.141,
+      "validation_breakdown": {
+        "syntax_valid": true,
+        "oops_passed": true,
+        "oops_pitfall_count": 0,
+        "hermit_consistent": true,
+        "pellet_consistent": false
+      },
+      "timing_breakdown_seconds": {
+        "syntax": 0.011,
+        "oops": 0.075,
+        "hermit": 1.439,
+        "pellet": 0.617,
+        "total": 2.141
+      }
+    }
+  },
+  "files_saved": [
+    {
+      "path": "data/output/ontologies/EDIFACT_ontology_20260302_130930.owl",
+      "description": "Ontology",
+      "timestamp": "2026-03-02T13:35:53.736894"
+    },
+    {
+      "path": "data/output/validations/EDIFACT_validation_20260302_130930.xml",
+      "description": "OOPS XML results",
+      "timestamp": "2026-03-02T13:35:53.737463"
+    },
+    {
+      "path": "data/output/validations/EDIFACT_validation_20260302_130930.json",
+      "description": "Validation metrics JSON",
+      "timestamp": "2026-03-02T13:35:53.737913"
+    },
+    {
+      "path": "data/output/scratchpads/EDIFACT_scratchpad_20260302_130930.json",
+      "description": "Agent scratchpad",
+      "timestamp": "2026-03-02T13:35:53.738679"
+    }
+  ],
+  "end_time": "2026-03-02T13:35:53.738918",
+  "iteration_count": 3,
+  "story_timing": {
+    "duration_seconds": 1583.16,
+    "duration_formatted": "26m 23s"
+  }
+}

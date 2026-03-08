@@ -1,0 +1,73 @@
+@prefix : <http://example.org/invoice#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+
+### Classes
+:Cl_Entity a owl:Class .
+
+:Cl_Organization a owl:Class ;
+    rdfs:subClassOf :Cl_Entity .
+
+:Cl_Invoice a owl:Class ;
+    rdfs:subClassOf :Cl_Entity .
+
+:Cl_InvoiceRole a owl:Class ;
+    rdfs:subClassOf :Cl_Entity .
+
+:Cl_OrganizationInvoiceParticipation a owl:Class ;
+    rdfs:subClassOf :Cl_Entity .
+
+### Hierarchies
+# Cl_Entity is the root class for all entities.
+# Cl_Organization and Cl_Invoice are subclasses.
+# Cl_OrganizationInvoiceParticipation is a reification class (pivot class) for modeling the role of an organization in an invoice.
+
+### Properties
+
+# Object Properties
+:hasParticipant a owl:ObjectProperty ;
+    rdfs:domain :Cl_Invoice ;
+    rdfs:range :Cl_OrganizationInvoiceParticipation .
+
+:involvesOrganization a owl:ObjectProperty ;
+    rdfs:domain :Cl_OrganizationInvoiceParticipation ;
+    rdfs:range :Cl_Organization .
+
+:involvesInvoice a owl:ObjectProperty ;
+    rdfs:domain :Cl_OrganizationInvoiceParticipation ;
+    rdfs:range :Cl_Invoice .
+
+:hasRole a owl:ObjectProperty ;
+    rdfs:domain :Cl_OrganizationInvoiceParticipation ;
+    rdfs:range :Cl_InvoiceRole .
+
+# Data Properties
+:organizationName a owl:DatatypeProperty ;
+    rdfs:domain :Cl_Organization ;
+    rdfs:range xsd:string .
+
+:invoiceNumber a owl:DatatypeProperty ;
+    rdfs:domain :Cl_Invoice ;
+    rdfs:range xsd:string .
+
+:roleName a owl:DatatypeProperty ;
+    rdfs:domain :Cl_InvoiceRole ;
+    rdfs:range xsd:string .
+
+### Example Restriction (Only Cl_OrganizationInvoiceParticipation uses hasRole)
+:Cl_OrganizationInvoiceParticipation owl:equivalentClass [
+    a owl:Restriction ;
+    owl:onProperty :hasRole ;
+    owl:allValuesFrom :Cl_InvoiceRole
+] .
+
+### Disjointness
+:Cl_Organization owl:disjointWith :Cl_Invoice .
+:Cl_Organization owl:disjointWith :Cl_InvoiceRole .
+:Cl_Invoice owl:disjointWith :Cl_InvoiceRole .
+
+### Explanation
+# To answer "What role does organization S play in the invoice?", 
+# look for the :Cl_OrganizationInvoiceParticipation instance that links the organization and the invoice, and retrieve its :hasRole property.

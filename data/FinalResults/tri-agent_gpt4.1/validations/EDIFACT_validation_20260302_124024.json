@@ -1,0 +1,69 @@
+{
+  "timestamp": "20260302_124024",
+  "story_id": "EDIFACT",
+  "ontology_size_chars": 12921,
+  "syntax": {
+    "valid": true,
+    "execution_time_seconds": 0.022,
+    "error": null
+  },
+  "oops": {
+    "has_pitfalls": true,
+    "pitfall_count": 1,
+    "execution_time_seconds": 0.096,
+    "pitfalls": [
+      {
+        "code": "P13",
+        "name": "Inverse relationships not explicitly declared",
+        "description": "This pitfall appears when any relationship (except for those that are defined as symmetric properties using owl:SymmetricProperty) does not have an inverse relationship (owl:inverseOf) defined within the ontology.\t",
+        "importance": "Minor",
+        "num_affected": 27,
+        "affected_elements": [
+          "http://www.example.org/ontology#hasAddress",
+          "http://www.example.org/ontology#hasNetPrice",
+          "http://www.example.org/ontology#hasReferenceNumber",
+          "http://www.example.org/ontology#hasDetail",
+          "http://www.example.org/ontology#describesItem",
+          "http://www.example.org/ontology#hasHeader",
+          "http://www.example.org/ontology#hasCompositeElement",
+          "http://www.example.org/ontology#isAssignedToBusinessProcess",
+          "http://www.example.org/ontology#hasTax",
+          "http://www.example.org/ontology#hasInvoiceAmount",
+          "http://www.example.org/ontology#hasIdentifier",
+          "http://www.example.org/ontology#hasSummary",
+          "http://www.example.org/ontology#playsRole",
+          "http://www.example.org/ontology#hasLineItem",
+          "http://www.example.org/ontology#containsMessage",
+          "http://www.example.org/ontology#hasMandatoryIdentifier",
+          "http://www.example.org/ontology#hasRoleAssignment",
+          "http://www.example.org/ontology#involvesOrganization",
+          "http://www.example.org/ontology#hasSimpleElement",
+          "http://www.example.org/ontology#hasSegment",
+          "http://www.example.org/ontology#hasGlobalLocationNumber",
+          "http://www.example.org/ontology#hasInvoiceNumber",
+          "http://www.example.org/ontology#hasQuantity",
+          "http://www.example.org/ontology#hasValidationConstraint",
+          "http://www.example.org/ontology#hasSection"
+        ]
+      }
+    ]
+  },
+  "hermit": {
+    "is_consistent": true,
+    "inconsistent_classes": [],
+    "execution_time_seconds": 1.626,
+    "error": null,
+    "reasoner": "Hermit"
+  },
+  "pellet": {
+    "is_consistent": true,
+    "inconsistent_classes": [],
+    "execution_time_seconds": 1.114,
+    "error": null,
+    "reasoner": "Pellet"
+  },
+  "aggregate": {
+    "all_validators_passed": false,
+    "total_execution_time_seconds": 2.858
+  }
+}

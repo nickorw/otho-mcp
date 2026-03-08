@@ -1,0 +1,350 @@
+{
+  "plan": {
+    "classes": [
+      "InterchangeEnvelope",
+      "Message",
+      "InvoiceMessage",
+      "Segment",
+      "BGM_Segment",
+      "NAD_Segment",
+      "HeaderSection",
+      "DetailSection",
+      "SummarySection",
+      "LineItem",
+      "Organization",
+      "AgentRole",
+      "Address",
+      "Identifier",
+      "GlobalLocationNumber",
+      "Item",
+      "Price",
+      "Tax",
+      "InvoiceAmount",
+      "ReferenceNumber",
+      "BusinessProcess",
+      "EN16931Compliance",
+      "P2POAlignment",
+      "SHACLConstraint",
+      "CompositeDataElement",
+      "SimpleDataElement",
+      "Delimiter",
+      "Pivot:OrganizationRoleAssignment"
+    ],
+    "hierarchy": {
+      "subClassOf": [
+        [
+          "InvoiceMessage",
+          "Message"
+        ],
+        [
+          "BGM_Segment",
+          "Segment"
+        ],
+        [
+          "NAD_Segment",
+          "Segment"
+        ],
+        [
+          "HeaderSection",
+          "Segment"
+        ],
+        [
+          "DetailSection",
+          "Segment"
+        ],
+        [
+          "SummarySection",
+          "Segment"
+        ],
+        [
+          "GlobalLocationNumber",
+          "Identifier"
+        ],
+        [
+          "Pivot:OrganizationRoleAssignment",
+          "owl:Thing"
+        ]
+      ],
+      "disjointWith": [
+        [
+          "Organization",
+          "Item"
+        ],
+        [
+          "Address",
+          "Item"
+        ],
+        [
+          "Price",
+          "Tax"
+        ],
+        [
+          "Message",
+          "Segment"
+        ],
+        [
+          "HeaderSection",
+          "DetailSection",
+          "SummarySection"
+        ]
+      ],
+      "disjointUnion": [
+        [
+          "Segment",
+          [
+            "BGM_Segment",
+            "NAD_Segment",
+            "HeaderSection",
+            "DetailSection",
+            "SummarySection"
+          ]
+        ]
+      ]
+    },
+    "properties": [
+      {
+        "name": "containsMessage",
+        "type": "object",
+        "domain": "InterchangeEnvelope",
+        "range": "Message",
+        "characteristics": [
+          "Functional"
+        ]
+      },
+      {
+        "name": "hasSegment",
+        "type": "object",
+        "domain": "Message",
+        "range": "Segment",
+        "characteristics": [
+          "Functional"
+        ]
+      },
+      {
+        "name": "hasSection",
+        "type": "object",
+        "domain": "InvoiceMessage",
+        "range": "Section",
+        "characteristics": []
+      },
+      {
+        "name": "hasLineItem",
+        "type": "object",
+        "domain": "DetailSection",
+        "range": "LineItem",
+        "characteristics": [
+          "Functional"
+        ]
+      },
+      {
+        "name": "involvesOrganization",
+        "type": "object",
+        "domain": "InvoiceMessage",
+        "range": "Organization",
+        "characteristics": []
+      },
+      {
+        "name": "hasRoleAssignment",
+        "type": "object",
+        "domain": "InvoiceMessage",
+        "range": "Pivot:OrganizationRoleAssignment",
+        "characteristics": []
+      },
+      {
+        "name": "hasAgentRole",
+        "type": "object",
+        "domain": "Pivot:OrganizationRoleAssignment",
+        "range": "AgentRole",
+        "characteristics": [
+          "Functional"
+        ]
+      },
+      {
+        "name": "hasParticipant",
+        "type": "object",
+        "domain": "Pivot:OrganizationRoleAssignment",
+        "range": "Organization",
+        "characteristics": [
+          "Functional"
+        ]
+      },
+      {
+        "name": "hasAddress",
+        "type": "object",
+        "domain": "Organization",
+        "range": "Address",
+        "characteristics": []
+      },
+      {
+        "name": "hasIdentifier",
+        "type": "object",
+        "domain": "Organization",
+        "range": "Identifier",
+        "characteristics": []
+      },
+      {
+        "name": "hasGlobalLocationNumber",
+        "type": "object",
+        "domain": "Organization",
+        "range": "GlobalLocationNumber",
+        "characteristics": [
+          "Functional"
+        ]
+      },
+      {
+        "name": "hasItem",
+        "type": "object",
+        "domain": "LineItem",
+        "range": "Item",
+        "characteristics": [
+          "Functional"
+        ]
+      },
+      {
+        "name": "hasNetPrice",
+        "type": "object",
+        "domain": "LineItem",
+        "range": "Price",
+        "characteristics": [
+          "Functional"
+        ]
+      },
+      {
+        "name": "hasQuantity",
+        "type": "data",
+        "domain": "LineItem",
+        "range": "xsd:decimal",
+        "characteristics": []
+      },
+      {
+        "name": "hasTax",
+        "type": "object",
+        "domain": "SummarySection",
+        "range": "Tax",
+        "characteristics": []
+      },
+      {
+        "name": "hasInvoiceAmount",
+        "type": "object",
+        "domain": "SummarySection",
+        "range": "InvoiceAmount",
+        "characteristics": [
+          "Functional"
+        ]
+      },
+      {
+        "name": "hasReferenceNumber",
+        "type": "object",
+        "domain": "HeaderSection",
+        "range": "ReferenceNumber",
+        "characteristics": [
+          "Functional"
+        ]
+      },
+      {
+        "name": "hasDocumentDate",
+        "type": "data",
+        "domain": "HeaderSection",
+        "range": "xsd:string",
+        "characteristics": []
+      },
+      {
+        "name": "hasInvoiceNumber",
+        "type": "data",
+        "domain": "InvoiceMessage",
+        "range": "xsd:string",
+        "characteristics": [
+          "Functional"
+        ]
+      },
+      {
+        "name": "isAssignedToProcess",
+        "type": "object",
+        "domain": "InvoiceMessage",
+        "range": "BusinessProcess",
+        "characteristics": []
+      },
+      {
+        "name": "compliesWithEN16931",
+        "type": "object",
+        "domain": "InvoiceMessage",
+        "range": "EN16931Compliance",
+        "characteristics": [
+          "Functional"
+        ]
+      },
+      {
+        "name": "alignedWithP2PO",
+        "type": "object",
+        "domain": "InvoiceMessage",
+        "range": "P2POAlignment",
+        "characteristics": [
+          "Functional"
+        ]
+      },
+      {
+        "name": "validatedBySHACL",
+        "type": "object",
+        "domain": "InvoiceMessage",
+        "range": "SHACLConstraint",
+        "characteristics": []
+      },
+      {
+        "name": "hasCompositeElement",
+        "type": "object",
+        "domain": "Segment",
+        "range": "CompositeDataElement",
+        "characteristics": []
+      },
+      {
+        "name": "hasSimpleElement",
+        "type": "object",
+        "domain": "CompositeDataElement",
+        "range": "SimpleDataElement",
+        "characteristics": []
+      },
+      {
+        "name": "usesDelimiter",
+        "type": "object",
+        "domain": "Segment",
+        "range": "Delimiter",
+        "characteristics": []
+      }
+    ]
+  },
+  "cq_coverage": {
+    "CQ1": "InvoiceMessage class and containsMessage/hasSection/hasLineItem properties (traverse from InterchangeEnvelope to InvoiceMessage to LineItem)",
+    "CQ2": "involvesOrganization property on InvoiceMessage, Organization class",
+    "CQ3": "Pivot:OrganizationRoleAssignment class with hasAgentRole and hasParticipant properties",
+    "CQ4": "AgentRole class and hasAgentRole property (filter by Buyer role)",
+    "CQ5": "Organization class, hasAddress, hasIdentifier, hasGlobalLocationNumber properties",
+    "CQ6": "Organization class (buyer), hasAddress property",
+    "CQ7": "LineItem class, hasItem property",
+    "CQ8": "Item class, hasNetPrice, hasQuantity, and related properties",
+    "CQ9": "LineItem class, hasNetPrice property",
+    "CQ10": "HeaderSection, DetailSection, SummarySection classes, hasReferenceNumber, hasDocumentDate, hasInvoiceAmount, hasTax, etc.",
+    "CQ11": "SummarySection class, hasInvoiceAmount property",
+    "CQ12": "InvoiceMessage class, hasInvoiceNumber property",
+    "CQ13": "EN16931Compliance, P2POAlignment, SHACLConstraint classes and related properties; presence of mandatory identifiers via hasIdentifier, hasGlobalLocationNumber, etc.",
+    "CQ14": "BusinessProcess class, isAssignedToProcess property"
+  },
+  "expert_consultations": 5,
+  "notes": "Expert consultation limit reached. Proceeding with current plan. No further extensions from expert can be incorporated. Ensure deep modeling with current class/property set, maximize coverage, and document any known gaps if found.",
+  "current_owl": "@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n@prefix owl: <http://www.w3.org/2002/07/owl#> .\n@prefix : <http://www.example.org/ontology#> .\n\n<http://www.example.org/ontology#edifact-invoice-ontology> a owl:Ontology ;\n    rdfs:label \"EDIFACT Invoice Ontology\" ;\n    rdfs:comment \"Ontology for modeling EDIFACT D96A Invoice Messages with EN 16931-1 and P2P-O alignment.\" .\n\n#################################################################\n# Classes\n#################################################################\n\n:InterchangeEnvelope a owl:Class ;\n    rdfs:label \"Interchange Envelope\" ;\n    rdfs:comment \"The outermost envelope containing EDIFACT messages.\" .\n\n:Message a owl:Class ;\n    rdfs:label \"Message\" ;\n    rdfs:comment \"A generic EDIFACT message.\" .\n\n:InvoiceMessage a owl:Class ;\n    rdfs:label \"Invoice Message\" ;\n    rdfs:comment \"An EDIFACT invoice message (INVOIC).\" ;\n    rdfs:subClassOf :Message .\n\n:Segment a owl:Class ;\n    rdfs:label \"Segment\" ;\n    rdfs:comment \"A segment within an EDIFACT message.\" .\n\n:BGM_Segment a owl:Class ;\n    rdfs:label \"Beginning of Message Segment (BGM)\" ;\n    rdfs:comment \"Segment for document identification (BGM).\" ;\n    rdfs:subClassOf :Segment .\n\n:NAD_Segment a owl:Class ;\n    rdfs:label \"Name and Address Segment (NAD)\" ;\n    rdfs:comment \"Segment for organization and address details (NAD).\" ;\n    rdfs:subClassOf :Segment .\n\n:HeaderSection a owl:Class ;\n    rdfs:label \"Header Section\" ;\n    rdfs:comment \"Header section of the invoice message.\" ;\n    rdfs:subClassOf :Segment .\n\n:DetailSection a owl:Class ;\n    rdfs:label \"Detail Section\" ;\n    rdfs:comment \"Detail section listing line items.\" ;\n    rdfs:subClassOf :Segment .\n\n:SummarySection a owl:Class ;\n    rdfs:label \"Summary Section\" ;\n    rdfs:comment \"Summary section with totals and taxes.\" ;\n    rdfs:subClassOf :Segment .\n\n:LineItem a owl:Class ;\n    rdfs:label \"Line Item\" ;\n    rdfs:comment \"A single line item in the invoice.\" .\n\n:Organization a owl:Class ;\n    rdfs:label \"Organization\" ;\n    rdfs:comment \"An organization involved in the business process.\" .\n\n:AgentRole a owl:Class ;\n    rdfs:label \"Agent Role\" ;\n    rdfs:comment \"A role played by an organization (e.g., Buyer, Supplier, DeliveryParty).\" .\n\n:Address a owl:Class ;\n    rdfs:label \"Address\" ;\n    rdfs:comment \"A postal or physical address.\" .\n\n:Identifier a owl:Class ;\n    rdfs:label \"Identifier\" ;\n    rdfs:comment \"A generic identifier.\" .\n\n:GlobalLocationNumber a owl:Class ;\n    rdfs:label \"Global Location Number\" ;\n    rdfs:comment \"A unique global location identifier (GLN).\" ;\n    rdfs:subClassOf :Identifier .\n\n:Item a owl:Class ;\n    rdfs:label \"Item\" ;\n    rdfs:comment \"An item or product listed in the invoice.\" .\n\n:Price a owl:Class ;\n    rdfs:label \"Price\" ;\n    rdfs:comment \"A price value, e.g., net price for a line item.\" .\n\n:Tax a owl:Class ;\n    rdfs:label \"Tax\" ;\n    rdfs:comment \"A tax amount or type in the invoice.\" .\n\n:InvoiceAmount a owl:Class ;\n    rdfs:label \"Invoice Amount\" ;\n    rdfs:comment \"Total amount of the invoice.\" .\n\n:ReferenceNumber a owl:Class ;\n    rdfs:label \"Reference Number\" ;\n    rdfs:comment \"Document or invoice reference number.\" .\n\n:BusinessProcess a owl:Class ;\n    rdfs:label \"Business Process\" ;\n    rdfs:comment \"A business process to which the invoice is assigned.\" .\n\n:EN16931Compliance a owl:Class ;\n    rdfs:label \"EN 16931 Compliance\" ;\n    rdfs:comment \"Represents compliance with EN 16931-1 standard.\" .\n\n:P2POAlignment a owl:Class ;\n    rdfs:label \"P2P-O Alignment\" ;\n    rdfs:comment \"Alignment with the Purchase-to-Pay Ontology (P2P-O).\" .\n\n:SHACLConstraint a owl:Class ;\n    rdfs:label \"SHACL Constraint\" ;\n    rdfs:comment \"A SHACL constraint for validation.\" .\n\n:CompositeDataElement a owl:Class ;\n    rdfs:label \"Composite Data Element\" ;\n    rdfs:comment \"A composite data element in a segment.\" .\n\n:SimpleDataElement a owl:Class ;\n    rdfs:label \"Simple Data Element\" ;\n    rdfs:comment \"A simple data element in a composite.\" .\n\n:Delimiter a owl:Class ;\n    rdfs:label \"Delimiter\" ;\n    rdfs:comment \"A delimiter used in EDIFACT (e.g., plus sign, colon).\" .\n\n:Pivot_OrganizationRoleAssignment a owl:Class ;\n    rdfs:label \"Organization Role Assignment (Pivot)\" ;\n    rdfs:comment \"Reification class linking organizations, roles, and context.\" .\n\n#################################################################\n# Object Properties\n#################################################################\n\n:containsMessage a owl:ObjectProperty ;\n    rdfs:label \"contains message\" ;\n    rdfs:comment \"Relates an InterchangeEnvelope to its contained Message.\" ;\n    rdfs:domain :InterchangeEnvelope ;\n    rdfs:range :Message .\n\n:hasSegment a owl:ObjectProperty ;\n    rdfs:label \"has segment\" ;\n    rdfs:comment \"Relates a Message to its Segments.\" ;\n    rdfs:domain :Message ;\n    rdfs:range :Segment .\n\n:hasSection a owl:ObjectProperty ;\n    rdfs:label \"has section\" ;\n    rdfs:comment \"Relates an InvoiceMessage to its sections (header, detail, summary).\" ;\n    rdfs:domain :InvoiceMessage ;\n    rdfs:range :Segment .\n\n:hasLineItem a owl:ObjectProperty ;\n    rdfs:label \"has line item\" ;\n    rdfs:comment \"Relates a DetailSection to its LineItems.\" ;\n    rdfs:domain :DetailSection ;\n    rdfs:range :LineItem .\n\n:involvesOrganization a owl:ObjectProperty ;\n    rdfs:label \"involves organization\" ;\n    rdfs:comment \"Relates an InvoiceMessage to organizations involved.\" ;\n    rdfs:domain :InvoiceMessage ;\n    rdfs:range :Organization .\n\n:hasRoleAssignment a owl:ObjectProperty ;\n    rdfs:label \"has role assignment\" ;\n    rdfs:comment \"Links an InvoiceMessage to a role assignment (pivot class).\" ;\n    rdfs:domain :InvoiceMessage ;\n    rdfs:range :Pivot_OrganizationRoleAssignment .\n\n:hasAgentRole a owl:ObjectProperty ;\n    rdfs:label \"has agent role\" ;\n    rdfs:comment \"Links a role assignment to an AgentRole (e.g., Buyer, Supplier).\" ;\n    rdfs:domain :Pivot_OrganizationRoleAssignment ;\n    rdfs:range :AgentRole .\n\n:hasParticipant a owl:ObjectProperty ;\n    rdfs:label \"has participant\" ;\n    rdfs:comment \"Links a role assignment to an Organization.\" ;\n    rdfs:domain :Pivot_OrganizationRoleAssignment ;\n    rdfs:range :Organization .\n\n:hasAddress a owl:ObjectProperty ;\n    rdfs:label \"has address\" ;\n    rdfs:comment \"Relates an Organization to its Address.\" ;\n    rdfs:domain :Organization ;\n    rdfs:range :Address .\n\n:hasIdentifier a owl:ObjectProperty ;\n    rdfs:label \"has identifier\" ;\n    rdfs:comment \"Relates an Organization to an Identifier.\" ;\n    rdfs:domain :Organization ;\n    rdfs:range :Identifier .\n\n:hasGlobalLocationNumber a owl:ObjectProperty ;\n    rdfs:label \"has global location number\" ;\n    rdfs:comment \"Relates an Organization to a GlobalLocationNumber.\" ;\n    rdfs:domain :Organization ;\n    rdfs:range :GlobalLocationNumber .\n\n:hasItem a owl:ObjectProperty ;\n    rdfs:label \"has item\" ;\n    rdfs:comment \"Relates a LineItem to its Item.\" ;\n    rdfs:domain :LineItem ;\n    rdfs:range :Item .\n\n:hasNetPrice a owl:ObjectProperty ;\n    rdfs:label \"has net price\" ;\n    rdfs:comment \"Relates a LineItem to its net Price.\" ;\n    rdfs:domain :LineItem ;\n    rdfs:range :Price .\n\n:hasTax a owl:ObjectProperty ;\n    rdfs:label \"has tax\" ;\n    rdfs:comment \"Relates a SummarySection to its Tax.\" ;\n    rdfs:domain :SummarySection ;\n    rdfs:range :Tax .\n\n:hasInvoiceAmount a owl:ObjectProperty ;\n    rdfs:label \"has invoice amount\" ;\n    rdfs:comment \"Relates a SummarySection to its InvoiceAmount.\" ;\n    rdfs:domain :SummarySection ;\n    rdfs:range :InvoiceAmount .\n\n:hasReferenceNumber a owl:ObjectProperty ;\n    rdfs:label \"has reference number\" ;\n    rdfs:comment \"Relates a HeaderSection to its ReferenceNumber.\" ;\n    rdfs:domain :HeaderSection ;\n    rdfs:range :ReferenceNumber .\n\n:isAssignedToProcess a owl:ObjectProperty ;\n    rdfs:label \"is assigned to process\" ;\n    rdfs:comment \"Assigns an InvoiceMessage to a BusinessProcess.\" ;\n    rdfs:domain :InvoiceMessage ;\n    rdfs:range :BusinessProcess .\n\n:compliesWithEN16931 a owl:ObjectProperty ;\n    rdfs:label \"complies with EN 16931\" ;\n    rdfs:comment \"Indicates EN 16931-1 compliance for an InvoiceMessage.\" ;\n    rdfs:domain :InvoiceMessage ;\n    rdfs:range :EN16931Compliance .\n\n:alignedWithP2PO a owl:ObjectProperty ;\n    rdfs:label \"aligned with P2P-O\" ;\n    rdfs:comment \"Indicates P2P-O alignment for an InvoiceMessage.\" ;\n    rdfs:domain :InvoiceMessage ;\n    rdfs:range :P2POAlignment .\n\n:validatedBySHACL a owl:ObjectProperty ;\n    rdfs:label \"validated by SHACL\" ;\n    rdfs:comment \"Indicates SHACL validation for an InvoiceMessage.\" ;\n    rdfs:domain :InvoiceMessage ;\n    rdfs:range :SHACLConstraint .\n\n:hasCompositeElement a owl:ObjectProperty ;\n    rdfs:label \"has composite element\" ;\n    rdfs:comment \"Relates a Segment to its CompositeDataElements.\" ;\n    rdfs:domain :Segment ;\n    rdfs:range :CompositeDataElement .\n\n:hasSimpleElement a owl:ObjectProperty ;\n    rdfs:label \"has simple element\" ;\n    rdfs:comment \"Relates a CompositeDataElement to its SimpleDataElements.\" ;\n    rdfs:domain :CompositeDataElement ;\n    rdfs:range :SimpleDataElement .\n\n:usesDelimiter a owl:ObjectProperty ;\n    rdfs:label \"uses delimiter\" ;\n    rdfs:comment \"Relates a Segment to a Delimiter used in EDIFACT syntax.\" ;\n    rdfs:domain :Segment ;\n    rdfs:range :Delimiter .\n\n#################################################################\n# Data Properties\n#################################################################\n\n:hasQuantity a owl:DatatypeProperty ;\n    rdfs:label \"has quantity\" ;\n    rdfs:comment \"The quantity for a LineItem.\" ;\n    rdfs:domain :LineItem ;\n    rdfs:range xsd:decimal .\n\n:hasDocumentDate a owl:DatatypeProperty ;\n    rdfs:label \"has document date\" ;\n    rdfs:comment \"The date of the invoice document (string for OWL 2 DL compliance).\" ;\n    rdfs:domain :HeaderSection ;\n    rdfs:range xsd:string .\n\n:hasInvoiceNumber a owl:DatatypeProperty ;\n    rdfs:label \"has invoice number\" ;\n    rdfs:comment \"The invoice number as a string.\" ;\n    rdfs:domain :InvoiceMessage ;\n    rdfs:range xsd:string .\n\n#################################################################\n# Property Characteristics\n#################################################################\n\n:containsMessage a owl:FunctionalProperty .\n:hasSegment a owl:FunctionalProperty .\n:hasLineItem a owl:FunctionalProperty .\n:hasAgentRole a owl:FunctionalProperty .\n:hasParticipant a owl:FunctionalProperty .\n:hasGlobalLocationNumber a owl:FunctionalProperty .\n:hasItem a owl:FunctionalProperty .\n:hasNetPrice a owl:FunctionalProperty .\n:hasInvoiceAmount a owl:FunctionalProperty .\n:hasReferenceNumber a owl:FunctionalProperty .\n:compliesWithEN16931 a owl:FunctionalProperty .\n:alignedWithP2PO a owl:FunctionalProperty .\n:hasInvoiceNumber a owl:FunctionalProperty .\n\n#################################################################\n# Disjoint and Equivalence Axioms\n#################################################################\n\n:Organization owl:disjointWith :Item .\n:Address owl:disjointWith :Item .\n:Price owl:disjointWith :Tax .\n:Message owl:disjointWith :Segment .\n:HeaderSection owl:disjointWith :DetailSection, :SummarySection .\n:DetailSection owl:disjointWith :SummarySection .\n\n# The following line is commented out because Turtle does not support owl:disjointUnionOf directly\n# owl:disjointUnionOf ( :BGM_Segment :NAD_Segment :HeaderSection :DetailSection :SummarySection ) :Segment .\n\n#################################################################\n# Restrictions and Complex Axioms\n#################################################################\n\n:InvoiceMessage owl:equivalentClass [\n    a owl:Class ;\n    owl:intersectionOf (\n      [ owl:onProperty :hasSection ; owl:someValuesFrom :HeaderSection ]\n      [ owl:onProperty :hasSection ; owl:someValuesFrom :DetailSection ]\n      [ owl:onProperty :hasSection ; owl:someValuesFrom :SummarySection ]\n    )\n] .\n\n:Pivot_OrganizationRoleAssignment owl:equivalentClass [\n    a owl:Class ;\n    owl:intersectionOf (\n      [ owl:onProperty :hasAgentRole ; owl:allValuesFrom :AgentRole ]\n      [ owl:onProperty :hasParticipant ; owl:allValuesFrom :Organization ]\n    )\n] .\n",
+  "iterations": [
+    {
+      "attempt": 1,
+      "result": "Syntax error: 'owl:FunctionalProperty' is being used as an object in the property definition. In Turtle, property characteristics like owl:FunctionalProperty must be declared as a separate triple, not as part of the property definition."
+    },
+    {
+      "attempt": 2,
+      "result": "Still a syntax error. The correct way to declare a property as functional is to declare the property as a class (ObjectProperty or DatatypeProperty), then separately assert it as a FunctionalProperty using a triple like ':containsMessage a owl:FunctionalProperty .'."
+    },
+    {
+      "attempt": 3,
+      "result": "Syntax and pitfalls validation both passed after correcting FunctionalProperty declarations. Ontology is ready for semantic audit."
+    }
+  ],
+  "expert_audits": 3,
+  "refinement_plan_1": "Analysis of review feedback and refinement plan:\n\nHigh-priority suggestions:\n- Expand organization and item modeling (CQ5, CQ8): Add properties for organization details (hasLegalEntity, hasContactInfo) and item attributes (hasItemDescription, hasSKU, hasUnitOfMeasure). This will allow full coverage for queries about organization and item details.\n- Add explicit properties to HeaderSection and SummarySection for payment terms, currency, and invoice status (CQ10).\n\nMedium-priority suggestions:\n- Introduce general class axioms (GCAs) for business logic, e.g., define Buyer as an Organization with AgentRole 'Buyer' in a Pivot_OrganizationRoleAssignment.\n- Add symmetric/transitive property characteristics where relevant (e.g., for business process relations).\n\nConstraint adherence:\n- No violations noted; previous iterations fixed syntax and property characteristics.\n- Reification and pivot class structure is correct and must be preserved.\n\nPlan for refinement:\n1. Add new classes and properties for legal entity, contact info, item description, SKU, unit of measure.\n2. Add data/object properties for payment terms, currency, invoice status.\n3. Add GCAs for Buyer and Supplier, using owl:equivalentClass and intersection restrictions.\n4. Review business process properties for possible symmetric/transitive characteristics.\n5. Ensure all new properties/classes have rdfs:label and rdfs:comment, and correct domain/range.\n6. Validate syntax and check for pitfalls after changes.\n7. Preserve all existing correct elements and do not break previous CQ coverage or constraints."
+}

@@ -1,0 +1,114 @@
+{
+  "iteration": 1,
+  "timestamp": "2026-03-02T14:37:53.793354",
+  "cq_coverage": {
+    "fully_covered": [
+      "CQ1",
+      "CQ2",
+      "CQ3",
+      "CQ4",
+      "CQ6",
+      "CQ7",
+      "CQ9",
+      "CQ11",
+      "CQ12",
+      "CQ13",
+      "CQ14"
+    ],
+    "partially_covered": [
+      {
+        "cq": "CQ5",
+        "missing": "Ontology lacks explicit properties for organization meta-data beyond address (e.g., contact info, registration numbers)",
+        "coverage_percent": 60
+      },
+      {
+        "cq": "CQ8",
+        "missing": "No detailed item description or classification properties; only Item and LineItem classes",
+        "coverage_percent": 70
+      },
+      {
+        "cq": "CQ10",
+        "missing": "Invoice details (dates, reference numbers) not explicitly modeled as properties; segments exist but lack data properties",
+        "coverage_percent": 65
+      }
+    ],
+    "not_covered": [],
+    "coverage_score": 0.85,
+    "details": "Most CQs are addressed through the hierarchy and segment classes, but some lack explicit property-level modeling for full data retrieval (e.g., organization info, item details, invoice meta-data)."
+  },
+  "constraint_adherence": {
+    "reification_correct": true,
+    "owl2_compliant": true,
+    "annotations_complete": false,
+    "directionality_correct": true,
+    "pivot_class_structure_correct": true,
+    "issues": [
+      "Several object properties (e.g., :containsMessage, :hasSegment, :hasAddress, :assignedTo, :hasAgentRole, :hasParticipant, :alignsWith, :processes, :validates) lack rdfs:label and rdfs:comment"
+    ]
+  },
+  "quality_metrics": {
+    "hierarchy_depth": 4,
+    "uses_restrictions": false,
+    "uses_gcas": false,
+    "uses_equivalence": false,
+    "property_characteristics_defined": false,
+    "disjointness_axioms": true,
+    "overall_score": 0.7,
+    "strengths": [
+      "Deep and well-structured class hierarchy reflecting EDIFACT envelope/message/segment/data element structure",
+      "Good coverage for roles and reification patterns"
+    ],
+    "weaknesses": [
+      "No property characteristics (functional, inverse, etc.)",
+      "No restrictions (owl:someValuesFrom, owl:allValuesFrom)",
+      "No GCAs or equivalence axioms",
+      "Annotations missing on properties"
+    ]
+  },
+  "validator_predictions": {
+    "likely_oops_pitfalls": [
+      "P4: Missing annotations for properties",
+      "P7: Lack of property characteristics",
+      "P22: No equivalence axioms",
+      "P23: No restrictions"
+    ],
+    "reasoner_risks": [
+      "None detected for OWL 2 DL datatypes",
+      "Potential for incomplete reasoning due to lack of property characteristics and restrictions"
+    ],
+    "confidence": "high"
+  },
+  "improvement_suggestions": [
+    {
+      "priority": "high",
+      "category": "CQ Coverage",
+      "suggestion": "Add explicit properties to Organization (e.g., hasContactInfo, hasRegistrationNumber) and Item (e.g., hasDescription, hasClassification) to fully answer CQ5 and CQ8.",
+      "expected_impact": "Improved CQ coverage for organization and item details."
+    },
+    {
+      "priority": "high",
+      "category": "Constraint Adherence",
+      "suggestion": "Add rdfs:label and rdfs:comment annotations to all object properties for full documentation and OOPS compliance.",
+      "expected_impact": "Better validator compatibility and ontology readability."
+    },
+    {
+      "priority": "medium",
+      "category": "Quality",
+      "suggestion": "Introduce property characteristics (e.g., functional, inverse) and basic restrictions (owl:someValuesFrom, owl:allValuesFrom) for key relations such as hasAddress, hasSegment.",
+      "expected_impact": "Improved reasoning and semantic precision."
+    },
+    {
+      "priority": "medium",
+      "category": "Quality",
+      "suggestion": "Add equivalence axioms and GCAs for complex class definitions (e.g., define InvoiceMessage equivalently as a Message with header, detail, summary).",
+      "expected_impact": "Richer axiomatization and more precise class semantics."
+    },
+    {
+      "priority": "low",
+      "category": "Optional Enrichment",
+      "suggestion": "Expand Address modeling with sub-properties (street, city, postal code) and add temporal properties for invoice dates.",
+      "expected_impact": "More granular data modeling and CQ10 coverage."
+    }
+  ],
+  "summary": "The ontology provides a strong structural foundation for EDIFACT invoice messages, with deep class hierarchies and clear segmentation. However, property-level detail and annotations are missing, limiting full CQ coverage and validator compatibility. Improvements in property characteristics, restrictions, and documentation will significantly enhance quality and completeness."
+}

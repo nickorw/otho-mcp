@@ -1,0 +1,113 @@
+{
+  "iteration": 1,
+  "timestamp": "2026-03-03T06:39:56.798351",
+  "cq_coverage": {
+    "fully_covered": [
+      "CQ1",
+      "CQ2",
+      "CQ3",
+      "CQ4",
+      "CQ6",
+      "CQ7",
+      "CQ8",
+      "CQ9",
+      "CQ10",
+      "CQ11",
+      "CQ12"
+    ],
+    "partially_covered": [
+      {
+        "cq": "CQ5",
+        "missing": "Organization attributes are not explicitly modeled (e.g., headquarters/warehouse distinction, contact info, legal identifiers). Only Address is present.",
+        "coverage_percent": 60
+      },
+      {
+        "cq": "CQ13",
+        "missing": "Mandatory/optional fields and validation rules for D96A/EN16931 are not formally encoded; SHACL constraints are referenced in the story but not present in OWL.",
+        "coverage_percent": 50
+      },
+      {
+        "cq": "CQ14",
+        "missing": "BusinessProcess class exists, but linkage to Invoice is only via subclassing HeaderSection, not via a direct property.",
+        "coverage_percent": 70
+      }
+    ],
+    "not_covered": [],
+    "coverage_score": 0.87,
+    "details": "The ontology covers most CQs with explicit classes and properties, especially for message structure, roles, items, and invoice details. Partial gaps exist for organization attribute richness, explicit validation constraints, and process associations."
+  },
+  "constraint_adherence": {
+    "reification_correct": true,
+    "owl2_compliant": true,
+    "annotations_complete": true,
+    "directionality_correct": true,
+    "pivot_class_structure_correct": true,
+    "issues": []
+  },
+  "quality_metrics": {
+    "hierarchy_depth": 4,
+    "uses_restrictions": true,
+    "uses_gcas": false,
+    "uses_equivalence": true,
+    "property_characteristics_defined": true,
+    "disjointness_axioms": true,
+    "overall_score": 0.82,
+    "strengths": [
+      "Complex class hierarchy reflecting EDIFACT structure and roles",
+      "Good use of restrictions and equivalence for key classes (e.g., BuyerRole)",
+      "Functional properties and disjointness axioms well specified"
+    ],
+    "weaknesses": [
+      "No General Class Axioms (GCAs) for context-dependent definitions",
+      "Organization and item attributes are not deeply modeled (e.g., no legal identifiers, contact info)",
+      "No SHACL or OWL-based validation for mandatory fields"
+    ]
+  },
+  "validator_predictions": {
+    "likely_oops_pitfalls": [
+      "P4: Missing domain or range for some properties (none detected here, but some inverse properties may be redundant)",
+      "P7: Lack of explicit validation/constraint axioms for mandatory fields"
+    ],
+    "reasoner_risks": [],
+    "confidence": "high"
+  },
+  "improvement_suggestions": [
+    {
+      "priority": "high",
+      "category": "CQ Coverage",
+      "suggestion": "Add richer modeling for Organization attributes (e.g., headquarters vs. warehouse, contact info, legal identifiers) and link these to AgentRole via properties or additional pivot classes.",
+      "expected_impact": "Full coverage for CQ5 and improved semantic richness for procurement scenarios."
+    },
+    {
+      "priority": "high",
+      "category": "CQ Coverage",
+      "suggestion": "Introduce explicit object/data properties linking Invoice (or HeaderSection) to BusinessProcess for CQ14, and encode process assignment as a property, not just subclassing.",
+      "expected_impact": "Clearer assignment of invoices to business processes, improving CQ14 coverage."
+    },
+    {
+      "priority": "high",
+      "category": "CQ Coverage/Constraints",
+      "suggestion": "Formalize mandatory/optional field constraints for D96A/EN16931 using OWL cardinality restrictions or SHACL shapes (even as annotation/prototype).",
+      "expected_impact": "Enables automated validation and CQ13 coverage."
+    },
+    {
+      "priority": "medium",
+      "category": "Quality",
+      "suggestion": "Add General Class Axioms (GCAs) to capture context-dependent definitions (e.g., a BuyerRole is an AgentRole assigned to an Organization in a message context).",
+      "expected_impact": "Improved semantic clarity and reasoning support."
+    },
+    {
+      "priority": "medium",
+      "category": "Quality",
+      "suggestion": "Deepen the class hierarchy for items and prices (e.g., model ItemCategory, TaxCategory, PriceType).",
+      "expected_impact": "Supports more detailed queries and reasoning."
+    },
+    {
+      "priority": "low",
+      "category": "Quality/Annotation",
+      "suggestion": "Expand rdfs:comment annotations to detail alignment with EN16931 and P2P-O.",
+      "expected_impact": "Improved documentation and interoperability."
+    }
+  ],
+  "summary": "The ontology provides a robust and well-structured representation of the EDIFACT INVOIC message, roles, and invoice details, with strong coverage for most competency questions and good adherence to OWL 2 constraints. Some partial coverage and quality gaps remain for organization attribute richness, validation constraints, and process linkage. Addressing these will further enhance semantic expressiveness and compliance with real-world procurement requirements."
+}

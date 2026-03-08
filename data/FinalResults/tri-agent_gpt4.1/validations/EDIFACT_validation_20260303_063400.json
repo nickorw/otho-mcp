@@ -1,0 +1,52 @@
+{
+  "timestamp": "20260303_063400",
+  "story_id": "EDIFACT",
+  "ontology_size_chars": 18065,
+  "syntax": {
+    "valid": true,
+    "execution_time_seconds": 0.034,
+    "error": null
+  },
+  "oops": {
+    "has_pitfalls": true,
+    "pitfall_count": 1,
+    "execution_time_seconds": 0.138,
+    "pitfalls": [
+      {
+        "code": "P22",
+        "name": "Using different naming conventions in the ontology",
+        "description": "The ontology elements are not named following the same convention (for example CamelCase or use of delimiters as \"-\" or \"_\") . Some notions about naming conventions are provided in [2].\t",
+        "importance": "Minor",
+        "num_affected": 1,
+        "affected_elements": [
+          "http://www.example.org/ontology#NAD_Segment",
+          "http://www.example.org/ontology#CompositeDataElement"
+        ]
+      }
+    ]
+  },
+  "hermit": {
+    "is_consistent": false,
+    "inconsistent_classes": [
+      "owl.Nothing",
+      "ontology.BuyerRole"
+    ],
+    "execution_time_seconds": 0.703,
+    "error": null,
+    "reasoner": "Hermit"
+  },
+  "pellet": {
+    "is_consistent": false,
+    "inconsistent_classes": [
+      "owl.Nothing",
+      "ontology.BuyerRole"
+    ],
+    "execution_time_seconds": 0.537,
+    "error": null,
+    "reasoner": "Pellet"
+  },
+  "aggregate": {
+    "all_validators_passed": false,
+    "total_execution_time_seconds": 1.412
+  }
+}

@@ -1,0 +1,104 @@
+{
+  "iteration": 1,
+  "timestamp": "2026-03-03T07:00:34.757660",
+  "cq_coverage": {
+    "fully_covered": [
+      "CQ1",
+      "CQ2",
+      "CQ3",
+      "CQ4",
+      "CQ6",
+      "CQ7",
+      "CQ9",
+      "CQ11",
+      "CQ12",
+      "CQ13",
+      "CQ14"
+    ],
+    "partially_covered": [
+      {
+        "cq": "CQ5",
+        "missing": "Ontology provides Organization and Address, but lacks explicit properties for detailed participant info (e.g., contact details, legal name, registration info).",
+        "coverage_percent": 70
+      },
+      {
+        "cq": "CQ8",
+        "missing": "Item class is present, but lacks detailed properties (e.g., item description, SKU, unit of measure).",
+        "coverage_percent": 60
+      },
+      {
+        "cq": "CQ10",
+        "missing": "Invoice details are distributed across sections and segments, but no explicit grouping or summary property.",
+        "coverage_percent": 75
+      }
+    ],
+    "not_covered": [],
+    "coverage_score": 0.9,
+    "details": "Most CQs are addressed through the class/property structure. Partial gaps exist for participant and item details, and invoice detail aggregation."
+  },
+  "constraint_adherence": {
+    "reification_correct": true,
+    "owl2_compliant": true,
+    "annotations_complete": true,
+    "directionality_correct": true,
+    "pivot_class_structure_correct": true,
+    "issues": []
+  },
+  "quality_metrics": {
+    "hierarchy_depth": 4,
+    "uses_restrictions": true,
+    "uses_gcas": false,
+    "uses_equivalence": false,
+    "property_characteristics_defined": true,
+    "disjointness_axioms": true,
+    "overall_score": 0.85,
+    "strengths": [
+      "Deep class hierarchy reflecting EDIFACT structure",
+      "Comprehensive use of restrictions and cardinality",
+      "Functional and inverse properties well defined",
+      "Disjointness axioms for key classes"
+    ],
+    "weaknesses": [
+      "No GCAs or equivalence axioms for complex class definitions",
+      "Limited enrichment for item and organization details",
+      "No explicit union/disjoint union constructs"
+    ]
+  },
+  "validator_predictions": {
+    "likely_oops_pitfalls": [
+      "P4 (Missing domain/range for some properties)",
+      "P7 (No equivalence axioms for key classes)"
+    ],
+    "reasoner_risks": [
+      "Hermit/Pellet may slow down on complex restrictions but no datatype violations detected"
+    ],
+    "confidence": "high"
+  },
+  "improvement_suggestions": [
+    {
+      "priority": "high",
+      "category": "CQ Coverage",
+      "suggestion": "Expand Organization and Item classes with additional data properties (e.g., organization legal name, registration number, item description, SKU, unit of measure) to fully cover CQ5 and CQ8.",
+      "expected_impact": "Improves CQ coverage and semantic richness for business document queries."
+    },
+    {
+      "priority": "medium",
+      "category": "Quality",
+      "suggestion": "Introduce General Class Axioms (GCAs) and owl:equivalentClass definitions for classes like InvoiceMessage, DetailSection, and RoleAssignment to clarify necessary and sufficient conditions.",
+      "expected_impact": "Richer axiomatization, better reasoning support, improved validator scores."
+    },
+    {
+      "priority": "medium",
+      "category": "Quality",
+      "suggestion": "Add explicit union/disjoint union axioms for Section subclasses to clarify invoice structure.",
+      "expected_impact": "Cleaner hierarchy, improved clarity for validators and reasoners."
+    },
+    {
+      "priority": "low",
+      "category": "Optional enrichment",
+      "suggestion": "Add temporal properties (e.g., effectiveDate, dueDate) using xsd:dateTime for invoices and line items.",
+      "expected_impact": "Supports advanced queries and business process modeling."
+    }
+  ],
+  "summary": "The ontology is well-structured, with deep hierarchies and comprehensive coverage for most competency questions. It adheres to OWL 2 DL constraints and includes rich property characteristics and restrictions. Improvements are needed for participant/item detail enrichment and advanced axiomatization, but overall quality and coverage are high."
+}

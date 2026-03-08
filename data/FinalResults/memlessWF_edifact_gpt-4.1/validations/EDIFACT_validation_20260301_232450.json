@@ -1,0 +1,56 @@
+{
+  "timestamp": "20260301_232450",
+  "story_id": "EDIFACT",
+  "ontology_size_chars": 29284,
+  "syntax": {
+    "valid": true,
+    "execution_time_seconds": 0,
+    "error": null
+  },
+  "oops": {
+    "has_pitfalls": false,
+    "pitfall_count": 0,
+    "execution_time_seconds": 0,
+    "pitfalls": []
+  },
+  "hermit": {
+    "is_consistent": false,
+    "inconsistent_classes": [],
+    "execution_time_seconds": 0.33,
+    "error": "Java error message is:\nException in thread \"main\" org.semanticweb.HermiT.datatypes.UnsupportedDatatypeException: HermiT supports all and only the datatypes of the OWL 2 datatype map, see \nhttp://www.w3.org/TR/owl2-syntax/#Datatype_Maps. \nThe datatype 'http://www.w3.org/2001/XMLSchema#date' is not part of the OWL 2 datatype map and \nno custom datatype definition is given; \ntherefore, HermiT cannot handle this datatype.\n\tat org.semanticweb.HermiT.datatypes.DatatypeRegistry.getDatatypeHandlerFor(Unknown Source)\n\tat org.semanticweb.HermiT.datatypes.DatatypeRegistry.getDatatypeHandlerFor(Unknown Source)\n\tat org.semanticweb.HermiT.datatypes.DatatypeRegistry.validateDatatypeRestriction(Unknown Source)\n\tat org.semanticweb.HermiT.structural.OWLClausification$DataRangeConverter.visit(Unknown Source)\n\tat uk.ac.manchester.cs.owl.owlapi.OWLDatatypeImpl.accept(OWLDatatypeImpl.java:343)\n\tat org.semanticweb.HermiT.structural.OWLClausification$DataRangeConverter.convertDataRange(Unknown Source)\n\tat org.semanticweb.HermiT.structural.OWLClausification$NormalizedAxiomClausifier.visit(Unknown Source)\n\tat uk.ac.manchester.cs.owl.owlapi.OWLDataAllValuesFromImpl.accept(OWLDataAllValuesFromImpl.java:99)\n\tat org.semanticweb.HermiT.structural.OWLClausification.clausify(Unknown Source)\n\tat org.semanticweb.HermiT.structural.OWLClausification.preprocessAndClausify(Unknown Source)\n\tat org.semanticweb.HermiT.Reasoner.loadOntology(Reasoner.java:117)\n\tat org.semanticweb.HermiT.Reasoner.<init>(Reasoner.java:108)\n\tat org.semanticweb.HermiT.Reasoner.<init>(Reasoner.java:86)\n\tat org.semanticweb.HermiT.cli.CommandLine.main(CommandLine.java:830)\n",
+    "reasoner": "Hermit"
+  },
+  "pellet": {
+    "is_consistent": false,
+    "inconsistent_classes": [
+      "xml_combined_owl.xml.Cl_Person",
+      "xml_combined_owl.xml.Cl_Supplier",
+      "xml_combined_owl.xml.Cl_Service",
+      "xml_combined_owl.xml.Cl_Product",
+      "xml_combined_owl.xml.Cl_EDIFACTMessage",
+      "xml_combined_owl.xml.Cl_InvoiceAmountReification",
+      "xml_combined_owl.xml.Cl_Company",
+      "xml_combined_owl.xml.Cl_Role",
+      "xml_combined_owl.xml.Cl_Entity",
+      "xml_combined_owl.xml.Cl_OrganizationInvoiceRole",
+      "xml_combined_owl.xml.Cl_Organization",
+      "xml_combined_owl.xml.Cl_Customer",
+      "xml_combined_owl.xml.Cl_Invoice",
+      "xml_combined_owl.xml.Cl_InvolvedOrganization",
+      "xml_combined_owl.xml.Cl_Address",
+      "xml_combined_owl.xml.Cl_BuyerAddressAssignment",
+      "xml_combined_owl.xml.Cl_OrganizationInvolvementDisplay",
+      "owl.Nothing",
+      "xml_combined_owl.xml.Cl_InvoiceAssignment",
+      "xml_combined_owl.xml.Cl_SellerRole",
+      "xml_combined_owl.xml.Cl_Buyer"
+    ],
+    "execution_time_seconds": 0.614,
+    "error": null,
+    "reasoner": "Pellet"
+  },
+  "aggregate": {
+    "all_validators_passed": false,
+    "total_execution_time_seconds": 0.944
+  }
+}

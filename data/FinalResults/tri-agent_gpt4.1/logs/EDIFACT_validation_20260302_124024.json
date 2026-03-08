@@ -1,0 +1,125 @@
+{
+  "story_id": "EDIFACT",
+  "timestamp": "20260302_124024",
+  "start_time": "2026-03-02T13:09:27.338062",
+  "ontology_size_chars": 12921,
+  "validation_results": {
+    "syntax": {
+      "valid": true,
+      "execution_time_seconds": 0.022,
+      "error": null,
+      "error_type": null
+    },
+    "oops": {
+      "has_pitfalls": true,
+      "pitfall_count": 1,
+      "execution_time_seconds": 0.096,
+      "pitfalls": [
+        {
+          "code": "P13",
+          "name": "Inverse relationships not explicitly declared",
+          "description": "This pitfall appears when any relationship (except for those that are defined as symmetric properties using owl:SymmetricProperty) does not have an inverse relationship (owl:inverseOf) defined within the ontology.\t",
+          "importance": "Minor",
+          "num_affected": 27,
+          "affected_elements": [
+            "http://www.example.org/ontology#hasAddress",
+            "http://www.example.org/ontology#hasNetPrice",
+            "http://www.example.org/ontology#hasReferenceNumber",
+            "http://www.example.org/ontology#hasDetail",
+            "http://www.example.org/ontology#describesItem",
+            "http://www.example.org/ontology#hasHeader",
+            "http://www.example.org/ontology#hasCompositeElement",
+            "http://www.example.org/ontology#isAssignedToBusinessProcess",
+            "http://www.example.org/ontology#hasTax",
+            "http://www.example.org/ontology#hasInvoiceAmount",
+            "http://www.example.org/ontology#hasIdentifier",
+            "http://www.example.org/ontology#hasSummary",
+            "http://www.example.org/ontology#playsRole",
+            "http://www.example.org/ontology#hasLineItem",
+            "http://www.example.org/ontology#containsMessage",
+            "http://www.example.org/ontology#hasMandatoryIdentifier",
+            "http://www.example.org/ontology#hasRoleAssignment",
+            "http://www.example.org/ontology#involvesOrganization",
+            "http://www.example.org/ontology#hasSimpleElement",
+            "http://www.example.org/ontology#hasSegment",
+            "http://www.example.org/ontology#hasGlobalLocationNumber",
+            "http://www.example.org/ontology#hasInvoiceNumber",
+            "http://www.example.org/ontology#hasQuantity",
+            "http://www.example.org/ontology#hasValidationConstraint",
+            "http://www.example.org/ontology#hasSection"
+          ]
+        }
+      ],
+      "pitfall_codes": [
+        "P13"
+      ],
+      "pitfall_names": [
+        "Inverse relationships not explicitly declared"
+      ]
+    },
+    "hermit": {
+      "reasoner": "Hermit",
+      "is_consistent": true,
+      "execution_time_seconds": 1.626,
+      "inconsistent_classes": [],
+      "inconsistent_classes_count": 0,
+      "error": null,
+      "error_type": null
+    },
+    "pellet": {
+      "reasoner": "Pellet",
+      "is_consistent": true,
+      "execution_time_seconds": 1.114,
+      "inconsistent_classes": [],
+      "inconsistent_classes_count": 0,
+      "error": null,
+      "error_type": null
+    },
+    "aggregate": {
+      "all_validators_passed": false,
+      "total_execution_time_seconds": 2.858,
+      "validation_breakdown": {
+        "syntax_valid": true,
+        "oops_passed": false,
+        "oops_pitfall_count": 1,
+        "hermit_consistent": true,
+        "pellet_consistent": true
+      },
+      "timing_breakdown_seconds": {
+        "syntax": 0.022,
+        "oops": 0.096,
+        "hermit": 1.626,
+        "pellet": 1.114,
+        "total": 2.858
+      }
+    }
+  },
+  "files_saved": [
+    {
+      "path": "data/output/ontologies/EDIFACT_ontology_20260302_124024.owl",
+      "description": "Ontology",
+      "timestamp": "2026-03-02T13:09:30.549676"
+    },
+    {
+      "path": "data/output/validations/EDIFACT_validation_20260302_124024.xml",
+      "description": "OOPS XML results",
+      "timestamp": "2026-03-02T13:09:30.550180"
+    },
+    {
+      "path": "data/output/validations/EDIFACT_validation_20260302_124024.json",
+      "description": "Validation metrics JSON",
+      "timestamp": "2026-03-02T13:09:30.550639"
+    },
+    {
+      "path": "data/output/scratchpads/EDIFACT_scratchpad_20260302_124024.json",
+      "description": "Agent scratchpad",
+      "timestamp": "2026-03-02T13:09:30.551380"
+    }
+  ],
+  "end_time": "2026-03-02T13:09:30.551610",
+  "iteration_count": 2,
+  "story_timing": {
+    "duration_seconds": 1746.22,
+    "duration_formatted": "29m 6s"
+  }
+}

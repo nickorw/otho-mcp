@@ -1,0 +1,78 @@
+@prefix : <http://example.org/ontology#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+### Classes
+:Cl_Invoice a owl:Class ;
+    rdfs:label "Invoice" ;
+    rdfs:comment "A document issued to indicate a transaction, typically listing products, quantities, prices, and payment terms." .
+
+:Cl_InvoiceIdentifier a owl:Class ;
+    rdfs:label "Invoice Identifier" ;
+    rdfs:comment "A unique identifier/number assigned to an invoice, used for reference and tracking." .
+
+:Cl_InvoiceReification a owl:Class ;
+    rdfs:label "Invoice Reification" ;
+    rdfs:comment "A reification class to connect an invoice with its invoice number, enabling flexible modeling for more complex scenarios." .
+
+### Class Hierarchy
+:Cl_InvoiceIdentifier rdfs:subClassOf :Cl_InvoiceReification .
+:Cl_Invoice rdfs:subClassOf :Cl_InvoiceReification .
+
+### Object Properties
+:hasInvoiceIdentifier a owl:ObjectProperty ;
+    rdfs:domain :Cl_InvoiceReification ;
+    rdfs:range :Cl_InvoiceIdentifier ;
+    rdfs:label "has invoice identifier" ;
+    rdfs:comment "Links an invoice reification to its invoice identifier." .
+
+:aboutInvoice a owl:ObjectProperty ;
+    rdfs:domain :Cl_InvoiceReification ;
+    rdfs:range :Cl_Invoice ;
+    rdfs:label "about invoice" ;
+    rdfs:comment "Links an invoice reification to the invoice it describes." .
+
+### Data Properties
+:invoiceNumberValue a owl:DatatypeProperty ;
+    rdfs:domain :Cl_InvoiceIdentifier ;
+    rdfs:range xsd:string ;
+    rdfs:label "invoice number value" ;
+    rdfs:comment "The literal invoice number as a string." ;
+    owl:FunctionalProperty .
+
+### Restrictions & General Class Axioms
+
+# Every Cl_InvoiceReification must be about an invoice and have an invoice identifier
+:Cl_InvoiceReification owl:equivalentClass [
+    rdf:type owl:Class ;
+    owl:intersectionOf (
+        [ rdf:type owl:Restriction ;
+          owl:onProperty :aboutInvoice ;
+          owl:someValuesFrom :Cl_Invoice ]
+        [ rdf:type owl:Restriction ;
+          owl:onProperty :hasInvoiceIdentifier ;
+          owl:someValuesFrom :Cl_InvoiceIdentifier ]
+    )
+] .
+
+# The Cl_InvoiceIdentifier is disjoint with Cl_Invoice
+:Cl_InvoiceIdentifier owl:disjointWith :Cl_Invoice .
+
+### Example Individuals (optional, for illustration)
+#:inv1 a :Cl_Invoice .
+#:inv1_id a :Cl_InvoiceIdentifier ;
+#    :invoiceNumberValue "INV-2024-001" .
+#:inv1_reif a :Cl_InvoiceReification ;
+#    :aboutInvoice :inv1 ;
+#    :hasInvoiceIdentifier :inv1_id .
+
+# Now, a query like: 
+# SELECT ?invNum WHERE {
+#   ?reif a :Cl_InvoiceReification ;
+#       :aboutInvoice ?invoice ;
+#       :hasInvoiceIdentifier ?id .
+#   ?id :invoiceNumberValue ?invNum .
+#   FILTER (?invoice = :inv1)
+# }
+# ...will answer "What is the invoice number?" for a given invoice.

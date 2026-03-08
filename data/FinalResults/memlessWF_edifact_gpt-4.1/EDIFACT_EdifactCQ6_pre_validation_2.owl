@@ -1,0 +1,72 @@
+@prefix : <http://example.org/ontology#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+
+### Classes
+
+:Cl_Person a owl:Class .
+:Cl_Stakeholder a owl:Class .
+:Cl_Buyer a owl:Class ;
+    rdfs:subClassOf :Cl_Person, :Cl_Stakeholder .
+:Cl_Seller a owl:Class ;
+    rdfs:subClassOf :Cl_Person, :Cl_Stakeholder .
+:Cl_Address a owl:Class .
+:Cl_BuyerAddressAssignment a owl:Class . # Pivot/reification class for Buyer-Address association
+
+### Disjointness
+
+:Cl_Buyer owl:disjointWith :Cl_Seller .
+
+### Properties
+
+:hasBuyer a owl:ObjectProperty ;
+    rdfs:domain :Cl_BuyerAddressAssignment ;
+    rdfs:range :Cl_Buyer .
+
+:hasAddress a owl:ObjectProperty ;
+    rdfs:domain :Cl_BuyerAddressAssignment ;
+    rdfs:range :Cl_Address .
+
+:buyerAddressAssignment a owl:ObjectProperty ;
+    rdfs:domain :Cl_Buyer ;
+    rdfs:range :Cl_BuyerAddressAssignment ;
+    owl:inverseOf :hasBuyer .
+
+:assignedToBuyer a owl:ObjectProperty ;
+    rdfs:domain :Cl_BuyerAddressAssignment ;
+    rdfs:range :Cl_Buyer ;
+    owl:inverseOf :buyerAddressAssignment .
+
+:addressLine a owl:DatatypeProperty ;
+    rdfs:domain :Cl_Address ;
+    rdfs:range xsd:string .
+
+:city a owl:DatatypeProperty ;
+    rdfs:domain :Cl_Address ;
+    rdfs:range xsd:string .
+
+:postalCode a owl:DatatypeProperty ;
+    rdfs:domain :Cl_Address ;
+    rdfs:range xsd:string .
+
+:country a owl:DatatypeProperty ;
+    rdfs:domain :Cl_Address ;
+    rdfs:range xsd:string .
+
+### Restrictions
+
+:Cl_BuyerAddressAssignment owl:equivalentClass [
+    rdf:type owl:Class ;
+    owl:intersectionOf (
+        [ rdf:type owl:Restriction ; owl:onProperty :hasBuyer ; owl:someValuesFrom :Cl_Buyer ]
+        [ rdf:type owl:Restriction ; owl:onProperty :hasAddress ; owl:someValuesFrom :Cl_Address ]
+    )
+] .
+
+### Comments
+
+# This ontology allows answering the competency question: "What is the address of the buyer?"
+# by linking a Cl_Buyer to a Cl_Address via the Cl_BuyerAddressAssignment pivot class. This supports extensibility
+# for possible additional properties such as address validity, address type, etc.

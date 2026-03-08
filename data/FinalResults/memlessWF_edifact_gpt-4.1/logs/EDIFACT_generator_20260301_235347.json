@@ -1,0 +1,10 @@
+{
+  "story_id": "EDIFACT",
+  "timestamp": "20260301_235347",
+  "duration_seconds": 389.1360809803009,
+  "duration_formatted": "6m 29s",
+  "ontology_saved": true,
+  "ontology_size_chars": 39354,
+  "workflow_type": "main_branch_sequential",
+  "iterations": []
+}

@@ -1,0 +1,61 @@
+{
+  "story_id": "EDIFACT",
+  "timestamp": "20260301_222612",
+  "start_time": "2026-03-01T22:32:04.862710",
+  "ontology_size_chars": 29128,
+  "validation_results": {
+    "syntax": {
+      "valid": true,
+      "execution_time_seconds": 0,
+      "error": null,
+      "error_type": null
+    },
+    "oops": {
+      "has_pitfalls": false,
+      "pitfall_count": 0,
+      "execution_time_seconds": 0,
+      "pitfalls": [],
+      "pitfall_codes": [],
+      "pitfall_names": []
+    },
+    "hermit": {
+      "reasoner": "Hermit",
+      "is_consistent": false,
+      "execution_time_seconds": 0.424,
+      "inconsistent_classes": [],
+      "inconsistent_classes_count": 0,
+      "error": "Java error message is:\nException in thread \"main\" org.semanticweb.HermiT.datatypes.UnsupportedDatatypeException: HermiT supports all and only the datatypes of the OWL 2 datatype map, see \nhttp://www.w3.org/TR/owl2-syntax/#Datatype_Maps. \nThe datatype 'http://www.w3.org/2001/XMLSchema#date' is not part of the OWL 2 datatype map and \nno custom datatype definition is given; \ntherefore, HermiT cannot handle this datatype.\n\tat org.semanticweb.HermiT.datatypes.DatatypeRegistry.getDatatypeHandlerFor(Unknown Source)\n\tat org.semanticweb.HermiT.datatypes.DatatypeRegistry.getDatatypeHandlerFor(Unknown Source)\n\tat org.semanticweb.HermiT.datatypes.DatatypeRegistry.validateDatatypeRestriction(Unknown Source)\n\tat org.semanticweb.HermiT.structural.OWLClausification$DataRangeConverter.visit(Unknown Source)\n\tat uk.ac.manchester.cs.owl.owlapi.OWLDatatypeImpl.accept(OWLDatatypeImpl.java:343)\n\tat org.semanticweb.HermiT.structural.OWLClausification$DataRangeConverter.convertDataRange(Unknown Source)\n\tat org.semanticweb.HermiT.structural.OWLClausification$NormalizedAxiomClausifier.visit(Unknown Source)\n\tat uk.ac.manchester.cs.owl.owlapi.OWLDataAllValuesFromImpl.accept(OWLDataAllValuesFromImpl.java:99)\n\tat org.semanticweb.HermiT.structural.OWLClausification.clausify(Unknown Source)\n\tat org.semanticweb.HermiT.structural.OWLClausification.preprocessAndClausify(Unknown Source)\n\tat org.semanticweb.HermiT.Reasoner.loadOntology(Reasoner.java:117)\n\tat org.semanticweb.HermiT.Reasoner.<init>(Reasoner.java:108)\n\tat org.semanticweb.HermiT.Reasoner.<init>(Reasoner.java:86)\n\tat org.semanticweb.HermiT.cli.CommandLine.main(CommandLine.java:830)\n",
+      "error_type": "reasoning_error"
+    },
+    "pellet": {
+      "reasoner": "Pellet",
+      "is_consistent": false,
+      "execution_time_seconds": 0.614,
+      "inconsistent_classes": [],
+      "inconsistent_classes_count": 0,
+      "error": "Java error message is: Mar 01, 2026 10:32:04 PM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature\nWARNING: Unsupported axiom: Ignoring triple with unknown property from OWL namespace: http://example.org/fests @owl:versionIRI http://example.org/fests/v1\nERROR: Ontology is inconsistent, run \"pellet explain\" to get the reason\n",
+      "error_type": "reasoning_error"
+    },
+    "aggregate": {
+      "all_validators_passed": false,
+      "total_execution_time_seconds": 1.038,
+      "validation_breakdown": {
+        "syntax_valid": true,
+        "oops_passed": true,
+        "oops_pitfall_count": 0,
+        "hermit_consistent": false,
+        "pellet_consistent": false
+      },
+      "timing_breakdown_seconds": {
+        "syntax": 0,
+        "oops": 0,
+        "hermit": 0.424,
+        "pellet": 0.614,
+        "total": 1.038
+      }
+    }
+  },
+  "files_saved": [],
+  "end_time": "2026-03-01T22:32:04.863913",
+  "iteration_count": 0
+}

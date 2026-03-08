@@ -1,0 +1,95 @@
+{
+  "story_id": "EDIFACT",
+  "timestamp": "20260301_215907",
+  "start_time": "2026-03-01T22:04:09.740740",
+  "ontology_size_chars": 27019,
+  "validation_results": {
+    "syntax": {
+      "valid": true,
+      "execution_time_seconds": 0,
+      "error": null,
+      "error_type": null
+    },
+    "oops": {
+      "has_pitfalls": false,
+      "pitfall_count": 0,
+      "execution_time_seconds": 0,
+      "pitfalls": [],
+      "pitfall_codes": [],
+      "pitfall_names": []
+    },
+    "hermit": {
+      "reasoner": "Hermit",
+      "is_consistent": false,
+      "execution_time_seconds": 0.54,
+      "inconsistent_classes": [
+        "xml_combined_owl.xml.Cl_ItemDescription",
+        "xml_combined_owl.xml.Cl_ItemName",
+        "xml_combined_owl.xml.Cl_ItemSKU",
+        "xml_combined_owl.xml.Cl_Invoice",
+        "xml_combined_owl.xml.Cl_Document",
+        "xml_combined_owl.xml.Cl_ItemPrice",
+        "xml_combined_owl.xml.Cl_ItemCategory",
+        "owl.Nothing",
+        "xml_combined_owl.xml.Cl_InvoiceOrganizationRole",
+        "xml_combined_owl.xml.Cl_ItemSoldDate",
+        "xml_combined_owl.xml.Cl_InvoiceLine",
+        "xml_combined_owl.xml.Cl_Information",
+        "xml_combined_owl.xml.Cl_ItemImage",
+        "xml_combined_owl.xml.Cl_InvoiceAmount",
+        "xml_combined_owl.xml.Cl_ItemSoldQuantity",
+        "xml_combined_owl.xml.Cl_InvoiceDetail"
+      ],
+      "inconsistent_classes_count": 16,
+      "error": null,
+      "error_type": null
+    },
+    "pellet": {
+      "reasoner": "Pellet",
+      "is_consistent": false,
+      "execution_time_seconds": 0.643,
+      "inconsistent_classes": [
+        "xml_combined_owl.xml.Cl_ItemDescription",
+        "xml_combined_owl.xml.Cl_ItemName",
+        "xml_combined_owl.xml.Cl_ItemSKU",
+        "xml_combined_owl.xml.Cl_Invoice",
+        "xml_combined_owl.xml.Cl_Document",
+        "xml_combined_owl.xml.Cl_ItemPrice",
+        "xml_combined_owl.xml.Cl_ItemCategory",
+        "owl.Nothing",
+        "xml_combined_owl.xml.Cl_InvoiceOrganizationRole",
+        "xml_combined_owl.xml.Cl_ItemSoldDate",
+        "xml_combined_owl.xml.Cl_InvoiceLine",
+        "xml_combined_owl.xml.Cl_Information",
+        "xml_combined_owl.xml.Cl_ItemImage",
+        "xml_combined_owl.xml.Cl_InvoiceAmount",
+        "xml_combined_owl.xml.Cl_ItemSoldQuantity",
+        "xml_combined_owl.xml.Cl_InvoiceDetail"
+      ],
+      "inconsistent_classes_count": 16,
+      "error": null,
+      "error_type": null
+    },
+    "aggregate": {
+      "all_validators_passed": false,
+      "total_execution_time_seconds": 1.183,
+      "validation_breakdown": {
+        "syntax_valid": true,
+        "oops_passed": true,
+        "oops_pitfall_count": 0,
+        "hermit_consistent": false,
+        "pellet_consistent": false
+      },
+      "timing_breakdown_seconds": {
+        "syntax": 0,
+        "oops": 0,
+        "hermit": 0.54,
+        "pellet": 0.643,
+        "total": 1.183
+      }
+    }
+  },
+  "files_saved": [],
+  "end_time": "2026-03-01T22:04:09.742120",
+  "iteration_count": 0
+}
