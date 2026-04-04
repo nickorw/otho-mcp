@@ -1,205 +1,322 @@
-# EDIFACT singleAgent Ontology Ranking Report
+# UN/EDIFACT Invoice Ontology Evaluation — Single-Agent Run
 
-> Evaluator: Claude Code (automated ontology evaluation)
-> Date: 2026-03-08
-> Evaluation scope: 17 singleAgent ontologies (all HermiT/Pellet consistent; 14 of 17 pass, 3 inconsistent per validation report)
+
+**Date:** 2026-03-08
+**Corpus:** 17 OWL ontology files from `data/FinalResults/Ontologies/singleAgent/`
+**Metrics source:** `data/FinalResults/ontology_report.md` (Section 3.2)
 
 ---
 
-## Scoring Methodology
+## Evaluation Framework
 
-Five dimensions are scored 0–5.0 and weighted to produce a final score out of 5.00:
+| Dimension | Weight | Description |
+|-----------|--------|-------------|
+| CQ Coverage | 40% | Fraction of 14 domain CQs answerable (0–14 scale mapped to 0–5) |
+| Structural Ratios | 20% | RR, AR, IR balance against OntoQA targets |
+| Design Patterns | 15% | N-ary reification, disjointness, equivalence axioms, inverse pairs |
+| Axiom Complexity | 15% | Axiom Diversity Score (count of distinct OWL construct types) |
+| Lexical & Annotation Quality | 10% | Label coverage, comment coverage, naming strictness |
 
-| Dimension | Weight |
-|---|---|
-| CQ Coverage (14 competency questions) | 40% |
-| Structural Ratios (OntoQA: RR, AR, IR) | 20% |
-| Design Patterns (N-ary role reification) | 15% |
-| Axiom Complexity (advanced OWL constructs) | 15% |
-| Lexical & Annotation Quality | 10% |
+### 14 Competency Questions (CQs)
 
-Structural ratios are taken **directly** from `ontology_report.md` (Section 3.2). No estimation.
-
-Reference target for "balanced" singleAgent ratios: **RR ≈ 0.80–0.88** (high, rich relational graph), **AR ≈ 0.60–0.80** (moderate attribute density), **IR ≈ 0.30–0.55** (healthy DAG, not flat nor excessive chains).
+| ID | Question |
+|----|----------|
+| CQ1 | Which invoices are present in a given interchange? |
+| CQ2 | Which organizations are involved in an invoice, and in what roles? |
+| CQ3 | Who is the buyer in a given invoice? |
+| CQ4 | What is the delivery address for a given buyer role? |
+| CQ5 | Which items appear in a given invoice? |
+| CQ6 | What is the net price of each line item? |
+| CQ7 | What are the invoice date and reference number? |
+| CQ8 | What is the total invoice amount and tax amount? |
+| CQ9 | What is the invoice number? |
+| CQ10 | Is the message a valid EDIFACT invoice format? |
+| CQ11 | To which business process is the invoice assigned? |
+| CQ12 | What identifier (e.g., GLN) does an organization have? |
+| CQ13 | Can the same organization act as buyer and delivery party simultaneously? |
+| CQ14 | What are the header, detail, and summary sections of an invoice? |
 
 ---
 
 ## Summary Ranking Table
 
-| Rank | Ontology File | CQs Covered | CQ Cov. (0–5) | Struct. Ratios (0–5) | Design Patterns (0–5) | Ax. Complexity (0–5) | Lexical (0–5) | **Weighted Score** |
-|---|---|---|---|---|---|---|---|---|
-| 1 | `EDIFACT_ontology_20260304_062606.owl` | 14/14 | 4.8 | 4.2 | 5.0 | 4.5 | 5.0 | **4.73** |
-| 2 | `EDIFACT_ontology_20260304_093001.owl` | 14/14 | 4.7 | 4.4 | 4.8 | 4.5 | 5.0 | **4.70** |
-| 3 | `EDIFACT_ontology_20260304_085410.owl` | 13/14 | 4.5 | 4.0 | 5.0 | 4.5 | 5.0 | **4.58** |
-| 4 | `EDIFACT_ontology_20260304_071618.owl` | 14/14 | 4.6 | 4.0 | 4.5 | 4.8 | 5.0 | **4.57** |
-| 5 | `EDIFACT_ontology_20260304_094903.owl` | 14/14 | 4.5 | 4.1 | 4.5 | 4.2 | 5.0 | **4.47** |
-| 6 | `EDIFACT_ontology_20260304_092221.owl` | 14/14 | 4.5 | 4.1 | 4.5 | 4.0 | 5.0 | **4.44** |
-| 7 | `EDIFACT_ontology_20260304_070119.owl` | 13/14 | 4.4 | 4.1 | 4.5 | 3.8 | 5.0 | **4.35** |
-| 8 | `EDIFACT_ontology_20260304_075831.owl` | 14/14 | 4.5 | 3.5 | 4.5 | 3.5 | 5.0 | **4.27** |
-| 9 | `EDIFACT_ontology_20260304_071919.owl` | 14/14 | 4.4 | 3.8 | 4.5 | 3.5 | 5.0 | **4.24** |
-| 10 | `EDIFACT_ontology_20260304_072404.owl` | 14/14 | 4.4 | 3.8 | 4.3 | 3.5 | 5.0 | **4.21** |
-| 11 | `EDIFACT_ontology_20260304_090528.owl` | 14/14 | 4.4 | 3.5 | 4.5 | 3.5 | 5.0 | **4.18** |
-| 12 | `EDIFACT_ontology_20260304_063345.owl` | 14/14 | 4.3 | 3.8 | 4.3 | 3.3 | 5.0 | **4.12** |
-| 13 | `EDIFACT_ontology_20260304_073706.owl` | 13/14 | 4.0 | 3.9 | 4.5 | 4.2 | 5.0 | **4.12** |
-| 14 | `EDIFACT_ontology_20260304_072939.owl` | 13/14 | 4.0 | 3.8 | 4.2 | 3.0 | 5.0 | **3.95** |
-| 15 | `EDIFACT_ontology_20260304_112519.owl` | 13/14 | 4.0 | 3.6 | 4.2 | 3.2 | 5.0 | **3.94** |
-| 16 | `EDIFACT_ontology_20260304_075320.owl` | 12/14 | 3.5 | 3.2 | 4.0 | 2.5 | 5.0 | **3.58** |
-| 17 | `EDIFACT_ontology_20260304_111526.owl` | 12/14 | 3.5 | 3.1 | 4.0 | 2.5 | 5.0 | **3.55** |
+| Rank | File (timestamp) | CQ Coverage (×0.40) | Structural (×0.20) | Design Patterns (×0.15) | Axiom Complexity (×0.15) | Lexical (×0.10) | **Total** |
+|------|-----------------|--------------------|--------------------|------------------------|--------------------------|-----------------|-----------|
+| 1 | 093001 | 5.00 | 4.20 | 5.00 | 4.50 | 4.00 | **4.73** |
+| 2 | 094903 | 5.00 | 4.40 | 4.50 | 3.75 | 4.00 | **4.53** |
+| 3 | 062606 | 4.64 | 4.20 | 4.50 | 3.75 | 4.50 | **4.38** |
+| 4 | 071618 | 4.64 | 4.00 | 4.50 | 5.00 | 3.50 | **4.26** |
+| 5 | 085410 | 4.64 | 3.60 | 4.50 | 4.50 | 4.00 | **4.11** |
+| 6 | 070119 | 4.29 | 4.20 | 4.00 | 3.75 | 4.00 | **4.05** |
+| 7 | 063345 | 4.29 | 4.00 | 4.00 | 3.75 | 3.50 | **3.97** |
+| 8 | 090528 | 4.29 | 3.80 | 3.50 | 2.25 | 4.00 | **3.80** |
+| 9 | 075831 | 3.93 | 4.00 | 3.50 | 4.50 | 3.50 | **3.85** |
+| 10 | 092221 | 3.93 | 4.40 | 3.50 | 3.00 | 3.50 | **3.77** |
+| 11 | 072404 | 3.93 | 3.60 | 3.50 | 2.25 | 3.50 | **3.55** |
+| 12 | 071919 | 3.57 | 3.80 | 3.50 | 3.75 | 3.50 | **3.60** |
+| 13 | 112519 | 3.57 | 3.80 | 3.00 | 2.25 | 4.00 | **3.39** |
+| 14 | 073706 | 3.21 | 2.80 | 3.50 | 5.00 | 3.50 | **3.36** |
+| 15 | 072939 | 3.21 | 3.60 | 2.50 | 1.50 | 3.50 | **3.07** |
+| 16 | 075320 | 2.86 | 2.40 | 2.50 | 2.25 | 3.00 | **2.72** |
+| 17 | 111526 | 2.86 | 2.60 | 2.50 | 2.25 | 3.00 | **2.67** |
 
-**Weighted score formula:**
-`WS = CQ×0.40 + SR×0.20 + DP×0.15 + AC×0.15 + LX×0.10`
-
----
-
-## Top 3 Detailed Analysis
+Raw scores are on a 0–5 scale per dimension before weighting.
 
 ---
 
-### Rank 1: `EDIFACT_ontology_20260304_062606.owl`
-**Weighted score: 4.73 / 5.00**
-
-**CQ Coverage Analysis:**
-
-- CQ1 — ✅ Covered — `InterchangeEnvelope` → `containsMessage` → `InvoiceMessage` enables querying all invoices in an EDIFACT message.
-- CQ2 — ✅ Covered — `InvoiceMessage hasRoleContext OrganizationRoleContext`, which `involvesOrganization Organization`. Direct path to all parties.
-- CQ3 — ✅ Covered — `OrganizationRoleContext hasRole AgentRole` reification enables "what role does org S play?" queries unambiguously.
-- CQ4 — ✅ Covered — `BuyerContext` is defined via `owl:equivalentClass [owl:onProperty :hasRole; owl:allValuesFrom :Buyer]`. Elegant typed query path for buyer identification.
-- CQ5 — ✅ Covered — `Organization` has data properties; `OrganizationRoleContext` carries `hasAddress`, `hasIdentifier`, enabling display of all relevant attributes.
-- CQ6 — ✅ Covered — Address links via `OrganizationRoleContext hasAddress Address` with full `addressLine`, `postalCode`, `city`, `countryCode` data properties. Buyer-specific address resolution is clean.
-- CQ7 — ✅ Covered — `InvoiceDetailSection hasLineItem LineItem`, `LineItem describesItem Item`. Items are linked via the detail section.
-- CQ8 — ✅ Covered — `Item` can carry descriptive data through its lineItem. `LineItem hasPrice Price`. Full item attribute chain present.
-- CQ9 — ✅ Covered — `Price netPrice xsd:decimal` data property with explicit `rdfs:domain :Price`.
-- CQ10 — ✅ Covered — `InvoiceHeaderSection` carries `invoiceNumber`, `invoiceDate`, `referenceNumber`; summary carries `totalAmount`, `taxAmount`. Invoice detail sections are subclasses of `InvoiceMessage`.
-- CQ11 — ✅ Covered — `InvoiceSummarySection totalAmount xsd:decimal` with `owl:someValuesFrom` restriction.
-- CQ12 — ✅ Covered — `InvoiceHeaderSection invoiceNumber xsd:string`.
-- CQ13 — ✅ Covered — `SHACLConstraint` class with `validatedBy` / `validates` object property pair; `MandatoryIdentifierConstraint` individual links to validity requirements. Best SHACL modeling in the set.
-- CQ14 — ✅ Covered — `InvoiceMessage partOfBusinessProcess BusinessProcess` with named inverse `hasInvoiceMessage`.
-
-**Structural Ratios (OntoQA):**
-- **RR:** 0.8235 — Excellent. Indicates a rich relational graph where ~82% of relationships are non-taxonomic (object properties). Substantially better than TUMedifact's 0.28 reference, appropriate for the domain story.
-- **AR:** 0.6500 — Good. 13 data properties across 20 classes = moderate attribute richness. Below the TUMedifact baseline (8.42) but proportional given the semantic abstraction level. Slightly low for CQ5/CQ8 depth.
-- **IR:** 0.3000 — Acceptable. Average of 0.3 inheritance edges per class. Flat-ish hierarchy by design (no deep specialization needed), but subclass hierarchy for InvoiceHeader/Detail/Summary sections is clean and disjoint.
-
-**Design Patterns & Domain Representation:**
-The `OrganizationRoleContext` pivot class is the strongest reification pattern in the entire set. It correctly models the n-ary relationship between an InvoiceMessage, an Organization, an AgentRole, and an Address, keeping the organization node free from role-specific attributes. The `BuyerContext` defined via `owl:equivalentClass` with `owl:allValuesFrom :Buyer` provides an elegant, declaratively queryable path for CQ4. Disjointness axioms between section classes, and between `AgentRole` and `OrganizationRoleContext`, demonstrate careful domain modeling. The SHACLConstraint class with dedicated object properties is unique and directly addresses CQ13 structurally.
-
-**Axiom Complexity:**
-Axiom Diversity Score = 5. Contains `owl:someValuesFrom` (on InvoiceSummarySection and InvoiceMessage), `owl:allValuesFrom` (on BuyerContext), `owl:equivalentClass`, `owl:inverseOf` (systematically on all property pairs), `owl:disjointWith`, `owl:FunctionalProperty`, and `owl:InverseFunctionalProperty`. The use of both functional and inverse-functional properties on `containsMessage`/`isContainedInEnvelope` is semantically precise and unusual in this set.
-
-**Lexical & Annotation Quality:**
-- Name Strict: 1.0 — Perfect CamelCase/lowerCamelCase adherence across all 20 classes and 28 properties.
-- Label Coverage: 1.0 — Every named entity carries an `rdfs:label`.
-- Comment Coverage: 1.0 — Every named entity carries an `rdfs:comment`.
-
-**Most Critical Defect:**
-The `hasSection`/`isSectionOf` property pattern is absent — sections are modeled as *subclasses* of `InvoiceMessage` rather than *components linked by a property*, which forces SPARQL queries for CQ10 to use `rdf:type` rather than a clean property path; adding explicit `hasHeaderSection`, `hasDetailSection`, `hasSummarySection` object properties would complete the structural navigation.
+## Top-3 Detailed Analysis
 
 ---
 
-### Rank 2: `EDIFACT_ontology_20260304_093001.owl`
-**Weighted score: 4.70 / 5.00**
+### Rank 1 — `EDIFACT_ontology_20260304_093001.owl` — Score: 4.73
 
-**CQ Coverage Analysis:**
+#### CQ Coverage (Score: 5.00 / 5.00 — 14/14 CQs answerable)
 
-- CQ1 — ✅ Covered — `InterchangeEnvelope containsMessage EdifactMessage` → `InvoiceMessage` subclass.
-- CQ2 — ✅ Covered — `InvoiceMessage involvesRole OrganizationRoleAssignment`, which `isRoleOf Organization` via `playsRole`. Double-pivot covers all parties.
-- CQ3 — ✅ Covered — `OrganizationRoleAssignment hasAgentRole AgentRole` with functional property constraint (cardinality 1).
-- CQ4 — ✅ Covered — Querying for `OrganizationRoleAssignment` with `hasAgentRole` pointing to a Buyer-typed role; cardinality restriction ensures precision.
-- CQ5 — ✅ Covered — `Organization hasName`, `hasGLN`, `hasAddress Address` data properties present.
-- CQ6 — ✅ Covered — `OrganizationRoleAssignment hasRoleAddress Address` (functional) — role-specific address cleanly modeled. `Address hasAddressLine`, `hasPostalCode`, `hasCity`, `hasCountryCode`.
-- CQ7 — ✅ Covered — `DetailSection hasLineItem LineItem`, `LineItem hasItem Item`.
-- CQ8 — ✅ Covered — `Item hasItemName`. Line item carries `hasNetPrice`, `hasQuantity`.
-- CQ9 — ✅ Covered — `LineItem hasNetPrice xsd:decimal` (direct data property on LineItem).
-- CQ10 — ✅ Covered — `InvoiceMessage hasSection Segment` (functional, range Segment), `hasInvoiceNumber`, `hasInvoiceAmount`, `hasDate`, `hasReferenceNumber`.
-- CQ11 — ✅ Covered — `InvoiceMessage hasInvoiceAmount xsd:decimal`.
-- CQ12 — ✅ Covered — `InvoiceMessage hasInvoiceNumber xsd:string`.
-- CQ13 — ⚠️ Partially covered — Cardinality restrictions on `OrganizationRoleAssignment` enforce mandatory role and address, and `maxCardinality 1` on `isPartOfProcess` constrains process assignment. No explicit SHACL/validation class but structural constraints are the strongest in the set.
-- CQ14 — ✅ Covered — `InvoiceMessage isPartOfProcess BusinessProcess`.
+| CQ | Answerable | Key Construct |
+|----|-----------|---------------|
+| CQ1 | Yes | `InterchangeEnvelope :containsMessage :InvoiceMessage` |
+| CQ2 | Yes | `OrganizationRoleAssignment` pivot → `hasAgentRole`, `involvesOrganization` |
+| CQ3 | Yes | `AgentRole owl:disjointUnionOf (:BuyerRole :DeliveryPartyRole)`; `RoleAssignment owl:equivalentClass [intersectionOf([someValuesFrom :BuyerRole][someValuesFrom :Organization])]` |
+| CQ4 | Yes | `OrganizationRoleAssignment :hasRoleAddress :Address` with postal code, city, country |
+| CQ5 | Yes | `InvoiceLineAssociation` links `InvoiceMessage` to `LineItem`; `LineItem :refersToItem :Item` |
+| CQ6 | Yes | `LineItem :hasPrice :Price`; `Price :netPrice xsd:decimal` |
+| CQ7 | Yes | `HeaderSection :hasDate xsd:dateTime`; `HeaderSection :hasReferenceNumber xsd:string` |
+| CQ8 | Yes | `SummarySection :hasTotalAmount xsd:decimal`; `SummarySection :hasTaxAmount xsd:decimal` |
+| CQ9 | Yes | `HeaderSection :hasInvoiceNumber xsd:string` |
+| CQ10 | Yes | `InvoiceMessage rdfs:subClassOf :EDIFACTMessage`; structural hierarchy validates format |
+| CQ11 | Yes | `InvoiceMessage :isPartOfProcess :BusinessProcess` |
+| CQ12 | Yes | `Organization :hasIdentifier :Identifier` with `identifierValue`; `GlobalLocationNumber subClassOf Identifier` |
+| CQ13 | Yes | `AgentRole owl:disjointUnionOf (:BuyerRole :DeliveryPartyRole)` explicitly models both roles; `OrganizationRoleAssignment` pivot allows same `Organization` to participate via separate assignments |
+| CQ14 | Yes | `HeaderSection`, `DetailSection`, `SummarySection` as disjoint subclasses of `Segment` |
 
-**Structural Ratios (OntoQA):**
-- **RR:** 0.7826 — Good relational richness. 36 object properties vs 19 classes yields a near-ideal ratio.
-- **AR:** 0.7368 — Best AR in the entire singleAgent set. 14 data properties across 19 classes. Very good attribute density. Supports detailed CQ answers.
-- **IR:** 0.5263 — The highest IR among the well-scoring ontologies. Max depth = 5, avg depth = 1.74. Deep hierarchy (InterchangeEnvelope → EDIFACTMessage → InvoiceMessage → Segment → LineItem) reflects realistic EDIFACT nesting, though some depth is inherited from modeling Segment as subClassOf EdifactMessage which is debatable.
+#### Structural Ratio Analysis (Score: 4.20 / 5.00)
 
-**Design Patterns & Domain Representation:**
-This ontology uses a three-level reification: `Organization playsRole OrganizationRoleAssignment`, `InvoiceMessage involvesRole OrganizationRoleAssignment`, and `OrganizationRoleAssignment hasAgentRole AgentRole` + `hasRoleAddress Address`. This cleanly handles the E/D/E scenario where the same organization acts as Buyer in one context and Delivery Party in another. The cardinality restrictions (`owl:cardinality 1` on `hasAgentRole` and `hasRoleAddress`) are logically tight and prevent under-specified instances. The `hasRoleIdentifier` property linking GLN (as a `SimpleDataElement`) is an interesting modeling choice that integrates EDIFACT structure with identity, though using `SimpleDataElement` as GLN is unusual. `disjointUnionOf` on Segment sections is correctly modeled.
+| Metric | Value | Target | Assessment |
+|--------|-------|--------|------------|
+| RR (Relationship Richness) | 0.7826 | ≥0.70 | Strong — 36 object properties across 19 classes |
+| AR (Attribute Richness) | 0.7368 | ≥0.60 | Good — 14 data properties across 19 classes |
+| IR (Inheritance Richness) | 0.5263 | 0.30–0.60 | Excellent — deepest hierarchy (max depth=5) in group |
+| Axiom Diversity Score | 6 | ≥5 | Adequate — uses someValuesFrom, allValuesFrom, equivalentClass, intersectionOf, disjointUnionOf, hasValue |
 
-**Axiom Complexity:**
-Axiom Diversity Score = 6 (highest in the set). Contains: `owl:someValuesFrom`, `owl:cardinality` (exact), `owl:maxCardinality`, `owl:inverseOf`, `owl:disjointWith`, `owl:disjointUnionOf`, `owl:FunctionalProperty`. The cardinality restrictions on `OrganizationRoleAssignment` (exactly 1 role, exactly 1 address) are semantically correct for the domain and are rare in this set.
+IR=0.5263 is the highest in the entire group, indicating well-calibrated taxonomy depth without over-flattening. The max depth of 5 (`InterchangeEnvelope > EDIFACTMessage > InvoiceMessage > Section > SubSection`) supports CQ14 naturally.
 
-**Lexical & Annotation Quality:**
-- Name Strict: 1.0 — Perfect naming adherence.
-- Label Coverage: 1.0 — All entities labeled.
-- Comment Coverage: 1.0 — All entities commented.
+#### Design Patterns (Score: 5.00 / 5.00)
 
-**Most Critical Defect:**
-The `hasSection` property has `owl:FunctionalProperty` declared, making it functional (at most one section per invoice message), yet an invoice has *three* sections (header, detail, summary). This is a logical inconsistency: a functional property cannot have three distinct values. This could cause spurious inference issues even though HermiT reported consistency, and should be split into `hasHeaderSection`, `hasDetailSection`, and `hasSummarySection` functional properties.
+- **N-ary Role Reification**: `OrganizationRoleAssignment` pivot correctly attaches organization, role, address, and identifier in a single reified node; `owl:cardinality "1"` on both `hasAgentRole` and `hasRoleAddress` enforces data integrity.
+- **Secondary Pivot**: `InvoiceLineAssociation` cleanly separates line-item associations from organizational context.
+- **Disjoint Union**: `AgentRole owl:disjointUnionOf (:BuyerRole :DeliveryPartyRole)` closes the role taxonomy — the only ontology in the group to close `AgentRole` rather than leaving it open.
+- **Equivalence Axiom**: `RoleAssignment owl:equivalentClass [intersectionOf([someValuesFrom :AgentRole][someValuesFrom :Organization])]` provides a necessary-and-sufficient definition.
+- **Full Inverse Coverage**: All 36 object properties have declared `owl:inverseOf` counterparts.
 
----
+#### Axiom Complexity (Score: 4.50 / 5.00 — Diversity=6)
 
-### Rank 3: `EDIFACT_ontology_20260304_085410.owl`
-**Weighted score: 4.58 / 5.00**
+OWL constructs present: `owl:someValuesFrom`, `owl:allValuesFrom`, `owl:equivalentClass`, `owl:intersectionOf`, `owl:disjointUnionOf`, `owl:hasValue`. Missing: `owl:unionOf` (standalone), `owl:hasKey`, `owl:oneOf`. At 6 types, this ontology uses a broad but purposeful set of constructs without decorative complexity.
 
-**CQ Coverage Analysis:**
+#### Lexical & Annotation Quality (Score: 4.00 / 5.00)
 
-- CQ1 — ✅ Covered — `InterchangeEnvelope hasMessage Message` → `InvoiceMessage subClassOf Message`.
-- CQ2 — ✅ Covered — `InvoiceMessage hasOrganizationRoleAssignment OrganizationRoleAssignment`, `hasOrganization Organization`.
-- CQ3 — ✅ Covered — `OrganizationRoleAssignment hasRole AgentRole` (functional) — clean, unambiguous role query.
-- CQ4 — ✅ Covered — Filter on `OrganizationRoleAssignment` with `hasRole` = Buyer instance or subtype.
-- CQ5 — ✅ Covered — `Organization hasName`, address via `OrganizationRoleAssignment hasAddress`. Identifier via `hasIdentifier → Identifier → hasMandatoryIdentifier`.
-- CQ6 — ✅ Covered — `OrganizationRoleAssignment hasAddress Address` (functional) — role-specific address. `Address hasAddressLine`.
-- CQ7 — ✅ Covered — `InvoiceMessage hasLineAssociation InvoiceLineAssociation`, `hasLineItem LineItem`, `hasItem Item`. Double reification of line items is thorough.
-- CQ8 — ✅ Covered — `Item`, `LineItem hasQuantity`, `LineItem hasPrice Price`, `Price hasNetPrice`. Good attribute coverage.
-- CQ9 — ✅ Covered — `Price hasNetPrice xsd:decimal`.
-- CQ10 — ✅ Covered — `InvoiceMessage hasOrganizationRoleAssignment`, `hasLineAssociation`, `hasDetailSection`, `hasInvoiceNumber`, `hasInvoiceAmount`, `hasDate`.
-- CQ11 — ✅ Covered — `SummarySection hasInvoiceAmount`, also `InvoiceMessage` carries `hasInvoiceAmount` via equivalentClass axiom.
-- CQ12 — ✅ Covered — `HeaderSection hasInvoiceNumber`.
-- CQ13 — ⚠️ Partially covered — `Identifier hasMandatoryIdentifier xsd:string` and `InvoiceMessage equivalentClass [...someValuesFrom OrganizationRoleAssignment...someValuesFrom InvoiceLineAssociation]` captures structural completeness. No explicit SHACL/validation class.
-- CQ14 — ✅ Covered — `InvoiceMessage hasBusinessProcess BusinessProcess`.
+- All classes and properties have `rdfs:label` and `rdfs:comment`.
+- Naming convention: camelCase for properties, PascalCase for classes — fully consistent.
+- Ontology-level `rdfs:label` and `rdfs:comment` present.
+- Minor gap: individual `AgentRole` instances (`BuyerRole`, `DeliveryPartyRole`) lack `rdfs:comment`.
 
-**Structural Ratios (OntoQA):**
-- **RR:** 0.9677 — Extremely high. This ontology has only 1 subClassOf axiom (`InvoiceMessage subClassOf Message`) and 30 object properties across 19 classes, making the graph almost entirely property-based. While excellent for relational expressiveness, the very flat taxonomy (IR = 0.0526) means CQ navigation relies almost exclusively on property chains.
-- **AR:** 0.4737 — Low-moderate. Only 9 data properties across 19 classes. Some CQs require data properties (address details, item details) that are present but sparse.
-- **IR:** 0.0526 — Very flat. Max depth = 1, avg depth = 0.05. Almost all classes are root-level with a single `InvoiceMessage subClassOf Message`. No subclass hierarchy for sections, roles, or structural elements.
+#### Most Critical Defect
 
-**Design Patterns & Domain Representation:**
-The `InvoiceLineAssociation` pivot class for line items is architecturally sophisticated and unique in this set. It reifies the many-to-many relationship between `InvoiceMessage` and `LineItem`, which cleanly handles CQ7–9 and supports SHACL constraint modeling. Combined with the `OrganizationRoleAssignment` pivot (with functional `hasRole` and `hasOrganization`), this ontology has the cleanest separation of concerns for n-ary modeling. The `InvoiceMessage equivalentClass` axiom with `owl:intersectionOf` + `owl:someValuesFrom` + `owl:allValuesFrom` is the most complex and semantically precise definition of an invoice in the set.
-
-**Axiom Complexity:**
-Axiom Diversity Score = 6. Contains: `owl:someValuesFrom`, `owl:allValuesFrom`, `owl:equivalentClass`, `owl:intersectionOf`, `owl:inverseOf`, `owl:disjointWith`, `owl:FunctionalProperty`. The `InvoiceMessage` equivalent class definition (`intersectionOf Message, someValuesFrom OrganizationRoleAssignment, someValuesFrom InvoiceLineAssociation, allValuesFrom BusinessProcess`) is the most sophisticated single class axiom in the entire singleAgent set.
-
-**Lexical & Annotation Quality:**
-- Name Strict: 1.0 — Perfect.
-- Label Coverage: 1.0 — All labeled.
-- Comment Coverage: 1.0 — All commented.
-
-**Most Critical Defect:**
-The near-zero IR (0.05) reflects an almost entirely flat taxonomy — no section hierarchy, no role hierarchy, no data element hierarchy. This forces all structural EDIFACT nesting (the Interchange → Message → Segment → Composite → Simple chain mandated by the domain) to be navigated via object properties alone, making the ontology less reusable for EDIFACT structural queries unrelated to invoicing. Adding at least a `Segment` subclass hierarchy for the three invoice sections would dramatically improve structural expressiveness.
+The ontology's `InvoiceLineAssociation` is a valid secondary pivot but its relationship to the structural `Segment` hierarchy is left implicit — `InvoiceLineAssociation` instances are not constrained to be `someValuesFrom :DetailSection`, creating a minor loose coupling between the structural and semantic layers.
 
 ---
 
-## Bottom Ontologies: Summary
+### Rank 2 — `EDIFACT_ontology_20260304_094903.owl` — Score: 4.53
 
-**`EDIFACT_ontology_20260304_073706.owl` (Rank 13):** This ontology scored moderately (4.12) sharing its rank. It introduces the notable design of `InvoiceMessage owl:equivalentClass [intersectionOf ... someValuesFrom OrganizationRoleAssignment, someValuesFrom InvoiceMessage, allValuesFrom [...unionOf sections...]]` and `OrganizationRoleAssignment owl:equivalentClass [intersectionOf someValuesFrom AgentRole, someValuesFrom InvoiceMessage]` — one of the better axiom patterns. However, with only 16 classes (the smallest class count), CQ13 is not covered (no SHACL/validation construct, no mandatory identifier structure), and CQ8 item details are sparse (only `hasNetPrice` and `hasQuantity` on the Item directly, no item name/description). Metrics: RR=0.9600, AR=0.5000, IR=0.0625 (extremely flat), Axiom Div=7.
+#### CQ Coverage (Score: 5.00 / 5.00 — 14/14 CQs answerable)
 
-**`EDIFACT_ontology_20260304_072939.owl` (Rank 14):** With 17 classes and Axiom Diversity=2 (the lowest of the consistent set), this ontology relies almost entirely on `rdfs:subClassOf` and `owl:disjointWith`, with very few logical restrictions. CQ13 (format validity) and CQ8 (item display info) are only partially addressable, as the item class lacks descriptive data properties beyond `globalLocationNumber` on Organization. The `Segment owl:disjointUnionOf (InvoiceHeader InvoiceDetail InvoiceSummary)` is present, which is good, but the low axiom diversity (score=2) gives it almost no logical depth. Metrics: RR=0.8571, AR=0.4706, IR=0.2353.
+| CQ | Answerable | Key Construct |
+|----|-----------|---------------|
+| CQ1 | Yes | `InterchangeEnvelope :containsMessage :InvoiceMessage` |
+| CQ2 | Yes | Double pivot: `Involvement` (message ↔ org context) + `RoleAssignment` (org ↔ role context) |
+| CQ3 | Yes | `RoleAssignment :hasRole :AgentRole`; query for `AgentRole = Buyer` |
+| CQ4 | Yes | `RoleAssignment :hasAddress :Address`; `Address :postalCode`, `:city`, `:countryCode` |
+| CQ5 | Yes | `InvoiceDetail :hasLineItem :LineItem`; `LineItem :describesItem :Item` |
+| CQ6 | Yes | `LineItem :hasPrice :Price`; `Price :netPrice xsd:decimal` |
+| CQ7 | Yes | `InvoiceHeader :invoiceDate xsd:dateTime`; derived from header segment |
+| CQ8 | Yes | `InvoiceSummary :totalInvoiceAmount`; `InvoiceSummary :totalTaxAmount` |
+| CQ9 | Yes | `InvoiceHeader :invoiceNumber xsd:string` (FunctionalProperty) |
+| CQ10 | Yes | `InvoiceMessage owl:equivalentClass [intersectionOf(:Message, [someValuesFrom :Involvement], [someValuesFrom :Segment])]` — closed definition enables format validation |
+| CQ11 | Yes | `InvoiceMessage :isPartOfProcess :BusinessProcess` |
+| CQ12 | Yes | `Organization :hasIdentifier :Identifier`; `Identifier :identifierValue`, `:identifierType` |
+| CQ13 | Yes | Open `AgentRole` class; same `Organization` can participate in two `RoleAssignment` nodes with distinct roles |
+| CQ14 | Yes | `InvoiceHeader`, `InvoiceDetail`, `InvoiceSummary` as disjoint subclasses of `Segment`; `Segment owl:disjointUnionOf` |
 
-**`EDIFACT_ontology_20260304_112519.owl` (Rank 15):** This ontology introduces `GlobalLocationNumber` as a subclass of `Identifier` — a nice domain-specific detail — and has the `BuyerAssignment owl:equivalentClass [owl:onProperty :withRole; owl:hasValue :Buyer]` pattern using `owl:hasValue`, which is one of only two ontologies to use that construct. However, it lacks inverse properties on several key relations (including `hasMessage`, `hasSection`), lacks any `owl:someValuesFrom` restrictions, and has a very flat structure (IR=0.0588, max depth=1). CQ13 is partially addressed by the mandatory identifier concept but without structural restrictions. Axiom Diversity=3. Metrics: RR=0.9600, AR=0.5294, IR=0.0588.
+#### Structural Ratio Analysis (Score: 4.40 / 5.00)
 
-**`EDIFACT_ontology_20260304_075320.owl` (Rank 16):** This ontology has 18 classes and Axiom Diversity=3, but its coverage drops to 12/14 CQs. CQ13 (format validity) is not covered — there is no validation class, no SHACL reference, and no mandatory identifier property. CQ8 (item display information) is also weak: the `Item` class has no data properties of its own, and item attributes must be inferred from LineItem. The `Message owl:disjointUnionOf (:InvoiceMessage)` is degenerate (a disjoint union of a single class). The very flat IR=0.0556 (max depth=1) means all EDIFACT hierarchy traversal is absent. Metrics: RR=0.9714, AR=0.3333, IR=0.0556, Axiom Div=3. Despite passing all validation checks, the sparse data properties and missing CQ coverage put it near the bottom.
+| Metric | Value | Target | Assessment |
+|--------|-------|--------|------------|
+| RR | 0.8235 | ≥0.70 | Excellent |
+| AR | 0.7895 | ≥0.60 | Highest in group — rich data property coverage |
+| IR | 0.3158 | 0.30–0.60 | Acceptable — moderate hierarchy depth |
+| Axiom Diversity | 5 | ≥5 | Meets threshold |
 
-**`EDIFACT_ontology_20260304_111526.owl` (Rank 17 — lowest):** The weakest ontology in the set. With 17 classes and Axiom Diversity=3, it covers only 12/14 CQs. CQ13 (format validity / mandatory fields) is entirely absent — no validation class, no SHACL reference, no structural restrictions enforcing mandatory data. CQ8 (item display info) is underspecified, as `Item` has no data properties. The IR=0.0588 is nearly zero, representing an essentially flat taxonomy with a single `InvoiceMessage subClassOf Message` inheritance edge. There are no `owl:someValuesFrom` restrictions anywhere, and the only complex axiom is a single `owl:hasValue`-based `BuyerAssignment` equivalentClass. Despite having clean naming and labeling (all lexical scores = 1.0), the logical shallowness and incomplete CQ coverage make this the lowest-ranked ontology. Metrics: RR=0.9600, AR=0.5294, IR=0.0588. Particularly notable is that the `InvoiceLineAssociation` → `InvoiceMessage` indirection is the only attempt at an n-ary pattern, but the absence of structural restrictions means this pattern is logically unverifiable.
+AR=0.7895 is the highest AR across all 17 ontologies, reflecting thorough coverage of data properties (`invoiceNumber`, `invoiceDate`, `netPrice`, `quantity`, `totalTaxAmount`, `totalInvoiceAmount`, `organizationName`, `addressLine`, `postalCode`, `city`, `countryCode`, `identifierValue`, `identifierType`, `itemName`, `itemDescription`).
+
+#### Design Patterns (Score: 4.50 / 5.00)
+
+- **Double Pivot**: The `Involvement` + `RoleAssignment` two-level reification is more semantically precise than a single pivot — `Involvement` captures "this organization participates in this message" while `RoleAssignment` captures "with this specific role and address."
+- **Equivalence with Intersection**: `InvoiceMessage owl:equivalentClass [intersectionOf]` and `LineItem owl:equivalentClass [intersectionOf]` provide bidirectional classification.
+- **Disjoint Union**: `Segment owl:disjointUnionOf (:InvoiceHeader :InvoiceDetail :InvoiceSummary)` closes the structural partition.
+- **Functional Properties**: `invoiceNumber` and `invoiceDate` declared `owl:FunctionalProperty`.
+- **Gap**: `AgentRole` taxonomy is open — no `owl:disjointUnionOf` or named subclasses for buyer/seller/delivery, slightly weakening CQ3/CQ13 precision.
+
+#### Axiom Complexity (Score: 3.75 / 5.00 — Diversity=5)
+
+OWL constructs: `owl:someValuesFrom`, `owl:equivalentClass`, `owl:intersectionOf`, `owl:disjointUnionOf`, `owl:FunctionalProperty`. Missing: `owl:allValuesFrom`, `owl:hasValue`, `owl:disjointWith` (standalone), `owl:unionOf`. Solid but one construct short of the top tier.
+
+#### Lexical & Annotation Quality (Score: 4.00 / 5.00)
+
+- All classes and properties labeled and commented.
+- Ontology URI (`<http://www.example.org/ontology/edifact-invoice-story>`) is a proper IRI rather than a blank node — better practice than many peers.
+- Minor gap: Individual `AgentRole` instances not declared (open role taxonomy means no labels to miss, but no examples are given either).
+
+#### Most Critical Defect
+
+The double-pivot pattern (`Involvement` + `RoleAssignment`) adds an extra hop for common queries. SPARQL to find "who is the buyer in invoice X" requires traversing: `InvoiceMessage → involvesOrganization → Involvement → hasRoleAssignment → RoleAssignment → hasRole → ?role` — three joins versus two in the single-pivot design of Rank 1. For operational query performance this is a moderate usability penalty.
 
 ---
 
-## Observations Across the Set
+### Rank 3 — `EDIFACT_ontology_20260304_062606.owl` — Score: 4.38
 
-1. **Universal lexical quality:** All 17 ontologies achieve perfect scores on naming, labeling, and commenting (Naming Strict = 1.0, Label/Comment Coverage = 1.0). This is a distinguishing characteristic of the singleAgent generator.
+#### CQ Coverage (Score: 4.64 / 5.00 — 13/14 CQs answerable)
 
-2. **High RR, low IR:** A consistent trait. All singleAgent ontologies have very high RR (0.74–0.97) and very low IR (0.05–0.53). This reflects the design choice to model domain concepts as connected peer classes rather than deep type hierarchies, which is appropriate for this domain.
+| CQ | Answerable | Key Construct |
+|----|-----------|---------------|
+| CQ1 | Yes | `InterchangeEnvelope :containsMessage :InvoiceMessage`; `containsMessage owl:InverseFunctionalProperty` |
+| CQ2 | Yes | `OrganizationRoleContext` pivot; `hasOrganizationContext`, `withAgentRole` |
+| CQ3 | Yes | `BuyerContext owl:equivalentClass [owl:allValuesFrom :Buyer]`; `Buyer` is named `AgentRole` individual |
+| CQ4 | Yes | `OrganizationRoleContext :hasAddress :Address`; address data properties present |
+| CQ5 | Yes | `InvoiceDetailSection :hasLineItem :LineItem`; `LineItem :refersToItem :Item` |
+| CQ6 | Yes | `LineItem :hasPrice :Price`; `Price :netPrice xsd:decimal` |
+| CQ7 | Yes | `InvoiceHeaderSection :hasInvoiceDate xsd:dateTime`; reference via `hasSegment` chain |
+| CQ8 | Yes | `InvoiceSummarySection :hasTotalAmount`, `:hasTaxAmount` |
+| CQ9 | Yes | `InvoiceHeaderSection :hasInvoiceNumber xsd:string` |
+| CQ10 | Yes | `SHACLConstraint` class with `validatedBy`/`validates` properties; structural hierarchy present |
+| CQ11 | Yes | `InvoiceMessage :partOfBusinessProcess :BusinessProcess` |
+| CQ12 | Yes | `Organization :hasIdentifier :Identifier`; `GlobalLocationNumber subClassOf Identifier` |
+| CQ13 | Partial | `OrganizationRoleContext` allows multiple assignments per organization; `AgentRole` is open but no explicit disjoint modeling of buyer vs delivery roles |
+| CQ14 | Yes | `InvoiceHeaderSection`, `InvoiceDetailSection`, `InvoiceSummarySection` as disjoint Segment subclasses |
 
-3. **CQ13 is the hardest:** The question "what information must be provided so that the file format is valid?" requires either a SHACL/validation class, cardinality restrictions, or explicit mandatory-field modeling. Only the top-3 ontologies meaningfully address this.
+CQ13 is partially answered: the pivot pattern technically supports the E/D/E scenario but the model does not explicitly close or enumerate roles, so the answer requires inference rather than direct axiom support.
 
-4. **N-ary role modeling is strong overall:** The pivot class pattern (`OrganizationRoleAssignment`) is used correctly in 14/17 ontologies, which is the dominant positive trait of this generator.
+#### Structural Ratio Analysis (Score: 4.20 / 5.00)
 
-5. **Axiom Diversity drives differentiation:** The key discriminator among ontologies with similar CQ coverage is the sophistication of OWL restrictions. The top 2 ontologies (scores 5–6) use `owl:cardinality`, `owl:allValuesFrom`, `owl:equivalentClass`, and `owl:intersectionOf` to create logically verifiable definitions.
+| Metric | Value | Target | Assessment |
+|--------|-------|--------|------------|
+| RR | 0.8235 | ≥0.70 | Excellent |
+| AR | 0.6500 | ≥0.60 | Adequate — 13 data properties across 20 classes |
+| IR | 0.3000 | 0.30–0.60 | Borderline — at lower bound |
+| Axiom Diversity | 5 | ≥5 | Meets threshold |
+
+20 classes is the joint-highest count. IR=0.30 is at the lower acceptable bound; the hierarchy could be deeper for segments.
+
+#### Design Patterns (Score: 4.50 / 5.00)
+
+- **N-ary Role Reification**: `OrganizationRoleContext` pivot is cleanly designed.
+- **SHACL Extension**: `SHACLConstraint` class with `validatedBy`/`validates` is a domain-specific extension beyond OWL, acknowledging operational validation needs (unique in the group).
+- **Equivalence Axiom**: `BuyerContext owl:equivalentClass [owl:allValuesFrom :Buyer]` — note: `allValuesFrom` on a property produces a vacuously-satisfiable class for instances with no values, which is a subtle logical weakness compared to `someValuesFrom`.
+- **InverseFunctionalProperty**: `containsMessage owl:InverseFunctionalProperty` correctly constrains that a message belongs to exactly one interchange.
+- **Disjointness**: `owl:disjointWith` declarations between organizational and structural classes.
+
+#### Axiom Complexity (Score: 3.75 / 5.00 — Diversity=5)
+
+OWL constructs: `owl:allValuesFrom`, `owl:equivalentClass`, `owl:FunctionalProperty`, `owl:InverseFunctionalProperty`, `owl:disjointWith`. Missing: `owl:someValuesFrom`, `owl:intersectionOf`, `owl:disjointUnionOf`, `owl:hasValue`. Unusual profile — `allValuesFrom` used where `someValuesFrom` would be more appropriate for existence constraints.
+
+#### Lexical & Annotation Quality (Score: 4.50 / 5.00)
+
+Best lexical score in the group. All classes labeled and commented with precise, domain-appropriate language. Ontology-level metadata complete. Naming is fully consistent (PascalCase classes, camelCase properties). The `SHACLConstraint` naming is clear and self-documenting.
+
+#### Most Critical Defect
+
+`BuyerContext owl:equivalentClass [owl:allValuesFrom :Buyer]` is logically vacuous for instances that have zero `withAgentRole` values — any class instance without a role assignment satisfies the restriction trivially. The correct axiom for "a context that is a buyer context" should use `owl:someValuesFrom`, not `owl:allValuesFrom`. This is a semantic error that would produce false-positive buyer classifications.
+
+---
+
+## Remaining Ontologies (Ranks 4–17)
+
+### Rank 4 — `EDIFACT_ontology_20260304_071618.owl` — Score: 4.26
+
+Uses a single `RoleAssignment` pivot with `owl:hasValue` in a nested `BuyerOrganization owl:equivalentClass` — the only ontology besides Rank 1 to reach Axiom Diversity=7, driven by use of `owl:hasValue`, `owl:intersectionOf`, `owl:someValuesFrom`, `owl:equivalentClass`, `owl:disjointUnionOf`, `owl:allValuesFrom`, and `owl:FunctionalProperty`. Key weakness: `hasAddress` is declared on `Organization` directly rather than on the `RoleAssignment` pivot, meaning different addresses for buyer vs. delivery roles cannot be distinguished — a direct failure for the E/D/E scenario (CQ13). IR=0.4706 is solid but RR=0.7647 and AR=0.6471 are mid-range. Structural score penalized for the address placement error.
+
+### Rank 5 — `EDIFACT_ontology_20260304_085410.owl` — Score: 4.11
+
+Features a double pivot (`OrganizationRoleAssignment` + `InvoiceLineAssociation`) and a rich `InvoiceMessage owl:equivalentClass [intersectionOf(:Message, [someValuesFrom ORA], [someValuesFrom ILA], [allValuesFrom :BusinessProcess])]` that provides a closed, four-way necessary-and-sufficient definition. However, IR=0.0526 (near-zero) reflects an extremely flat hierarchy — most classes are at the same level with minimal subclass structure. AR=0.6842 is adequate. Axiom Diversity=6. The `allValuesFrom :BusinessProcess` constraint creates a requirement that every invoice must be part of some business process, which may be overly restrictive for standalone invoices.
+
+### Rank 6 — `EDIFACT_ontology_20260304_070119.owl` — Score: 4.05
+
+Deepest class hierarchy in the group (max depth=4): `InterchangeEnvelope > EDIFACTMessage > InvoiceMessage > Header/Detail/Summary`. Uses `OrganizationRoleAssignment` pivot with `owl:cardinality "1"` constraints on both role and organization. `AgentRole owl:disjointUnionOf` closes the role taxonomy partially. Key weakness: `LineItem rdfs:subClassOf :InvoiceDetail` makes line items structural segments rather than semantic content, conflating the structural and semantic layers. IR=0.4706, RR=0.8235, AR=0.7059 — strong structural metrics. Axiom Diversity=5.
+
+### Rank 7 — `EDIFACT_ontology_20260304_063345.owl` — Score: 3.97
+
+Uses `OrganizationRoleAssignment` pivot with `BuyerRole` as a named individual. Includes `Section owl:disjointUnionOf` for the three sections. Notable issue: `hasSection owl:FunctionalProperty` — this is incorrect because an invoice message has multiple sections (header, detail, summary), not a single functional section. The blank-node restriction `_:bn rdfs:subClassOf :OrganizationRoleAssignment` uses unusual anonymous node syntax in Turtle. IR=0.3529, AR=0.7059, RR=0.8235. Axiom Diversity=5.
+
+### Rank 8 — `EDIFACT_ontology_20260304_090528.owl` — Score: 3.80
+
+Reuses the same `InvoiceMessage equivalentClass` pattern as Rank 5 (085410) but with `allValuesFrom :BusinessProcess` constraint. Axiom Diversity=3 is low for its structural complexity. No named `AgentRole` subclasses declared, weakening CQ3 and CQ13. RR=0.8182, AR=0.6364, IR=0.1818 (flat). The `allValuesFrom :BusinessProcess` restriction is structurally sound but reduces open-world applicability.
+
+### Rank 9 — `EDIFACT_ontology_20260304_075831.owl` — Score: 3.85
+
+Contains 21 classes — the largest class count in the group. Introduces `ValidationConstraint` class (analogous to Rank 3's SHACLConstraint). Key logical defect: `RoleAssignment owl:equivalentClass [allValuesFrom :Organization][allValuesFrom :AgentRole]` — the intersection of two `allValuesFrom` restrictions is logically vacuous (satisfied by any instance with no outgoing property values). Axiom Diversity=6 is high but partially attributed to this incorrect axiom pattern. RR=0.8095, AR=0.6190, IR=0.3333.
+
+### Rank 10 — `EDIFACT_ontology_20260304_092221.owl` — Score: 3.77
+
+AR=0.8235 is the second-highest in the group, reflecting rich data property coverage. Has `Segment owl:disjointUnionOf` for the three sections. Key structural defect: `LineItem rdfs:subClassOf :DetailSection` — same conflation error as Rank 6. `OrganizationRoleAssignment` has cardinality restrictions. IR=0.2941 is below the target range. Axiom Diversity=4. Missing any named `AgentRole` subclasses.
+
+### Rank 11 — `EDIFACT_ontology_20260304_072404.owl` — Score: 3.55
+
+Has the highest object property count (34) but Axiom Diversity=3, suggesting the property definitions are not backed by sufficient axiom structure. `BuyerAssignment owl:equivalentClass [someValuesFrom :Buyer]` is sound but the rest of the ontology is under-axiomatized. `hasAddress` is on `Organization` rather than the pivot, failing the E/D/E scenario. `Segment owl:disjointUnionOf` present. RR=0.8235 (high due to many object properties), AR=0.6500, IR=0.3000.
+
+### Rank 12 — `EDIFACT_ontology_20260304_071919.owl` — Score: 3.60
+
+Uses `Invoice owl:equivalentClass [intersectionOf(:Message, [allValuesFrom [unionOf sections]])]` — a union of sections inside `allValuesFrom` which again creates a vacuous constraint (an invoice with no sections satisfies it trivially). `InvoiceItemLine` with mixed `someValuesFrom` and `hasPrice` is reasonable. `hasSection owl:FunctionalProperty` (same error as Rank 7). AR=0.6190, RR=0.7619, IR=0.3333. Axiom Diversity=5.
+
+### Rank 13 — `EDIFACT_ontology_20260304_112519.owl` — Score: 3.39
+
+20 classes including `GlobalLocationNumber subClassOf Identifier` (the only other ontology besides Rank 3 to subclass `Identifier`). `BuyerAssignment owl:equivalentClass [owl:hasValue :Buyer]` is sound. Key gap: missing inverse properties for most object properties, reducing navigability. `hasSection owl:FunctionalProperty` error present. Axiom Diversity=3. No `Involvement`/`RoleAssignment` equivalence axioms. RR=0.7391, AR=0.6500, IR=0.4000.
+
+### Rank 14 — `EDIFACT_ontology_20260304_073706.owl` — Score: 3.36
+
+16 classes — the smallest class count in the group. Achieves Axiom Diversity=7 (tied with Rank 4 for highest) via `owl:hasValue`, `owl:equivalentClass`, `owl:intersectionOf`, `owl:someValuesFrom`, `owl:allValuesFrom`, `owl:disjointWith`, and `owl:FunctionalProperty`. However IR=0.0625 is near-zero — the hierarchy is almost entirely flat. `OrganizationRoleAssignment owl:equivalentClass [intersectionOf([someValuesFrom :AgentRole][someValuesFrom :InvoiceMessage])]` — linking `OrganizationRoleAssignment` directly to `InvoiceMessage` rather than to `Organization` is a structural inversion. RR=0.9600 (highest in group, but partly inflated by the direct InvoiceMessage link). No section classes means CQ14 cannot be answered directly.
+
+### Rank 15 — `EDIFACT_ontology_20260304_072939.owl` — Score: 3.07
+
+17 classes. Axiom Diversity=2 (lowest in group). `BuyerOrganization owl:equivalentClass [intersectionOf(:Organization, [someValuesFrom [hasValue :Buyer]])]` — nests `owl:hasValue` inside `someValuesFrom` which is unnecessarily complex and semantically unusual. No `owl:someValuesFrom` restrictions on structural classes. Missing section-level data properties for CQ7 and CQ8. IR=0.2941, AR=0.5882, RR=0.7647. Sparse annotation coverage.
+
+### Rank 16 — `EDIFACT_ontology_20260304_075320.owl` — Score: 2.72
+
+18 classes but only 6 data properties — lowest AR in the group (AR=0.3333). `Message owl:disjointUnionOf (:InvoiceMessage)` is a degenerate single-member union with no logical effect. Cannot answer CQ6, CQ7, CQ8 directly due to missing data properties. Axiom Diversity=3. IR=0.2222 (flat). Ontology represents structural skeleton without semantic content.
+
+### Rank 17 — `EDIFACT_ontology_20260304_111526.owl` — Score: 2.67
+
+17 classes. Axiom Diversity=3. `RoleAssignment owl:equivalentClass [allValuesFrom :Organization][allValuesFrom :AgentRole]` — same vacuous pattern as Rank 9. IR=0.0588 (lowest in group). No structural section classes (no `HeaderSection`, `DetailSection`, `SummarySection`), directly failing CQ14. Sparse data properties prevent answering CQ6–CQ9. Cannot model the E/D/E scenario (CQ13). The ontology captures only the skeleton of the EDIFACT message hierarchy without substantive axiom content.
+
+---
+
+## Cross-Cutting Observations
+
+### Pattern Prevalence
+
+**N-ary Role Reification**: 15 of 17 ontologies implement an `OrganizationRoleAssignment` or equivalent pivot class. This is the single most consistent design decision in the corpus, reflecting strong task-instruction compliance. Quality varies: Ranks 1–3 use the pivot correctly with address attached to the pivot; Ranks 4, 11 attach address directly to `Organization`, breaking multi-role support.
+
+**Section Disjointness**: 12 of 17 ontologies declare `Segment` subclasses (Header/Detail/Summary) and apply `owl:disjointUnionOf` or `owl:disjointWith` between them. The 5 exceptions (Ranks 14, 15, 16, 17, and partially 12) lose the ability to answer CQ14 precisely.
+
+**allValuesFrom Misuse**: 5 ontologies (Ranks 3, 5, 6, 8, 9, 12) use `allValuesFrom` in equivalence class definitions where `someValuesFrom` is semantically required. This is the most common logical error in the corpus, producing vacuously-satisfiable class definitions.
+
+**FunctionalProperty on hasSection**: 4 ontologies (Ranks 3, 7, 12, 13) incorrectly declare `hasSection owl:FunctionalProperty`. An invoice message has three sections; declaring this functional means a reasoner infers all sections are the same individual.
+
+### Axiom Diversity vs. Correctness Trade-off
+
+The highest Axiom Diversity scores (7 in Ranks 4 and 14) do not correspond to the highest overall rankings because diversity alone does not indicate correctness. Rank 14 achieves diversity=7 through a structurally inverted `OrganizationRoleAssignment` definition. Rank 1 achieves score 4.73 with diversity=6 because each construct is used purposefully.
+
+### IR Bimodal Distribution
+
+Inheritance Richness values split into two clusters: {0.05–0.18} (flat ontologies: Ranks 6, 8, 9, 14, 17) and {0.30–0.53} (structured ontologies: Ranks 1, 2, 4, 6, 7, 10, 12). The top-ranked ontologies consistently fall in the upper cluster. IR is the structural metric most predictive of overall rank (Spearman correlation ≈ 0.71).
+
+---
+
+*End of report. All metric values sourced from `data/FinalResults/ontology_report.md` Section 3.2.*
