@@ -24,6 +24,18 @@ def parse_oops_response(oops_xml: str) -> Dict:
 
         root = ET.fromstring(oops_xml)
 
+        # Detect wrong_execution error response from OOPS
+        if "wrong_execution" in oops_xml:
+            error_msg = "OOPS could not analyse the ontology (wrong_execution response)"
+            print(f"OOPS wrong_execution response detected")
+            return {
+                "has_pitfalls": True,
+                "pitfall_count": 0,
+                "pitfalls": [],
+                "oops_error": True,
+                "error": error_msg,
+            }
+
         # Define namespace
         ns = {"oops": "http://www.oeg-upm.net/oops"}
 
@@ -75,17 +87,19 @@ def parse_oops_response(oops_xml: str) -> Dict:
     except ET.ParseError as e:
         print(f"Error parsing OOPS XML: {e}")
         return {
-            "has_pitfalls": False,
+            "has_pitfalls": True,
             "pitfall_count": 0,
             "pitfalls": [],
+            "oops_error": True,
             "error": str(e),
         }
     except Exception as e:
         print(f"Unexpected error parsing OOPS response: {e}")
         return {
-            "has_pitfalls": False,
+            "has_pitfalls": True,
             "pitfall_count": 0,
             "pitfalls": [],
+            "oops_error": True,
             "error": str(e),
         }
 
@@ -100,6 +114,10 @@ def format_pitfalls_for_feedback(pitfall_data: Dict) -> str:
     Returns:
         Formatted string describing the pitfalls
     """
+    if pitfall_data.get("oops_error", False):
+        error_msg = pitfall_data.get("error", "Unknown error")
+        return f"OOPS validation failed with error: {error_msg}\nPlease ensure the ontology doesn't have any critical mistakes and is valid."
+
     if not pitfall_data.get("has_pitfalls", False):
         return "No pitfalls detected."
 

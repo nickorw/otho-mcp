@@ -137,6 +137,8 @@ class ValidationLogger:
         pitfall_count: int,
         execution_time_seconds: float,
         pitfalls: List[Dict[str, Any]],
+        oops_error: bool = False,
+        error: Optional[str] = None,
     ):
         """Log OOPS pitfall detection results with complete pitfall details."""
         self.logger.info(f"\n{'=' * 60}")
@@ -148,6 +150,12 @@ class ValidationLogger:
                 f"✓ Pitfall check PASSED - No pitfalls detected ({execution_time_seconds:.3f}s)"
             )
             self.logger.debug("All checked OOPS pitfall categories passed successfully")
+        elif oops_error:
+            self.logger.error(
+                f"✗ Pitfall check FAILED - OOPS error occurred ({execution_time_seconds:.3f}s)"
+            )
+            if error:
+                self.logger.error(f"  OOPS error: {error}")
         else:
             self.logger.warning(
                 f"⚠ Pitfall check: Found {pitfall_count} pitfall(s) ({execution_time_seconds:.3f}s)"
@@ -195,6 +203,8 @@ class ValidationLogger:
             "pitfalls": pitfalls,  # Complete pitfall objects with all details
             "pitfall_codes": [p.get("code") for p in pitfalls],
             "pitfall_names": [p.get("name") for p in pitfalls],
+            "oops_error": oops_error,
+            "error": error,
         }
 
     def log_reasoner_validation(self, reasoner_name: str, result: Dict[str, Any]):

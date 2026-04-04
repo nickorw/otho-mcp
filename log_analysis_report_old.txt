@@ -58,7 +58,6 @@ Total Validations: 20
 All Validators Passed: 0 (0.00%)
 Syntax Valid: 20 (100.00%)
 OOPS Passed (No Pitfalls): 20 (100.00%)
-OOPS Errors (Could Not Evaluate): 0 (0.00%)
 OOPS Passed (No Critical/Important): 20 (100.00%)
 Reasoners Passed (Both Consistent): 0 (0.00%)
 
@@ -92,28 +91,28 @@ WARNING: Unsupported axiom: Ignoring triple with unknown property from OW
 WARNING: Unsupported axiom: Ignoring equivalentClass axiom because the ob
 
 Hermit Inconsistent Classes:
-  - xml_combined_owl.xml.Cl_Document
-  - xml_combined_owl.xml.Cl_ItemImage
-  - xml_combined_owl.xml.Cl_ItemSoldQuantity
-  - xml_combined_owl.xml.Cl_InvoiceDetail
   - xml_combined_owl.xml.Cl_Information
-  - xml_combined_owl.xml.Cl_InvoiceAmount
-  - xml_combined_owl.xml.Cl_ItemSKU
-  - xml_combined_owl.xml.Cl_ItemCategory
+  - owl.Nothing
+  - xml_combined_owl.xml.Cl_ItemSoldDate
   - xml_combined_owl.xml.Cl_Invoice
+  - xml_combined_owl.xml.Cl_ItemSKU
+  - xml_combined_owl.xml.Cl_ItemName
   - xml_combined_owl.xml.Cl_ItemPrice
+  - xml_combined_owl.xml.Cl_InvoiceOrganizationRole
+  - xml_combined_owl.xml.Cl_InvoiceLine
+  - xml_combined_owl.xml.Cl_ItemImage
 
 Pellet Inconsistent Classes:
-  - xml_combined_owl.xml.Cl_ItemImage
-  - xml_combined_owl.xml.Cl_ItemSoldQuantity
-  - xml_combined_owl.xml.Cl_GovernmentAgency
-  - xml_combined_owl.xml.Cl_ItemSKU
-  - xml_combined_owl.xml.Cl_ItemCategory
-  - xml_combined_owl.xml.Cl_InvoiceAssignment
-  - xml_combined_owl.xml.Cl_Role
+  - xml_combined_owl.xml.Cl_Service
+  - xml_combined_owl.xml.Cl_InvoiceLine
   - xml_combined_owl.xml.Cl_OrganizationInvolvementDisplay
-  - xml_combined_owl.xml.Cl_OrganizationInvoiceRole
-  - xml_combined_owl.xml.Cl_Assignment
+  - xml_combined_owl.xml.Cl_ProvidedInformation
+  - xml_combined_owl.xml.Cl_RequiredInformation
+  - xml_combined_owl.xml.Cl_InvoiceAssignment
+  - xml_combined_owl.xml.Cl_SellerRole
+  - xml_combined_owl.xml.Cl_DisplayAttribute
+  - xml_combined_owl.xml.Cl_InvoiceDetail
+  - xml_combined_owl.xml.Cl_OrganizationInformationDisplay
 
 OOPS PITFALLS (Validation)
 --------------------------------------------------------------------------------
@@ -168,7 +167,7 @@ Timestamp            |  Syntax  |   OOPS   |  Hermit  |  Pellet
 20260301_234726      |     ✓    |     ✓    |     x    |     x   
 20260301_235347      |     ✓    |     ✓    |     x    |     x   
 
-Legend: ✓ = passed, x = failed, ? = OOPS error (could not evaluate)
+Legend: ✓ = passed, x = failed
 
 ================================================================================
 END OF REPORT

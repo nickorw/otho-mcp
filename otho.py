@@ -253,6 +253,7 @@ def validate_combined_owl_node(state: OntoAgentState) -> OntoAgentState:
 
         if syntax_validation_result != "OK":
             print("Syntax validation failed!")
+            validation_logger.save_json_log()
             return {
                 **state,
                 "combined_validation": f"Syntax Error: {syntax_validation_result}",
@@ -277,12 +278,16 @@ def validate_combined_owl_node(state: OntoAgentState) -> OntoAgentState:
         has_pitfalls = pitfall_data.get("has_pitfalls", False)
         pitfall_count = pitfall_data.get("pitfall_count", 0)
         pitfalls_list = pitfall_data.get("pitfalls", [])
+        oops_error = pitfall_data.get("oops_error", False)
+        oops_error_msg = pitfall_data.get("error")
 
         validation_logger.log_pitfall_detection(
             has_pitfalls=has_pitfalls,
             pitfall_count=pitfall_count,
             execution_time_seconds=oops_time_seconds,
             pitfalls=pitfalls_list,
+            oops_error=oops_error,
+            error=oops_error_msg,
         )
 
         # Format pitfall feedback for potential correction
@@ -291,7 +296,9 @@ def validate_combined_owl_node(state: OntoAgentState) -> OntoAgentState:
         # Determine if validation passed
         validation_ok = not has_pitfalls
 
-        if has_pitfalls:
+        if oops_error:
+            print(f"\n⚠ OOPS validation error: {oops_error_msg}")
+        elif has_pitfalls:
             print(f"\nFound {pitfall_data['pitfall_count']} pitfall(s)")
             print(pitfall_feedback)
         else:
@@ -315,7 +322,7 @@ def validate_combined_owl_node(state: OntoAgentState) -> OntoAgentState:
         save_text_file(oops_result_file, validation_result)
         print(f"Saved validation results to: {oops_result_file}")
 
-        # Note: ValidationLogger will be completed and saved by final_reasoner_validation_node
+        validation_logger.save_json_log()
 
         return {
             **state,
@@ -391,9 +398,9 @@ def final_reasoner_validation_node(state: OntoAgentState) -> OntoAgentState:
     oops_time = state.get("oops_time_seconds", 0)
 
     validation_results["syntax"] = {
-        "valid": validation_results.get("syntax", {}).get("valid", True),
+        "valid": validation_results.get("syntax", {}).get("valid", False),
         "execution_time_seconds": syntax_time,
-        "error": None,
+        "error": validation_results.get("syntax", {}).get("error"),
     }
 
     validation_results["oops"] = {
@@ -401,6 +408,9 @@ def final_reasoner_validation_node(state: OntoAgentState) -> OntoAgentState:
         "pitfall_count": validation_results.get("oops", {}).get("pitfall_count", 0),
         "execution_time_seconds": oops_time,
         "pitfalls": validation_results.get("oops", {}).get("pitfalls", []),
+        "pitfall_codes": validation_results.get("oops", {}).get("pitfall_codes", []),
+        "oops_error": validation_results.get("oops", {}).get("oops_error", False),
+        "error": validation_results.get("oops", {}).get("error"),
     }
 
     print("3️⃣  Reasoning Consistency")
@@ -477,6 +487,8 @@ def final_reasoner_validation_node(state: OntoAgentState) -> OntoAgentState:
             pitfall_count=validation_results["oops"].get("pitfall_count", 0),
             execution_time_seconds=validation_results["oops"].get("execution_time_seconds", 0),
             pitfalls=validation_results["oops"].get("pitfalls", []),
+            oops_error=validation_results["oops"].get("oops_error", False),
+            error=validation_results["oops"].get("error"),
         )
 
     # Log reasoners

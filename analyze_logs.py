@@ -204,6 +204,8 @@ def extract_validation_metrics(log_data):
     metrics["oops_time_seconds"] = oops.get("execution_time_seconds", 0.0)
     metrics["oops_pitfall_codes"] = oops.get("pitfall_codes", [])
     metrics["oops_pitfalls"] = oops.get("pitfalls", [])
+    metrics["oops_error"] = oops.get("oops_error", False)
+    metrics["oops_error_msg"] = oops.get("error")
 
     # Analyze pitfall severity
     pitfalls = oops.get("pitfalls", [])
@@ -228,6 +230,7 @@ def extract_validation_metrics(log_data):
     # Determine if only minor pitfalls exist
     if (
         metrics["oops_has_pitfalls"]
+        and not metrics["oops_error"]
         and not metrics["has_critical_pitfalls"]
         and not metrics["has_important_pitfalls"]
     ):
@@ -428,7 +431,8 @@ def analyze_validation_logs(validation_logs):
     syntax_valid = sum(1 for m in all_metrics if m["syntax_valid"])
     hermit_consistent = sum(1 for m in all_metrics if m["hermit_consistent"])
     pellet_consistent = sum(1 for m in all_metrics if m["pellet_consistent"])
-    oops_passed = sum(1 for m in all_metrics if not m["oops_has_pitfalls"])
+    oops_passed = sum(1 for m in all_metrics if not m["oops_has_pitfalls"] and not m["oops_error"])
+    oops_errors = sum(1 for m in all_metrics if m["oops_error"])
 
     analysis["overall"]["all_passed_rate"] = (
         all_passed / len(all_metrics) * 100 if all_metrics else 0
@@ -442,13 +446,17 @@ def analyze_validation_logs(validation_logs):
     analysis["overall"]["oops_passed_rate"] = (
         oops_passed / len(all_metrics) * 100 if all_metrics else 0
     )
+    analysis["overall"]["oops_error_count"] = oops_errors
+    analysis["overall"]["oops_error_rate"] = (
+        oops_errors / len(all_metrics) * 100 if all_metrics else 0
+    )
 
     # OOPS severity-based statistics
     # Count runs without Critical or Important pitfalls (ignoring Minor)
     oops_no_critical_important = sum(
         1
         for m in all_metrics
-        if not m["has_critical_pitfalls"] and not m["has_important_pitfalls"]
+        if not m["oops_error"] and not m["has_critical_pitfalls"] and not m["has_important_pitfalls"]
     )
     # Count runs with only minor pitfalls
     oops_only_minor = sum(1 for m in all_metrics if m["has_only_minor_pitfalls"])
@@ -647,7 +655,7 @@ def analyze_validation_logs(validation_logs):
             story_pellet / len(story_metrics) * 100 if story_metrics else 0
         )
 
-        story_oops_passed = sum(1 for m in story_metrics if not m["oops_has_pitfalls"])
+        story_oops_passed = sum(1 for m in story_metrics if not m["oops_has_pitfalls"] and not m["oops_error"])
         story_analysis["oops_passed_rate"] = (
             story_oops_passed / len(story_metrics) * 100 if story_metrics else 0
         )
@@ -841,6 +849,9 @@ def generate_report(
             f"OOPS Passed (No Pitfalls): {validation_analysis['overall']['oops_passed_count']} ({validation_analysis['overall']['oops_passed_rate']:.2f}%)"
         )
         report.append(
+            f"OOPS Errors (Could Not Evaluate): {validation_analysis['overall']['oops_error_count']} ({validation_analysis['overall']['oops_error_rate']:.2f}%)"
+        )
+        report.append(
             f"OOPS Passed (No Critical/Important): {validation_analysis['overall']['oops_no_critical_important_count']} ({validation_analysis['overall']['oops_no_critical_important_rate']:.2f}%)"
         )
         reasoner = validation_analysis["reasoner_analysis"]
@@ -970,14 +981,17 @@ def generate_report(
         for m in sorted_metrics:
             timestamp = m["timestamp"]
             syntax = "  ✓" if m["syntax_valid"] else "  x"
-            oops = "  ✓" if not m["oops_has_pitfalls"] else "  x"
+            if m["oops_error"]:
+                oops = "  ?"
+            else:
+                oops = "  ✓" if not m["oops_has_pitfalls"] else "  x"
             hermit = "  ✓" if m["hermit_consistent"] else "  x"
             pellet = "  ✓" if m["pellet_consistent"] else "  x"
             report.append(
                 f"{timestamp:<20} | {syntax:^8} | {oops:^8} | {hermit:^8} | {pellet:^8}"
             )
         report.append("")
-        report.append("Legend: ✓ = passed, x = failed")
+        report.append("Legend: ✓ = passed, x = failed, ? = OOPS error (could not evaluate)")
         report.append("")
 
     report.append("=" * 80)
