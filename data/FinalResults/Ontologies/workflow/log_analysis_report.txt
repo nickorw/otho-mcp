@@ -4,27 +4,27 @@ OTHO AGENT LOG ANALYSIS - COMPREHENSIVE REPORT
 
 OVERALL SUMMARY (Generator Runs)
 --------------------------------------------------------------------------------
-Total Runs Analyzed: 20
-Total Successes: 20
+Total Runs Analyzed: 19
+Total Successes: 19
 Total Failures: 0
 Overall Success Rate: 100.00%
 
 DURATION STATISTICS
 --------------------------------------------------------------------------------
-Average Duration: 332.14 seconds (5.54 minutes)
-Median Duration: 333.86 seconds
-Min Duration: 281.14 seconds
-Max Duration: 389.14 seconds
+Average Duration: 424.09 seconds (7.07 minutes)
+Median Duration: 427.82 seconds
+Min Duration: 291.95 seconds
+Max Duration: 529.85 seconds
 
 PER-STORY ANALYSIS (Generator)
 --------------------------------------------------------------------------------
 
 EDIFACT:
-  Runs: 20
+  Runs: 19
   Success Rate: 100.00%
-  Successes: 20
+  Successes: 19
   Failures: 0
-  Avg Duration: 332.14 seconds (5.54 minutes)
+  Avg Duration: 424.09 seconds (7.07 minutes)
 
 PITFALLS ANALYSIS (Generator)
 --------------------------------------------------------------------------------
@@ -55,119 +55,117 @@ VALIDATION ANALYSIS (Reasoner Results)
 OVERALL VALIDATION SUMMARY
 --------------------------------------------------------------------------------
 Total Validations: 20
-All Validators Passed: 0 (0.00%)
+All Validators Passed: 1 (5.00%)
 Syntax Valid: 20 (100.00%)
-OOPS Passed (No Pitfalls): 20 (100.00%)
-OOPS Passed (No Critical/Important): 20 (100.00%)
-Reasoners Passed (Both Consistent): 0 (0.00%)
+OOPS Passed (No Pitfalls): 1 (5.00%)
+OOPS Errors (Could Not Evaluate): 4 (20.00%)
+OOPS Passed (No Critical/Important): 8 (40.00%)
+Reasoners Passed (Both Consistent): 1 (5.00%)
 
 REASONER VALIDATION RESULTS
 --------------------------------------------------------------------------------
-Hermit Consistent: 0 (0.00%)
-Pellet Consistent: 0 (0.00%)
-Both Reasoners Consistent: 0 (0.00%)
-Hermit Errors: 18
-Pellet Errors: 12
+Hermit Consistent: 1 (5.00%)
+Pellet Consistent: 2 (10.00%)
+Both Reasoners Consistent: 1 (5.00%)
+Hermit Errors: 17
+Pellet Errors: 14
 
 Hermit Error Reasons:
-  18x - Java error message is:
+  16x - Java error message is:
+  1x - IllegalArgumentException:Error: In OWL 2 DL, owl:topDataProperty is only allowed to occur in the super property position of SubDataPropertyOf axioms, but the ontology contains an axiom DataPropertyDomain(owl:topDataProperty owl:Thing) that violates this condition.
 
 Pellet Error Reasons:
-  5x - Java error message is: ERROR: Ontology is inconsistent, run "pellet explain" to get the reason
+  9x - Java error message is: ERROR: Ontology is inconsistent, run "pellet explain" to get the reason
 
-  1x - Java error message is: Mar 01, 2026 9:54:19 PM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature
+  1x - Java error message is: Apr 05, 2026 6:33:53 AM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature
+WARNING: Unsupported axiom: Ignoring triple with unknown term from OWL nam
+  1x - Java error message is: Apr 05, 2026 6:42:11 AM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature
+WARNING: Unsupported axiom: Property http://example.org/fests#hasTotalNetP
+  1x - Java error message is:
+Apr 05, 2026 8:46:05 AM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature
 WARNING: Unsupported axiom: Ignoring equivalentClass axiom because the obj
-  1x - Java error message is: Mar 01, 2026 9:59:06 PM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature
-WARNING: Unsupported axiom: Property http://example.org/fests#lineTotal is
-  1x - Java error message is: Mar 01, 2026 10:09:19 PM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature
-WARNING: Unsupported axiom: Ignoring equivalentClass axiom because the ob
-  1x - Java error message is: Mar 01, 2026 10:32:04 PM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature
-WARNING: Unsupported axiom: Ignoring triple with unknown property from OW
-  1x - Java error message is: Mar 01, 2026 10:43:00 PM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature
-WARNING: Unsupported axiom: Ignoring equivalentClass axiom because the ob
-  1x - Java error message is: Mar 01, 2026 11:14:10 PM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature
-WARNING: Unsupported axiom: Ignoring triple with unknown property from OW
-  1x - Java error message is: Mar 01, 2026 11:35:02 PM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature
-WARNING: Unsupported axiom: Ignoring equivalentClass axiom because the ob
-
-Hermit Inconsistent Classes:
-  - xml_combined_owl.xml.Cl_Information
-  - owl.Nothing
-  - xml_combined_owl.xml.Cl_ItemSoldDate
-  - xml_combined_owl.xml.Cl_Invoice
-  - xml_combined_owl.xml.Cl_ItemSKU
-  - xml_combined_owl.xml.Cl_ItemName
-  - xml_combined_owl.xml.Cl_ItemPrice
-  - xml_combined_owl.xml.Cl_InvoiceOrganizationRole
-  - xml_combined_owl.xml.Cl_InvoiceLine
-  - xml_combined_owl.xml.Cl_ItemImage
+  1x - Java error message is: Apr 05, 2026 8:52:48 AM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature
+WARNING: Unsupported axiom: Ignoring equivalentClass axiom because the obj
+  1x - Java error message is: Apr 05, 2026 9:07:38 AM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature
+WARNING: Unsupported axiom: Ignoring equivalentClass axiom because the obj
 
 Pellet Inconsistent Classes:
-  - xml_combined_owl.xml.Cl_Service
-  - xml_combined_owl.xml.Cl_InvoiceLine
-  - xml_combined_owl.xml.Cl_OrganizationInvolvementDisplay
-  - xml_combined_owl.xml.Cl_ProvidedInformation
-  - xml_combined_owl.xml.Cl_RequiredInformation
-  - xml_combined_owl.xml.Cl_InvoiceAssignment
-  - xml_combined_owl.xml.Cl_SellerRole
-  - xml_combined_owl.xml.Cl_DisplayAttribute
   - xml_combined_owl.xml.Cl_InvoiceDetail
-  - xml_combined_owl.xml.Cl_OrganizationInformationDisplay
+  - xml_combined_owl.xml.Cl_Description
+  - xml_combined_owl.xml.Cl_InvoiceDetailReification
+  - xml_combined_owl.xml.Cl_OrganizationInfo_Display
+  - xml_combined_owl.xml.Cl_InvoiceReification
+  - xml_combined_owl.xml.Cl_InvoiceAmountAssignment
+  - xml_combined_owl.xml.Cl_InvoiceParty
+  - xml_combined_owl.xml.Cl_GrossPrice
+  - owl.Nothing
+  - xml_combined_owl.xml.Cl_StockStatus
 
 OOPS PITFALLS (Validation)
 --------------------------------------------------------------------------------
-Total Pitfall Occurrences: 0
-Unique Pitfalls: 0
+Total Pitfall Occurrences: 55
+Unique Pitfalls: 9
 
 Severity Breakdown:
-  Runs Passed (No Pitfalls): 20 (100.00%)
-  Runs Passed (No Critical/Important): 20 (100.00%)
-  Runs with Only Minor Pitfalls: 0 (0.00%)
+  Runs Passed (No Pitfalls): 1 (5.00%)
+  Runs Passed (No Critical/Important): 8 (40.00%)
+  Runs with Only Minor Pitfalls: 7 (35.00%)
 
 Most Common Pitfalls:
+  P22 (Minor): 14 - Using different naming conventions in the ontology
+  P20 (Minor): 13 - Misusing ontology annotations
+  P13 (Minor): 8 - Inverse relationships not explicitly declared
+  P04 (Minor): 6 - Creating unconnected ontology elements
+  P05 (Critical): 6 - Defining wrong inverse relationships
+  P19 (Critical): 3 - Defining multiple domains or ranges in properties
+  P12 (Important): 2 - Equivalent properties not explicitly declared
+  P08 (Minor): 2 - Missing annotations
+  P10 (Important): 1 - Missing disjointness
 
 VALIDATION TIMING ANALYSIS
 --------------------------------------------------------------------------------
-Hermit Avg Time: 0.393s (median: 0.363s)
-Pellet Avg Time: 0.624s (median: 0.611s)
-Total Validation Avg Time: 1.017s
+Hermit Avg Time: 0.753s (median: 0.687s)
+Pellet Avg Time: 0.581s (median: 0.531s)
+Syntax Avg Time: 0.047s
+OOPS Avg Time: 0.233s
+Total Validation Avg Time: 1.617s
 
 PER-STORY VALIDATION ANALYSIS
 --------------------------------------------------------------------------------
 
 EDIFACT:
   Validations: 20
-  All Passed Rate: 0.00%
-  Hermit Consistent Rate: 0.00%
-  Pellet Consistent Rate: 0.00%
-  OOPS Passed Rate: 100.00%
+  All Passed Rate: 5.00%
+  Hermit Consistent Rate: 5.00%
+  Pellet Consistent Rate: 10.00%
+  OOPS Passed Rate: 5.00%
 
 PER-RUN VALIDATION RESULTS
 --------------------------------------------------------------------------------
 Timestamp            |  Syntax  |   OOPS   |  Hermit  |  Pellet 
 --------------------------------------------------------------
-20260301_214840      |     ✓    |     ✓    |     x    |     x   
-20260301_215419      |     ✓    |     ✓    |     x    |     x   
-20260301_215907      |     ✓    |     ✓    |     x    |     x   
-20260301_220409      |     ✓    |     ✓    |     x    |     x   
-20260301_220919      |     ✓    |     ✓    |     x    |     x   
-20260301_221415      |     ✓    |     ✓    |     x    |     x   
-20260301_221951      |     ✓    |     ✓    |     x    |     x   
-20260301_222612      |     ✓    |     ✓    |     x    |     x   
-20260301_223204      |     ✓    |     ✓    |     x    |     x   
-20260301_223728      |     ✓    |     ✓    |     x    |     x   
-20260301_230354      |     ✓    |     ✓    |     x    |     x   
-20260301_230929      |     ✓    |     ✓    |     x    |     x   
-20260301_231410      |     ✓    |     ✓    |     x    |     x   
-20260301_231957      |     ✓    |     ✓    |     x    |     x   
-20260301_232450      |     ✓    |     ✓    |     x    |     x   
-20260301_232958      |     ✓    |     ✓    |     x    |     x   
-20260301_233503      |     ✓    |     ✓    |     x    |     x   
-20260301_234116      |     ✓    |     ✓    |     x    |     x   
-20260301_234726      |     ✓    |     ✓    |     x    |     x   
-20260301_235347      |     ✓    |     ✓    |     x    |     x   
+20260405_061829      |     ✓    |     x    |     x    |     x   
+20260405_062718      |     ✓    |     x    |     x    |     x   
+20260405_063353      |     ✓    |     x    |     x    |     x   
+20260405_064211      |     ✓    |     x    |     x    |     x   
+20260405_064934      |     ✓    |     x    |     x    |     ✓   
+20260405_065755      |     ✓    |     ?    |     x    |     x   
+20260405_070335      |     ✓    |     x    |     x    |     x   
+20260405_071057      |     ✓    |     x    |     x    |     x   
+20260405_071828      |     ✓    |     ?    |     x    |     x   
+20260405_072425      |     ✓    |     x    |     x    |     x   
+20260405_083242      |     ✓    |     x    |     x    |     x   
+20260405_084038      |     ✓    |     ?    |     x    |     x   
+20260405_084605      |     ✓    |     x    |     x    |     x   
+20260405_085248      |     ✓    |     ✓    |     ✓    |     ✓   
+20260405_090030      |     ✓    |     x    |     x    |     x   
+20260405_090738      |     ✓    |     x    |     x    |     x   
+20260405_091438      |     ✓    |     x    |     x    |     x   
+20260405_092220      |     ✓    |     x    |     x    |     x   
+20260405_092928      |     ✓    |     ?    |     x    |     x   
+20260405_093420      |     ✓    |     x    |     x    |     x   
 
-Legend: ✓ = passed, x = failed
+Legend: ✓ = passed, x = failed, ? = OOPS error (could not evaluate)
 
 ================================================================================
 END OF REPORT
