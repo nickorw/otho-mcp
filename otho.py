@@ -581,15 +581,20 @@ def create_generator_log_node(state: OntoAgentState) -> OntoAgentState:
     if story_start_time:
         duration_seconds = time.time() - story_start_time
         duration_formatted = format_duration(duration_seconds)
+        start_time = datetime.fromtimestamp(story_start_time).strftime("%Y%m%d_%H%M%S")
     else:
         duration_seconds = 0
         duration_formatted = "0s"
+        start_time = None
 
+    end_time = datetime.now().strftime("%Y%m%d_%H%M%S")
     combined_owl = state.get("combined_owl", "")
 
     generator_log = {
         "story_id": story_id,
         "timestamp": timestamp,
+        "start_time": start_time,
+        "end_time": end_time,
         "duration_seconds": duration_seconds,
         "duration_formatted": duration_formatted,
         "ontology_saved": len(combined_owl) > 0,

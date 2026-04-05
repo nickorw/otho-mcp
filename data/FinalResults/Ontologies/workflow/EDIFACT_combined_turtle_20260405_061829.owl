@@ -1,0 +1,1510 @@
+@prefix : <http://example.org/fests#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://example.org/fests>
+    a owl:Ontology ;
+    rdfs:label "FestS" .
+
+#################################################################
+# Classes
+#################################################################
+
+:Cl_Entity a owl:Class ;
+    rdfs:label "Entity" ;
+    rdfs:comment "A generic entity, superclass for organizations, persons, items, events, invoices, etc." ;
+    rdfs:subClassOf owl:Thing .
+
+:Cl_Document a owl:Class ;
+    rdfs:label "Document" ;
+    rdfs:comment "A generic document class, supertype for EDIFACT messages and invoices." ;
+    rdfs:subClassOf :Cl_Entity .
+
+:Cl_EDIFACTMessage a owl:Class ;
+    rdfs:label "EDIFACT Message" ;
+    rdfs:comment "An electronic data interchange message formatted according to the EDIFACT standard." ;
+    rdfs:subClassOf :Cl_Document .
+
+:Cl_Invoice a owl:Class ;
+    rdfs:label "Invoice" ;
+    rdfs:comment "A commercial document issued by a seller to a buyer, relating to a sale transaction and indicating the products, quantities, and agreed prices for products or services." ;
+    rdfs:subClassOf :Cl_Document , :Cl_FinancialDocument , :Cl_InvoiceEntity .
+
+:Cl_EDIFACTMessageInvoiceListing a owl:Class ;
+    rdfs:label "EDIFACT Message Invoice Listing" ;
+    rdfs:comment "A reification/pivot class representing the inclusion of an Invoice in an EDIFACT Message." .
+
+:Cl_Organization a owl:Class ;
+    rdfs:label "Organization" ;
+    rdfs:comment "An entity such as a company, agency, or institution involved in an event, project, or process." ;
+    rdfs:subClassOf :Cl_Entity .
+
+:Cl_OrganizationType a owl:Class ;
+    rdfs:label "Organization Type" ;
+    rdfs:comment "A category or classification of organization, such as government, NGO, corporation, etc." ;
+    rdfs:subClassOf :Cl_Organization .
+
+:Cl_Company a owl:Class ;
+    rdfs:subClassOf :Cl_Organization ;
+    rdfs:label "Company" ;
+    rdfs:comment "A company that may be involved in invoices." .
+
+:Cl_Supplier a owl:Class ;
+    rdfs:subClassOf :Cl_Organization ;
+    rdfs:label "Supplier" ;
+    rdfs:comment "A supplier organization involved in invoices." .
+
+:Cl_Client a owl:Class ;
+    rdfs:subClassOf :Cl_Organization ;
+    rdfs:label "Client" ;
+    rdfs:comment "A client organization involved in invoices." .
+
+:Cl_ContactInfo a owl:Class ;
+    rdfs:label "Contact Information" ;
+    rdfs:comment "Contact details for an organization or seller." ;
+    rdfs:subClassOf :Cl_DisplayAttribute .
+
+:Cl_OrganizationInvolvement a owl:Class ;
+    rdfs:label "Organization Involvement" ;
+    rdfs:comment "A reification class capturing the involvement of an organization in an event, project, or process, and the information displayed about it." .
+
+:Cl_InvoiceParticipation a owl:Class ;
+    rdfs:label "Invoice Participation" ;
+    rdfs:comment "A reification class representing the involvement of an organization in an invoice." .
+
+:Cl_InvoiceRole a owl:Class ;
+    rdfs:label "Invoice Role" ;
+    rdfs:comment "Role played by an organization or person in an invoice (e.g. buyer, seller)." .
+
+:Cl_BuyerRole a owl:Class ;
+    rdfs:subClassOf :Cl_InvoiceRole ;
+    rdfs:label "Buyer Role" ;
+    rdfs:comment "Role of a buyer in an invoice." .
+
+:Cl_SellerRole a owl:Class ;
+    rdfs:subClassOf :Cl_InvoiceRole ;
+    rdfs:label "Seller Role" ;
+    rdfs:comment "Role of a seller in an invoice." .
+
+:Cl_InvoiceParty a owl:Class ;
+    rdfs:label "Invoice Party Reification" ;
+    rdfs:comment "A reification class linking an organization, a role, and an invoice." .
+
+:Cl_OrganizationInvoiceRole a owl:Class ;
+    rdfs:subClassOf :Cl_InvoiceRole ;
+    rdfs:label "Organization Invoice Role" ;
+    rdfs:comment "Pivot class for reification: links an Organization, an Invoice, and a RoleType." .
+
+:Cl_RoleType a owl:Class ;
+    rdfs:label "Role Type" ;
+    rdfs:comment "The kind of role (e.g., buyer, seller, issuer, payer, recipient, etc.) the organization plays in an invoice." .
+
+:Cl_Person a owl:Class ;
+    rdfs:label "Person" ;
+    rdfs:comment "A human individual involved in the process." ;
+    rdfs:subClassOf :Cl_Entity .
+
+:Cl_Buyer a owl:Class ;
+    rdfs:label "Buyer" ;
+    rdfs:comment "A person or organization who buys goods or services." ;
+    rdfs:subClassOf :Cl_Person .
+
+:Cl_Address a owl:Class ;
+    rdfs:label "Address" ;
+    rdfs:comment "A postal address for a person or organization." ;
+    rdfs:subClassOf :Cl_Entity .
+
+:Cl_BuyerAddressAssignment a owl:Class ;
+    rdfs:label "Buyer Address Assignment" ;
+    rdfs:comment "Assignment of an address to a buyer." ;
+    rdfs:subClassOf :Cl_Entity .
+
+:Cl_Item a owl:Class ;
+    rdfs:label "Item" ;
+    rdfs:comment "An item that is sold." .
+
+:Cl_Product a owl:Class ;
+    rdfs:subClassOf :Cl_Item , :Cl_Entity ;
+    rdfs:label "Product" ;
+    rdfs:comment "A product that may be sold." .
+
+:Cl_Service a owl:Class ;
+    rdfs:subClassOf :Cl_Item ;
+    rdfs:label "Service" ;
+    rdfs:comment "A service that may be sold." .
+
+:Cl_InvoiceItem a owl:Class ;
+    rdfs:label "Invoice Item" ;
+    rdfs:comment "An item listed in an invoice." .
+
+:Cl_InvoiceLine a owl:Class ;
+    rdfs:label "Invoice Line" ;
+    rdfs:comment "A line in an invoice, typically representing a product or service." ;
+    rdfs:subClassOf :Cl_Item .
+
+:Cl_Quantity a owl:Class ;
+    rdfs:label "Quantity" ;
+    rdfs:comment "A quantity of an item." .
+
+:Cl_Price a owl:Class ;
+    rdfs:label "Price" ;
+    rdfs:comment "A monetary value for an item or service." ;
+    rdfs:subClassOf :Cl_MonetaryValue , :Cl_DisplayAttribute .
+
+:Cl_NetPrice a owl:Class ;
+    rdfs:label "Net Price" ;
+    rdfs:comment "The net price for an item or service." ;
+    rdfs:subClassOf :Cl_Price .
+
+:Cl_GrossPrice a owl:Class ;
+    rdfs:label "Gross Price" ;
+    rdfs:comment "The gross price for an item or service." ;
+    rdfs:subClassOf :Cl_Price .
+
+:Cl_MonetaryValue a owl:Class ;
+    rdfs:label "Monetary Value" ;
+    rdfs:comment "A value representing money." .
+
+:Cl_Currency a owl:Class ;
+    rdfs:label "Currency" ;
+    rdfs:comment "Currency used for the price." .
+
+:Cl_SaleInfo a owl:Class ;
+    rdfs:label "SaleInfo" ;
+    rdfs:comment "Reified class to capture information displayed about items sold." .
+
+:Cl_ProductCategory a owl:Class ;
+    rdfs:label "ProductCategory" ;
+    rdfs:comment "Category or type of the item." ;
+    rdfs:subClassOf :Cl_DisplayAttribute .
+
+:Cl_Seller a owl:Class ;
+    rdfs:label "Seller" ;
+    rdfs:comment "Entity selling the item." .
+
+:Cl_Description a owl:Class ;
+    rdfs:label "Description" ;
+    rdfs:comment "Textual description of an item." ;
+    rdfs:subClassOf :Cl_DisplayAttribute .
+
+:Cl_Image a owl:Class ;
+    rdfs:label "Image" ;
+    rdfs:comment "Image representing the item." ;
+    rdfs:subClassOf :Cl_DisplayAttribute .
+
+:Cl_StockStatus a owl:Class ;
+    rdfs:label "StockStatus" ;
+    rdfs:comment "Availability status of the item." ;
+    rdfs:subClassOf :Cl_DisplayAttribute .
+
+:Cl_DisplayAttribute a owl:Class ;
+    rdfs:label "DisplayAttribute" ;
+    rdfs:comment "General superclass for attributes displayed about an item." .
+
+:Cl_InvoiceNetPriceCalculation a owl:Class ;
+    rdfs:label "Invoice Net Price Calculation" ;
+    rdfs:comment "A calculation of the net price for an invoice." .
+
+:Cl_InvoiceEntity a owl:Class ;
+    rdfs:label "Invoice Entity" ;
+    rdfs:comment "A superclass for invoice-related entities." ;
+    rdfs:subClassOf :Cl_Entity .
+
+:Cl_InvoiceDetailReification a owl:Class ;
+    rdfs:label "Invoice Detail Reification" ;
+    rdfs:comment "A reification class for detailed invoice information." ;
+    rdfs:subClassOf :Cl_InvoiceEntity .
+
+:Cl_Customer a owl:Class ;
+    rdfs:label "Customer" ;
+    rdfs:comment "A customer involved in an invoice." ;
+    rdfs:subClassOf :Cl_Entity .
+
+:Cl_Amount a owl:Class ;
+    rdfs:label "Amount" ;
+    rdfs:comment "A monetary amount." ;
+    rdfs:subClassOf :Cl_Entity .
+
+:Cl_InvoiceAmount a owl:Class ;
+    rdfs:label "Invoice Amount" ;
+    rdfs:comment "The amount for an invoice." ;
+    rdfs:subClassOf :Cl_Amount .
+
+:Cl_InvoiceAmountReification a owl:Class ;
+    rdfs:label "Invoice Amount Reification" ;
+    rdfs:comment "A reification class for invoice amounts." ;
+    rdfs:subClassOf :Cl_InvoiceEntity .
+
+:Cl_FinancialDocument a owl:Class ;
+    rdfs:label "Financial Document" ;
+    rdfs:comment "A document with financial significance." ;
+    rdfs:subClassOf :Cl_Document .
+
+:Cl_InvoiceIdentifier a owl:Class ;
+    rdfs:label "Invoice Identifier" ;
+    rdfs:comment "A unique identifier for an invoice." ;
+    rdfs:subClassOf :Cl_Document .
+
+:Cl_InvoiceNumber a owl:Class ;
+    rdfs:label "Invoice Number" ;
+    rdfs:comment "A number identifying an invoice." ;
+    rdfs:subClassOf :Cl_InvoiceIdentifier .
+
+:Cl_FileFormat a owl:Class ;
+    rdfs:label "File Format" ;
+    rdfs:comment "A file format for electronic documents." .
+
+:Cl_InformationElement a owl:Class ;
+    rdfs:label "Information Element" ;
+    rdfs:comment "A piece of information required in a file format." .
+
+:Cl_FileFormatValidityRequirement a owl:Class ;
+    rdfs:label "File Format Validity Requirement" ;
+    rdfs:comment "A reification class linking a file format to the information elements and constraints required for its validity." ;
+    rdfs:subClassOf :Cl_InformationElement .
+
+:Cl_ValidationInstance a owl:Class ;
+    rdfs:label "Validation Instance" ;
+    rdfs:comment "An instance of a validation process." ;
+    rdfs:subClassOf :Cl_InformationElement .
+
+:Cl_Value a owl:Class ;
+    rdfs:label "Value" ;
+    rdfs:comment "A value for a property or attribute." ;
+    rdfs:subClassOf :Cl_Entity .
+
+:Cl_RequirementType a owl:Class ;
+    rdfs:label "Requirement Type" ;
+    rdfs:comment "A type of requirement for a file format." ;
+    rdfs:subClassOf :Cl_InformationElement .
+
+:Cl_Constraint a owl:Class ;
+    rdfs:label "Constraint" ;
+    rdfs:comment "A constraint on information elements or validity requirements." ;
+    rdfs:subClassOf :Cl_InformationElement .
+
+:Cl_ValidationResult a owl:Class ;
+    rdfs:label "Validation Result" ;
+    rdfs:comment "A result of a validation process." ;
+    rdfs:subClassOf :Cl_InformationElement .
+
+:Cl_BusinessProcess a owl:Class ;
+    rdfs:label "Business Process" ;
+    rdfs:comment "A business process within the organization." .
+
+:Cl_InvoiceAssignment a owl:Class ;
+    rdfs:label "Invoice Assignment" ;
+    rdfs:comment "A reification class representing the assignment of an invoice to a business process." .
+
+#################################################################
+# Object Properties
+#################################################################
+
+:hasInvoiceListing a owl:ObjectProperty ;
+    rdfs:domain :Cl_EDIFACTMessage ;
+    rdfs:range :Cl_EDIFACTMessageInvoiceListing ;
+    rdfs:label "has invoice listing" ;
+    rdfs:comment "Links an EDIFACT message to its invoice listing reification." ;
+    owl:inverseOf :listedInMessage .
+
+:listedInMessage a owl:ObjectProperty ;
+    rdfs:domain :Cl_EDIFACTMessageInvoiceListing ;
+    rdfs:range :Cl_EDIFACTMessage ;
+    rdfs:label "listed in message" ;
+    rdfs:comment "Inverse of hasInvoiceListing, links invoice listing reification to the message." ;
+    owl:inverseOf :hasInvoiceListing .
+
+:listsInvoice a owl:ObjectProperty ;
+    rdfs:domain :Cl_EDIFACTMessageInvoiceListing ;
+    rdfs:range :Cl_Invoice ;
+    rdfs:label "lists invoice" ;
+    rdfs:comment "Links the invoice listing reification to the Invoice." ;
+    owl:inverseOf :listedByMessageListing .
+
+:listedByMessageListing a owl:ObjectProperty ;
+    rdfs:domain :Cl_Invoice ;
+    rdfs:range :Cl_EDIFACTMessageInvoiceListing ;
+    rdfs:label "listed by message listing" ;
+    rdfs:comment "Inverse of listsInvoice." ;
+    owl:inverseOf :listsInvoice .
+
+:involvesOrganization a owl:ObjectProperty ;
+    rdfs:domain [ a owl:Class ; owl:unionOf ( :Cl_InvoiceParticipation :Cl_InvoiceParty :Cl_OrganizationInvolvement ) ] ;
+    rdfs:range :Cl_Organization ;
+    rdfs:label "involves organization" ;
+    rdfs:comment "Links a participation or involvement to an organization." ;
+    owl:inverseOf :organizationInvolvedIn .
+
+:organizationInvolvedIn a owl:ObjectProperty ;
+    rdfs:domain :Cl_Organization ;
+    rdfs:range [ a owl:Class ; owl:unionOf ( :Cl_InvoiceParticipation :Cl_InvoiceParty :Cl_OrganizationInvolvement ) ] ;
+    rdfs:label "organization involved in" ;
+    rdfs:comment "Inverse of involvesOrganization." ;
+    owl:inverseOf :involvesOrganization .
+
+:involvesInvoice a owl:ObjectProperty ;
+    rdfs:domain :Cl_InvoiceParticipation ;
+    rdfs:range :Cl_Invoice ;
+    rdfs:label "involves invoice" ;
+    rdfs:comment "Links a participation to an invoice." ;
+    owl:inverseOf :invoiceInvolvedInParticipation .
+
+:invoiceInvolvedInParticipation a owl:ObjectProperty ;
+    rdfs:domain :Cl_Invoice ;
+    rdfs:range :Cl_InvoiceParticipation ;
+    rdfs:label "invoice involved in participation" ;
+    rdfs:comment "Inverse of involvesInvoice." ;
+    owl:inverseOf :involvesInvoice .
+
+:hasRoleInInvoice a owl:DatatypeProperty ;
+    rdfs:domain :Cl_InvoiceParticipation ;
+    rdfs:range xsd:string ;
+    rdfs:label "has role in invoice" ;
+    rdfs:comment "The role played in the invoice." .
+
+:hasInvoiceParticipation a owl:ObjectProperty ;
+    rdfs:domain :Cl_Invoice ;
+    rdfs:range :Cl_InvoiceParticipation ;
+    rdfs:label "has invoice participation" ;
+    rdfs:comment "Links an invoice to its participations." ;
+    owl:inverseOf :invoiceParticipationOf ;
+    owl:deprecated "true"^^xsd:boolean .
+
+:hasInvoiceParticipationCamelCase a owl:ObjectProperty ;
+    rdfs:domain :Cl_Invoice ;
+    rdfs:range :Cl_InvoiceParticipation ;
+    rdfs:label "hasInvoiceParticipation" ;
+    rdfs:comment "Links an invoice to its participations (CamelCase preferred naming)." ;
+    owl:inverseOf :invoiceParticipationOfCamelCase .
+
+:invoiceParticipationOf a owl:ObjectProperty ;
+    rdfs:domain :Cl_InvoiceParticipation ;
+    rdfs:range :Cl_Invoice ;
+    rdfs:label "invoice participation of" ;
+    rdfs:comment "Inverse of hasInvoiceParticipation." ;
+    owl:inverseOf :hasInvoiceParticipation .
+
+:invoiceParticipationOfCamelCase a owl:ObjectProperty ;
+    rdfs:domain :Cl_InvoiceParticipation ;
+    rdfs:range :Cl_Invoice ;
+    rdfs:label "invoiceParticipationOf" ;
+    rdfs:comment "Inverse of hasInvoiceParticipation (CamelCase)." ;
+    owl:inverseOf :hasInvoiceParticipationCamelCase .
+
+:participatesInInvoice a owl:ObjectProperty ;
+    rdfs:domain :Cl_Organization ;
+    rdfs:range :Cl_InvoiceParticipation ;
+    rdfs:label "participates in invoice" ;
+    rdfs:comment "Links an organization to its invoice participations." ;
+    owl:inverseOf :invoiceParticipationByOrganization .
+
+:invoiceParticipationByOrganization a owl:ObjectProperty ;
+    rdfs:domain :Cl_InvoiceParticipation ;
+    rdfs:range :Cl_Organization ;
+    rdfs:label "invoice participation by organization" ;
+    rdfs:comment "Inverse of participatesInInvoice." ;
+    owl:inverseOf :participatesInInvoice .
+
+:hasOrganization a owl:ObjectProperty ;
+    rdfs:domain :Cl_OrganizationInvoiceRole ;
+    rdfs:range :Cl_Organization ;
+    rdfs:label "has organization" ;
+    rdfs:comment "Links a role to an organization." ;
+    owl:inverseOf :organizationOfRole .
+
+:organizationOfRole a owl:ObjectProperty ;
+    rdfs:domain :Cl_Organization ;
+    rdfs:range :Cl_OrganizationInvoiceRole ;
+    rdfs:label "organization of role" ;
+    rdfs:comment "Inverse of hasOrganization." ;
+    owl:inverseOf :hasOrganization .
+
+:hasInvoice a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain :Cl_OrganizationInvoiceRole ;
+    rdfs:range :Cl_Invoice ;
+    rdfs:label "has invoice" ;
+    rdfs:comment "Links a role to an invoice." ;
+    owl:inverseOf :invoiceOfRole .
+
+:invoiceOfRole a owl:ObjectProperty ;
+    rdfs:domain :Cl_Invoice ;
+    rdfs:range :Cl_OrganizationInvoiceRole ;
+    rdfs:label "invoice of role" ;
+    rdfs:comment "Inverse of hasInvoice." ;
+    owl:inverseOf :hasInvoice .
+
+:hasInvoiceAmountInvoice a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain :Cl_InvoiceAmountReification ;
+    rdfs:range :Cl_Invoice ;
+    rdfs:label "has invoice (amount reification)" ;
+    rdfs:comment "Links an invoice amount reification to an invoice." ;
+    owl:inverseOf :invoiceOfAmountReification .
+
+:invoiceOfAmountReification a owl:ObjectProperty ;
+    rdfs:domain :Cl_Invoice ;
+    rdfs:range :Cl_InvoiceAmountReification ;
+    rdfs:label "invoice of amount reification" ;
+    rdfs:comment "Inverse of hasInvoiceAmountInvoice." ;
+    owl:inverseOf :hasInvoiceAmountInvoice .
+
+:hasInvoiceAmount a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain :Cl_InvoiceAmountReification ;
+    rdfs:range :Cl_InvoiceAmount ;
+    rdfs:label "has invoice amount" ;
+    rdfs:comment "Links an invoice amount reification to an invoice amount." ;
+    owl:inverseOf :invoiceAmountOfReification .
+
+:invoiceAmountOfReification a owl:ObjectProperty ;
+    rdfs:domain :Cl_InvoiceAmount ;
+    rdfs:range :Cl_InvoiceAmountReification ;
+    rdfs:label "invoice amount of reification" ;
+    rdfs:comment "Inverse of hasInvoiceAmount." ;
+    owl:inverseOf :hasInvoiceAmount .
+
+:hasRoleType a owl:ObjectProperty ;
+    rdfs:domain :Cl_OrganizationInvoiceRole ;
+    rdfs:range :Cl_RoleType ;
+    rdfs:label "has role type" ;
+    rdfs:comment "Links a role to a role type." ;
+    owl:inverseOf :roleTypeOfRole .
+
+:roleTypeOfRole a owl:ObjectProperty ;
+    rdfs:domain :Cl_RoleType ;
+    rdfs:range :Cl_OrganizationInvoiceRole ;
+    rdfs:label "role type of role" ;
+    rdfs:comment "Inverse of hasRoleType." ;
+    owl:inverseOf :hasRoleType .
+
+:hasInvoiceRole a owl:ObjectProperty ;
+    rdfs:domain :Cl_InvoiceParty ;
+    rdfs:range :Cl_InvoiceRole ;
+    rdfs:label "has invoice role" ;
+    rdfs:comment "Links a party reification to an invoice role." ;
+    owl:inverseOf :invoiceRoleOfParty .
+
+:invoiceRoleOfParty a owl:ObjectProperty ;
+    rdfs:domain :Cl_InvoiceRole ;
+    rdfs:range :Cl_InvoiceParty ;
+    rdfs:label "invoice role of party" ;
+    rdfs:comment "Inverse of hasInvoiceRole." ;
+    owl:inverseOf :hasInvoiceRole .
+
+:relatedToInvoice a owl:ObjectProperty ;
+    rdfs:domain :Cl_InvoiceParty ;
+    rdfs:range :Cl_Invoice ;
+    rdfs:label "related to invoice" ;
+    rdfs:comment "Links a party reification to an invoice." ;
+    owl:inverseOf :invoiceOfParty .
+
+:invoiceOfParty a owl:ObjectProperty ;
+    rdfs:domain :Cl_Invoice ;
+    rdfs:range :Cl_InvoiceParty ;
+    rdfs:label "invoice of party" ;
+    rdfs:comment "Inverse of relatedToInvoice." ;
+    owl:inverseOf :relatedToInvoice .
+
+:hasBuyer a owl:ObjectProperty ;
+    rdfs:domain [ a owl:Class ; owl:unionOf ( :Cl_Invoice :Cl_BuyerAddressAssignment ) ] ;
+    rdfs:range :Cl_Buyer ;
+    rdfs:label "has buyer" ;
+    rdfs:comment "Links an invoice or assignment to a buyer." ;
+    owl:inverseOf :buyerOf .
+
+:buyerOf a owl:ObjectProperty ;
+    rdfs:domain :Cl_Buyer ;
+    rdfs:range [ a owl:Class ; owl:unionOf ( :Cl_Invoice :Cl_BuyerAddressAssignment ) ] ;
+    rdfs:label "buyer of" ;
+    rdfs:comment "Inverse of hasBuyer." ;
+    owl:inverseOf :hasBuyer .
+
+:hasAddress a owl:ObjectProperty ;
+    rdfs:domain :Cl_BuyerAddressAssignment ;
+    rdfs:range :Cl_Address ;
+    rdfs:label "connects the assignment to the address" ;
+    rdfs:comment "Links a buyer address assignment to an address." ;
+    owl:inverseOf :addressOfAssignment .
+
+:addressOfAssignment a owl:ObjectProperty ;
+    rdfs:domain :Cl_Address ;
+    rdfs:range :Cl_BuyerAddressAssignment ;
+    rdfs:label "relates an address to its assignment" ;
+    rdfs:comment "Inverse of hasAddress." ;
+    owl:inverseOf :hasAddress .
+
+:buyerAddressAssignment a owl:ObjectProperty ;
+    rdfs:domain :Cl_Buyer ;
+    rdfs:range :Cl_BuyerAddressAssignment ;
+    rdfs:label "relates a buyer to their address assignment" ;
+    rdfs:comment "Links a buyer to their address assignment." ;
+    owl:inverseOf :buyerOfAssignment .
+
+:buyerOfAssignment a owl:ObjectProperty ;
+    rdfs:domain :Cl_BuyerAddressAssignment ;
+    rdfs:range :Cl_Buyer ;
+    rdfs:label "buyer of assignment" ;
+    rdfs:comment "Inverse of buyerAddressAssignment." ;
+    owl:inverseOf :buyerAddressAssignment .
+
+:hasInvoiceItem a owl:ObjectProperty ;
+    rdfs:domain :Cl_Invoice ;
+    rdfs:range :Cl_InvoiceItem ;
+    rdfs:label "has invoice item" ;
+    rdfs:comment "Links an invoice to its items." ;
+    owl:inverseOf :invoiceItemOf .
+
+:invoiceItemOf a owl:ObjectProperty ;
+    rdfs:domain :Cl_InvoiceItem ;
+    rdfs:range :Cl_Invoice ;
+    rdfs:label "invoice item of" ;
+    rdfs:comment "Inverse of hasInvoiceItem." ;
+    owl:inverseOf :hasInvoiceItem .
+
+:refersToItem a owl:ObjectProperty ;
+    rdfs:domain :Cl_InvoiceItem ;
+    rdfs:range :Cl_Item ;
+    rdfs:label "refers to item" ;
+    rdfs:comment "Links an invoice item to an item." ;
+    owl:inverseOf :itemOfInvoiceItem .
+
+:itemOfInvoiceItem a owl:ObjectProperty ;
+    rdfs:domain :Cl_Item ;
+    rdfs:range :Cl_InvoiceItem ;
+    rdfs:label "item of invoice item" ;
+    rdfs:comment "Inverse of refersToItem." ;
+    owl:inverseOf :refersToItem .
+
+:hasQuantity a owl:ObjectProperty ;
+    rdfs:domain [ a owl:Class ; owl:unionOf ( :Cl_InvoiceItem :Cl_InvoiceLine ) ] ;
+    rdfs:range :Cl_Quantity ;
+    rdfs:label "has quantity" ;
+    rdfs:comment "Links an invoice item or line to a quantity." ;
+    owl:inverseOf :quantityOf .
+
+:quantityOf a owl:ObjectProperty ;
+    rdfs:domain :Cl_Quantity ;
+    rdfs:range [ a owl:Class ; owl:unionOf ( :Cl_InvoiceItem :Cl_InvoiceLine ) ] ;
+    rdfs:label "quantity of" ;
+    rdfs:comment "Inverse of hasQuantity." ;
+    owl:inverseOf :hasQuantity .
+
+:hasPrice a owl:ObjectProperty ;
+    rdfs:domain [ a owl:Class ; owl:unionOf ( :Cl_InvoiceItem :Cl_SaleInfo ) ] ;
+    rdfs:range :Cl_Price ;
+    rdfs:label "has price" ;
+    rdfs:comment "Links an invoice item or sale info to a price." ;
+    owl:inverseOf :priceOf .
+
+:priceOf a owl:ObjectProperty ;
+    rdfs:domain :Cl_Price ;
+    rdfs:range [ a owl:Class ; owl:unionOf ( :Cl_InvoiceItem :Cl_SaleInfo ) ] ;
+    rdfs:label "price of" ;
+    rdfs:comment "Inverse of hasPrice." ;
+    owl:inverseOf :hasPrice .
+
+:refersToProduct a owl:ObjectProperty ;
+    rdfs:domain :Cl_InvoiceLine ;
+    rdfs:range :Cl_Product ;
+    rdfs:label "refers to product" ;
+    rdfs:comment "Links an invoice line to a product." ;
+    owl:inverseOf :productOfInvoiceLine .
+
+:productOfInvoiceLine a owl:ObjectProperty ;
+    rdfs:domain :Cl_Product ;
+    rdfs:range :Cl_InvoiceLine ;
+    rdfs:label "product of invoice line" ;
+    rdfs:comment "Inverse of refersToProduct." ;
+    owl:inverseOf :refersToProduct .
+
+:hasNetPrice a owl:ObjectProperty ;
+    rdfs:domain :Cl_InvoiceLine ;
+    rdfs:range :Cl_NetPrice ;
+    rdfs:label "has net price" ;
+    rdfs:comment "Links an invoice line to its net price." ;
+    owl:inverseOf :netPriceOf .
+
+:netPriceOf a owl:ObjectProperty ;
+    rdfs:domain :Cl_NetPrice ;
+    rdfs:range :Cl_InvoiceLine ;
+    rdfs:label "net price of" ;
+    rdfs:comment "Inverse of hasNetPrice." ;
+    owl:inverseOf :hasNetPrice .
+
+:hasGrossPrice a owl:ObjectProperty ;
+    rdfs:domain :Cl_InvoiceLine ;
+    rdfs:range :Cl_GrossPrice ;
+    rdfs:label "has gross price" ;
+    rdfs:comment "Links an invoice line to its gross price." ;
+    owl:inverseOf :grossPriceOf .
+
+:grossPriceOf a owl:ObjectProperty ;
+    rdfs:domain :Cl_GrossPrice ;
+    rdfs:range :Cl_InvoiceLine ;
+    rdfs:label "gross price of" ;
+    rdfs:comment "Inverse of hasGrossPrice." ;
+    owl:inverseOf :hasGrossPrice .
+
+:hasCurrency a owl:ObjectProperty ;
+    rdfs:domain [ a owl:Class ; owl:unionOf ( :Cl_MonetaryValue :Cl_Price :Cl_InvoiceNetPriceCalculation ) ] ;
+    rdfs:range :Cl_Currency ;
+    rdfs:label "has currency" ;
+    rdfs:comment "Links a monetary value, price, or calculation to a currency." ;
+    owl:inverseOf :currencyOf .
+
+:currencyOf a owl:ObjectProperty ;
+    rdfs:domain :Cl_Currency ;
+    rdfs:range [ a owl:Class ; owl:unionOf ( :Cl_MonetaryValue :Cl_Price :Cl_InvoiceNetPriceCalculation ) ] ;
+    rdfs:label "currency of" ;
+    rdfs:comment "Inverse of hasCurrency." ;
+    owl:inverseOf :hasCurrency .
+
+:hasNetTotal a owl:ObjectProperty ;
+    rdfs:domain :Cl_Invoice ;
+    rdfs:range :Cl_NetPrice ;
+    rdfs:label "has net total" ;
+    rdfs:comment "Links an invoice to its net total." ;
+    owl:inverseOf :netTotalOf .
+
+:netTotalOf a owl:ObjectProperty ;
+    rdfs:domain :Cl_NetPrice ;
+    rdfs:range :Cl_Invoice ;
+    rdfs:label "net total of" ;
+    rdfs:comment "Inverse of hasNetTotal." ;
+    owl:inverseOf :hasNetTotal .
+
+:forInvoice a owl:ObjectProperty ;
+    rdfs:domain :Cl_InvoiceNetPriceCalculation ;
+    rdfs:range :Cl_Invoice ;
+    rdfs:label "for invoice" ;
+    rdfs:comment "Links a net price calculation to an invoice." ;
+    owl:inverseOf :invoiceOfNetPriceCalculation .
+
+:invoiceOfNetPriceCalculation a owl:ObjectProperty ;
+    rdfs:domain :Cl_Invoice ;
+    rdfs:range :Cl_InvoiceNetPriceCalculation ;
+    rdfs:label "invoice of net price calculation" ;
+    rdfs:comment "Inverse of forInvoice." ;
+    owl:inverseOf :forInvoice .
+
+:includesInvoiceLine a owl:ObjectProperty ;
+    rdfs:domain :Cl_InvoiceNetPriceCalculation ;
+    rdfs:range :Cl_InvoiceLine ;
+    rdfs:label "includes invoice line" ;
+    rdfs:comment "Links a net price calculation to invoice lines." ;
+    owl:inverseOf :invoiceLineOfCalculation .
+
+:invoiceLineOfCalculation a owl:ObjectProperty ;
+    rdfs:domain :Cl_InvoiceLine ;
+    rdfs:range :Cl_InvoiceNetPriceCalculation ;
+    rdfs:label "invoice line of calculation" ;
+    rdfs:comment "Inverse of includesInvoiceLine." ;
+    owl:inverseOf :includesInvoiceLine .
+
+:hasSaleInfo a owl:ObjectProperty ;
+    rdfs:domain :Cl_Item ;
+    rdfs:range :Cl_SaleInfo ;
+    rdfs:label "has sale info" ;
+    rdfs:comment "Links an item to sale information." ;
+    owl:inverseOf :saleInfoForItem .
+
+:saleInfoForItem a owl:ObjectProperty ;
+    rdfs:domain :Cl_SaleInfo ;
+    rdfs:range :Cl_Item ;
+    rdfs:label "sale info for item" ;
+    rdfs:comment "Inverse of hasSaleInfo." ;
+    owl:inverseOf :hasSaleInfo .
+
+:hasDisplayAttribute a owl:ObjectProperty ;
+    rdfs:domain :Cl_SaleInfo ;
+    rdfs:range :Cl_DisplayAttribute ;
+    rdfs:label "has display attribute" ;
+    rdfs:comment "Links sale information to display attributes." ;
+    owl:inverseOf :displayAttributeOfSaleInfo .
+
+:displayAttributeOfSaleInfo a owl:ObjectProperty ;
+    rdfs:domain :Cl_DisplayAttribute ;
+    rdfs:range :Cl_SaleInfo ;
+    rdfs:label "display attribute of sale info" ;
+    rdfs:comment "Inverse of hasDisplayAttribute." ;
+    owl:inverseOf :hasDisplayAttribute .
+
+:hasDescription a owl:ObjectProperty ;
+    rdfs:domain :Cl_SaleInfo ;
+    rdfs:range :Cl_Description ;
+    rdfs:subPropertyOf :hasDisplayAttribute ;
+    rdfs:label "has description" ;
+    rdfs:comment "Links sale information to a description." ;
+    owl:inverseOf :descriptionOfSaleInfo .
+
+:descriptionOfSaleInfo a owl:ObjectProperty ;
+    rdfs:domain :Cl_Description ;
+    rdfs:range :Cl_SaleInfo ;
+    rdfs:label "description of sale info" ;
+    rdfs:comment "Inverse of hasDescription." ;
+    owl:inverseOf :hasDescription .
+
+:hasImage a owl:ObjectProperty ;
+    rdfs:domain :Cl_SaleInfo ;
+    rdfs:range :Cl_Image ;
+    rdfs:subPropertyOf :hasDisplayAttribute ;
+    rdfs:label "has image" ;
+    rdfs:comment "Links sale information to an image." ;
+    owl:inverseOf :imageOfSaleInfo .
+
+:imageOfSaleInfo a owl:ObjectProperty ;
+    rdfs:domain :Cl_Image ;
+    rdfs:range :Cl_SaleInfo ;
+    rdfs:label "image of sale info" ;
+    rdfs:comment "Inverse of hasImage." ;
+    owl:inverseOf :hasImage .
+
+:hasStockStatus a owl:ObjectProperty ;
+    rdfs:domain :Cl_SaleInfo ;
+    rdfs:range :Cl_StockStatus ;
+    rdfs:subPropertyOf :hasDisplayAttribute ;
+    rdfs:label "has stock status" ;
+    rdfs:comment "Links sale information to stock status." ;
+    owl:inverseOf :stockStatusOfSaleInfo .
+
+:stockStatusOfSaleInfo a owl:ObjectProperty ;
+    rdfs:domain :Cl_StockStatus ;
+    rdfs:range :Cl_SaleInfo ;
+    rdfs:label "stock status of sale info" ;
+    rdfs:comment "Inverse of hasStockStatus." ;
+    owl:inverseOf :hasStockStatus .
+
+:hasCategory a owl:ObjectProperty ;
+    rdfs:domain :Cl_SaleInfo ;
+    rdfs:range :Cl_ProductCategory ;
+    rdfs:subPropertyOf :hasDisplayAttribute ;
+    rdfs:label "has category" ;
+    rdfs:comment "Links sale information to product category." ;
+    owl:inverseOf :categoryOfSaleInfo .
+
+:categoryOfSaleInfo a owl:ObjectProperty ;
+    rdfs:domain :Cl_ProductCategory ;
+    rdfs:range :Cl_SaleInfo ;
+    rdfs:label "category of sale info" ;
+    rdfs:comment "Inverse of hasCategory." ;
+    owl:inverseOf :hasCategory .
+
+:hasSeller a owl:ObjectProperty ;
+    rdfs:domain :Cl_SaleInfo ;
+    rdfs:range :Cl_Seller ;
+    rdfs:label "has seller" ;
+    rdfs:comment "Links sale information to a seller." ;
+    owl:inverseOf :sellerOfSaleInfo .
+
+:sellerOfSaleInfo a owl:ObjectProperty ;
+    rdfs:domain :Cl_Seller ;
+    rdfs:range :Cl_SaleInfo ;
+    rdfs:label "seller of sale info" ;
+    rdfs:comment "Inverse of hasSeller." ;
+    owl:inverseOf :hasSeller .
+
+:hasContactInfo a owl:ObjectProperty ;
+    rdfs:domain :Cl_Seller ;
+    rdfs:range :Cl_ContactInfo ;
+    rdfs:label "has contact info" ;
+    rdfs:comment "Links a seller to contact information." ;
+    owl:inverseOf :contactInfoOfSeller .
+
+:contactInfoOfSeller a owl:ObjectProperty ;
+    rdfs:domain :Cl_ContactInfo ;
+    rdfs:range :Cl_Seller ;
+    rdfs:label "contact info of seller" ;
+    rdfs:comment "Inverse of hasContactInfo." ;
+    owl:inverseOf :hasContactInfo .
+
+:invoice_hasCustomer a owl:ObjectProperty ;
+    rdfs:domain :Cl_Invoice ;
+    rdfs:range :Cl_Customer ;
+    rdfs:label "invoice has customer" ;
+    rdfs:comment "Links an invoice to a customer." ;
+    owl:inverseOf :customerOfInvoice .
+
+:customerOfInvoice a owl:ObjectProperty ;
+    rdfs:domain :Cl_Customer ;
+    rdfs:range :Cl_Invoice ;
+    rdfs:label "customer of invoice" ;
+    rdfs:comment "Inverse of invoice_hasCustomer." ;
+    owl:inverseOf :invoice_hasCustomer .
+
+:invoice_hasInvoiceDetail a owl:ObjectProperty ;
+    rdfs:domain :Cl_Invoice ;
+    rdfs:range :Cl_InvoiceDetailReification ;
+    rdfs:label "invoice has invoice detail" ;
+    rdfs:comment "Links an invoice to invoice details." ;
+    owl:inverseOf :invoiceDetailOfInvoice .
+
+:invoiceDetailOfInvoice a owl:ObjectProperty ;
+    rdfs:domain :Cl_InvoiceDetailReification ;
+    rdfs:range :Cl_Invoice ;
+    rdfs:label "invoice detail of invoice" ;
+    rdfs:comment "Inverse of invoice_hasInvoiceDetail." ;
+    owl:inverseOf :invoice_hasInvoiceDetail .
+
+:invoiceDetail_invoice a owl:ObjectProperty ;
+    rdfs:domain :Cl_InvoiceDetailReification ;
+    rdfs:range :Cl_Invoice ;
+    rdfs:label "invoice detail invoice" ;
+    rdfs:comment "Links a detail reification to an invoice." ;
+    owl:inverseOf :invoiceOfInvoiceDetail .
+
+:invoiceOfInvoiceDetail a owl:ObjectProperty ;
+    rdfs:domain :Cl_Invoice ;
+    rdfs:range :Cl_InvoiceDetailReification ;
+    rdfs:label "invoice of invoice detail" ;
+    rdfs:comment "Inverse of invoiceDetail_invoice." ;
+    owl:inverseOf :invoiceDetail_invoice .
+
+:invoiceDetail_item a owl:ObjectProperty ;
+    rdfs:domain :Cl_InvoiceDetailReification ;
+    rdfs:range :Cl_InvoiceItem ;
+    rdfs:label "invoice detail item" ;
+    rdfs:comment "Links a detail reification to an invoice item." ;
+    owl:inverseOf :invoiceItemOfInvoiceDetail .
+
+:invoiceItemOfInvoiceDetail a owl:ObjectProperty ;
+    rdfs:domain :Cl_InvoiceItem ;
+    rdfs:range :Cl_InvoiceDetailReification ;
+    rdfs:label "invoice item of invoice detail" ;
+    rdfs:comment "Inverse of invoiceDetail_item." ;
+    owl:inverseOf :invoiceDetail_item .
+
+:invoiceItem_hasProduct a owl:ObjectProperty ;
+    rdfs:domain :Cl_InvoiceItem ;
+    rdfs:range :Cl_Product ;
+    rdfs:label "invoice item has product" ;
+    rdfs:comment "Links an invoice item to a product." ;
+    owl:inverseOf :productOfInvoiceItem .
+
+:productOfInvoiceItem a owl:ObjectProperty ;
+    rdfs:domain :Cl_Product ;
+    rdfs:range :Cl_InvoiceItem ;
+    rdfs:label "product of invoice item" ;
+    rdfs:comment "Inverse of invoiceItem_hasProduct." ;
+    owl:inverseOf :invoiceItem_hasProduct .
+
+:hasInvoiceNumber a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain :Cl_Invoice ;
+    rdfs:range :Cl_InvoiceNumber ;
+    rdfs:label "has invoice number" ;
+    rdfs:comment "Links an invoice to its invoice number." ;
+    owl:inverseOf :invoiceNumberOf .
+
+:invoiceNumberOf a owl:ObjectProperty ;
+    rdfs:domain :Cl_InvoiceNumber ;
+    rdfs:range :Cl_Invoice ;
+    rdfs:label "invoice number of" ;
+    rdfs:comment "Inverse of hasInvoiceNumber." ;
+    owl:inverseOf :hasInvoiceNumber .
+
+:hasValidityRequirement a owl:ObjectProperty ;
+    rdfs:domain :Cl_FileFormat ;
+    rdfs:range :Cl_FileFormatValidityRequirement ;
+    rdfs:label "has validity requirement" ;
+    rdfs:comment "Links a file format to its validity requirements." ;
+    owl:inverseOf :validityRequirementOf .
+
+:validityRequirementOf a owl:ObjectProperty ;
+    rdfs:domain :Cl_FileFormatValidityRequirement ;
+    rdfs:range :Cl_FileFormat ;
+    rdfs:label "validity requirement of" ;
+    rdfs:comment "Inverse of hasValidityRequirement." ;
+    owl:inverseOf :hasValidityRequirement .
+
+:requiresInformationElement a owl:ObjectProperty ;
+    rdfs:domain :Cl_FileFormatValidityRequirement ;
+    rdfs:range :Cl_InformationElement ;
+    rdfs:label "requires information element" ;
+    rdfs:comment "Links a validity requirement to required information elements." ;
+    owl:inverseOf :isInformationElementOf .
+
+:isInformationElementOf a owl:ObjectProperty ;
+    rdfs:domain :Cl_InformationElement ;
+    rdfs:range :Cl_FileFormatValidityRequirement ;
+    rdfs:label "is information element of" ;
+    rdfs:comment "Inverse of requiresInformationElement." ;
+    owl:inverseOf :requiresInformationElement .
+
+:hasConstraint a owl:ObjectProperty ;
+    rdfs:domain :Cl_FileFormatValidityRequirement ;
+    rdfs:range :Cl_Constraint ;
+    rdfs:label "has constraint" ;
+    rdfs:comment "Links a validity requirement to a constraint." ;
+    owl:inverseOf :isConstraintOf .
+
+:isConstraintOf a owl:ObjectProperty ;
+    rdfs:domain :Cl_Constraint ;
+    rdfs:range :Cl_FileFormatValidityRequirement ;
+    rdfs:label "is constraint of" ;
+    rdfs:comment "Inverse of hasConstraint." ;
+    owl:inverseOf :hasConstraint .
+
+:hasRequirementType a owl:ObjectProperty ;
+    rdfs:domain :Cl_FileFormatValidityRequirement ;
+    rdfs:range :Cl_RequirementType ;
+    rdfs:label "has requirement type" ;
+    rdfs:comment "Links a validity requirement to a requirement type." ;
+    owl:inverseOf :isRequirementTypeOf .
+
+:isRequirementTypeOf a owl:ObjectProperty ;
+    rdfs:domain :Cl_RequirementType ;
+    rdfs:range :Cl_FileFormatValidityRequirement ;
+    rdfs:label "is requirement type of" ;
+    rdfs:comment "Inverse of hasRequirementType." ;
+    owl:inverseOf :hasRequirementType .
+
+:assignedInvoice a owl:ObjectProperty ;
+    rdfs:domain :Cl_InvoiceAssignment ;
+    rdfs:range :Cl_Invoice ;
+    rdfs:label "assigned invoice" ;
+    rdfs:comment "Links an assignment to an invoice." ;
+    owl:inverseOf :hasInvoiceAssignment .
+
+:assignedBusinessProcess a owl:ObjectProperty ;
+    rdfs:domain :Cl_InvoiceAssignment ;
+    rdfs:range :Cl_BusinessProcess ;
+    rdfs:label "assigned business process" ;
+    rdfs:comment "Links an assignment to a business process." ;
+    owl:inverseOf :hasBusinessProcessAssignment .
+
+:hasInvoiceAssignment a owl:ObjectProperty ;
+    rdfs:domain :Cl_Invoice ;
+    rdfs:range :Cl_InvoiceAssignment ;
+    rdfs:label "has invoice assignment" ;
+    rdfs:comment "Inverse of assignedInvoice." ;
+    owl:inverseOf :assignedInvoice .
+
+:hasBusinessProcessAssignment a owl:ObjectProperty ;
+    rdfs:domain :Cl_BusinessProcess ;
+    rdfs:range :Cl_InvoiceAssignment ;
+    rdfs:label "has business process assignment" ;
+    rdfs:comment "Inverse of assignedBusinessProcess." ;
+    owl:inverseOf :assignedBusinessProcess .
+
+#################################################################
+# Data Properties
+#################################################################
+
+:invoiceNumber a owl:DatatypeProperty ;
+    rdfs:domain :Cl_Invoice ;
+    rdfs:range xsd:string ;
+    rdfs:label "invoice number" ;
+    rdfs:comment "The invoice number as a string." .
+
+:messageIdentifier a owl:DatatypeProperty ;
+    rdfs:domain :Cl_EDIFACTMessage ;
+    rdfs:range xsd:string ;
+    rdfs:label "message identifier" ;
+    rdfs:comment "Identifier for an EDIFACT message." .
+
+:issueDate a owl:DatatypeProperty ;
+    rdfs:domain :Cl_Invoice ;
+    rdfs:range xsd:date ;
+    rdfs:label "issue date" ;
+    rdfs:comment "The date the invoice was issued." .
+
+:organizationName a owl:DatatypeProperty ;
+    rdfs:domain :Cl_Organization ;
+    rdfs:range xsd:string ;
+    rdfs:label "organization name" ;
+    rdfs:comment "The name of the organization." .
+
+:roleTypeName a owl:DatatypeProperty ;
+    rdfs:domain :Cl_RoleType ;
+    rdfs:range xsd:string ;
+    rdfs:label "role type name" ;
+    rdfs:comment "The name of the role type." .
+
+:addressLine a owl:DatatypeProperty ;
+    rdfs:domain :Cl_Address ;
+    rdfs:range xsd:string ;
+    rdfs:label "street address or address line" ;
+    rdfs:comment "The street address or address line." .
+
+:city a owl:DatatypeProperty ;
+    rdfs:domain :Cl_Address ;
+    rdfs:range xsd:string ;
+    rdfs:label "city of the address" ;
+    rdfs:comment "The city of the address." .
+
+:postalCode a owl:DatatypeProperty ;
+    rdfs:domain :Cl_Address ;
+    rdfs:range xsd:string ;
+    rdfs:label "postal code of the address" ;
+    rdfs:comment "The postal code of the address." .
+
+:country a owl:DatatypeProperty ;
+    rdfs:domain :Cl_Address ;
+    rdfs:range xsd:string ;
+    rdfs:label "country of the address" ;
+    rdfs:comment "The country of the address." .
+
+:quantityValue a owl:DatatypeProperty ;
+    rdfs:domain :Cl_Quantity ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "quantity value" ;
+    rdfs:comment "The value of the quantity." .
+
+:priceValue a owl:DatatypeProperty ;
+    rdfs:domain :Cl_Price ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "price value" ;
+    rdfs:comment "The value of the price." .
+
+:unitPriceValue a owl:DatatypeProperty ;
+    rdfs:domain :Cl_NetPrice ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "unit price value" ;
+    rdfs:comment "The unit price as a decimal value." .
+
+:currencyCode a owl:DatatypeProperty ;
+    rdfs:domain :Cl_Currency ;
+    rdfs:range xsd:string ;
+    rdfs:label "currency code" ;
+    rdfs:comment "The code of the currency." .
+
+:itemDescription a owl:DatatypeProperty ;
+    rdfs:domain :Cl_Item ;
+    rdfs:range xsd:string ;
+    rdfs:label "item description" ;
+    rdfs:comment "A description of the item." .
+
+:itemCode a owl:DatatypeProperty ;
+    rdfs:domain :Cl_Item ;
+    rdfs:range xsd:string ;
+    rdfs:label "item code" ;
+    rdfs:comment "A code for the item." .
+
+:netPriceSum a owl:DatatypeProperty ;
+    rdfs:domain :Cl_InvoiceNetPriceCalculation ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "net price sum" ;
+    rdfs:comment "The sum of net prices." .
+
+:descriptionText a owl:DatatypeProperty ;
+    rdfs:domain :Cl_Description ;
+    rdfs:range xsd:string ;
+    rdfs:label "description text" ;
+    rdfs:comment "The text of a description." .
+
+:imageURL a owl:DatatypeProperty ;
+    rdfs:domain :Cl_Image ;
+    rdfs:range xsd:anyURI ;
+    rdfs:label "image URL" ;
+    rdfs:comment "The URL of an image." .
+
+:stockStatusValue a owl:DatatypeProperty ;
+    rdfs:domain :Cl_StockStatus ;
+    rdfs:range xsd:string ;
+    rdfs:label "stock status value" ;
+    rdfs:comment "The value of the stock status." .
+
+:categoryName a owl:DatatypeProperty ;
+    rdfs:domain :Cl_ProductCategory ;
+    rdfs:range xsd:string ;
+    rdfs:label "category name" ;
+    rdfs:comment "The name of the product category." .
+
+:sellerName a owl:DatatypeProperty ;
+    rdfs:domain :Cl_Seller ;
+    rdfs:range xsd:string ;
+    rdfs:label "seller name" ;
+    rdfs:comment "The name of the seller." .
+
+:contactEmail a owl:DatatypeProperty ;
+    rdfs:domain :Cl_ContactInfo ;
+    rdfs:range xsd:string ;
+    rdfs:label "contact email" ;
+    rdfs:comment "The email address for contact information." .
+
+:contactPhone a owl:DatatypeProperty ;
+    rdfs:domain :Cl_ContactInfo ;
+    rdfs:range xsd:string ;
+    rdfs:label "contact phone" ;
+    rdfs:comment "The phone number for contact information." .
+
+:contactAddress a owl:DatatypeProperty ;
+    rdfs:domain :Cl_ContactInfo ;
+    rdfs:range xsd:string ;
+    rdfs:label "contact address" ;
+    rdfs:comment "The address for contact information." .
+
+:orgName a owl:DatatypeProperty ;
+    rdfs:domain :Cl_Organization ;
+    rdfs:range xsd:string ;
+    rdfs:label "organization name" ;
+    rdfs:comment "The name of the organization (alternative property)." .
+
+:orgIdentifier a owl:DatatypeProperty ;
+    rdfs:domain :Cl_Organization ;
+    rdfs:range xsd:string ;
+    rdfs:label "organization identifier" ;
+    rdfs:comment "An identifier for the organization." .
+
+:elementName a owl:DatatypeProperty ;
+    rdfs:domain :Cl_InformationElement ;
+    rdfs:range xsd:string ;
+    rdfs:label "element name" ;
+    rdfs:comment "The name of the information element." .
+
+:constraintDescription a owl:DatatypeProperty ;
+    rdfs:domain :Cl_Constraint ;
+    rdfs:range xsd:string ;
+    rdfs:label "constraint description" ;
+    rdfs:comment "A description of the constraint." .
+
+:requirementTypeName a owl:DatatypeProperty ;
+    rdfs:domain :Cl_RequirementType ;
+    rdfs:range xsd:string ;
+    rdfs:label "requirement type name" ;
+    rdfs:comment "The name of the requirement type." .
+
+:formatName a owl:DatatypeProperty ;
+    rdfs:domain :Cl_FileFormat ;
+    rdfs:range xsd:string ;
+    rdfs:label "file format name" ;
+    rdfs:comment "The name of the file format." .
+
+:validityRequirementDescription a owl:DatatypeProperty ;
+    rdfs:domain :Cl_FileFormatValidityRequirement ;
+    rdfs:range xsd:string ;
+    rdfs:label "validity requirement description" ;
+    rdfs:comment "A description of the validity requirement." .
+
+:displayedInformation a owl:DatatypeProperty ;
+    rdfs:domain :Cl_OrganizationInvolvement ;
+    rdfs:range xsd:string ;
+    rdfs:label "displayed information" ;
+    rdfs:comment "Information displayed about the organization involvement." .
+
+:roleName a owl:DatatypeProperty ;
+    rdfs:domain :Cl_RoleType ;
+    rdfs:range xsd:string ;
+    rdfs:label "role name" ;
+    rdfs:comment "The name of the role." .
+
+:assignmentDate a owl:DatatypeProperty ;
+    rdfs:domain :Cl_InvoiceAssignment ;
+    rdfs:range xsd:dateTime ;
+    rdfs:label "assignment date" ;
+    rdfs:comment "The date and time of the assignment." .
+
+:amountValue a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain :Cl_InvoiceAmount ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "amount value" ;
+    rdfs:comment "The value of the invoice amount." .
+
+:currency a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain :Cl_InvoiceAmount ;
+    rdfs:range xsd:string ;
+    rdfs:label "currency" ;
+    rdfs:comment "The currency of the invoice amount." .
+
+:invoiceId a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain :Cl_Invoice ;
+    rdfs:range xsd:string ;
+    rdfs:label "invoice id" ;
+    rdfs:comment "The identifier of the invoice." .
+
+:invoiceDate a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain :Cl_Invoice ;
+    rdfs:range xsd:date ;
+    rdfs:label "invoice date" ;
+    rdfs:comment "The date of the invoice." .
+
+:invoiceTotalAmount a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain :Cl_Invoice ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "invoice total amount" ;
+    rdfs:comment "The total amount of the invoice." .
+
+:invoiceDetailQuantity a owl:DatatypeProperty ;
+    rdfs:domain :Cl_InvoiceDetailReification ;
+    rdfs:range xsd:integer ;
+    rdfs:label "invoice detail quantity" ;
+    rdfs:comment "The quantity in the invoice detail." .
+
+:invoiceDetailUnitPrice a owl:DatatypeProperty ;
+    rdfs:domain :Cl_InvoiceDetailReification ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "invoice detail unit price" ;
+    rdfs:comment "The unit price in the invoice detail." .
+
+:invoiceDetailTotal a owl:DatatypeProperty ;
+    rdfs:domain :Cl_InvoiceDetailReification ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "invoice detail total" ;
+    rdfs:comment "The total in the invoice detail." .
+
+:productName a owl:DatatypeProperty ;
+    rdfs:domain :Cl_Product ;
+    rdfs:range xsd:string ;
+    rdfs:label "product name" ;
+    rdfs:comment "The name of the product." .
+
+:customerName a owl:DatatypeProperty ;
+    rdfs:domain :Cl_Customer ;
+    rdfs:range xsd:string ;
+    rdfs:label "customer name" ;
+    rdfs:comment "The name of the customer." .
+
+:customerId a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain :Cl_Customer ;
+    rdfs:range xsd:string ;
+    rdfs:label "customer id" ;
+    rdfs:comment "The identifier of the customer." .
+
+:invoiceNumberValue a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain :Cl_InvoiceNumber ;
+    rdfs:range xsd:string ;
+    rdfs:label "invoice number value" ;
+    rdfs:comment "The string value of the invoice number." .
+
+#################################################################
+# Restrictions, Equivalent Classes, and Disjointness
+#################################################################
+
+:Cl_EDIFACTMessageInvoiceListing owl:equivalentClass [
+    a owl:Restriction ;
+    owl:onProperty :listsInvoice ;
+    owl:allValuesFrom :Cl_Invoice
+] .
+
+:Cl_InvoiceParticipation owl:equivalentClass [
+    rdf:type owl:Class ;
+    owl:intersectionOf (
+        [ rdf:type owl:Restriction ;
+          owl:onProperty :involvesOrganization ;
+          owl:someValuesFrom :Cl_Organization ]
+        [ rdf:type owl:Restriction ;
+          owl:onProperty :involvesInvoice ;
+          owl:someValuesFrom :Cl_Invoice ]
+    )
+] .
+
+:Cl_OrganizationInvoiceRole owl:equivalentClass [
+    rdf:type owl:Class ;
+    owl:intersectionOf (
+        [ rdf:type owl:Restriction ; owl:onProperty :hasOrganization ; owl:someValuesFrom :Cl_Organization ]
+        [ rdf:type owl:Restriction ; owl:onProperty :hasInvoice ; owl:someValuesFrom :Cl_Invoice ]
+        [ rdf:type owl:Restriction ; owl:onProperty :hasRoleType ; owl:someValuesFrom :Cl_RoleType ]
+    )
+] .
+
+:Cl_InvoiceParty owl:equivalentClass [
+    a owl:Class ;
+    owl:intersectionOf (
+        [ a owl:Restriction ; owl:onProperty :hasInvoiceRole ; owl:someValuesFrom :Cl_InvoiceRole ]
+        [ a owl:Restriction ; owl:onProperty :involvesOrganization ; owl:someValuesFrom :Cl_Organization ]
+        [ a owl:Restriction ; owl:onProperty :relatedToInvoice ; owl:someValuesFrom :Cl_Invoice ]
+    )
+] .
+
+:Cl_Buyer owl:equivalentClass [
+    a owl:Restriction ;
+    owl:onProperty :buyerAddressAssignment ;
+    owl:allValuesFrom :Cl_BuyerAddressAssignment
+] .
+
+:Cl_BuyerAddressAssignment owl:equivalentClass [
+    a owl:Class ;
+    owl:intersectionOf (
+        [ a owl:Restriction ; owl:onProperty :hasBuyer ; owl:someValuesFrom :Cl_Buyer ]
+        [ a owl:Restriction ; owl:onProperty :hasAddress ; owl:someValuesFrom :Cl_Address ]
+    )
+] .
+
+:Cl_InvoiceItem owl:equivalentClass [
+    rdf:type owl:Class ;
+    owl:intersectionOf (
+        [ rdf:type owl:Restriction ; owl:onProperty :refersToItem ; owl:someValuesFrom :Cl_Item ]
+        [ rdf:type owl:Restriction ; owl:onProperty :hasQuantity ; owl:someValuesFrom :Cl_Quantity ]
+        [ rdf:type owl:Restriction ; owl:onProperty :hasPrice ; owl:someValuesFrom :Cl_Price ]
+    )
+] .
+
+:Cl_Invoice owl:equivalentClass [
+    rdf:type owl:Class ;
+    owl:intersectionOf (
+        [ rdf:type owl:Restriction ; owl:onProperty :hasInvoiceItem ; owl:someValuesFrom :Cl_InvoiceItem ]
+        [ rdf:type owl:Restriction ; owl:onProperty :hasInvoiceNumber ; owl:someValuesFrom :Cl_InvoiceNumber ]
+    )
+] .
+
+:Cl_InvoiceLine owl:equivalentClass [
+    rdf:type owl:Class ;
+    owl:intersectionOf (
+        [ rdf:type owl:Restriction ; owl:onProperty :refersToProduct ; owl:someValuesFrom :Cl_Product ]
+        [ rdf:type owl:Restriction ; owl:onProperty :hasNetPrice ; owl:someValuesFrom :Cl_NetPrice ]
+    )
+] .
+
+:Cl_NetPrice owl:equivalentClass [
+    rdf:type owl:Restriction ;
+    owl:onProperty :hasCurrency ;
+    owl:allValuesFrom :Cl_Currency
+] .
+
+:Cl_SaleInfo owl:equivalentClass [
+    rdf:type owl:Class ;
+    owl:intersectionOf (
+        [ rdf:type owl:Restriction ; owl:onProperty :saleInfoForItem ; owl:someValuesFrom :Cl_Item ]
+        [ rdf:type owl:Restriction ; owl:onProperty :hasDisplayAttribute ; owl:someValuesFrom :Cl_DisplayAttribute ]
+        [ rdf:type owl:Restriction ; owl:onProperty :hasSeller ; owl:someValuesFrom :Cl_Seller ]
+    )
+] .
+
+:Cl_InvoiceDetailReification owl:equivalentClass [
+    rdf:type owl:Class ;
+    owl:intersectionOf (
+        [ rdf:type owl:Restriction ; owl:onProperty :invoiceDetail_invoice ; owl:someValuesFrom :Cl_Invoice ]
+        [ rdf:type owl:Restriction ; owl:onProperty :invoiceDetail_item ; owl:someValuesFrom :Cl_InvoiceItem ]
+        [ rdf:type owl:Restriction ; owl:onProperty :invoiceDetailQuantity ; owl:someValuesFrom xsd:integer ]
+        [ rdf:type owl:Restriction ; owl:onProperty :invoiceDetailUnitPrice ; owl:someValuesFrom xsd:decimal ]
+        [ rdf:type owl:Restriction ; owl:onProperty :invoiceDetailTotal ; owl:someValuesFrom xsd:decimal ]
+    )
+] .
+
+:Cl_InvoiceAmountReification owl:equivalentClass [
+    rdf:type owl:Class ;
+    owl:intersectionOf (
+        [ rdf:type owl:Restriction ;
+          owl:onProperty :hasInvoiceAmountInvoice ;
+          owl:allValuesFrom :Cl_Invoice ]
+        [ rdf:type owl:Restriction ;
+          owl:onProperty :hasInvoiceAmount ;
+          owl:allValuesFrom :Cl_InvoiceAmount ]
+    )
+] .
+
+:Cl_InvoiceAssignment owl:equivalentClass [
+    a owl:Class ;
+    owl:intersectionOf (
+        [ a owl:Restriction ;
+          owl:onProperty :assignedInvoice ;
+          owl:someValuesFrom :Cl_Invoice ]
+        [ a owl:Restriction ;
+          owl:onProperty :assignedBusinessProcess ;
+          owl:someValuesFrom :Cl_BusinessProcess ]
+    )
+] .
+
+:Cl_Organization owl:equivalentClass [
+    a owl:Restriction ;
+    owl:onProperty :orgName ;
+    owl:someValuesFrom xsd:string
+] .
+
+#################################################################
+# Disjointness and Disjoint Unions
+#################################################################
+
+:Cl_EDIFACTMessage owl:disjointWith :Cl_Invoice .
+:Cl_Supplier owl:disjointWith :Cl_Client .
+:Cl_Organization owl:disjointWith :Cl_Invoice , :Cl_InvoiceRole, :Cl_InvoiceParty , :Cl_OrganizationType , :Cl_ContactInfo , :Cl_RoleType .
+:Cl_Invoice owl:disjointWith :Cl_InvoiceRole , :Cl_InvoiceParty , :Cl_InvoiceNumber , :Cl_InvoiceAmount , :Cl_InvoiceAmountReification , :Cl_BusinessProcess , :Cl_InvoiceAssignment , :Cl_Customer , :Cl_Product , :Cl_InvoiceItem , :Cl_InvoiceDetailReification , :Cl_Seller , :Cl_Item , :Cl_InvoiceLine .
+:Cl_InvoiceRole owl:disjointWith :Cl_InvoiceParty , :Cl_Invoice , :Cl_Organization , :Cl_RoleType .
+:Cl_InvoiceParty owl:disjointWith :Cl_Organization , :Cl_Invoice , :Cl_InvoiceRole .
+:Cl_BuyerRole owl:disjointWith :Cl_SellerRole .
+:Cl_Buyer owl:disjointWith :Cl_Address , :Cl_BuyerAddressAssignment .
+:Cl_Address owl:disjointWith :Cl_BuyerAddressAssignment .
+:Cl_Product owl:disjointWith :Cl_Service , :Cl_InvoiceItem , :Cl_InvoiceDetailReification , :Cl_Customer .
+:Cl_InvoiceLine owl:disjointWith :Cl_Invoice .
+:Cl_NetPrice owl:disjointWith :Cl_GrossPrice .
+:Cl_Price owl:disjointUnionOf ( :Cl_NetPrice :Cl_GrossPrice ) .
+:Cl_Product owl:disjointWith :Cl_Service .
+:Cl_Item owl:disjointWith :Cl_Seller .
+:Cl_Price owl:disjointWith :Cl_Description, :Cl_Image, :Cl_StockStatus, :Cl_ProductCategory, :Cl_ContactInfo .
+:Cl_Seller owl:disjointWith :Cl_DisplayAttribute .
+:Cl_InvoiceDetailReification owl:disjointWith :Cl_Invoice , :Cl_Customer , :Cl_Product , :Cl_InvoiceItem .
+:Cl_InvoiceAmount owl:disjointWith :Cl_InvoiceAmountReification , :Cl_Invoice .
+:Cl_FileFormat owl:disjointWith :Cl_InformationElement .
+:Cl_ValidationInstance owl:disjointWith :Cl_ValidationResult .
+:Cl_InvoiceAssignment owl:disjointWith :Cl_Invoice , :Cl_BusinessProcess , :Cl_Document .
+:Cl_ContactInfo owl:disjointWith :Cl_Organization .
+:Cl_RoleType owl:disjointWith :Cl_Organization .
+:Cl_Item owl:disjointUnionOf ( :Cl_Product :Cl_Service ) .
+
+#################################################################
+# Subclass and Hierarchy Axioms
+#################################################################
+
+:Cl_RequirementType rdfs:subClassOf :Cl_InformationElement .
+:Cl_Constraint rdfs:subClassOf :Cl_InformationElement .
+:Cl_FileFormatValidityRequirement rdfs:subClassOf :Cl_InformationElement .
+:Cl_ValidationInstance rdfs:subClassOf :Cl_InformationElement .
+:Cl_ValidationResult rdfs:subClassOf :Cl_InformationElement .
+:Cl_Invoice rdfs:subClassOf :Cl_Document , :Cl_FinancialDocument , :Cl_InvoiceEntity .
+:Cl_InvoiceLine rdfs:subClassOf :Cl_Item .
+:Cl_NetPrice rdfs:subClassOf :Cl_Price , :Cl_MonetaryValue .
+:Cl_GrossPrice rdfs:subClassOf :Cl_Price , :Cl_MonetaryValue .
+:Cl_Company rdfs:subClassOf :Cl_Organization .
+:Cl_Supplier rdfs:subClassOf :Cl_Organization .
+:Cl_Client rdfs:subClassOf :Cl_Organization .
+:Cl_InvoiceAmount rdfs:subClassOf :Cl_Amount .
+:Cl_InvoiceNumber rdfs:subClassOf :Cl_InvoiceIdentifier .
+:Cl_ProductCategory rdfs:subClassOf :Cl_DisplayAttribute .
+:Cl_Description rdfs:subClassOf :Cl_DisplayAttribute .
+:Cl_Image rdfs:subClassOf :Cl_DisplayAttribute .
+:Cl_StockStatus rdfs:subClassOf :Cl_DisplayAttribute .
+:Cl_ContactInfo rdfs:subClassOf :Cl_DisplayAttribute .
+:Cl_InvoiceEntity rdfs:subClassOf :Cl_Entity .
+:Cl_Product rdfs:subClassOf :Cl_Item , :Cl_Entity .
+:Cl_Service rdfs:subClassOf :Cl_Item .
+:Cl_OrganizationType rdfs:subClassOf :Cl_Organization .
+:Cl_InvoiceIdentifier rdfs:subClassOf :Cl_Document .
+:Cl_Amount rdfs:subClassOf :Cl_Entity .
+:Cl_Value rdfs:subClassOf :Cl_Entity .
+:Cl_FinancialDocument rdfs:subClassOf :Cl_Document .
+
+#################################################################
+# General Class Axioms / Soft Restrictions
+#################################################################
+
+[ a owl:Restriction ;
+  owl:onProperty :assignedInvoice ;
+  owl:someValuesFrom :Cl_Invoice ;
+  rdfs:subClassOf :Cl_InvoiceAssignment
+] .
+
+[ a owl:Restriction ;
+  owl:onProperty :assignedBusinessProcess ;
+  owl:someValuesFrom :Cl_BusinessProcess ;
+  rdfs:subClassOf :Cl_InvoiceAssignment
+] .
+
+[ a owl:Restriction ;
+  owl:onProperty :isInformationElementOf ;
+  owl:someValuesFrom :Cl_FileFormatValidityRequirement ;
+  rdfs:subClassOf :Cl_InformationElement
+] .
+
+:Cl_FileFormatValidityRequirement rdfs:subClassOf [
+    a owl:Restriction ;
+    owl:onProperty :requiresInformationElement ;
+    owl:someValuesFrom :Cl_InformationElement
+] ,
+[
+    a owl:Restriction ;
+    owl:onProperty :hasConstraint ;
+    owl:someValuesFrom :Cl_Constraint
+] .
+
+:Cl_FileFormat rdfs:subClassOf [
+    a owl:Restriction ;
+    owl:onProperty :hasValidityRequirement ;
+    owl:someValuesFrom :Cl_FileFormatValidityRequirement
+] .
+
+#################################################################
+# Naming Convention Harmonization
+#################################################################
+
+#################################################################
+# End of FestS ontology
+#################################################################

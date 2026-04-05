@@ -1,0 +1,178 @@
+{
+  "story_id": "EDIFACT",
+  "timestamp": "20260405_070335",
+  "start_time": "2026-04-05T07:10:57.110272",
+  "ontology_size_chars": 60907,
+  "validation_results": {
+    "syntax": {
+      "valid": true,
+      "execution_time_seconds": 0.039,
+      "error": null,
+      "error_type": null
+    },
+    "oops": {
+      "has_pitfalls": true,
+      "pitfall_count": 5,
+      "execution_time_seconds": 0.178,
+      "pitfalls": [
+        {
+          "code": "P12",
+          "name": "Equivalent properties not explicitly declared",
+          "description": "The ontology lacks information about equivalent properties (owl:equivalentProperty) in the cases of duplicated relationships and/or attributes.\t",
+          "importance": "Important",
+          "num_affected": 1,
+          "affected_elements": []
+        },
+        {
+          "code": "P13",
+          "name": "Inverse relationships not explicitly declared",
+          "description": "This pitfall appears when any relationship (except for those that are defined as symmetric properties using owl:SymmetricProperty) does not have an inverse relationship (owl:inverseOf) defined within the ontology.\t",
+          "importance": "Minor",
+          "num_affected": 5,
+          "affected_elements": [
+            "http://example.org/fests#entityHasRepresentation"
+          ]
+        },
+        {
+          "code": "P19",
+          "name": "Defining multiple domains or ranges in properties",
+          "description": "The domain or range (or both) of a property (relationships and attributes) is defined by stating more than one rdfs:domain or rdfs:range statements. In OWL multiple rdfs:domain or rdfs:range axioms are allowed, but they are interpreted as conjunction, being, therefore, equivalent to the construct owl:intersectionOf. This pitfall is related to the common error that appears when defining domains and ranges described in [7].\t",
+          "importance": "Critical",
+          "num_affected": 2,
+          "affected_elements": [
+            "http://example.org/fests#hasOrganizationInfo",
+            "http://example.org/fests#isOrganizationInfoOf"
+          ]
+        },
+        {
+          "code": "P20",
+          "name": "Misusing ontology annotations",
+          "description": "The contents of some annotation properties are swapped or misused. This pitfall might affect annotation properties related to natural language information (for example, annotations for naming such as rdfs:label or for providing descriptions such as rdfs:comment). Other types of annotation could also be affected as temporal, versioning information, among others.\t",
+          "importance": "Minor",
+          "num_affected": 45,
+          "affected_elements": [
+            "http://example.org/fests#isDetailOfInvoice",
+            "http://example.org/fests#isDescribedByContent",
+            "http://example.org/fests#isAddressOfOrganization",
+            "http://example.org/fests#isIdentifierOfInvoice",
+            "http://example.org/fests#invoiceAmountAssignedBy",
+            "http://example.org/fests#isSpecificationOfInformationRequirement",
+            "http://example.org/fests#isAddressOfAssignment",
+            "http://example.org/fests#isPriceComponentOfLine",
+            "http://example.org/fests#isInvoiceRoleOfInvolvement",
+            "http://example.org/fests#isDocumentOfMessageContent",
+            "http://example.org/fests#isOrganizationInParticipation",
+            "http://example.org/fests#isOrganizationOfInvolvement",
+            "http://example.org/fests#isAddressShownInDisplay",
+            "http://example.org/fests#isInvoiceOfDetailRecord",
+            "http://example.org/fests#isSupplierOfInvoice",
+            "http://example.org/fests#isLogoShownInDisplay",
+            "http://example.org/fests#isConstraintOfValidationRule",
+            "http://example.org/fests#isBuyerOfAssignment",
+            "http://example.org/fests#isLineOfInvoice",
+            "http://example.org/fests#isDescriptionShownInDisplay",
+            "http://example.org/fests#isItemOfInvoiceLine",
+            "http://example.org/fests#isContactShownInDisplay",
+            "http://example.org/fests#isRequiredInformationOfRequirement",
+            "http://example.org/fests#isCurrencyOfPriceComponent",
+            "http://example.org/fests#isRoleInParticipation",
+            "http://example.org/fests#isValidationRuleOfRequirement",
+            "http://example.org/fests#isMonetaryAmountOfDetailRecord",
+            "http://example.org/fests#isContactInfoOf",
+            "http://example.org/fests#isDescriptionOfOrganization",
+            "http://example.org/fests#isCustomerOfInvoice",
+            "http://example.org/fests#isBusinessProcessOfAssignment",
+            "http://example.org/fests#isSpecificationOfFileFormat",
+            "http://example.org/fests#isPartyOfInvoice",
+            "http://example.org/fests#isInformationRequirementOfSpecification",
+            "http://example.org/fests#isProductOrServiceOfDetailRecord",
+            "http://example.org/fests#isCurrencyOfMonetaryAmount",
+            "http://example.org/fests#isParticipationOfInvoice",
+            "http://example.org/fests#isOrganizationInfoOf",
+            "http://example.org/fests#invoiceAmountAssignmentOf",
+            "http://example.org/fests#isDisplayedAttributeOf",
+            "http://example.org/fests#isInvoiceOfAssignment",
+            "http://example.org/fests#isDataTypeOfRequiredInformation",
+            "http://example.org/fests#isIncludedInMessage",
+            "http://example.org/fests#isRoleOfOrganization",
+            "http://example.org/fests#isDisplayedInSaleInfo"
+          ]
+        },
+        {
+          "code": "P22",
+          "name": "Using different naming conventions in the ontology",
+          "description": "The ontology elements are not named following the same convention (for example CamelCase or use of delimiters as \"-\" or \"_\") . Some notions about naming conventions are provided in [2].\t",
+          "importance": "Minor",
+          "num_affected": 1,
+          "affected_elements": [
+            "http://example.org/fests#Cl_OrganizationInfoDisplay",
+            "http://example.org/fests#hasInvoiceParticipation"
+          ]
+        }
+      ],
+      "pitfall_codes": [
+        "P12",
+        "P13",
+        "P19",
+        "P20",
+        "P22"
+      ],
+      "pitfall_names": [
+        "Equivalent properties not explicitly declared",
+        "Inverse relationships not explicitly declared",
+        "Defining multiple domains or ranges in properties",
+        "Misusing ontology annotations",
+        "Using different naming conventions in the ontology"
+      ],
+      "oops_error": false,
+      "error": null
+    },
+    "hermit": {
+      "reasoner": "Hermit",
+      "is_consistent": false,
+      "execution_time_seconds": 0.701,
+      "inconsistent_classes": [],
+      "inconsistent_classes_count": 0,
+      "error": "Java error message is:\nException in thread \"main\" org.semanticweb.HermiT.datatypes.UnsupportedDatatypeException: HermiT supports all and only the datatypes of the OWL 2 datatype map, see \nhttp://www.w3.org/TR/owl2-syntax/#Datatype_Maps. \nThe datatype 'http://www.w3.org/2001/XMLSchema#date' is not part of the OWL 2 datatype map and \nno custom datatype definition is given; \ntherefore, HermiT cannot handle this datatype.\n\tat org.semanticweb.HermiT.datatypes.DatatypeRegistry.getDatatypeHandlerFor(Unknown Source)\n\tat org.semanticweb.HermiT.datatypes.DatatypeRegistry.getDatatypeHandlerFor(Unknown Source)\n\tat org.semanticweb.HermiT.datatypes.DatatypeRegistry.validateDatatypeRestriction(Unknown Source)\n\tat org.semanticweb.HermiT.structural.OWLClausification$DataRangeConverter.visit(Unknown Source)\n\tat uk.ac.manchester.cs.owl.owlapi.OWLDatatypeImpl.accept(OWLDatatypeImpl.java:343)\n\tat org.semanticweb.HermiT.structural.OWLClausification$DataRangeConverter.convertDataRange(Unknown Source)\n\tat org.semanticweb.HermiT.structural.OWLClausification$NormalizedAxiomClausifier.visit(Unknown Source)\n\tat uk.ac.manchester.cs.owl.owlapi.OWLDataAllValuesFromImpl.accept(OWLDataAllValuesFromImpl.java:99)\n\tat org.semanticweb.HermiT.structural.OWLClausification.clausify(Unknown Source)\n\tat org.semanticweb.HermiT.structural.OWLClausification.preprocessAndClausify(Unknown Source)\n\tat org.semanticweb.HermiT.Reasoner.loadOntology(Reasoner.java:117)\n\tat org.semanticweb.HermiT.Reasoner.<init>(Reasoner.java:108)\n\tat org.semanticweb.HermiT.Reasoner.<init>(Reasoner.java:86)\n\tat org.semanticweb.HermiT.cli.CommandLine.main(CommandLine.java:830)\n",
+      "error_type": "reasoning_error"
+    },
+    "pellet": {
+      "reasoner": "Pellet",
+      "is_consistent": false,
+      "execution_time_seconds": 0.63,
+      "inconsistent_classes": [
+        "xml_combined_owl.xml.Cl_Buyer",
+        "xml_combined_owl.xml.Cl_Address",
+        "xml_combined_owl.xml.Cl_InvoiceInvolvement",
+        "xml_combined_owl.xml.Cl_Customer",
+        "owl.Nothing",
+        "xml_combined_owl.xml.Cl_Invoice",
+        "xml_combined_owl.xml.Cl_InvoiceAmountAssignment"
+      ],
+      "inconsistent_classes_count": 7,
+      "error": null,
+      "error_type": null
+    },
+    "aggregate": {
+      "all_validators_passed": false,
+      "total_execution_time_seconds": 1.548,
+      "validation_breakdown": {
+        "syntax_valid": true,
+        "oops_passed": false,
+        "oops_pitfall_count": 5,
+        "hermit_consistent": false,
+        "pellet_consistent": false
+      },
+      "timing_breakdown_seconds": {
+        "syntax": 0.039,
+        "oops": 0.178,
+        "hermit": 0.701,
+        "pellet": 0.63,
+        "total": 1.548
+      }
+    }
+  },
+  "files_saved": [],
+  "end_time": "2026-04-05T07:10:57.114673",
+  "iteration_count": 0
+}

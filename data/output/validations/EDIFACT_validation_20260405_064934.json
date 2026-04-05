@@ -1,0 +1,122 @@
+{
+  "syntax": {
+    "valid": true,
+    "execution_time_seconds": 0.045256853103637695,
+    "error": null
+  },
+  "oops": {
+    "has_pitfalls": true,
+    "pitfall_count": 5,
+    "execution_time_seconds": 0.4795498847961426,
+    "pitfalls": [
+      {
+        "code": "P05",
+        "name": "Defining wrong inverse relationships",
+        "description": "Two relationships are defined as inverse relations when they are not necessarily inverse.\t",
+        "importance": "Critical",
+        "num_affected": 56,
+        "affected_elements": []
+      },
+      {
+        "code": "P10",
+        "name": "Missing disjointness",
+        "description": "The ontology lacks disjoint axioms between classes or between properties that should be defined as disjoint. This pitfall is related with the guidelines provided in [6], [2] and [7].\t",
+        "importance": "Important",
+        "num_affected": 0,
+        "affected_elements": []
+      },
+      {
+        "code": "P13",
+        "name": "Inverse relationships not explicitly declared",
+        "description": "This pitfall appears when any relationship (except for those that are defined as symmetric properties using owl:SymmetricProperty) does not have an inverse relationship (owl:inverseOf) defined within the ontology.\t",
+        "importance": "Minor",
+        "num_affected": 1,
+        "affected_elements": [
+          "http://example.org/fests#hasAttribute"
+        ]
+      },
+      {
+        "code": "P20",
+        "name": "Misusing ontology annotations",
+        "description": "The contents of some annotation properties are swapped or misused. This pitfall might affect annotation properties related to natural language information (for example, annotations for naming such as rdfs:label or for providing descriptions such as rdfs:comment). Other types of annotation could also be affected as temporal, versioning information, among others.\t",
+        "importance": "Minor",
+        "num_affected": 35,
+        "affected_elements": [
+          "http://example.org/fests#itemReferredByInvoiceLine",
+          "http://example.org/fests#fileFormatValidationOf",
+          "http://example.org/fests#informationDisplayOfOrganization",
+          "http://example.org/fests#organizationTypeOfOrganization",
+          "http://example.org/fests#invoiceOfInvoiceLine",
+          "http://example.org/fests#amountOfInvoiceLine",
+          "http://example.org/fests#validationRuleOfValidation",
+          "http://example.org/fests#invoiceOfInvoiceItem",
+          "http://example.org/fests#netPriceOfPricing",
+          "http://example.org/fests#businessProcessOfAssignment",
+          "http://example.org/fests#attributeConstraintOfRequirement",
+          "http://example.org/fests#organizationProfileOfOrganization",
+          "http://example.org/fests#invoiceItemOfDetail",
+          "http://example.org/fests#elementConstraintOfRequirement",
+          "http://example.org/fests#organizationLocationOfOrganization",
+          "http://example.org/fests#organizationAboutInformationDisplay",
+          "http://example.org/fests#isInvoiceRoleOf",
+          "http://example.org/fests#organizationIdentifierOfOrganization",
+          "http://example.org/fests#productReferredByInvoiceItem",
+          "http://example.org/fests#productOfInvoiceItem",
+          "http://example.org/fests#validationRuleOfRequirement",
+          "http://example.org/fests#specificationComponentOfRequirement",
+          "http://example.org/fests#serviceOfInvoiceItem",
+          "http://example.org/fests#personInvolvedInRoleAssignment",
+          "http://example.org/fests#contactInformationOfOrganization",
+          "http://example.org/fests#organizationRoleOfOrganization",
+          "http://example.org/fests#grossPriceOfPricing",
+          "http://example.org/fests#organizationOfInvoiceRole",
+          "http://example.org/fests#identifierOfInvoiceIdentification",
+          "http://example.org/fests#roleInInvoiceOf",
+          "http://example.org/fests#netPriceOfInvoice",
+          "http://example.org/fests#invoiceItemOfPricing",
+          "http://example.org/fests#fileFormatOfRequirement",
+          "http://example.org/fests#currencyOfAmountOrInvoiceAmount",
+          "http://example.org/fests#isInvolvedInByRoleAssignment"
+        ]
+      },
+      {
+        "code": "P22",
+        "name": "Using different naming conventions in the ontology",
+        "description": "The ontology elements are not named following the same convention (for example CamelCase or use of delimiters as \"-\" or \"_\") . Some notions about naming conventions are provided in [2].\t",
+        "importance": "Minor",
+        "num_affected": 1,
+        "affected_elements": [
+          "http://example.org/fests#Cl_OrganizationIdentifier",
+          "http://example.org/fests#addressOfAssignment"
+        ]
+      }
+    ],
+    "pitfall_codes": [
+      "P05",
+      "P10",
+      "P13",
+      "P20",
+      "P22"
+    ],
+    "oops_error": false,
+    "error": null
+  },
+  "hermit": {
+    "is_consistent": false,
+    "inconsistent_classes": [],
+    "execution_time_seconds": 0.984,
+    "error": "Java error message is:\nException in thread \"main\" org.semanticweb.HermiT.datatypes.UnsupportedDatatypeException: HermiT supports all and only the datatypes of the OWL 2 datatype map, see \nhttp://www.w3.org/TR/owl2-syntax/#Datatype_Maps. \nThe datatype 'http://www.w3.org/2001/XMLSchema#date' is not part of the OWL 2 datatype map and \nno custom datatype definition is given; \ntherefore, HermiT cannot handle this datatype.\n\tat org.semanticweb.HermiT.datatypes.DatatypeRegistry.getDatatypeHandlerFor(Unknown Source)\n\tat org.semanticweb.HermiT.datatypes.DatatypeRegistry.getDatatypeHandlerFor(Unknown Source)\n\tat org.semanticweb.HermiT.datatypes.DatatypeRegistry.validateDatatypeRestriction(Unknown Source)\n\tat org.semanticweb.HermiT.structural.OWLClausification$DataRangeConverter.visit(Unknown Source)\n\tat uk.ac.manchester.cs.owl.owlapi.OWLDatatypeImpl.accept(OWLDatatypeImpl.java:343)\n\tat org.semanticweb.HermiT.structural.OWLClausification$DataRangeConverter.convertDataRange(Unknown Source)\n\tat org.semanticweb.HermiT.structural.OWLClausification$NormalizedAxiomClausifier.visit(Unknown Source)\n\tat uk.ac.manchester.cs.owl.owlapi.OWLDataAllValuesFromImpl.accept(OWLDataAllValuesFromImpl.java:99)\n\tat org.semanticweb.HermiT.structural.OWLClausification.clausify(Unknown Source)\n\tat org.semanticweb.HermiT.structural.OWLClausification.preprocessAndClausify(Unknown Source)\n\tat org.semanticweb.HermiT.Reasoner.loadOntology(Reasoner.java:117)\n\tat org.semanticweb.HermiT.Reasoner.<init>(Reasoner.java:108)\n\tat org.semanticweb.HermiT.Reasoner.<init>(Reasoner.java:86)\n\tat org.semanticweb.HermiT.cli.CommandLine.main(CommandLine.java:830)\n",
+    "reasoner": "Hermit"
+  },
+  "pellet": {
+    "is_consistent": true,
+    "inconsistent_classes": [],
+    "execution_time_seconds": 1.162,
+    "error": null,
+    "reasoner": "Pellet"
+  },
+  "aggregate": {
+    "all_validators_passed": false,
+    "total_execution_time_seconds": 2.146
+  }
+}

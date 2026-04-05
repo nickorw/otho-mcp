@@ -1,0 +1,118 @@
+@prefix : <http://example.org/ontology#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+#################################################################
+# Classes
+#################################################################
+
+:Cl_Organization rdf:type owl:Class .
+
+:Cl_Company rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Organization .
+
+:Cl_Supplier rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Organization .
+
+:Cl_Buyer rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_Organization .
+
+:Cl_Invoice rdf:type owl:Class .
+
+:Cl_InvoiceRole rdf:type owl:Class . # Pivot/reification class for role of an organization in an invoice
+
+:Cl_InvoiceBuyerRole rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_InvoiceRole .
+
+:Cl_InvoiceSupplierRole rdf:type owl:Class ;
+    rdfs:subClassOf :Cl_InvoiceRole .
+
+#################################################################
+# Properties
+#################################################################
+
+# Object properties
+
+:hasInvoiceRole rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_Invoice ;
+    rdfs:range :Cl_InvoiceRole .
+
+:roleHeldBy rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_InvoiceRole ;
+    rdfs:range :Cl_Organization .
+
+:roleOfInvoice rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_InvoiceRole ;
+    rdfs:range :Cl_Invoice ;
+    owl:inverseOf :hasInvoiceRole .
+
+# Subproperties for specific roles
+
+:hasBuyerRole rdf:type owl:ObjectProperty ;
+    rdfs:subPropertyOf :hasInvoiceRole ;
+    rdfs:domain :Cl_Invoice ;
+    rdfs:range :Cl_InvoiceBuyerRole .
+
+:hasSupplierRole rdf:type owl:ObjectProperty ;
+    rdfs:subPropertyOf :hasInvoiceRole ;
+    rdfs:domain :Cl_Invoice ;
+    rdfs:range :Cl_InvoiceSupplierRole .
+
+:buyerRoleHeldBy rdf:type owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:subPropertyOf :roleHeldBy ;
+    rdfs:domain :Cl_InvoiceBuyerRole ;
+    rdfs:range :Cl_Buyer .
+
+:supplierRoleHeldBy rdf:type owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:subPropertyOf :roleHeldBy ;
+    rdfs:domain :Cl_InvoiceSupplierRole ;
+    rdfs:range :Cl_Supplier .
+
+#################################################################
+# Restrictions / Axioms
+#################################################################
+
+# An InvoiceBuyerRole must be held by a Cl_Buyer
+:Cl_InvoiceBuyerRole owl:equivalentClass [
+    rdf:type owl:Class ;
+    owl:intersectionOf (
+        :Cl_InvoiceRole
+        [ rdf:type owl:Restriction ;
+          owl:onProperty :buyerRoleHeldBy ;
+          owl:allValuesFrom :Cl_Buyer
+        ]
+    )
+] .
+
+# An InvoiceSupplierRole must be held by a Cl_Supplier
+:Cl_InvoiceSupplierRole owl:equivalentClass [
+    rdf:type owl:Class ;
+    owl:intersectionOf (
+        :Cl_InvoiceRole
+        [ rdf:type owl:Restriction ;
+          owl:onProperty :supplierRoleHeldBy ;
+          owl:allValuesFrom :Cl_Supplier
+        ]
+    )
+] .
+
+# An Invoice has at least one buyer role
+:Cl_Invoice rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :hasBuyerRole ;
+    owl:someValuesFrom :Cl_InvoiceBuyerRole
+] .
+
+# Disjointness
+:Cl_Buyer owl:disjointWith :Cl_Supplier .
+:Cl_InvoiceBuyerRole owl:disjointWith :Cl_InvoiceSupplierRole .
+
+#################################################################
+# Example Query Answering the Competency Question
+# "Which organization is the buyer in the invoice?"
+# (Given an invoice :Invoice1, find ?org where:
+# :Invoice1 :hasBuyerRole ?buyerRole .
+# ?buyerRole :buyerRoleHeldBy ?org . )
+#################################################################

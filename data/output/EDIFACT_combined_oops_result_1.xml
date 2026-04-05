@@ -1,0 +1,101 @@
+Syntax Check: OK
+Pitfall Check: <?xml version="1.0" encoding="UTF-8"?>
+<oops:OOPSResponse xmlns:oops="http://www.oeg-upm.net/oops">
+<oops:Pitfall>
+<oops:Code>P04</oops:Code><oops:Name>Creating unconnected ontology elements</oops:Name>
+<oops:Description>Ontology elements (classes, object properties and datatype properties) are created isolated, with no relation to the rest of the ontology.	</oops:Description>
+<oops:Importance>Minor</oops:Importance>
+<oops:NumberAffectedElements>4</oops:NumberAffectedElements>
+<oops:Affects>
+<oops:AffectedElement>http://example.org/fests#Cl_Information</oops:AffectedElement>
+<oops:AffectedElement>http://example.org/fests#Cl_Entity</oops:AffectedElement>
+<oops:AffectedElement>http://example.org/fests#Cl_InvoiceData</oops:AffectedElement>
+<oops:AffectedElement>http://example.org/fests#Cl_InvoiceEntity</oops:AffectedElement>
+</oops:Affects>
+</oops:Pitfall>
+<oops:Pitfall>
+<oops:Code>P08</oops:Code><oops:Name>Missing annotations</oops:Name>
+<oops:Description>This pitfall consists in creating an ontology element and failing to provide human readable annotations attached to it. Consequently, ontology elements lack annotation properties that label them (e.g. rdfs:label, lemon:LexicalEntry, skos:prefLabel or skos:altLabel) or that define them (e.g. rdfs:comment or dc:description). This pitfall is related to the guidelines provided in [5].	</oops:Description>
+<oops:Importance>Minor</oops:Importance>
+<oops:NumberAffectedElements>1</oops:NumberAffectedElements>
+<oops:Affects>
+<oops:AffectedElement>http://example.org/fests#Cl_Item</oops:AffectedElement>
+</oops:Affects>
+</oops:Pitfall>
+<oops:Pitfall>
+<oops:Code>P13</oops:Code><oops:Name>Inverse relationships not explicitly declared</oops:Name>
+<oops:Description>This pitfall appears when any relationship (except for those that are defined as symmetric properties using owl:SymmetricProperty) does not have an inverse relationship (owl:inverseOf) defined within the ontology.	</oops:Description>
+<oops:Importance>Minor</oops:Importance>
+<oops:NumberAffectedElements>31</oops:NumberAffectedElements>
+<oops:Affects>
+<oops:MightBeInverse>
+<oops:AffectedElement>http://example.org/fests#refersToInvoice</oops:AffectedElement>
+<oops:AffectedElement>http://example.org/fests#hasInvoiceAmountAssignment</oops:AffectedElement>
+</oops:MightBeInverse>
+<oops:MightBeInverse>
+<oops:AffectedElement>http://example.org/fests#hasItem</oops:AffectedElement>
+<oops:AffectedElement>http://example.org/fests#hasDisplay</oops:AffectedElement>
+</oops:MightBeInverse>
+<oops:NoInverseSuggestion>
+<oops:AffectedElement>http://example.org/fests#hasCustomer</oops:AffectedElement>
+<oops:AffectedElement>http://example.org/fests#hasIdentifier</oops:AffectedElement>
+<oops:AffectedElement>http://example.org/fests#roleOrganization</oops:AffectedElement>
+<oops:AffectedElement>http://example.org/fests#hasItemInformation</oops:AffectedElement>
+<oops:AffectedElement>http://example.org/fests#informationItemHasDataType</oops:AffectedElement>
+<oops:AffectedElement>http://example.org/fests#constrains</oops:AffectedElement>
+<oops:AffectedElement>http://example.org/fests#hasOrganization</oops:AffectedElement>
+<oops:AffectedElement>http://example.org/fests#requiresInformation</oops:AffectedElement>
+<oops:AffectedElement>http://example.org/fests#hasEDIFACTInvoice</oops:AffectedElement>
+<oops:AffectedElement>http://example.org/fests#requiresInformationItem</oops:AffectedElement>
+<oops:AffectedElement>http://example.org/fests#refersToAmount</oops:AffectedElement>
+<oops:AffectedElement>http://example.org/fests#hasContactInformation</oops:AffectedElement>
+<oops:AffectedElement>http://example.org/fests#appliesToComponent</oops:AffectedElement>
+<oops:AffectedElement>http://example.org/fests#hasDescription</oops:AffectedElement>
+<oops:AffectedElement>http://example.org/fests#displaysInformation</oops:AffectedElement>
+<oops:AffectedElement>http://example.org/fests#hasRole</oops:AffectedElement>
+<oops:AffectedElement>http://example.org/fests#hasProduct</oops:AffectedElement>
+<oops:AffectedElement>http://example.org/fests#hasEmployee</oops:AffectedElement>
+<oops:AffectedElement>http://example.org/fests#constraintHasValueDomain</oops:AffectedElement>
+<oops:AffectedElement>http://example.org/fests#hasNetPriceComputation</oops:AffectedElement>
+<oops:AffectedElement>http://example.org/fests#hasComponent</oops:AffectedElement>
+<oops:AffectedElement>http://example.org/fests#refersToItem</oops:AffectedElement>
+<oops:AffectedElement>http://example.org/fests#hasValidationRequirement</oops:AffectedElement>
+<oops:AffectedElement>http://example.org/fests#roleType</oops:AffectedElement>
+<oops:AffectedElement>http://example.org/fests#hasLocation</oops:AffectedElement>
+<oops:AffectedElement>http://example.org/fests#informationItemHasConstraint</oops:AffectedElement>
+<oops:AffectedElement>http://example.org/fests#hasInvoiceRole</oops:AffectedElement>
+</oops:NoInverseSuggestion>
+</oops:Affects>
+</oops:Pitfall>
+<oops:Pitfall>
+<oops:Code>P20</oops:Code><oops:Name>Misusing ontology annotations</oops:Name>
+<oops:Description>The contents of some annotation properties are swapped or misused. This pitfall might affect annotation properties related to natural language information (for example, annotations for naming such as rdfs:label or for providing descriptions such as rdfs:comment). Other types of annotation could also be affected as temporal, versioning information, among others.	</oops:Description>
+<oops:Importance>Minor</oops:Importance>
+<oops:NumberAffectedElements>13</oops:NumberAffectedElements>
+<oops:Affects>
+<oops:AffectedElement>http://example.org/fests#isAddressOfAssignment</oops:AffectedElement>
+<oops:AffectedElement>http://example.org/fests#organizationInvoiceRoleOf</oops:AffectedElement>
+<oops:AffectedElement>http://example.org/fests#isOrganizationInvolvedInParticipation</oops:AffectedElement>
+<oops:AffectedElement>http://example.org/fests#hasEDIFACTMessageDocumentListing</oops:AffectedElement>
+<oops:AffectedElement>http://example.org/fests#isBuyerOfAssignment</oops:AffectedElement>
+<oops:AffectedElement>http://example.org/fests#isDocumentListedBy</oops:AffectedElement>
+<oops:AffectedElement>http://example.org/fests#isValidationRuleOfRequirement</oops:AffectedElement>
+<oops:AffectedElement>http://example.org/fests#isInvoiceNumberOfAssignment</oops:AffectedElement>
+<oops:AffectedElement>http://example.org/fests#isAssignmentOfInvoice</oops:AffectedElement>
+<oops:AffectedElement>http://example.org/fests#isBusinessProcessOfAssignment</oops:AffectedElement>
+<oops:AffectedElement>http://example.org/fests#isAssignedToBusinessProcess</oops:AffectedElement>
+<oops:AffectedElement>http://example.org/fests#isInvoiceInvolvedInParticipation</oops:AffectedElement>
+<oops:AffectedElement>http://example.org/fests#isInvoiceNumberAssignmentOf</oops:AffectedElement>
+</oops:Affects>
+</oops:Pitfall>
+<oops:Pitfall>
+<oops:Code>P22</oops:Code><oops:Name>Using different naming conventions in the ontology</oops:Name>
+<oops:Description>The ontology elements are not named following the same convention (for example CamelCase or use of delimiters as &quot;-&quot; or &quot;_&quot;) . Some notions about naming conventions are provided in [2].	</oops:Description>
+<oops:Importance>Minor</oops:Importance>
+<oops:NumberAffectedElements>1</oops:NumberAffectedElements>
+<oops:Affects>
+<oops:AffectedElement>http://example.org/fests#Cl_OrganizationIdentifier</oops:AffectedElement>
+<oops:AffectedElement>http://example.org/fests#hasInvoiceParticipation</oops:AffectedElement>
+</oops:Affects>
+</oops:Pitfall>
+</oops:OOPSResponse>

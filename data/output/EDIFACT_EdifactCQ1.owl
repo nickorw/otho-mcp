@@ -1,63 +1,62 @@
 @prefix : <http://example.org/edifact#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-### Classes
+#################################################################
+# Classes
+#################################################################
 
 :Cl_EDIFACTMessage rdf:type owl:Class ;
     rdfs:label "EDIFACT Message" ;
-    rdfs:comment "A structured message formatted according to the EDIFACT standard." .
+    rdfs:comment "A structured message following the EDIFACT standard." .
 
 :Cl_Invoice rdf:type owl:Class ;
     rdfs:label "Invoice" ;
-    rdfs:comment "A commercial document issued by a seller to a buyer, indicating products, quantities, and agreed prices." .
+    rdfs:comment "An invoice document, possibly contained within an EDIFACT message." .
 
-:Cl_InvoiceListing rdf:type owl:Class ;
-    rdfs:label "Invoice Listing" ;
-    rdfs:comment "A reification class representing the inclusion of an Invoice in an EDIFACT message." .
+:Cl_Document rdf:type owl:Class ;
+    rdfs:label "Document" ;
+    rdfs:comment "A general document class, superclass for Invoice." .
 
-:Cl_BusinessDocument rdf:type owl:Class ;
-    rdfs:label "Business Document" ;
-    rdfs:comment "A superclass for business-related documents exchanged in messages." .
+:Cl_EDIFACTMessageDocumentListing rdf:type owl:Class ;
+    rdfs:label "EDIFACT Message Document Listing" ;
+    rdfs:comment "A pivot class representing the listing of documents (e.g., invoices) within an EDIFACT message." .
 
-### Class Hierarchies
+#################################################################
+# Class Hierarchies
+#################################################################
 
-:Cl_Invoice rdfs:subClassOf :Cl_BusinessDocument .
+:Cl_Invoice rdfs:subClassOf :Cl_Document .
 
-### Disjoint Classes
+#################################################################
+# Properties
+#################################################################
 
-:Cl_EDIFACTMessage owl:disjointWith :Cl_Invoice .
-:Cl_EDIFACTMessage owl:disjointWith :Cl_InvoiceListing .
-:Cl_Invoice owl:disjointWith :Cl_InvoiceListing .
-
-### Properties
-
-:hasInvoiceListing rdf:type owl:ObjectProperty ;
+:hasInvoice rdf:type owl:ObjectProperty ;
     rdfs:domain :Cl_EDIFACTMessage ;
-    rdfs:range :Cl_InvoiceListing ;
-    rdfs:label "has invoice listing" ;
-    rdfs:comment "Relates an EDIFACT message to an InvoiceListing (reification node)." .
-
-:listsInvoice rdf:type owl:ObjectProperty ;
-    rdfs:domain :Cl_InvoiceListing ;
     rdfs:range :Cl_Invoice ;
-    rdfs:label "lists invoice" ;
-    rdfs:comment "Relates an InvoiceListing to the Invoice it lists in the EDIFACT message." .
+    rdfs:label "has invoice" ;
+    rdfs:comment "Relates an EDIFACT message to an invoice." .
 
-:isListedInMessage rdf:type owl:ObjectProperty ;
-    rdfs:domain :Cl_InvoiceListing ;
+:listsDocument rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_EDIFACTMessageDocumentListing ;
+    rdfs:range :Cl_Document ;
+    rdfs:label "lists document" ;
+    rdfs:comment "Relates an EDIFACT message document listing to a document (e.g., invoice) listed in the message." .
+
+:forEDIFACTMessage rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_EDIFACTMessageDocumentListing ;
     rdfs:range :Cl_EDIFACTMessage ;
-    rdfs:label "is listed in message" ;
-    rdfs:comment "Inverse of hasInvoiceListing, relates InvoiceListing to the EDIFACT message." ;
-    owl:inverseOf :hasInvoiceListing .
+    rdfs:label "for EDIFACT message" ;
+    rdfs:comment "Indicates the EDIFACT message for which the document listing applies." .
 
-:invoiceNumber rdf:type owl:DatatypeProperty ;
+:documentNumber rdf:type owl:DatatypeProperty ;
     rdfs:domain :Cl_Invoice ;
     rdfs:range xsd:string ;
-    rdfs:label "invoice number" ;
-    rdfs:comment "A unique identifier for the invoice." .
+    rdfs:label "document number" ;
+    rdfs:comment "The identifier for an invoice." .
 
 :issueDate rdf:type owl:DatatypeProperty ;
     rdfs:domain :Cl_Invoice ;
@@ -65,56 +64,43 @@
     rdfs:label "issue date" ;
     rdfs:comment "The date the invoice was issued." .
 
-:totalAmount rdf:type owl:DatatypeProperty ;
-    rdfs:domain :Cl_Invoice ;
-    rdfs:range xsd:decimal ;
-    rdfs:label "total amount" ;
-    rdfs:comment "The total amount of the invoice." .
+#################################################################
+# Reification (Pivot Class for Complex Relation)
+#################################################################
 
-### Property Hierarchies
+# The relationship "What invoices are all listed in an EDIFACT message?" involves an EDIFACT message and potentially multiple invoices.
+# To support further extension (e.g., listing multiple types of documents, or additional attributes about the listing), we use a pivot class.
 
-:hasBusinessDocument rdf:type owl:ObjectProperty ;
-    rdfs:domain :Cl_EDIFACTMessage ;
-    rdfs:range :Cl_BusinessDocument ;
-    rdfs:label "has business document" ;
-    rdfs:comment "Relates an EDIFACT message to any included business document." .
+# For each EDIFACT message, there can exist one or more Cl_EDIFACTMessageDocumentListing instances,
+# each of which connects the message to a Cl_Document (e.g., Cl_Invoice).
 
-:hasInvoiceListing rdfs:subPropertyOf :hasBusinessDocument .
+#################################################################
+# Restrictions
+#################################################################
 
-### Restrictions
-
-:Cl_EDIFACTMessage owl:equivalentClass [
+:Cl_EDIFACTMessageDocumentListing owl:equivalentClass [
     rdf:type owl:Class ;
-    owl:Restriction [
-        owl:onProperty :hasInvoiceListing ;
-        owl:allValuesFrom :Cl_InvoiceListing
-    ]
+    owl:intersectionOf (
+        [ rdf:type owl:Restriction ; owl:onProperty :forEDIFACTMessage ; owl:someValuesFrom :Cl_EDIFACTMessage ]
+        [ rdf:type owl:Restriction ; owl:onProperty :listsDocument ; owl:someValuesFrom :Cl_Document ]
+    )
 ] .
 
-:Cl_InvoiceListing owl:equivalentClass [
-    rdf:type owl:Class ;
-    owl:Restriction [
-        owl:onProperty :listsInvoice ;
-        owl:allValuesFrom :Cl_Invoice
-    ] ;
-    owl:Restriction [
-        owl:onProperty :isListedInMessage ;
-        owl:allValuesFrom :Cl_EDIFACTMessage
-    ]
-] .
+#################################################################
+# Disjointness
+#################################################################
 
-### General Class Axioms
+:Cl_EDIFACTMessage owl:disjointWith :Cl_Invoice, :Cl_Document, :Cl_EDIFACTMessageDocumentListing .
+:Cl_Invoice owl:disjointWith :Cl_EDIFACTMessageDocumentListing .
 
-[ rdf:type owl:Restriction ;
-  owl:onProperty :listsInvoice ;
-  owl:someValuesFrom :Cl_Invoice ;
-  rdfs:subClassOf :Cl_InvoiceListing
-] .
+#################################################################
+# Example Query Explanation
+#################################################################
 
-### Disjoint Union
+# To answer "What invoices are all listed in an EDIFACT message?"
+# 1. Find all :Cl_EDIFACTMessageDocumentListing where :forEDIFACTMessage points to the message of interest.
+# 2. For each such listing, retrieve :listsDocument, filter for those where the document is a :Cl_Invoice.
 
-:Cl_BusinessDocument owl:disjointUnionOf ( :Cl_Invoice ) .
-
-### Example Query (for reference, not part of the ontology)
-# To answer the competency question "What invoices are all listed in an EDIFACT message?", 
-# query for all :Cl_Invoice linked via :listsInvoice to :Cl_InvoiceListing, which is linked via :hasInvoiceListing to a given :Cl_EDIFACTMessage.
+#################################################################
+# End of Ontology
+#################################################################

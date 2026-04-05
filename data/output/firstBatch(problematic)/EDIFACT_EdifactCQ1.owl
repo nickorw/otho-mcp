@@ -1,0 +1,120 @@
+@prefix : <http://example.org/edifact#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+### Classes
+
+:Cl_EDIFACTMessage rdf:type owl:Class ;
+    rdfs:label "EDIFACT Message" ;
+    rdfs:comment "A structured message formatted according to the EDIFACT standard." .
+
+:Cl_Invoice rdf:type owl:Class ;
+    rdfs:label "Invoice" ;
+    rdfs:comment "A commercial document issued by a seller to a buyer, indicating products, quantities, and agreed prices." .
+
+:Cl_InvoiceListing rdf:type owl:Class ;
+    rdfs:label "Invoice Listing" ;
+    rdfs:comment "A reification class representing the inclusion of an Invoice in an EDIFACT message." .
+
+:Cl_BusinessDocument rdf:type owl:Class ;
+    rdfs:label "Business Document" ;
+    rdfs:comment "A superclass for business-related documents exchanged in messages." .
+
+### Class Hierarchies
+
+:Cl_Invoice rdfs:subClassOf :Cl_BusinessDocument .
+
+### Disjoint Classes
+
+:Cl_EDIFACTMessage owl:disjointWith :Cl_Invoice .
+:Cl_EDIFACTMessage owl:disjointWith :Cl_InvoiceListing .
+:Cl_Invoice owl:disjointWith :Cl_InvoiceListing .
+
+### Properties
+
+:hasInvoiceListing rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_EDIFACTMessage ;
+    rdfs:range :Cl_InvoiceListing ;
+    rdfs:label "has invoice listing" ;
+    rdfs:comment "Relates an EDIFACT message to an InvoiceListing (reification node)." .
+
+:listsInvoice rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_InvoiceListing ;
+    rdfs:range :Cl_Invoice ;
+    rdfs:label "lists invoice" ;
+    rdfs:comment "Relates an InvoiceListing to the Invoice it lists in the EDIFACT message." .
+
+:isListedInMessage rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_InvoiceListing ;
+    rdfs:range :Cl_EDIFACTMessage ;
+    rdfs:label "is listed in message" ;
+    rdfs:comment "Inverse of hasInvoiceListing, relates InvoiceListing to the EDIFACT message." ;
+    owl:inverseOf :hasInvoiceListing .
+
+:invoiceNumber rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Cl_Invoice ;
+    rdfs:range xsd:string ;
+    rdfs:label "invoice number" ;
+    rdfs:comment "A unique identifier for the invoice." .
+
+:issueDate rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Cl_Invoice ;
+    rdfs:range xsd:date ;
+    rdfs:label "issue date" ;
+    rdfs:comment "The date the invoice was issued." .
+
+:totalAmount rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Cl_Invoice ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "total amount" ;
+    rdfs:comment "The total amount of the invoice." .
+
+### Property Hierarchies
+
+:hasBusinessDocument rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_EDIFACTMessage ;
+    rdfs:range :Cl_BusinessDocument ;
+    rdfs:label "has business document" ;
+    rdfs:comment "Relates an EDIFACT message to any included business document." .
+
+:hasInvoiceListing rdfs:subPropertyOf :hasBusinessDocument .
+
+### Restrictions
+
+:Cl_EDIFACTMessage owl:equivalentClass [
+    rdf:type owl:Class ;
+    owl:Restriction [
+        owl:onProperty :hasInvoiceListing ;
+        owl:allValuesFrom :Cl_InvoiceListing
+    ]
+] .
+
+:Cl_InvoiceListing owl:equivalentClass [
+    rdf:type owl:Class ;
+    owl:Restriction [
+        owl:onProperty :listsInvoice ;
+        owl:allValuesFrom :Cl_Invoice
+    ] ;
+    owl:Restriction [
+        owl:onProperty :isListedInMessage ;
+        owl:allValuesFrom :Cl_EDIFACTMessage
+    ]
+] .
+
+### General Class Axioms
+
+[ rdf:type owl:Restriction ;
+  owl:onProperty :listsInvoice ;
+  owl:someValuesFrom :Cl_Invoice ;
+  rdfs:subClassOf :Cl_InvoiceListing
+] .
+
+### Disjoint Union
+
+:Cl_BusinessDocument owl:disjointUnionOf ( :Cl_Invoice ) .
+
+### Example Query (for reference, not part of the ontology)
+# To answer the competency question "What invoices are all listed in an EDIFACT message?", 
+# query for all :Cl_Invoice linked via :listsInvoice to :Cl_InvoiceListing, which is linked via :hasInvoiceListing to a given :Cl_EDIFACTMessage.

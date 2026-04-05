@@ -1,0 +1,117 @@
+@prefix : <http://example.org/ontology#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+#################################################################
+# Classes
+#################################################################
+
+:Cl_BusinessProcess a owl:Class ;
+    rdfs:label "Business Process" ;
+    rdfs:comment "A business process, such as procurement, sales, etc." .
+
+:Cl_Invoice a owl:Class ;
+    rdfs:label "Invoice" ;
+    rdfs:comment "An invoice document issued or received in a business process." .
+
+:Cl_Document a owl:Class ;
+    rdfs:label "Document" ;
+    rdfs:comment "A general class for documents." .
+
+:Cl_Invoice rdfs:subClassOf :Cl_Document .
+
+:Cl_InvoiceAssignment a owl:Class ;
+    rdfs:label "Invoice Assignment" ;
+    rdfs:comment "A reification class representing the assignment of an invoice to a business process." .
+
+#################################################################
+# Hierarchies
+#################################################################
+
+:Cl_FinancialDocument a owl:Class ;
+    rdfs:label "Financial Document" ;
+    rdfs:comment "Superclass for all financial documents." .
+
+:Cl_Invoice rdfs:subClassOf :Cl_FinancialDocument .
+
+#################################################################
+# Properties
+#################################################################
+
+:assignedInvoice a owl:ObjectProperty ;
+    rdfs:label "assigned invoice" ;
+    rdfs:domain :Cl_InvoiceAssignment ;
+    rdfs:range :Cl_Invoice ;
+    rdfs:comment "The invoice being assigned in the context of the assignment." .
+
+:assignedBusinessProcess a owl:ObjectProperty ;
+    rdfs:label "assigned business process" ;
+    rdfs:domain :Cl_InvoiceAssignment ;
+    rdfs:range :Cl_BusinessProcess ;
+    rdfs:comment "The business process to which the invoice is assigned." .
+
+:assignmentDate a owl:DatatypeProperty ;
+    rdfs:label "assignment date" ;
+    rdfs:domain :Cl_InvoiceAssignment ;
+    rdfs:range xsd:date ;
+    rdfs:comment "The date when the invoice was assigned to the business process." .
+
+#################################################################
+# Additional Relations and Restrictions
+#################################################################
+
+:Cl_InvoiceAssignment rdfs:subClassOf [
+    a owl:Restriction ;
+    owl:onProperty :assignedInvoice ;
+    owl:allValuesFrom :Cl_Invoice
+] .
+
+:Cl_InvoiceAssignment rdfs:subClassOf [
+    a owl:Restriction ;
+    owl:onProperty :assignedBusinessProcess ;
+    owl:allValuesFrom :Cl_BusinessProcess
+] .
+
+:Cl_InvoiceAssignment rdfs:subClassOf [
+    a owl:Restriction ;
+    owl:onProperty :assignmentDate ;
+    owl:allValuesFrom xsd:date
+] .
+
+#################################################################
+# Disjointness
+#################################################################
+
+:Cl_BusinessProcess owl:disjointWith :Cl_Invoice .
+:Cl_BusinessProcess owl:disjointWith :Cl_Document .
+:Cl_Invoice owl:disjointWith :Cl_InvoiceAssignment .
+:Cl_BusinessProcess owl:disjointWith :Cl_InvoiceAssignment .
+
+#################################################################
+# Inverse Properties
+#################################################################
+
+:hasInvoiceAssignment a owl:ObjectProperty ;
+    rdfs:domain :Cl_Invoice ;
+    rdfs:range :Cl_InvoiceAssignment ;
+    owl:inverseOf :assignedInvoice ;
+    rdfs:comment "Links an Invoice to its InvoiceAssignment(s)." .
+
+:hasBusinessProcessAssignment a owl:ObjectProperty ;
+    rdfs:domain :Cl_BusinessProcess ;
+    rdfs:range :Cl_InvoiceAssignment ;
+    owl:inverseOf :assignedBusinessProcess ;
+    rdfs:comment "Links a BusinessProcess to its InvoiceAssignment(s)." .
+
+#################################################################
+# Equivalent Class (for possible restriction)
+#################################################################
+
+:Cl_InvoiceAssignment owl:equivalentClass [
+    a owl:Class ;
+    owl:intersectionOf (
+        [ a owl:Restriction ; owl:onProperty :assignedInvoice ; owl:someValuesFrom :Cl_Invoice ]
+        [ a owl:Restriction ; owl:onProperty :assignedBusinessProcess ; owl:someValuesFrom :Cl_BusinessProcess ]
+    )
+] .

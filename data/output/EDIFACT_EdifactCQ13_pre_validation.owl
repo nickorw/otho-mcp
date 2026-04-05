@@ -7,166 +7,140 @@
 # Classes
 #################################################################
 
-:Cl_FileFormat rdf:type owl:Class .
-:Cl_FileComponent rdf:type owl:Class .
-:Cl_ValidationRequirement rdf:type owl:Class .
-:Cl_FileFormatComponentAssignment rdf:type owl:Class .
-:Cl_RequiredInformation rdf:type owl:Class .
-:Cl_ValidationRule rdf:type owl:Class .
-:Cl_InformationType rdf:type owl:Class .
+:Cl_FileFormat a owl:Class .
+:Cl_FileComponent a owl:Class .
+:Cl_ValidationRule a owl:Class .
+:Cl_RequiredInformation a owl:Class .
+:Cl_DataType a owl:Class .
+:Cl_Constraint a owl:Class .
+:Cl_ValidationRequirement a owl:Class . # Pivot class for reification
+:Cl_InformationItem a owl:Class .
+:Cl_FormatSpecification a owl:Class .
+:Cl_ValueDomain a owl:Class .
 
-# Hierarchy
-:Cl_ValidationRequirement rdfs:subClassOf :Cl_ValidationRule .
-:Cl_RequiredInformation rdfs:subClassOf :Cl_InformationType .
+# Hierarchies
+:Cl_ValidationRule rdfs:subClassOf :Cl_FormatSpecification .
+:Cl_RequiredInformation rdfs:subClassOf :Cl_FormatSpecification .
+:Cl_Constraint rdfs:subClassOf :Cl_ValidationRule .
+:Cl_DataType rdfs:subClassOf :Cl_FormatSpecification .
+:Cl_InformationItem rdfs:subClassOf :Cl_RequiredInformation .
+:Cl_ValueDomain rdfs:subClassOf :Cl_Constraint .
 
 # Disjointness
-:Cl_FileFormat owl:disjointWith :Cl_FileComponent .
-:Cl_FileFormat owl:disjointWith :Cl_ValidationRequirement .
-:Cl_FileComponent owl:disjointWith :Cl_ValidationRequirement .
-:Cl_RequiredInformation owl:disjointWith :Cl_ValidationRequirement .
+:Cl_FileFormat owl:disjointWith :Cl_FileComponent, :Cl_ValidationRule, :Cl_RequiredInformation, :Cl_DataType, :Cl_Constraint, :Cl_ValidationRequirement, :Cl_InformationItem, :Cl_FormatSpecification, :Cl_ValueDomain .
 
 #################################################################
-# Properties
-#################################################################
-
 # Object Properties
-:hasComponent rdf:type owl:ObjectProperty ;
+#################################################################
+
+:hasComponent a owl:ObjectProperty ;
     rdfs:domain :Cl_FileFormat ;
     rdfs:range :Cl_FileComponent .
 
-:requiresInformation rdf:type owl:ObjectProperty ;
+:hasValidationRequirement a owl:ObjectProperty ;
+    rdfs:domain :Cl_FileFormat ;
+    rdfs:range :Cl_ValidationRequirement .
+
+:requiresInformation a owl:ObjectProperty ;
+    rdfs:domain :Cl_FileFormat ;
+    rdfs:range :Cl_RequiredInformation .
+
+:hasValidationRule a owl:ObjectProperty ;
     rdfs:domain :Cl_ValidationRequirement ;
-    rdfs:range :Cl_RequiredInformation .
+    rdfs:range :Cl_ValidationRule .
 
-:hasValidationRequirement rdf:type owl:ObjectProperty ;
-    rdfs:domain :Cl_FileFormat ;
-    rdfs:range :Cl_ValidationRequirement .
+:requiresInformationItem a owl:ObjectProperty ;
+    rdfs:domain :Cl_ValidationRequirement ;
+    rdfs:range :Cl_InformationItem .
 
-:hasInformationType rdf:type owl:ObjectProperty ;
-    rdfs:domain :Cl_RequiredInformation ;
-    rdfs:range :Cl_InformationType .
+:constrains a owl:ObjectProperty ;
+    rdfs:domain :Cl_ValidationRule ;
+    rdfs:range :Cl_Constraint .
 
-:componentAssignment rdf:type owl:ObjectProperty ;
-    rdfs:domain :Cl_FileFormat ;
-    rdfs:range :Cl_FileFormatComponentAssignment .
-
-:assignsComponent rdf:type owl:ObjectProperty ;
-    rdfs:domain :Cl_FileFormatComponentAssignment ;
+:appliesToComponent a owl:ObjectProperty ;
+    rdfs:domain :Cl_ValidationRequirement ;
     rdfs:range :Cl_FileComponent .
 
-:assignsRequirement rdf:type owl:ObjectProperty ;
-    rdfs:domain :Cl_FileFormatComponentAssignment ;
-    rdfs:range :Cl_ValidationRequirement .
+:informationItemHasDataType a owl:ObjectProperty ;
+    rdfs:domain :Cl_InformationItem ;
+    rdfs:range :Cl_DataType .
 
-:specifiesRequiredInformation rdf:type owl:ObjectProperty ;
-    rdfs:domain :Cl_FileFormatComponentAssignment ;
-    rdfs:range :Cl_RequiredInformation .
+:informationItemHasConstraint a owl:ObjectProperty ;
+    rdfs:domain :Cl_InformationItem ;
+    rdfs:range :Cl_Constraint .
 
+:constraintHasValueDomain a owl:ObjectProperty ;
+    rdfs:domain :Cl_Constraint ;
+    rdfs:range :Cl_ValueDomain .
+
+#################################################################
 # Data Properties
-:componentName rdf:type owl:DatatypeProperty ;
+#################################################################
+
+:componentName a owl:DatatypeProperty ;
     rdfs:domain :Cl_FileComponent ;
     rdfs:range xsd:string .
 
-:informationDescription rdf:type owl:DatatypeProperty ;
-    rdfs:domain :Cl_RequiredInformation ;
+:informationItemName a owl:DatatypeProperty ;
+    rdfs:domain :Cl_InformationItem ;
     rdfs:range xsd:string .
 
-:requirementDescription rdf:type owl:DatatypeProperty ;
-    rdfs:domain :Cl_ValidationRequirement ;
+:datatypeName a owl:DatatypeProperty ;
+    rdfs:domain :Cl_DataType ;
     rdfs:range xsd:string .
 
-:informationTypeName rdf:type owl:DatatypeProperty ;
-    rdfs:domain :Cl_InformationType ;
+:constraintDescription a owl:DatatypeProperty ;
+    rdfs:domain :Cl_Constraint ;
     rdfs:range xsd:string .
 
-:formatName rdf:type owl:DatatypeProperty ;
-    rdfs:domain :Cl_FileFormat ;
+:valueDomainDescription a owl:DatatypeProperty ;
+    rdfs:domain :Cl_ValueDomain ;
+    rdfs:range xsd:string .
+
+:formatSpecificationDescription a owl:DatatypeProperty ;
+    rdfs:domain :Cl_FormatSpecification ;
     rdfs:range xsd:string .
 
 #################################################################
-# Reification (Pivot Class for Complex Relations)
+# Restrictions and Axioms
 #################################################################
 
-# Cl_FileFormatComponentAssignment links a FileFormat, FileComponent, ValidationRequirement, and RequiredInformation
-:Cl_FileFormatComponentAssignment rdf:type owl:Class ;
-    rdfs:label "FileFormatComponentAssignment" ;
-    rdfs:comment "Assignment linking a file format, its component, the validation requirement for the component, and the required information." .
-
-# Relations for the pivot class
-:assignmentOfFormat rdf:type owl:ObjectProperty ;
-    rdfs:domain :Cl_FileFormatComponentAssignment ;
-    rdfs:range :Cl_FileFormat .
-
-:assignmentOfComponent rdf:type owl:ObjectProperty ;
-    rdfs:domain :Cl_FileFormatComponentAssignment ;
-    rdfs:range :Cl_FileComponent .
-
-:assignmentOfRequirement rdf:type owl:ObjectProperty ;
-    rdfs:domain :Cl_FileFormatComponentAssignment ;
-    rdfs:range :Cl_ValidationRequirement .
-
-:assignmentOfRequiredInformation rdf:type owl:ObjectProperty ;
-    rdfs:domain :Cl_FileFormatComponentAssignment ;
-    rdfs:range :Cl_RequiredInformation .
-
-#################################################################
-# Restrictions and Class Axioms
-#################################################################
-
-# A valid file format must have at least one validation requirement specifying required information
-:Cl_FileFormat owl:equivalentClass [
-    rdf:type owl:Class ;
-    owl:intersectionOf (
-        :Cl_FileFormat
-        [ rdf:type owl:Restriction ;
-          owl:onProperty :hasValidationRequirement ;
-          owl:someValuesFrom :Cl_ValidationRequirement
-        ]
-    )
-] .
-
+# A file format is valid if all required information items are present and satisfy their constraints and data types.
 :Cl_ValidationRequirement owl:equivalentClass [
     rdf:type owl:Class ;
     owl:intersectionOf (
-        :Cl_ValidationRequirement
-        [ rdf:type owl:Restriction ;
-          owl:onProperty :requiresInformation ;
-          owl:someValuesFrom :Cl_RequiredInformation
-        ]
+        [ rdf:type owl:Restriction ; owl:onProperty :hasValidationRule ; owl:someValuesFrom :Cl_ValidationRule ]
+        [ rdf:type owl:Restriction ; owl:onProperty :requiresInformationItem ; owl:someValuesFrom :Cl_InformationItem ]
+        [ rdf:type owl:Restriction ; owl:onProperty :appliesToComponent ; owl:someValuesFrom :Cl_FileComponent ]
     )
 ] .
 
-:Cl_FileFormatComponentAssignment owl:equivalentClass [
+:Cl_InformationItem owl:equivalentClass [
     rdf:type owl:Class ;
     owl:intersectionOf (
-        :Cl_FileFormatComponentAssignment
-        [ rdf:type owl:Restriction ;
-          owl:onProperty :assignmentOfFormat ;
-          owl:someValuesFrom :Cl_FileFormat
-        ]
-        [ rdf:type owl:Restriction ;
-          owl:onProperty :assignmentOfComponent ;
-          owl:someValuesFrom :Cl_FileComponent
-        ]
-        [ rdf:type owl:Restriction ;
-          owl:onProperty :assignmentOfRequirement ;
-          owl:someValuesFrom :Cl_ValidationRequirement
-        ]
-        [ rdf:type owl:Restriction ;
-          owl:onProperty :assignmentOfRequiredInformation ;
-          owl:someValuesFrom :Cl_RequiredInformation
-        ]
+        [ rdf:type owl:Restriction ; owl:onProperty :informationItemHasDataType ; owl:someValuesFrom :Cl_DataType ]
+        [ rdf:type owl:Restriction ; owl:onProperty :informationItemHasConstraint ; owl:someValuesFrom :Cl_Constraint ]
     )
 ] .
 
 #################################################################
-# Sample Query Answering the Competency Question
+# Example Individuals (optional, for illustration)
 #################################################################
 
-# To answer "What information must be provided so that the file format is valid?"
-# One can traverse from :Cl_FileFormat via :hasValidationRequirement to :Cl_ValidationRequirement,
-# then via :requiresInformation to :Cl_RequiredInformation, and then via :hasInformationType to :Cl_InformationType.
+# :MyFileFormat a :Cl_FileFormat ;
+#     :hasComponent :Header, :Body ;
+#     :hasValidationRequirement :Req1 .
 
-#################################################################
-# End of Ontology
-#################################################################
+# :Header a :Cl_FileComponent ; :componentName "Header" .
+# :Body a :Cl_FileComponent ; :componentName "Body" .
+
+# :Req1 a :Cl_ValidationRequirement ;
+#     :hasValidationRule :Rule1 ;
+#     :requiresInformationItem :Info1 ;
+#     :appliesToComponent :Header .
+
+# :Rule1 a :Cl_ValidationRule ; :constrains :Constraint1 .
+# :Info1 a :Cl_InformationItem ; :informationItemName "Version" ; :informationItemHasDataType :StringType ; :informationItemHasConstraint :Constraint1 .
+# :StringType a :Cl_DataType ; :datatypeName "string" .
+# :Constraint1 a :Cl_Constraint ; :constraintDescription "Must be non-empty" ; :constraintHasValueDomain :NonEmptyString .
+# :NonEmptyString a :Cl_ValueDomain ; :valueDomainDescription "Any non-empty string" .

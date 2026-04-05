@@ -1,0 +1,154 @@
+{
+  "story_id": "EDIFACT",
+  "timestamp": "20260405_062718",
+  "start_time": "2026-04-05T06:33:53.610095",
+  "ontology_size_chars": 51507,
+  "validation_results": {
+    "syntax": {
+      "valid": true,
+      "execution_time_seconds": 0.038,
+      "error": null,
+      "error_type": null
+    },
+    "oops": {
+      "has_pitfalls": true,
+      "pitfall_count": 5,
+      "execution_time_seconds": 0.654,
+      "pitfalls": [
+        {
+          "code": "P05",
+          "name": "Defining wrong inverse relationships",
+          "description": "Two relationships are defined as inverse relations when they are not necessarily inverse.\t",
+          "importance": "Critical",
+          "num_affected": 2,
+          "affected_elements": []
+        },
+        {
+          "code": "P12",
+          "name": "Equivalent properties not explicitly declared",
+          "description": "The ontology lacks information about equivalent properties (owl:equivalentProperty) in the cases of duplicated relationships and/or attributes.\t",
+          "importance": "Important",
+          "num_affected": 3,
+          "affected_elements": []
+        },
+        {
+          "code": "P13",
+          "name": "Inverse relationships not explicitly declared",
+          "description": "This pitfall appears when any relationship (except for those that are defined as symmetric properties using owl:SymmetricProperty) does not have an inverse relationship (owl:inverseOf) defined within the ontology.\t",
+          "importance": "Minor",
+          "num_affected": 2,
+          "affected_elements": [
+            "http://example.org/fests#involvesInvoice",
+            "http://example.org/fests#isInvolvedInInvoiceParticipation"
+          ]
+        },
+        {
+          "code": "P20",
+          "name": "Misusing ontology annotations",
+          "description": "The contents of some annotation properties are swapped or misused. This pitfall might affect annotation properties related to natural language information (for example, annotations for naming such as rdfs:label or for providing descriptions such as rdfs:comment). Other types of annotation could also be affected as temporal, versioning information, among others.\t",
+          "importance": "Minor",
+          "num_affected": 31,
+          "affected_elements": [
+            "http://example.org/fests#isInformationProvidedBy",
+            "http://example.org/fests#isInvoiceIdentifierOf",
+            "http://example.org/fests#isRoleTypeOf",
+            "http://example.org/fests#isInvoiceAmountRecordOf",
+            "http://example.org/fests#isInvoiceDetailOf",
+            "http://example.org/fests#isInvoiceRecipientOf",
+            "http://example.org/fests#isTotalAmountOf",
+            "http://example.org/fests#isServiceOfInvoiceLineEntry",
+            "http://example.org/fests#isDisplayedItemOf",
+            "http://example.org/fests#isBusinessProcessAssignmentOf",
+            "http://example.org/fests#isAssignedDocumentOf",
+            "http://example.org/fests#isValidationRequiredBySpecification",
+            "http://example.org/fests#isOrganizationInformationOf",
+            "http://example.org/fests#isConstraintOfSpecification",
+            "http://example.org/fests#isAmountOfAmountRecord",
+            "http://example.org/fests#isMonetaryAmountOf",
+            "http://example.org/fests#isInvoiceIssuerOf",
+            "http://example.org/fests#isInvolvedInOrganizationParticipation",
+            "http://example.org/fests#isInvoiceOrganizationParticipationOf",
+            "http://example.org/fests#isInvoiceItemOf",
+            "http://example.org/fests#isEncodingOfFileFormat",
+            "http://example.org/fests#isSpecificationOfFileFormat",
+            "http://example.org/fests#isMetadataOfFileFormat",
+            "http://example.org/fests#isProductOfInvoiceLineEntry",
+            "http://example.org/fests#isComponentOfFileFormat",
+            "http://example.org/fests#isDisplayedAttributeOf",
+            "http://example.org/fests#isInvoiceReferredByAmountRecord",
+            "http://example.org/fests#isInvoiceLineEntryOf",
+            "http://example.org/fests#isRequirementFulfilledBy",
+            "http://example.org/fests#isInvoiceDateOf",
+            "http://example.org/fests#isDataSectionOfFileFormat"
+          ]
+        },
+        {
+          "code": "P22",
+          "name": "Using different naming conventions in the ontology",
+          "description": "The ontology elements are not named following the same convention (for example CamelCase or use of delimiters as \"-\" or \"_\") . Some notions about naming conventions are provided in [2].\t",
+          "importance": "Minor",
+          "num_affected": 1,
+          "affected_elements": [
+            "http://example.org/fests#Cl_OrganizationIdentifier",
+            "http://example.org/fests#isPriceOfInvoiceLine"
+          ]
+        }
+      ],
+      "pitfall_codes": [
+        "P05",
+        "P12",
+        "P13",
+        "P20",
+        "P22"
+      ],
+      "pitfall_names": [
+        "Defining wrong inverse relationships",
+        "Equivalent properties not explicitly declared",
+        "Inverse relationships not explicitly declared",
+        "Misusing ontology annotations",
+        "Using different naming conventions in the ontology"
+      ],
+      "oops_error": false,
+      "error": null
+    },
+    "hermit": {
+      "reasoner": "Hermit",
+      "is_consistent": false,
+      "execution_time_seconds": 0.687,
+      "inconsistent_classes": [],
+      "inconsistent_classes_count": 0,
+      "error": "Java error message is:\nException in thread \"main\" java.lang.IllegalArgumentException: Error: In OWL 2 DL, owl:topDataProperty is only allowed to occur in the super property position of SubDataPropertyOf axioms, but the ontology contains an axiom DataPropertyDomain(owl:topDataProperty owl:Thing) that violates this condition.\n\tat org.semanticweb.HermiT.structural.OWLNormalization$AxiomVisitor.checkTopDataPropertyUse(Unknown Source)\n\tat org.semanticweb.HermiT.structural.OWLNormalization$AxiomVisitor.visit(Unknown Source)\n\tat uk.ac.manchester.cs.owl.owlapi.OWLDataPropertyDomainAxiomImpl.accept(OWLDataPropertyDomainAxiomImpl.java:95)\n\tat org.semanticweb.HermiT.structural.OWLNormalization.processAxioms(Unknown Source)\n\tat org.semanticweb.HermiT.structural.OWLNormalization.processOntology(Unknown Source)\n\tat org.semanticweb.HermiT.structural.OWLClausification.preprocessAndClausify(Unknown Source)\n\tat org.semanticweb.HermiT.Reasoner.loadOntology(Reasoner.java:117)\n\tat org.semanticweb.HermiT.Reasoner.<init>(Reasoner.java:108)\n\tat org.semanticweb.HermiT.Reasoner.<init>(Reasoner.java:86)\n\tat org.semanticweb.HermiT.cli.CommandLine.main(CommandLine.java:830)\n",
+      "error_type": "reasoning_error"
+    },
+    "pellet": {
+      "reasoner": "Pellet",
+      "is_consistent": false,
+      "execution_time_seconds": 0.531,
+      "inconsistent_classes": [],
+      "inconsistent_classes_count": 0,
+      "error": "Java error message is: Apr 05, 2026 6:33:53 AM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature\nWARNING: Unsupported axiom: Ignoring triple with unknown term from OWL namespace: owl:imports @rdf:type owl:OntologyProperty\nApr 05, 2026 6:33:53 AM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature\nWARNING: Unsupported axiom: Ignoring triple with unknown term from OWL namespace: owl:priorVersion @rdf:type owl:OntologyProperty\nApr 05, 2026 6:33:53 AM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature\nWARNING: Unsupported axiom: Ignoring triple with unknown term from OWL namespace: owl:versionIRI @rdf:type owl:OntologyProperty\nApr 05, 2026 6:33:53 AM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature\nWARNING: Unsupported axiom: Ignoring triple with unknown term from OWL namespace: owl:incompatibleWith @rdf:type owl:OntologyProperty\nApr 05, 2026 6:33:53 AM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature\nWARNING: Unsupported axiom: Ignoring triple with unknown term from OWL namespace: owl:backwardCompatibleWith @rdf:type owl:OntologyProperty\nApr 05, 2026 6:33:53 AM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature\nWARNING: Unsupported axiom: Ignoring range axiom for AnnotationProperty http://www.w3.org/2002/07/owl#priorVersion\nApr 05, 2026 6:33:53 AM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature\nWARNING: Unsupported axiom: Ignoring domain axiom for AnnotationProperty http://www.w3.org/2002/07/owl#priorVersion\nApr 05, 2026 6:33:53 AM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature\nWARNING: Unsupported axiom: Ignoring triple with unknown property from OWL namespace: http://www.w3.org/2002/07/owl @owl:versionIRI http://www.w3.org/2002/07/owl\nApr 05, 2026 6:33:53 AM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature\nWARNING: Unsupported axiom: Ignoring range axiom for AnnotationProperty http://www.w3.org/2002/07/owl#versionInfo\nApr 05, 2026 6:33:53 AM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature\nWARNING: Unsupported axiom: Ignoring domain axiom for AnnotationProperty http://www.w3.org/2002/07/owl#versionInfo\nApr 05, 2026 6:33:53 AM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature\nWARNING: Unsupported axiom: Ignoring domain axiom for AnnotationProperty http://www.w3.org/2000/01/rdf-schema#isDefinedBy\nApr 05, 2026 6:33:53 AM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature\nWARNING: Unsupported axiom: Ignoring range axiom for AnnotationProperty http://www.w3.org/2000/01/rdf-schema#isDefinedBy\nApr 05, 2026 6:33:53 AM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature\nWARNING: Unsupported axiom: Ignoring range axiom for AnnotationProperty http://www.w3.org/2000/01/rdf-schema#comment\nApr 05, 2026 6:33:53 AM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature\nWARNING: Unsupported axiom: Ignoring domain axiom for AnnotationProperty http://www.w3.org/2000/01/rdf-schema#comment\nApr 05, 2026 6:33:53 AM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature\nWARNING: Unsupported axiom: Ignoring domain axiom for AnnotationProperty http://www.w3.org/2000/01/rdf-schema#seeAlso\nApr 05, 2026 6:33:53 AM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature\nWARNING: Unsupported axiom: Ignoring range axiom for AnnotationProperty http://www.w3.org/2000/01/rdf-schema#seeAlso\nApr 05, 2026 6:33:53 AM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature\nWARNING: Unsupported axiom: Ignoring range axiom for AnnotationProperty http://www.w3.org/2002/07/owl#backwardCompatibleWith\nApr 05, 2026 6:33:53 AM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature\nWARNING: Unsupported axiom: Ignoring domain axiom for AnnotationProperty http://www.w3.org/2002/07/owl#backwardCompatibleWith\nApr 05, 2026 6:33:53 AM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature\nWARNING: Unsupported axiom: Ignoring range axiom for AnnotationProperty http://www.w3.org/2002/07/owl#deprecated\nApr 05, 2026 6:33:53 AM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature\nWARNING: Unsupported axiom: Ignoring domain axiom for AnnotationProperty http://www.w3.org/2002/07/owl#deprecated\nApr 05, 2026 6:33:53 AM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature\nWARNING: Unsupported axiom: Ignoring range axiom for AnnotationProperty http://www.w3.org/2000/01/rdf-schema#label\nApr 05, 2026 6:33:53 AM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature\nWARNING: Unsupported axiom: Ignoring domain axiom for AnnotationProperty http://www.w3.org/2000/01/rdf-schema#label\nApr 05, 2026 6:33:53 AM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature\nWARNING: Unsupported axiom: Ignoring triple with unknown property from OWL namespace: http://example.org/fests @owl:versionIRI http://example.org/fests/1.0\nApr 05, 2026 6:33:53 AM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature\nWARNING: Unsupported axiom: Ignoring range axiom for AnnotationProperty http://www.w3.org/2002/07/owl#incompatibleWith\nApr 05, 2026 6:33:53 AM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature\nWARNING: Unsupported axiom: Ignoring domain axiom for AnnotationProperty http://www.w3.org/2002/07/owl#incompatibleWith\nERROR: Ontology is inconsistent, run \"pellet explain\" to get the reason\n",
+      "error_type": "reasoning_error"
+    },
+    "aggregate": {
+      "all_validators_passed": false,
+      "total_execution_time_seconds": 1.91,
+      "validation_breakdown": {
+        "syntax_valid": true,
+        "oops_passed": false,
+        "oops_pitfall_count": 5,
+        "hermit_consistent": false,
+        "pellet_consistent": false
+      },
+      "timing_breakdown_seconds": {
+        "syntax": 0.038,
+        "oops": 0.654,
+        "hermit": 0.687,
+        "pellet": 0.531,
+        "total": 1.91
+      }
+    }
+  },
+  "files_saved": [],
+  "end_time": "2026-04-05T06:33:53.612610",
+  "iteration_count": 0
+}

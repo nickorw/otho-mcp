@@ -1,0 +1,127 @@
+{
+  "syntax": {
+    "valid": true,
+    "execution_time_seconds": 0.04178190231323242,
+    "error": null
+  },
+  "oops": {
+    "has_pitfalls": true,
+    "pitfall_count": 3,
+    "execution_time_seconds": 0.37493085861206055,
+    "pitfalls": [
+      {
+        "code": "P19",
+        "name": "Defining multiple domains or ranges in properties",
+        "description": "The domain or range (or both) of a property (relationships and attributes) is defined by stating more than one rdfs:domain or rdfs:range statements. In OWL multiple rdfs:domain or rdfs:range axioms are allowed, but they are interpreted as conjunction, being, therefore, equivalent to the construct owl:intersectionOf. This pitfall is related to the common error that appears when defining domains and ranges described in [7].\t",
+        "importance": "Critical",
+        "num_affected": 2,
+        "affected_elements": [
+          "http://example.org/fests#isIdentifierOf",
+          "http://example.org/fests#hasIdentifier"
+        ]
+      },
+      {
+        "code": "P20",
+        "name": "Misusing ontology annotations",
+        "description": "The contents of some annotation properties are swapped or misused. This pitfall might affect annotation properties related to natural language information (for example, annotations for naming such as rdfs:label or for providing descriptions such as rdfs:comment). Other types of annotation could also be affected as temporal, versioning information, among others.\t",
+        "importance": "Minor",
+        "num_affected": 57,
+        "affected_elements": [
+          "http://example.org/fests#isInvoiceIssuedByActor",
+          "http://example.org/fests#isFileFormatOfValidationContext",
+          "http://example.org/fests#isInformationDisplayedBy",
+          "http://example.org/fests#isInvoiceOfCustomer",
+          "http://example.org/fests#isProductReferredByInvoiceDetail",
+          "http://example.org/fests#isConstraintOfFileFormatValidationRequirement",
+          "http://example.org/fests#isOrgRoleOfOrganization",
+          "http://example.org/fests#isItemReferredByInvoiceLine",
+          "http://example.org/fests#isContactInformationOfOrganization",
+          "http://example.org/fests#isFileFormatValidationRequirementOfFileFormat",
+          "http://example.org/fests#isInvolvedOrganizationOf",
+          "http://example.org/fests#isMessageContentOf",
+          "http://example.org/fests#isAssignedBusinessProcessOf",
+          "http://example.org/fests#isValidationRuleOfFileFormatValidationRequirement",
+          "http://example.org/fests#isInvoiceDetailOf",
+          "http://example.org/fests#isInvoiceListedInMessageContent",
+          "http://example.org/fests#isInvoiceInRoleInInvoice",
+          "http://example.org/fests#isAddressOfAssignment",
+          "http://example.org/fests#isFormatSpecificationOfFileFormat",
+          "http://example.org/fests#isConstraintOfRequiredElement",
+          "http://example.org/fests#isItemInformationDisplayedBy",
+          "http://example.org/fests#isOrganizationTypeOfOrganization",
+          "http://example.org/fests#isValidationContextOfValidationResult",
+          "http://example.org/fests#isAmountOfInvoiceLine",
+          "http://example.org/fests#isValidationRuleOfFormatSpecification",
+          "http://example.org/fests#isOrganizationInvolvedInParticipation",
+          "http://example.org/fests#isPriceComponentOfInvoiceLine",
+          "http://example.org/fests#isValidationRuleOfValidationCheck",
+          "http://example.org/fests#hasBuyerAssignmentForBuyer",
+          "http://example.org/fests#isPaymentOfInvoice",
+          "http://example.org/fests#isAssignedDocumentOf",
+          "http://example.org/fests#isRequiredElementOfFormatSpecification",
+          "http://example.org/fests#isInvoiceAmountOfAssignment",
+          "http://example.org/fests#isInvoiceLineOf",
+          "http://example.org/fests#isInformationTypeOfItemInformation",
+          "http://example.org/fests#isBuyerInAssignment",
+          "http://example.org/fests#isPartyRoleOfAssignment",
+          "http://example.org/fests#invoiceAmountAssignmentForInvoice",
+          "http://example.org/fests#isOrganizationDescribedBy",
+          "http://example.org/fests#isOrganizationInRoleInInvoice",
+          "http://example.org/fests#isInvoiceIdentificationOf",
+          "http://example.org/fests#isInvoiceNumberOfInvoiceIdentification",
+          "http://example.org/fests#isInformationItemOfFileFormatValidationRequirement",
+          "http://example.org/fests#isPartyOfAssignment",
+          "http://example.org/fests#isBuyerOfTransaction",
+          "http://example.org/fests#isDescriptionOfOrganization",
+          "http://example.org/fests#isInformationItemOfValidFileFormatInformation",
+          "http://example.org/fests#isElementConstraintOfFormatSpecification",
+          "http://example.org/fests#isRoleInRoleInInvoice",
+          "http://example.org/fests#isLocationOfOrganization",
+          "http://example.org/fests#isValidationResultOfValidationCheck",
+          "http://example.org/fests#isElementOfFileFormatValidationRequirement",
+          "http://example.org/fests#isInvoiceInvolvedInParticipation",
+          "http://example.org/fests#isListedInMessageContent",
+          "http://example.org/fests#isNetPriceOfInvoiceLine",
+          "http://example.org/fests#isIdentifiedByInvoiceIdentification",
+          "http://example.org/fests#isItemAboutItemInformation"
+        ]
+      },
+      {
+        "code": "P22",
+        "name": "Using different naming conventions in the ontology",
+        "description": "The ontology elements are not named following the same convention (for example CamelCase or use of delimiters as \"-\" or \"_\") . Some notions about naming conventions are provided in [2].\t",
+        "importance": "Minor",
+        "num_affected": 1,
+        "affected_elements": [
+          "http://example.org/fests#Cl_InvoicePartyRole",
+          "http://example.org/fests#ClOrganizationIdentifier"
+        ]
+      }
+    ],
+    "pitfall_codes": [
+      "P19",
+      "P20",
+      "P22"
+    ],
+    "oops_error": false,
+    "error": null
+  },
+  "hermit": {
+    "is_consistent": false,
+    "inconsistent_classes": [],
+    "execution_time_seconds": 0.613,
+    "error": "Java error message is:\nException in thread \"main\" org.semanticweb.HermiT.datatypes.UnsupportedDatatypeException: HermiT supports all and only the datatypes of the OWL 2 datatype map, see \nhttp://www.w3.org/TR/owl2-syntax/#Datatype_Maps. \nThe datatype 'http://www.w3.org/2001/XMLSchema#date' is not part of the OWL 2 datatype map and \nno custom datatype definition is given; \ntherefore, HermiT cannot handle this datatype.\n\tat org.semanticweb.HermiT.datatypes.DatatypeRegistry.getDatatypeHandlerFor(Unknown Source)\n\tat org.semanticweb.HermiT.datatypes.DatatypeRegistry.getDatatypeHandlerFor(Unknown Source)\n\tat org.semanticweb.HermiT.datatypes.DatatypeRegistry.validateDatatypeRestriction(Unknown Source)\n\tat org.semanticweb.HermiT.structural.OWLClausification$DataRangeConverter.visit(Unknown Source)\n\tat uk.ac.manchester.cs.owl.owlapi.OWLDatatypeImpl.accept(OWLDatatypeImpl.java:343)\n\tat org.semanticweb.HermiT.structural.OWLClausification$DataRangeConverter.convertDataRange(Unknown Source)\n\tat org.semanticweb.HermiT.structural.OWLClausification$NormalizedAxiomClausifier.visit(Unknown Source)\n\tat uk.ac.manchester.cs.owl.owlapi.OWLDataAllValuesFromImpl.accept(OWLDataAllValuesFromImpl.java:99)\n\tat org.semanticweb.HermiT.structural.OWLClausification.clausify(Unknown Source)\n\tat org.semanticweb.HermiT.structural.OWLClausification.preprocessAndClausify(Unknown Source)\n\tat org.semanticweb.HermiT.Reasoner.loadOntology(Reasoner.java:117)\n\tat org.semanticweb.HermiT.Reasoner.<init>(Reasoner.java:108)\n\tat org.semanticweb.HermiT.Reasoner.<init>(Reasoner.java:86)\n\tat org.semanticweb.HermiT.cli.CommandLine.main(CommandLine.java:830)\n",
+    "reasoner": "Hermit"
+  },
+  "pellet": {
+    "is_consistent": false,
+    "inconsistent_classes": [],
+    "execution_time_seconds": 0.52,
+    "error": "Java error message is: ERROR: Ontology is inconsistent, run \"pellet explain\" to get the reason\n",
+    "reasoner": "Pellet"
+  },
+  "aggregate": {
+    "all_validators_passed": false,
+    "total_execution_time_seconds": 1.133
+  }
+}

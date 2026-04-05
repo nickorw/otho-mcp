@@ -1,0 +1,58 @@
+2026-04-05 07:24:25 | INFO     | ============================================================
+2026-04-05 07:24:25 | INFO     | Validation Logger Initialized for EDIFACT
+2026-04-05 07:24:25 | INFO     | Log files: EDIFACT_validation_20260405_071828.log
+2026-04-05 07:24:25 | INFO     | Timestamp: 20260405_071828
+2026-04-05 07:24:25 | INFO     | ============================================================
+2026-04-05 07:24:25 | INFO     | 
+Starting final validation for EDIFACT
+2026-04-05 07:24:25 | DEBUG    | Ontology size: 37216 characters
+2026-04-05 07:24:25 | INFO     | 
+============================================================
+2026-04-05 07:24:25 | INFO     | PILLAR 1: SYNTAX VALIDATION (RDFLib)
+2026-04-05 07:24:25 | INFO     | ============================================================
+2026-04-05 07:24:25 | INFO     | ✓ Syntax validation PASSED (0.038s)
+2026-04-05 07:24:25 | DEBUG    | No syntax errors detected in RDF/Turtle parsing
+2026-04-05 07:24:25 | INFO     | 
+============================================================
+2026-04-05 07:24:25 | INFO     | PILLAR 2: PITFALL DETECTION (OOPS)
+2026-04-05 07:24:25 | INFO     | ============================================================
+2026-04-05 07:24:25 | ERROR    | ✗ Pitfall check FAILED - OOPS error occurred (0.086s)
+2026-04-05 07:24:25 | ERROR    |   OOPS error: OOPS could not analyse the ontology (wrong_execution response)
+2026-04-05 07:24:25 | INFO     | 
+============================================================
+2026-04-05 07:24:25 | INFO     | PILLAR 3: REASONING CONSISTENCY
+2026-04-05 07:24:25 | INFO     | ============================================================
+2026-04-05 07:24:25 | DEBUG    | Checking logical consistency with OWL 2 DL reasoners (Hermit & Pellet)
+2026-04-05 07:24:25 | INFO     | 
+  → Hermit Reasoner
+2026-04-05 07:24:25 | INFO     |   --------------------------------------------------------
+2026-04-05 07:24:25 | ERROR    |   ✗ FAILED - Inconsistencies detected (0.664s)
+2026-04-05 07:24:25 | ERROR    |   Reasoner reported inconsistency but provided no specific details.
+2026-04-05 07:24:25 | INFO     | 
+  → Pellet Reasoner
+2026-04-05 07:24:25 | INFO     |   --------------------------------------------------------
+2026-04-05 07:24:25 | ERROR    |   ✗ FAILED - Inconsistencies detected (0.494s)
+2026-04-05 07:24:25 | ERROR    | 
+  Error Details:
+2026-04-05 07:24:25 | ERROR    |     Java error message is: ERROR: Ontology is inconsistent, run "pellet explain" to get the reason
+2026-04-05 07:24:25 | ERROR    |     
+2026-04-05 07:24:25 | INFO     | 
+============================================================
+2026-04-05 07:24:25 | INFO     | VALIDATION SUMMARY
+2026-04-05 07:24:25 | INFO     | ============================================================
+2026-04-05 07:24:25 | INFO     | 1. Syntax (RDFLib):    ✓ PASSED (0.038s)
+2026-04-05 07:24:25 | INFO     | 2. OOPS Pitfalls:      ⚠ FAILED (0 pitfalls) (0.086s)
+2026-04-05 07:24:25 | WARNING  |    └─ 0 modeling pitfall(s) detected - check details above
+2026-04-05 07:24:25 | INFO     | 3. Hermit Reasoner:    ✗ FAILED (0.664s)
+2026-04-05 07:24:25 | ERROR    |    └─ Logical inconsistencies found - check inconsistent classes above
+2026-04-05 07:24:25 | INFO     | 4. Pellet Reasoner:    ✗ FAILED (0.494s)
+2026-04-05 07:24:25 | ERROR    |    └─ Logical inconsistencies found - check inconsistent classes above
+2026-04-05 07:24:25 | INFO     | ------------------------------------------------------------
+2026-04-05 07:24:25 | ERROR    | Overall Result:        ❌ VALIDATION FAILED
+2026-04-05 07:24:25 | ERROR    |                        Issues found: 0 pitfalls, Hermit inconsistencies, Pellet inconsistencies
+2026-04-05 07:24:25 | INFO     | ------------------------------------------------------------
+2026-04-05 07:24:25 | INFO     | Total Validation Time: 1.282s
+2026-04-05 07:24:25 | INFO     | Agent Iterations:      0
+2026-04-05 07:24:25 | INFO     | ============================================================
+2026-04-05 07:24:25 | INFO     | 
+✓ Validation JSON log saved: logs/EDIFACT_validation_20260405_071828.json

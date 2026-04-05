@@ -1,0 +1,82 @@
+{
+  "story_id": "EDIFACT",
+  "timestamp": "20260405_072425",
+  "start_time": "2026-04-05T07:31:33.476616",
+  "ontology_size_chars": 51793,
+  "validation_results": {
+    "syntax": {
+      "valid": true,
+      "execution_time_seconds": 0.041,
+      "error": null,
+      "error_type": null
+    },
+    "oops": {
+      "has_pitfalls": true,
+      "pitfall_count": 2,
+      "execution_time_seconds": 0.179,
+      "pitfalls": [
+        {
+          "code": "P20",
+          "name": "Misusing ontology annotations",
+          "description": "The contents of some annotation properties are swapped or misused. This pitfall might affect annotation properties related to natural language information (for example, annotations for naming such as rdfs:label or for providing descriptions such as rdfs:comment). Other types of annotation could also be affected as temporal, versioning information, among others.\t",
+          "importance": "Minor",
+          "num_affected": 30,
+          "affected_elements": [
+            "http://example.org/fests#isInformationDisplayedBy",
+            "http://example.org/fests#isIssueDateOf",
+            "http://example.org/fests#isDetailOfInvoice",
+            "http://example.org/fests#isDataFieldOf",
+            "http://example.org/fests#isInvoiceNumberOf",
+            "http://example.org/fests#isTotalAmountOf",
+            "http://example.org/fests#isItemOfLine",
+            "http://example.org/fests#isValidationRuleOf",
+            "http://example.org/fests#isFormatValidatedBy",
+            "http://example.org/fests#isDueDateOf",
+            "http://example.org/fests#isInformationTypeSpecifiedBy",
+            "http://example.org/fests#isInvoiceRoleOf",
+            "http://example.org/fests#isInvoiceLineOf",
+            "http://example.org/fests#isFieldConstraintOf",
+            "http://example.org/fests#isNetTotalOf",
+            "http://example.org/fests#isInvolvedInInvoice",
+            "http://example.org/fests#isSoldItemOfDisplay",
+            "http://example.org/fests#isInfoDataDisplayedBy",
+            "http://example.org/fests#isProductOfLine",
+            "http://example.org/fests#isMetadataRequirementOf",
+            "http://example.org/fests#isMonetaryAmountOf",
+            "http://example.org/fests#isSpecificationOfFileFormat",
+            "http://example.org/fests#isCurrencyOfMonetaryAmount",
+            "http://example.org/fests#isListedInEDIFACTMessage",
+            "http://example.org/fests#isLineOfDetails",
+            "http://example.org/fests#hasAssignmentForBusinessProcess",
+            "http://example.org/fests#isBuyerOfAddressRelation",
+            "http://example.org/fests#isSpecificationUsedBy",
+            "http://example.org/fests#isAddressOfBuyerRelation",
+            "http://example.org/fests#isRequiredByValidation"
+          ]
+        },
+        {
+          "code": "P22",
+          "name": "Using different naming conventions in the ontology",
+          "description": "The ontology elements are not named following the same convention (for example CamelCase or use of delimiters as \"-\" or \"_\") . Some notions about naming conventions are provided in [2].\t",
+          "importance": "Minor",
+          "num_affected": 1,
+          "affected_elements": [
+            "http://example.org/fests#Cl_OrganizationInfoDisplay",
+            "http://example.org/fests#isRequiredByValidation"
+          ]
+        }
+      ],
+      "pitfall_codes": [
+        "P20",
+        "P22"
+      ],
+      "pitfall_names": [
+        "Misusing ontology annotations",
+        "Using different naming conventions in the ontology"
+      ],
+      "oops_error": false,
+      "error": null
+    }
+  },
+  "files_saved": []
+}

@@ -1,0 +1,121 @@
+@prefix : <http://example.org/invoice#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+### Classes
+
+:Cl_Entity a owl:Class .
+:Cl_Organization a owl:Class ; rdfs:subClassOf :Cl_Entity .
+:Cl_Invoice a owl:Class .
+:Cl_InvoiceParticipation a owl:Class .   # Pivot class for reification
+:Cl_Role a owl:Class .
+
+### Class Hierarchies
+
+:Cl_Supplier a owl:Class ; rdfs:subClassOf :Cl_Organization .
+:Cl_Customer a owl:Class ; rdfs:subClassOf :Cl_Organization .
+:Cl_Payer a owl:Class ; rdfs:subClassOf :Cl_Organization .
+:Cl_Payee a owl:Class ; rdfs:subClassOf :Cl_Organization .
+
+### Properties
+
+# Object Properties
+:involvesOrganization a owl:ObjectProperty ;
+    rdfs:domain :Cl_InvoiceParticipation ;
+    rdfs:range :Cl_Organization .
+
+:involvesInvoice a owl:ObjectProperty ;
+    rdfs:domain :Cl_InvoiceParticipation ;
+    rdfs:range :Cl_Invoice .
+
+:hasRole a owl:ObjectProperty ;
+    rdfs:domain :Cl_InvoiceParticipation ;
+    rdfs:range :Cl_Role .
+
+:hasParticipation a owl:ObjectProperty ;
+    rdfs:domain :Cl_Invoice ;
+    rdfs:range :Cl_InvoiceParticipation .
+
+# Role Properties
+:isSupplierRole a owl:ObjectProperty ;
+    rdfs:domain :Cl_Role ;
+    rdfs:range :Cl_Supplier .
+
+:isCustomerRole a owl:ObjectProperty ;
+    rdfs:domain :Cl_Role ;
+    rdfs:range :Cl_Customer .
+
+:isPayerRole a owl:ObjectProperty ;
+    rdfs:domain :Cl_Role ;
+    rdfs:range :Cl_Payer .
+
+:isPayeeRole a owl:ObjectProperty ;
+    rdfs:domain :Cl_Role ;
+    rdfs:range :Cl_Payee .
+
+### Restrictions
+
+# Every Cl_InvoiceParticipation must involve an organization and an invoice
+:Cl_InvoiceParticipation rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :involvesOrganization ;
+    owl:someValuesFrom :Cl_Organization
+] , [
+    rdf:type owl:Restriction ;
+    owl:onProperty :involvesInvoice ;
+    owl:someValuesFrom :Cl_Invoice
+] .
+
+# Each Cl_Invoice must have at least one participation (organization involved)
+:Cl_Invoice rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :hasParticipation ;
+    owl:someValuesFrom :Cl_InvoiceParticipation
+] .
+
+### Disjointness
+
+:Cl_Supplier owl:disjointWith :Cl_Customer, :Cl_Payer, :Cl_Payee .
+:Cl_Customer owl:disjointWith :Cl_Payer, :Cl_Payee .
+:Cl_Payer owl:disjointWith :Cl_Payee .
+
+### Equivalency (Optional, if roles are strictly mapped)
+
+:Cl_Supplier owl:equivalentClass [
+    rdf:type owl:Restriction ;
+    owl:onProperty :isSupplierRole ;
+    owl:someValuesFrom :Cl_Role
+] .
+
+:Cl_Customer owl:equivalentClass [
+    rdf:type owl:Restriction ;
+    owl:onProperty :isCustomerRole ;
+    owl:someValuesFrom :Cl_Role
+] .
+
+:Cl_Payer owl:equivalentClass [
+    rdf:type owl:Restriction ;
+    owl:onProperty :isPayerRole ;
+    owl:someValuesFrom :Cl_Role
+] .
+
+:Cl_Payee owl:equivalentClass [
+    rdf:type owl:Restriction ;
+    owl:onProperty :isPayeeRole ;
+    owl:someValuesFrom :Cl_Role
+] .
+
+### Example Query Pattern (for the competency question)
+# To answer: "Which organizations are involved in the invoice?"
+# Query for all :involvesOrganization where there exists a :Cl_InvoiceParticipation linked to the :Cl_Invoice of interest.
+
+# Example instance (not required but illustrative):
+#:invoice1 a :Cl_Invoice .
+#:orgA a :Cl_Supplier .
+#:participation1 a :Cl_InvoiceParticipation ;
+#    :involvesOrganization :orgA ;
+#    :involvesInvoice :invoice1 ;
+#    :hasRole :roleSupplier .
+#:roleSupplier a :Cl_Role ; :isSupplierRole :orgA .

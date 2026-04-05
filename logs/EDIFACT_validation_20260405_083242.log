@@ -1,0 +1,116 @@
+2026-04-05 08:40:38 | INFO     | ============================================================
+2026-04-05 08:40:38 | INFO     | Validation Logger Initialized for EDIFACT
+2026-04-05 08:40:38 | INFO     | Log files: EDIFACT_validation_20260405_083242.log
+2026-04-05 08:40:38 | INFO     | Timestamp: 20260405_083242
+2026-04-05 08:40:38 | INFO     | ============================================================
+2026-04-05 08:40:38 | INFO     | 
+Starting final validation for EDIFACT
+2026-04-05 08:40:38 | DEBUG    | Ontology size: 60978 characters
+2026-04-05 08:40:38 | INFO     | 
+============================================================
+2026-04-05 08:40:38 | INFO     | PILLAR 1: SYNTAX VALIDATION (RDFLib)
+2026-04-05 08:40:38 | INFO     | ============================================================
+2026-04-05 08:40:38 | INFO     | ✓ Syntax validation PASSED (0.043s)
+2026-04-05 08:40:38 | DEBUG    | No syntax errors detected in RDF/Turtle parsing
+2026-04-05 08:40:38 | INFO     | 
+============================================================
+2026-04-05 08:40:38 | INFO     | PILLAR 2: PITFALL DETECTION (OOPS)
+2026-04-05 08:40:38 | INFO     | ============================================================
+2026-04-05 08:40:38 | WARNING  | ⚠ Pitfall check: Found 3 pitfall(s) (0.197s)
+2026-04-05 08:40:38 | WARNING  | Pitfall codes detected: P04, P20, P22
+2026-04-05 08:40:38 | WARNING  | 
+Detailed Pitfall Information:
+2026-04-05 08:40:38 | WARNING  | ------------------------------------------------------------
+2026-04-05 08:40:38 | WARNING  | 
+Pitfall #1: P04
+2026-04-05 08:40:38 | WARNING  |   Name: Creating unconnected ontology elements
+2026-04-05 08:40:38 | WARNING  |   Importance: Minor
+2026-04-05 08:40:38 | WARNING  |   Description: Ontology elements (classes, object properties and datatype properties) are created isolated, with no relation to the rest of the ontology.	
+2026-04-05 08:40:38 | WARNING  |   Affected Elements (2 total):
+2026-04-05 08:40:38 | WARNING  |     - http://example.org/fests#Cl_ContactDetail
+2026-04-05 08:40:38 | WARNING  |     - http://example.org/fests#Cl_Stakeholder
+2026-04-05 08:40:38 | WARNING  | 
+Pitfall #2: P20
+2026-04-05 08:40:38 | WARNING  |   Name: Misusing ontology annotations
+2026-04-05 08:40:38 | WARNING  |   Importance: Minor
+2026-04-05 08:40:38 | WARNING  |   Description: The contents of some annotation properties are swapped or misused. This pitfall might affect annotation properties related to natural language information (for example, annotations for naming such as rdfs:label or for providing descriptions such as rdfs:comment). Other types of annotation could also be affected as temporal, versioning information, among others.	
+2026-04-05 08:40:38 | WARNING  |   Affected Elements (19 total):
+2026-04-05 08:40:38 | WARNING  |     - http://example.org/fests#organizationInvolvedInInvoice
+2026-04-05 08:40:38 | WARNING  |     - http://example.org/fests#isAddressOfRelation
+2026-04-05 08:40:38 | WARNING  |     - http://example.org/fests#elementRequiredByValidity
+2026-04-05 08:40:38 | WARNING  |     - http://example.org/fests#isItemOfLine
+2026-04-05 08:40:38 | WARNING  |     - http://example.org/fests#isServiceOfLine
+2026-04-05 08:40:38 | WARNING  |     - http://example.org/fests#ruleRequiredByValidity
+2026-04-05 08:40:38 | WARNING  |     - http://example.org/fests#productOrServiceOfDetail
+2026-04-05 08:40:38 | WARNING  |     - http://example.org/fests#isLineOfInvoice
+2026-04-05 08:40:38 | WARNING  |     - http://example.org/fests#businessProcessHasAssignment
+2026-04-05 08:40:38 | WARNING  |     - http://example.org/fests#isProductOfLine
+2026-04-05 08:40:38 | WARNING  |     ... and 9 more elements
+2026-04-05 08:40:38 | WARNING  | 
+Pitfall #3: P22
+2026-04-05 08:40:38 | WARNING  |   Name: Using different naming conventions in the ontology
+2026-04-05 08:40:38 | WARNING  |   Importance: Minor
+2026-04-05 08:40:38 | WARNING  |   Description: The ontology elements are not named following the same convention (for example CamelCase or use of delimiters as "-" or "_") . Some notions about naming conventions are provided in [2].	
+2026-04-05 08:40:38 | WARNING  |   Affected Elements (2 total):
+2026-04-05 08:40:38 | WARNING  |     - http://example.org/fests#Cl_OrganizationIdentifier
+2026-04-05 08:40:38 | WARNING  |     - http://example.org/fests#hasImage
+2026-04-05 08:40:38 | INFO     | 
+============================================================
+2026-04-05 08:40:38 | INFO     | PILLAR 3: REASONING CONSISTENCY
+2026-04-05 08:40:38 | INFO     | ============================================================
+2026-04-05 08:40:38 | DEBUG    | Checking logical consistency with OWL 2 DL reasoners (Hermit & Pellet)
+2026-04-05 08:40:38 | INFO     | 
+  → Hermit Reasoner
+2026-04-05 08:40:38 | INFO     |   --------------------------------------------------------
+2026-04-05 08:40:38 | ERROR    |   ✗ FAILED - Inconsistencies detected (1.269s)
+2026-04-05 08:40:38 | ERROR    | 
+  Error Details:
+2026-04-05 08:40:38 | ERROR    |     Java error message is:
+2026-04-05 08:40:38 | ERROR    |     Exception in thread "main" org.semanticweb.HermiT.datatypes.UnsupportedDatatypeException: HermiT supports all and only the datatypes of the OWL 2 datatype map, see 
+2026-04-05 08:40:38 | ERROR    |     http://www.w3.org/TR/owl2-syntax/#Datatype_Maps. 
+2026-04-05 08:40:38 | ERROR    |     The datatype 'http://www.w3.org/2001/XMLSchema#date' is not part of the OWL 2 datatype map and 
+2026-04-05 08:40:38 | ERROR    |     no custom datatype definition is given; 
+2026-04-05 08:40:38 | ERROR    |     therefore, HermiT cannot handle this datatype.
+2026-04-05 08:40:38 | ERROR    |     	at org.semanticweb.HermiT.datatypes.DatatypeRegistry.getDatatypeHandlerFor(Unknown Source)
+2026-04-05 08:40:38 | ERROR    |     	at org.semanticweb.HermiT.datatypes.DatatypeRegistry.getDatatypeHandlerFor(Unknown Source)
+2026-04-05 08:40:38 | ERROR    |     	at org.semanticweb.HermiT.datatypes.DatatypeRegistry.validateDatatypeRestriction(Unknown Source)
+2026-04-05 08:40:38 | ERROR    |     	at org.semanticweb.HermiT.structural.OWLClausification$DataRangeConverter.visit(Unknown Source)
+2026-04-05 08:40:38 | ERROR    |     	at uk.ac.manchester.cs.owl.owlapi.OWLDatatypeImpl.accept(OWLDatatypeImpl.java:343)
+2026-04-05 08:40:38 | ERROR    |     	at org.semanticweb.HermiT.structural.OWLClausification$DataRangeConverter.convertDataRange(Unknown Source)
+2026-04-05 08:40:38 | ERROR    |     	at org.semanticweb.HermiT.structural.OWLClausification$NormalizedAxiomClausifier.visit(Unknown Source)
+2026-04-05 08:40:38 | ERROR    |     	at uk.ac.manchester.cs.owl.owlapi.OWLDataAllValuesFromImpl.accept(OWLDataAllValuesFromImpl.java:99)
+2026-04-05 08:40:38 | ERROR    |     	at org.semanticweb.HermiT.structural.OWLClausification.clausify(Unknown Source)
+2026-04-05 08:40:38 | ERROR    |     	at org.semanticweb.HermiT.structural.OWLClausification.preprocessAndClausify(Unknown Source)
+2026-04-05 08:40:38 | ERROR    |     	at org.semanticweb.HermiT.Reasoner.loadOntology(Reasoner.java:117)
+2026-04-05 08:40:38 | ERROR    |     	at org.semanticweb.HermiT.Reasoner.<init>(Reasoner.java:108)
+2026-04-05 08:40:38 | ERROR    |     	at org.semanticweb.HermiT.Reasoner.<init>(Reasoner.java:86)
+2026-04-05 08:40:38 | ERROR    |     	at org.semanticweb.HermiT.cli.CommandLine.main(CommandLine.java:830)
+2026-04-05 08:40:38 | ERROR    |     
+2026-04-05 08:40:38 | INFO     | 
+  → Pellet Reasoner
+2026-04-05 08:40:38 | INFO     |   --------------------------------------------------------
+2026-04-05 08:40:38 | ERROR    |   ✗ FAILED - Inconsistencies detected (0.597s)
+2026-04-05 08:40:38 | ERROR    | 
+  Error Details:
+2026-04-05 08:40:38 | ERROR    |     Java error message is: ERROR: Ontology is inconsistent, run "pellet explain" to get the reason
+2026-04-05 08:40:38 | ERROR    |     
+2026-04-05 08:40:38 | INFO     | 
+============================================================
+2026-04-05 08:40:38 | INFO     | VALIDATION SUMMARY
+2026-04-05 08:40:38 | INFO     | ============================================================
+2026-04-05 08:40:38 | INFO     | 1. Syntax (RDFLib):    ✓ PASSED (0.043s)
+2026-04-05 08:40:38 | INFO     | 2. OOPS Pitfalls:      ⚠ FAILED (3 pitfalls) (0.197s)
+2026-04-05 08:40:38 | WARNING  |    └─ 3 modeling pitfall(s) detected - check details above
+2026-04-05 08:40:38 | INFO     | 3. Hermit Reasoner:    ✗ FAILED (1.269s)
+2026-04-05 08:40:38 | ERROR    |    └─ Logical inconsistencies found - check inconsistent classes above
+2026-04-05 08:40:38 | INFO     | 4. Pellet Reasoner:    ✗ FAILED (0.597s)
+2026-04-05 08:40:38 | ERROR    |    └─ Logical inconsistencies found - check inconsistent classes above
+2026-04-05 08:40:38 | INFO     | ------------------------------------------------------------
+2026-04-05 08:40:38 | ERROR    | Overall Result:        ❌ VALIDATION FAILED
+2026-04-05 08:40:38 | ERROR    |                        Issues found: 3 pitfalls, Hermit inconsistencies, Pellet inconsistencies
+2026-04-05 08:40:38 | INFO     | ------------------------------------------------------------
+2026-04-05 08:40:38 | INFO     | Total Validation Time: 2.106s
+2026-04-05 08:40:38 | INFO     | Agent Iterations:      0
+2026-04-05 08:40:38 | INFO     | ============================================================
+2026-04-05 08:40:38 | INFO     | 
+✓ Validation JSON log saved: logs/EDIFACT_validation_20260405_083242.json

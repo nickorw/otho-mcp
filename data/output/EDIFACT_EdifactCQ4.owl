@@ -1,5 +1,4 @@
 @prefix : <http://example.org/ontology#> .
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
@@ -8,111 +7,105 @@
 # Classes
 #################################################################
 
-:Cl_Organization rdf:type owl:Class .
+:Cl_Organization a owl:Class ;
+    rdfs:label "Organization" ;
+    rdfs:comment "A legal entity such as a company, institution, or group." .
 
-:Cl_Company rdf:type owl:Class ;
-    rdfs:subClassOf :Cl_Organization .
+:Cl_Invoice a owl:Class ;
+    rdfs:label "Invoice" ;
+    rdfs:comment "A document issued by a seller to a buyer indicating products, quantities, and agreed prices." .
 
-:Cl_Supplier rdf:type owl:Class ;
-    rdfs:subClassOf :Cl_Organization .
+:Cl_InvoiceRole a owl:Class ;
+    rdfs:label "Invoice Role" ;
+    rdfs:comment "A reification class to represent the role of an organization in the context of an invoice." .
 
-:Cl_Buyer rdf:type owl:Class ;
-    rdfs:subClassOf :Cl_Organization .
+:Cl_InvoiceRoleType a owl:Class ;
+    rdfs:label "Invoice Role Type" ;
+    rdfs:comment "Types of roles that an organization can play in the context of an invoice." .
 
-:Cl_Invoice rdf:type owl:Class .
+:Cl_BuyerRoleType a owl:Class ;
+    rdfs:subClassOf :Cl_InvoiceRoleType ;
+    rdfs:label "Buyer Role Type" ;
+    rdfs:comment "Role type indicating the buyer in an invoice." .
 
-:Cl_InvoiceRole rdf:type owl:Class . # Pivot/reification class for role of an organization in an invoice
+:Cl_SellerRoleType a owl:Class ;
+    rdfs:subClassOf :Cl_InvoiceRoleType ;
+    rdfs:label "Seller Role Type" ;
+    rdfs:comment "Role type indicating the seller in an invoice." .
 
-:Cl_InvoiceBuyerRole rdf:type owl:Class ;
-    rdfs:subClassOf :Cl_InvoiceRole .
-
-:Cl_InvoiceSupplierRole rdf:type owl:Class ;
-    rdfs:subClassOf :Cl_InvoiceRole .
+:Cl_BuyerInvoiceRole a owl:Class ;
+    rdfs:label "Buyer Invoice Role" ;
+    rdfs:comment "The role instance representing the buyer in an invoice." .
 
 #################################################################
-# Properties
+# Class Hierarchies
 #################################################################
 
-# Object properties
+:Cl_InvoiceRole rdfs:subClassOf owl:Thing .
 
-:hasInvoiceRole rdf:type owl:ObjectProperty ;
+:Cl_BuyerRoleType owl:disjointWith :Cl_SellerRoleType .
+
+#################################################################
+# Object Properties
+#################################################################
+
+:hasInvoiceRole a owl:ObjectProperty ;
     rdfs:domain :Cl_Invoice ;
-    rdfs:range :Cl_InvoiceRole .
+    rdfs:range :Cl_InvoiceRole ;
+    rdfs:label "has invoice role" ;
+    rdfs:comment "Links an invoice to a role played by an organization in the invoice." .
 
-:roleHeldBy rdf:type owl:ObjectProperty ;
+:roleOrganization a owl:ObjectProperty ;
     rdfs:domain :Cl_InvoiceRole ;
-    rdfs:range :Cl_Organization .
+    rdfs:range :Cl_Organization ;
+    rdfs:label "role organization" ;
+    rdfs:comment "Links the invoice role to the organization playing the role." .
 
-:roleOfInvoice rdf:type owl:ObjectProperty ;
+:roleType a owl:ObjectProperty ;
     rdfs:domain :Cl_InvoiceRole ;
-    rdfs:range :Cl_Invoice ;
-    owl:inverseOf :hasInvoiceRole .
-
-# Subproperties for specific roles
-
-:hasBuyerRole rdf:type owl:ObjectProperty ;
-    rdfs:subPropertyOf :hasInvoiceRole ;
-    rdfs:domain :Cl_Invoice ;
-    rdfs:range :Cl_InvoiceBuyerRole .
-
-:hasSupplierRole rdf:type owl:ObjectProperty ;
-    rdfs:subPropertyOf :hasInvoiceRole ;
-    rdfs:domain :Cl_Invoice ;
-    rdfs:range :Cl_InvoiceSupplierRole .
-
-:buyerRoleHeldBy rdf:type owl:ObjectProperty , owl:FunctionalProperty ;
-    rdfs:subPropertyOf :roleHeldBy ;
-    rdfs:domain :Cl_InvoiceBuyerRole ;
-    rdfs:range :Cl_Buyer .
-
-:supplierRoleHeldBy rdf:type owl:ObjectProperty , owl:FunctionalProperty ;
-    rdfs:subPropertyOf :roleHeldBy ;
-    rdfs:domain :Cl_InvoiceSupplierRole ;
-    rdfs:range :Cl_Supplier .
+    rdfs:range :Cl_InvoiceRoleType ;
+    rdfs:label "role type" ;
+    rdfs:comment "Specifies the type of the role (e.g., buyer, seller) in the invoice." .
 
 #################################################################
-# Restrictions / Axioms
+# Restrictions
 #################################################################
 
-# An InvoiceBuyerRole must be held by a Cl_Buyer
-:Cl_InvoiceBuyerRole owl:equivalentClass [
-    rdf:type owl:Class ;
+# Only organizations can play roles in invoices
+:Cl_InvoiceRole rdfs:subClassOf [
+    a owl:Restriction ;
+    owl:onProperty :roleOrganization ;
+    owl:allValuesFrom :Cl_Organization
+] .
+
+# An InvoiceRole with roleType BuyerRoleType is a BuyerInvoiceRole
+:Cl_BuyerInvoiceRole owl:equivalentClass [
+    a owl:Class ;
     owl:intersectionOf (
         :Cl_InvoiceRole
-        [ rdf:type owl:Restriction ;
-          owl:onProperty :buyerRoleHeldBy ;
-          owl:allValuesFrom :Cl_Buyer
+        [ a owl:Restriction ;
+          owl:onProperty :roleType ;
+          owl:hasValue :Cl_BuyerRoleType
         ]
     )
 ] .
 
-# An InvoiceSupplierRole must be held by a Cl_Supplier
-:Cl_InvoiceSupplierRole owl:equivalentClass [
-    rdf:type owl:Class ;
-    owl:intersectionOf (
-        :Cl_InvoiceRole
-        [ rdf:type owl:Restriction ;
-          owl:onProperty :supplierRoleHeldBy ;
-          owl:allValuesFrom :Cl_Supplier
-        ]
-    )
-] .
-
-# An Invoice has at least one buyer role
-:Cl_Invoice rdfs:subClassOf [
-    rdf:type owl:Restriction ;
-    owl:onProperty :hasBuyerRole ;
-    owl:someValuesFrom :Cl_InvoiceBuyerRole
-] .
-
+#################################################################
 # Disjointness
-:Cl_Buyer owl:disjointWith :Cl_Supplier .
-:Cl_InvoiceBuyerRole owl:disjointWith :Cl_InvoiceSupplierRole .
+#################################################################
+
+:Cl_BuyerRoleType owl:disjointWith :Cl_SellerRoleType .
 
 #################################################################
-# Example Query Answering the Competency Question
-# "Which organization is the buyer in the invoice?"
-# (Given an invoice :Invoice1, find ?org where:
-# :Invoice1 :hasBuyerRole ?buyerRole .
-# ?buyerRole :buyerRoleHeldBy ?org . )
+# Example Query Pattern for the Competency Question
+#################################################################
+
+# To answer: "Which organization is the buyer in the invoice?"
+# Find ?org where:
+#   ?invoice :hasInvoiceRole ?role .
+#   ?role :roleType :Cl_BuyerRoleType .
+#   ?role :roleOrganization ?org .
+
+#################################################################
+# End of Ontology
 #################################################################

@@ -1,0 +1,175 @@
+================================================================================
+OTHO AGENT LOG ANALYSIS - COMPREHENSIVE REPORT
+================================================================================
+
+OVERALL SUMMARY (Generator Runs)
+--------------------------------------------------------------------------------
+Total Runs Analyzed: 20
+Total Successes: 20
+Total Failures: 0
+Overall Success Rate: 100.00%
+
+DURATION STATISTICS
+--------------------------------------------------------------------------------
+Average Duration: 332.14 seconds (5.54 minutes)
+Median Duration: 333.86 seconds
+Min Duration: 281.14 seconds
+Max Duration: 389.14 seconds
+
+PER-STORY ANALYSIS (Generator)
+--------------------------------------------------------------------------------
+
+EDIFACT:
+  Runs: 20
+  Success Rate: 100.00%
+  Successes: 20
+  Failures: 0
+  Avg Duration: 332.14 seconds (5.54 minutes)
+
+PITFALLS ANALYSIS (Generator)
+--------------------------------------------------------------------------------
+Total Pitfall Occurrences: 0
+Unique Pitfalls Encountered: 0
+
+Most Common Pitfalls:
+
+TOOL USAGE ANALYSIS
+--------------------------------------------------------------------------------
+Total Tool Calls: 0
+
+Tool Call Breakdown:
+
+TEMPORAL ANALYSIS (Learning Over Time)
+--------------------------------------------------------------------------------
+First 10 Runs Success Rate: 100.00%
+Last 10 Runs Success Rate: 100.00%
+Improvement: +0.00 percentage points
+
+SUCCESS PATTERNS
+--------------------------------------------------------------------------------
+
+================================================================================
+VALIDATION ANALYSIS (Reasoner Results)
+================================================================================
+
+OVERALL VALIDATION SUMMARY
+--------------------------------------------------------------------------------
+Total Validations: 20
+All Validators Passed: 0 (0.00%)
+Syntax Valid: 20 (100.00%)
+OOPS Passed (No Pitfalls): 20 (100.00%)
+OOPS Errors (Could Not Evaluate): 0 (0.00%)
+OOPS Passed (No Critical/Important): 20 (100.00%)
+Reasoners Passed (Both Consistent): 0 (0.00%)
+
+REASONER VALIDATION RESULTS
+--------------------------------------------------------------------------------
+Hermit Consistent: 0 (0.00%)
+Pellet Consistent: 0 (0.00%)
+Both Reasoners Consistent: 0 (0.00%)
+Hermit Errors: 18
+Pellet Errors: 12
+
+Hermit Error Reasons:
+  18x - Java error message is:
+
+Pellet Error Reasons:
+  5x - Java error message is: ERROR: Ontology is inconsistent, run "pellet explain" to get the reason
+
+  1x - Java error message is: Mar 01, 2026 9:54:19 PM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature
+WARNING: Unsupported axiom: Ignoring equivalentClass axiom because the obj
+  1x - Java error message is: Mar 01, 2026 9:59:06 PM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature
+WARNING: Unsupported axiom: Property http://example.org/fests#lineTotal is
+  1x - Java error message is: Mar 01, 2026 10:09:19 PM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature
+WARNING: Unsupported axiom: Ignoring equivalentClass axiom because the ob
+  1x - Java error message is: Mar 01, 2026 10:32:04 PM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature
+WARNING: Unsupported axiom: Ignoring triple with unknown property from OW
+  1x - Java error message is: Mar 01, 2026 10:43:00 PM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature
+WARNING: Unsupported axiom: Ignoring equivalentClass axiom because the ob
+  1x - Java error message is: Mar 01, 2026 11:14:10 PM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature
+WARNING: Unsupported axiom: Ignoring triple with unknown property from OW
+  1x - Java error message is: Mar 01, 2026 11:35:02 PM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature
+WARNING: Unsupported axiom: Ignoring equivalentClass axiom because the ob
+
+Hermit Inconsistent Classes:
+  - xml_combined_owl.xml.Cl_Document
+  - xml_combined_owl.xml.Cl_ItemImage
+  - xml_combined_owl.xml.Cl_ItemSoldQuantity
+  - xml_combined_owl.xml.Cl_InvoiceDetail
+  - xml_combined_owl.xml.Cl_Information
+  - xml_combined_owl.xml.Cl_InvoiceAmount
+  - xml_combined_owl.xml.Cl_ItemSKU
+  - xml_combined_owl.xml.Cl_ItemCategory
+  - xml_combined_owl.xml.Cl_Invoice
+  - xml_combined_owl.xml.Cl_ItemPrice
+
+Pellet Inconsistent Classes:
+  - xml_combined_owl.xml.Cl_ItemImage
+  - xml_combined_owl.xml.Cl_ItemSoldQuantity
+  - xml_combined_owl.xml.Cl_GovernmentAgency
+  - xml_combined_owl.xml.Cl_ItemSKU
+  - xml_combined_owl.xml.Cl_ItemCategory
+  - xml_combined_owl.xml.Cl_InvoiceAssignment
+  - xml_combined_owl.xml.Cl_Role
+  - xml_combined_owl.xml.Cl_OrganizationInvolvementDisplay
+  - xml_combined_owl.xml.Cl_OrganizationInvoiceRole
+  - xml_combined_owl.xml.Cl_Assignment
+
+OOPS PITFALLS (Validation)
+--------------------------------------------------------------------------------
+Total Pitfall Occurrences: 0
+Unique Pitfalls: 0
+
+Severity Breakdown:
+  Runs Passed (No Pitfalls): 20 (100.00%)
+  Runs Passed (No Critical/Important): 20 (100.00%)
+  Runs with Only Minor Pitfalls: 0 (0.00%)
+
+Most Common Pitfalls:
+
+VALIDATION TIMING ANALYSIS
+--------------------------------------------------------------------------------
+Hermit Avg Time: 0.393s (median: 0.363s)
+Pellet Avg Time: 0.624s (median: 0.611s)
+Total Validation Avg Time: 1.017s
+
+PER-STORY VALIDATION ANALYSIS
+--------------------------------------------------------------------------------
+
+EDIFACT:
+  Validations: 20
+  All Passed Rate: 0.00%
+  Hermit Consistent Rate: 0.00%
+  Pellet Consistent Rate: 0.00%
+  OOPS Passed Rate: 100.00%
+
+PER-RUN VALIDATION RESULTS
+--------------------------------------------------------------------------------
+Timestamp            |  Syntax  |   OOPS   |  Hermit  |  Pellet 
+--------------------------------------------------------------
+20260301_214840      |     ✓    |     ✓    |     x    |     x   
+20260301_215419      |     ✓    |     ✓    |     x    |     x   
+20260301_215907      |     ✓    |     ✓    |     x    |     x   
+20260301_220409      |     ✓    |     ✓    |     x    |     x   
+20260301_220919      |     ✓    |     ✓    |     x    |     x   
+20260301_221415      |     ✓    |     ✓    |     x    |     x   
+20260301_221951      |     ✓    |     ✓    |     x    |     x   
+20260301_222612      |     ✓    |     ✓    |     x    |     x   
+20260301_223204      |     ✓    |     ✓    |     x    |     x   
+20260301_223728      |     ✓    |     ✓    |     x    |     x   
+20260301_230354      |     ✓    |     ✓    |     x    |     x   
+20260301_230929      |     ✓    |     ✓    |     x    |     x   
+20260301_231410      |     ✓    |     ✓    |     x    |     x   
+20260301_231957      |     ✓    |     ✓    |     x    |     x   
+20260301_232450      |     ✓    |     ✓    |     x    |     x   
+20260301_232958      |     ✓    |     ✓    |     x    |     x   
+20260301_233503      |     ✓    |     ✓    |     x    |     x   
+20260301_234116      |     ✓    |     ✓    |     x    |     x   
+20260301_234726      |     ✓    |     ✓    |     x    |     x   
+20260301_235347      |     ✓    |     ✓    |     x    |     x   
+
+Legend: ✓ = passed, x = failed, ? = OOPS error (could not evaluate)
+
+================================================================================
+END OF REPORT
+================================================================================

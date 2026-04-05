@@ -1,0 +1,166 @@
+@prefix : <http://example.org/ontology#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+### Classes
+
+:Cl_Item rdf:type owl:Class ;
+    rdfs:label "Item" ;
+    rdfs:comment "Represents an item that is sold." .
+
+:Cl_Sale rdf:type owl:Class ;
+    rdfs:label "Sale" ;
+    rdfs:comment "Represents a sale event of an item." .
+
+:Cl_ItemDisplayInformation rdf:type owl:Class ;
+    rdfs:label "Item Display Information" ;
+    rdfs:comment "Reification class capturing the information displayed about items sold." .
+
+:Cl_Information rdf:type owl:Class ;
+    rdfs:label "Information" ;
+    rdfs:comment "General class for information entities." .
+
+:Cl_ItemAttribute rdf:type owl:Class ;
+    rdfs:label "Item Attribute" ;
+    rdfs:comment "Superclass for all attributes of an item." ;
+    rdfs:subClassOf :Cl_Information .
+
+:Cl_ItemName rdf:type owl:Class ;
+    rdfs:label "Item Name" ;
+    rdfs:subClassOf :Cl_ItemAttribute .
+
+:Cl_ItemPrice rdf:type owl:Class ;
+    rdfs:label "Item Price" ;
+    rdfs:subClassOf :Cl_ItemAttribute .
+
+:Cl_ItemDescription rdf:type owl:Class ;
+    rdfs:label "Item Description" ;
+    rdfs:subClassOf :Cl_ItemAttribute .
+
+:Cl_ItemCategory rdf:type owl:Class ;
+    rdfs:label "Item Category" ;
+    rdfs:subClassOf :Cl_ItemAttribute .
+
+:Cl_ItemImage rdf:type owl:Class ;
+    rdfs:label "Item Image" ;
+    rdfs:subClassOf :Cl_ItemAttribute .
+
+:Cl_ItemSKU rdf:type owl:Class ;
+    rdfs:label "Item SKU" ;
+    rdfs:subClassOf :Cl_ItemAttribute .
+
+:Cl_ItemStockStatus rdf:type owl:Class ;
+    rdfs:label "Item Stock Status" ;
+    rdfs:subClassOf :Cl_ItemAttribute .
+
+:Cl_ItemRating rdf:type owl:Class ;
+    rdfs:label "Item Rating" ;
+    rdfs:subClassOf :Cl_ItemAttribute .
+
+### Hierarchies
+
+:Cl_ItemAttribute rdfs:subClassOf :Cl_Information .
+
+### Pivot/Reification Class
+
+:Cl_ItemDisplayInformation rdf:type owl:Class ;
+    rdfs:label "Item Display Information" ;
+    rdfs:subClassOf :Cl_Information .
+
+### Properties
+
+:displayedInformation a owl:ObjectProperty ;
+    rdfs:domain :Cl_Item ;
+    rdfs:range :Cl_ItemDisplayInformation ;
+    rdfs:label "displayed information" ;
+    rdfs:comment "Connects an item to its displayed information." .
+
+:hasAttribute a owl:ObjectProperty ;
+    rdfs:domain :Cl_ItemDisplayInformation ;
+    rdfs:range :Cl_ItemAttribute ;
+    rdfs:label "has attribute" ;
+    rdfs:comment "Connects item display information to its attributes." .
+
+:itemOf a owl:ObjectProperty ;
+    rdfs:domain :Cl_ItemDisplayInformation ;
+    rdfs:range :Cl_Item ;
+    owl:inverseOf :displayedInformation ;
+    rdfs:label "item of" .
+
+:itemNameValue a owl:DatatypeProperty ;
+    rdfs:domain :Cl_ItemName ;
+    rdfs:range xsd:string ;
+    rdfs:label "item name value" .
+
+:itemPriceValue a owl:DatatypeProperty ;
+    rdfs:domain :Cl_ItemPrice ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "item price value" .
+
+:itemDescriptionValue a owl:DatatypeProperty ;
+    rdfs:domain :Cl_ItemDescription ;
+    rdfs:range xsd:string ;
+    rdfs:label "item description value" .
+
+:itemCategoryValue a owl:DatatypeProperty ;
+    rdfs:domain :Cl_ItemCategory ;
+    rdfs:range xsd:string ;
+    rdfs:label "item category value" .
+
+:itemImageURL a owl:DatatypeProperty ;
+    rdfs:domain :Cl_ItemImage ;
+    rdfs:range xsd:anyURI ;
+    rdfs:label "item image URL" .
+
+:itemSKUValue a owl:DatatypeProperty ;
+    rdfs:domain :Cl_ItemSKU ;
+    rdfs:range xsd:string ;
+    rdfs:label "item SKU value" .
+
+:itemStockStatusValue a owl:DatatypeProperty ;
+    rdfs:domain :Cl_ItemStockStatus ;
+    rdfs:range xsd:string ;
+    rdfs:label "item stock status value" .
+
+:itemRatingValue a owl:DatatypeProperty ;
+    rdfs:domain :Cl_ItemRating ;
+    rdfs:range xsd:float ;
+    rdfs:label "item rating value" .
+
+### Restrictions
+
+:Cl_ItemDisplayInformation owl:equivalentClass [
+    rdf:type owl:Class ;
+    owl:intersectionOf (
+        [ rdf:type owl:Restriction ;
+          owl:onProperty :itemOf ;
+          owl:someValuesFrom :Cl_Item ]
+        [ rdf:type owl:Restriction ;
+          owl:onProperty :hasAttribute ;
+          owl:someValuesFrom :Cl_ItemAttribute ]
+    )
+] .
+
+### Disjointness
+
+:Cl_ItemName owl:disjointWith :Cl_ItemPrice, :Cl_ItemDescription, :Cl_ItemCategory, :Cl_ItemImage, :Cl_ItemSKU, :Cl_ItemStockStatus, :Cl_ItemRating .
+:Cl_ItemPrice owl:disjointWith :Cl_ItemDescription, :Cl_ItemCategory, :Cl_ItemImage, :Cl_ItemSKU, :Cl_ItemStockStatus, :Cl_ItemRating .
+:Cl_ItemDescription owl:disjointWith :Cl_ItemCategory, :Cl_ItemImage, :Cl_ItemSKU, :Cl_ItemStockStatus, :Cl_ItemRating .
+:Cl_ItemCategory owl:disjointWith :Cl_ItemImage, :Cl_ItemSKU, :Cl_ItemStockStatus, :Cl_ItemRating .
+:Cl_ItemImage owl:disjointWith :Cl_ItemSKU, :Cl_ItemStockStatus, :Cl_ItemRating .
+:Cl_ItemSKU owl:disjointWith :Cl_ItemStockStatus, :Cl_ItemRating .
+:Cl_ItemStockStatus owl:disjointWith :Cl_ItemRating .
+
+### General Class Axioms
+
+[ rdf:type owl:Restriction ;
+  owl:onProperty :hasAttribute ;
+  owl:someValuesFrom :Cl_ItemAttribute ;
+  rdfs:subClassOf :Cl_ItemDisplayInformation ] .
+
+### Notes
+
+# This ontology structure allows answering the competency question: "What information is displayed about the items sold?"
+# The pivot class Cl_ItemDisplayInformation connects each Cl_Item to the displayed attributes (name, price, description, etc.), and each attribute class captures the value of that information via datatype properties.

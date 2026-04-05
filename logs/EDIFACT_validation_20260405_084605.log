@@ -1,0 +1,124 @@
+2026-04-05 08:52:48 | INFO     | ============================================================
+2026-04-05 08:52:48 | INFO     | Validation Logger Initialized for EDIFACT
+2026-04-05 08:52:48 | INFO     | Log files: EDIFACT_validation_20260405_084605.log
+2026-04-05 08:52:48 | INFO     | Timestamp: 20260405_084605
+2026-04-05 08:52:48 | INFO     | ============================================================
+2026-04-05 08:52:48 | INFO     | 
+Starting final validation for EDIFACT
+2026-04-05 08:52:48 | DEBUG    | Ontology size: 52739 characters
+2026-04-05 08:52:48 | INFO     | 
+============================================================
+2026-04-05 08:52:48 | INFO     | PILLAR 1: SYNTAX VALIDATION (RDFLib)
+2026-04-05 08:52:48 | INFO     | ============================================================
+2026-04-05 08:52:48 | INFO     | ✓ Syntax validation PASSED (0.045s)
+2026-04-05 08:52:48 | DEBUG    | No syntax errors detected in RDF/Turtle parsing
+2026-04-05 08:52:48 | INFO     | 
+============================================================
+2026-04-05 08:52:48 | INFO     | PILLAR 2: PITFALL DETECTION (OOPS)
+2026-04-05 08:52:48 | INFO     | ============================================================
+2026-04-05 08:52:48 | WARNING  | ⚠ Pitfall check: Found 4 pitfall(s) (0.225s)
+2026-04-05 08:52:48 | WARNING  | Pitfall codes detected: P05, P08, P13, P22
+2026-04-05 08:52:48 | WARNING  | 
+Detailed Pitfall Information:
+2026-04-05 08:52:48 | WARNING  | ------------------------------------------------------------
+2026-04-05 08:52:48 | WARNING  | 
+Pitfall #1: P05
+2026-04-05 08:52:48 | WARNING  |   Name: Defining wrong inverse relationships
+2026-04-05 08:52:48 | WARNING  |   Importance: Critical
+2026-04-05 08:52:48 | WARNING  |   Description: Two relationships are defined as inverse relations when they are not necessarily inverse.	
+2026-04-05 08:52:48 | WARNING  |   Affected Elements: None specified
+2026-04-05 08:52:48 | WARNING  | 
+Pitfall #2: P08
+2026-04-05 08:52:48 | WARNING  |   Name: Missing annotations
+2026-04-05 08:52:48 | WARNING  |   Importance: Minor
+2026-04-05 08:52:48 | WARNING  |   Description: This pitfall consists in creating an ontology element and failing to provide human readable annotations attached to it. Consequently, ontology elements lack annotation properties that label them (e.g. rdfs:label, lemon:LexicalEntry, skos:prefLabel or skos:altLabel) or that define them (e.g. rdfs:comment or dc:description). This pitfall is related to the guidelines provided in [5].	
+2026-04-05 08:52:48 | WARNING  |   Affected Elements (19 total):
+2026-04-05 08:52:48 | WARNING  |     - http://example.org/fests#isRoleIn
+2026-04-05 08:52:48 | WARNING  |     - http://example.org/fests#hasOrganization
+2026-04-05 08:52:48 | WARNING  |     - http://example.org/fests#isBusinessProcessOfAssignment
+2026-04-05 08:52:48 | WARNING  |     - http://example.org/fests#involvesOrganization
+2026-04-05 08:52:48 | WARNING  |     - http://example.org/fests#isInvoiceOf
+2026-04-05 08:52:48 | WARNING  |     - http://example.org/fests#isContactInfoOf
+2026-04-05 08:52:48 | WARNING  |     - http://example.org/fests#hasInvoice
+2026-04-05 08:52:48 | WARNING  |     - http://example.org/fests#hasInvoiceNumber
+2026-04-05 08:52:48 | WARNING  |     - http://example.org/fests#isParticipationInInvoice
+2026-04-05 08:52:48 | WARNING  |     - http://example.org/fests#hasContactInfo
+2026-04-05 08:52:48 | WARNING  |     ... and 9 more elements
+2026-04-05 08:52:48 | WARNING  | 
+Pitfall #3: P13
+2026-04-05 08:52:48 | WARNING  |   Name: Inverse relationships not explicitly declared
+2026-04-05 08:52:48 | WARNING  |   Importance: Minor
+2026-04-05 08:52:48 | WARNING  |   Description: This pitfall appears when any relationship (except for those that are defined as symmetric properties using owl:SymmetricProperty) does not have an inverse relationship (owl:inverseOf) defined within the ontology.	
+2026-04-05 08:52:48 | WARNING  |   Affected Elements: None specified
+2026-04-05 08:52:48 | WARNING  | 
+Pitfall #4: P22
+2026-04-05 08:52:48 | WARNING  |   Name: Using different naming conventions in the ontology
+2026-04-05 08:52:48 | WARNING  |   Importance: Minor
+2026-04-05 08:52:48 | WARNING  |   Description: The ontology elements are not named following the same convention (for example CamelCase or use of delimiters as "-" or "_") . Some notions about naming conventions are provided in [2].	
+2026-04-05 08:52:48 | WARNING  |   Affected Elements (2 total):
+2026-04-05 08:52:48 | WARNING  |     - http://example.org/fests#Cl_BuyerParticipation
+2026-04-05 08:52:48 | WARNING  |     - http://example.org/fests#refersToLineItem
+2026-04-05 08:52:48 | INFO     | 
+============================================================
+2026-04-05 08:52:48 | INFO     | PILLAR 3: REASONING CONSISTENCY
+2026-04-05 08:52:48 | INFO     | ============================================================
+2026-04-05 08:52:48 | DEBUG    | Checking logical consistency with OWL 2 DL reasoners (Hermit & Pellet)
+2026-04-05 08:52:48 | INFO     | 
+  → Hermit Reasoner
+2026-04-05 08:52:48 | INFO     |   --------------------------------------------------------
+2026-04-05 08:52:48 | ERROR    |   ✗ FAILED - Inconsistencies detected (0.873s)
+2026-04-05 08:52:48 | ERROR    | 
+  Error Details:
+2026-04-05 08:52:48 | ERROR    |     Java error message is:
+2026-04-05 08:52:48 | ERROR    |     Exception in thread "main" org.semanticweb.HermiT.datatypes.UnsupportedDatatypeException: HermiT supports all and only the datatypes of the OWL 2 datatype map, see 
+2026-04-05 08:52:48 | ERROR    |     http://www.w3.org/TR/owl2-syntax/#Datatype_Maps. 
+2026-04-05 08:52:48 | ERROR    |     The datatype 'http://www.w3.org/2001/XMLSchema#date' is not part of the OWL 2 datatype map and 
+2026-04-05 08:52:48 | ERROR    |     no custom datatype definition is given; 
+2026-04-05 08:52:48 | ERROR    |     therefore, HermiT cannot handle this datatype.
+2026-04-05 08:52:48 | ERROR    |     	at org.semanticweb.HermiT.datatypes.DatatypeRegistry.getDatatypeHandlerFor(Unknown Source)
+2026-04-05 08:52:48 | ERROR    |     	at org.semanticweb.HermiT.datatypes.DatatypeRegistry.getDatatypeHandlerFor(Unknown Source)
+2026-04-05 08:52:48 | ERROR    |     	at org.semanticweb.HermiT.datatypes.DatatypeRegistry.validateDatatypeRestriction(Unknown Source)
+2026-04-05 08:52:48 | ERROR    |     	at org.semanticweb.HermiT.structural.OWLClausification$DataRangeConverter.visit(Unknown Source)
+2026-04-05 08:52:48 | ERROR    |     	at uk.ac.manchester.cs.owl.owlapi.OWLDatatypeImpl.accept(OWLDatatypeImpl.java:343)
+2026-04-05 08:52:48 | ERROR    |     	at org.semanticweb.HermiT.structural.OWLClausification$DataRangeConverter.convertDataRange(Unknown Source)
+2026-04-05 08:52:48 | ERROR    |     	at org.semanticweb.HermiT.structural.OWLClausification$NormalizedAxiomClausifier.visit(Unknown Source)
+2026-04-05 08:52:48 | ERROR    |     	at uk.ac.manchester.cs.owl.owlapi.OWLDataAllValuesFromImpl.accept(OWLDataAllValuesFromImpl.java:99)
+2026-04-05 08:52:48 | ERROR    |     	at org.semanticweb.HermiT.structural.OWLClausification.clausify(Unknown Source)
+2026-04-05 08:52:48 | ERROR    |     	at org.semanticweb.HermiT.structural.OWLClausification.preprocessAndClausify(Unknown Source)
+2026-04-05 08:52:48 | ERROR    |     	at org.semanticweb.HermiT.Reasoner.loadOntology(Reasoner.java:117)
+2026-04-05 08:52:48 | ERROR    |     	at org.semanticweb.HermiT.Reasoner.<init>(Reasoner.java:108)
+2026-04-05 08:52:48 | ERROR    |     	at org.semanticweb.HermiT.Reasoner.<init>(Reasoner.java:86)
+2026-04-05 08:52:48 | ERROR    |     	at org.semanticweb.HermiT.cli.CommandLine.main(CommandLine.java:830)
+2026-04-05 08:52:48 | ERROR    |     
+2026-04-05 08:52:48 | INFO     | 
+  → Pellet Reasoner
+2026-04-05 08:52:48 | INFO     |   --------------------------------------------------------
+2026-04-05 08:52:48 | ERROR    |   ✗ FAILED - Inconsistencies detected (0.636s)
+2026-04-05 08:52:48 | ERROR    | 
+  Error Details:
+2026-04-05 08:52:48 | ERROR    |     Java error message is: Apr 05, 2026 8:52:48 AM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature
+2026-04-05 08:52:48 | ERROR    |     WARNING: Unsupported axiom: Ignoring equivalentClass axiom because the object is not a class http://example.org/fests#Cl_FileFormatRequirement owl:equivalentClass bnode(19027371:19d5d7d0758:-7fcd)
+2026-04-05 08:52:48 | ERROR    |     Apr 05, 2026 8:52:48 AM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature
+2026-04-05 08:52:48 | ERROR    |     WARNING: Unsupported axiom: Ignoring equivalentClass axiom because the object is not a class http://example.org/fests#Cl_FileFormat owl:equivalentClass bnode(19027371:19d5d7d0758:-7fd5)
+2026-04-05 08:52:48 | ERROR    |     ERROR: Ontology is inconsistent, run "pellet explain" to get the reason
+2026-04-05 08:52:48 | ERROR    |     
+2026-04-05 08:52:48 | INFO     | 
+============================================================
+2026-04-05 08:52:48 | INFO     | VALIDATION SUMMARY
+2026-04-05 08:52:48 | INFO     | ============================================================
+2026-04-05 08:52:48 | INFO     | 1. Syntax (RDFLib):    ✓ PASSED (0.045s)
+2026-04-05 08:52:48 | INFO     | 2. OOPS Pitfalls:      ⚠ FAILED (4 pitfalls) (0.225s)
+2026-04-05 08:52:48 | WARNING  |    └─ 4 modeling pitfall(s) detected - check details above
+2026-04-05 08:52:48 | INFO     | 3. Hermit Reasoner:    ✗ FAILED (0.873s)
+2026-04-05 08:52:48 | ERROR    |    └─ Logical inconsistencies found - check inconsistent classes above
+2026-04-05 08:52:48 | INFO     | 4. Pellet Reasoner:    ✗ FAILED (0.636s)
+2026-04-05 08:52:48 | ERROR    |    └─ Logical inconsistencies found - check inconsistent classes above
+2026-04-05 08:52:48 | INFO     | ------------------------------------------------------------
+2026-04-05 08:52:48 | ERROR    | Overall Result:        ❌ VALIDATION FAILED
+2026-04-05 08:52:48 | ERROR    |                        Issues found: 4 pitfalls, Hermit inconsistencies, Pellet inconsistencies
+2026-04-05 08:52:48 | INFO     | ------------------------------------------------------------
+2026-04-05 08:52:48 | INFO     | Total Validation Time: 1.778s
+2026-04-05 08:52:48 | INFO     | Agent Iterations:      0
+2026-04-05 08:52:48 | INFO     | ============================================================
+2026-04-05 08:52:48 | INFO     | 
+✓ Validation JSON log saved: logs/EDIFACT_validation_20260405_084605.json

@@ -7,23 +7,26 @@
 ### Classes
 
 :Cl_Invoice rdf:type owl:Class .
+
 :Cl_Item rdf:type owl:Class .
-:Cl_InvoiceLine rdf:type owl:Class .
-:Cl_Price rdf:type owl:Class .
-:Cl_Currency rdf:type owl:Class .
-:Cl_Amount rdf:type owl:Class .
-:Cl_NetPrice rdf:type owl:Class .
-:Cl_Total rdf:type owl:Class .
 
-# Hierarchy
-:Cl_Price rdfs:subClassOf :Cl_Amount .
-:Cl_NetPrice rdfs:subClassOf :Cl_Price .
-:Cl_Total rdfs:subClassOf :Cl_Amount .
-
-# Reification class for the sale of an item in an invoice (pivot class)
 :Cl_InvoiceLine rdf:type owl:Class ;
-    rdfs:label "Invoice Line" ;
-    rdfs:comment "A line in an invoice representing the sale of a specific item, its quantity, and net price." .
+    rdfs:subClassOf owl:Thing .
+
+:Cl_NetPriceComputation rdf:type owl:Class ;
+    rdfs:subClassOf owl:Thing .
+
+### Class Hierarchies and Superclasses
+
+:Cl_InvoiceEntity rdf:type owl:Class .
+
+:Cl_Invoice rdfs:subClassOf :Cl_InvoiceEntity .
+:Cl_Item rdfs:subClassOf :Cl_InvoiceEntity .
+:Cl_InvoiceLine rdfs:subClassOf :Cl_InvoiceEntity .
+
+### Reification / Pivot Class
+
+# Cl_InvoiceLine acts as a pivot class to relate an Invoice, an Item, and the price/quantity details.
 
 ### Properties
 
@@ -37,17 +40,9 @@
     rdfs:domain :Cl_InvoiceLine ;
     rdfs:range :Cl_Item .
 
-:hasNetPrice rdf:type owl:ObjectProperty ;
-    rdfs:domain :Cl_InvoiceLine ;
-    rdfs:range :Cl_NetPrice .
-
-:hasCurrency rdf:type owl:ObjectProperty ;
-    rdfs:domain :Cl_Amount ;
-    rdfs:range :Cl_Currency .
-
-:hasTotalNetPrice rdf:type owl:ObjectProperty ;
+:hasNetPriceComputation rdf:type owl:ObjectProperty ;
     rdfs:domain :Cl_Invoice ;
-    rdfs:range :Cl_Total .
+    rdfs:range :Cl_NetPriceComputation .
 
 # Data Properties
 
@@ -55,93 +50,49 @@
     rdfs:domain :Cl_InvoiceLine ;
     rdfs:range xsd:decimal .
 
-:unitNetPrice rdf:type owl:DatatypeProperty ;
-    rdfs:domain :Cl_NetPrice ;
+:unitPrice rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Cl_InvoiceLine ;
     rdfs:range xsd:decimal .
 
-:totalNetPriceValue rdf:type owl:DatatypeProperty ;
-    rdfs:domain :Cl_Total ;
+:lineNetPrice rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Cl_InvoiceLine ;
     rdfs:range xsd:decimal .
 
-:currencyCode rdf:type owl:DatatypeProperty ;
-    rdfs:domain :Cl_Currency ;
-    rdfs:range xsd:string .
+:invoiceNetPrice rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Cl_NetPriceComputation ;
+    rdfs:range xsd:decimal .
+
+# The net price of the invoice is computed via the Cl_NetPriceComputation pivot class, which aggregates the line net prices.
 
 ### Restrictions
 
-# Each Cl_InvoiceLine must have exactly one Cl_Item
-:Cl_InvoiceLine rdfs:subClassOf [
-    rdf:type owl:Restriction ;
-    owl:onProperty :refersToItem ;
-    owl:cardinality "1"^^xsd:nonNegativeInteger
-] .
-
-# Each Cl_InvoiceLine must have exactly one Cl_NetPrice
-:Cl_InvoiceLine rdfs:subClassOf [
-    rdf:type owl:Restriction ;
-    owl:onProperty :hasNetPrice ;
-    owl:cardinality "1"^^xsd:nonNegativeInteger
-] .
-
-# Each Cl_NetPrice must have exactly one unitNetPrice
-:Cl_NetPrice rdfs:subClassOf [
-    rdf:type owl:Restriction ;
-    owl:onProperty :unitNetPrice ;
-    owl:cardinality "1"^^xsd:nonNegativeInteger
-] .
-
-# Each Cl_Total must have exactly one totalNetPriceValue
-:Cl_Total rdfs:subClassOf [
-    rdf:type owl:Restriction ;
-    owl:onProperty :totalNetPriceValue ;
-    owl:cardinality "1"^^xsd:nonNegativeInteger
-] .
-
-# Each Cl_Invoice can have multiple Cl_InvoiceLines
-:Cl_Invoice rdfs:subClassOf [
+# Each Cl_Invoice has only Cl_InvoiceLine as its hasInvoiceLine
+:Cl_Invoice owl:equivalentClass [
     rdf:type owl:Restriction ;
     owl:onProperty :hasInvoiceLine ;
-    owl:minCardinality "1"^^xsd:nonNegativeInteger
+    owl:allValuesFrom :Cl_InvoiceLine
 ] .
 
-# Each Cl_Invoice must have exactly one Cl_Total as total net price
-:Cl_Invoice rdfs:subClassOf [
+# Each Cl_InvoiceLine refers only to Cl_Item
+:Cl_InvoiceLine owl:equivalentClass [
     rdf:type owl:Restriction ;
-    owl:onProperty :hasTotalNetPrice ;
-    owl:cardinality "1"^^xsd:nonNegativeInteger
+    owl:onProperty :refersToItem ;
+    owl:allValuesFrom :Cl_Item
+] .
+
+# Each Cl_Invoice has only Cl_NetPriceComputation as its hasNetPriceComputation
+:Cl_Invoice owl:equivalentClass [
+    rdf:type owl:Restriction ;
+    owl:onProperty :hasNetPriceComputation ;
+    owl:allValuesFrom :Cl_NetPriceComputation
 ] .
 
 ### Disjointness
 
-:Cl_Invoice owl:disjointWith :Cl_Item, :Cl_InvoiceLine, :Cl_Price, :Cl_Currency, :Cl_Total .
+:Cl_Invoice owl:disjointWith :Cl_Item, :Cl_InvoiceLine, :Cl_NetPriceComputation .
+:Cl_Item owl:disjointWith :Cl_InvoiceLine, :Cl_NetPriceComputation .
+:Cl_InvoiceLine owl:disjointWith :Cl_NetPriceComputation .
 
-:Cl_Item owl:disjointWith :Cl_InvoiceLine, :Cl_Price, :Cl_Currency, :Cl_Total .
+### Comments
 
-:Cl_InvoiceLine owl:disjointWith :Cl_Price, :Cl_Currency, :Cl_Total .
-
-:Cl_Price owl:disjointWith :Cl_Currency, :Cl_Total .
-
-:Cl_Currency owl:disjointWith :Cl_Total .
-
-### Equivalent Class (General Class Axiom)
-
-# The class Cl_Total is equivalent to the total net price of all items sold in the invoice.
-:Cl_Total owl:equivalentClass [
-    rdf:type owl:Class ;
-    owl:intersectionOf (
-        :Cl_Amount
-        [ rdf:type owl:Restriction ;
-          owl:onProperty :totalNetPriceValue ;
-          owl:someValuesFrom xsd:decimal
-        ]
-    )
-] .
-
-### Annotation for Competency Question
-
-# The net price of the items sold in the invoice can be obtained by traversing:
-# Cl_Invoice --hasInvoiceLine--> Cl_InvoiceLine --hasNetPrice--> Cl_NetPrice --unitNetPrice--> xsd:decimal
-# and sum (unitNetPrice * quantity) for all Cl_InvoiceLine, or directly via:
-# Cl_Invoice --hasTotalNetPrice--> Cl_Total --totalNetPriceValue--> xsd:decimal
-
-# End of ontology for competency question: "What is the net price of the items sold in the invoice?"
+# To answer "What is the net price of the items sold in the invoice?", query for :invoiceNetPrice via the :hasNetPriceComputation pivot from the relevant :Cl_Invoice. The net price at the invoice level is computed as the sum of :lineNetPrice for all :Cl_InvoiceLine entries associated with the invoice. Each :Cl_InvoiceLine also records its own :lineNetPrice (typically quantity * unitPrice).

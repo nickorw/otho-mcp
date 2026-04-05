@@ -1,0 +1,161 @@
+{
+  "story_id": "EDIFACT",
+  "timestamp": "20260405_061829",
+  "start_time": "2026-04-05T06:27:18.913657",
+  "ontology_size_chars": 55499,
+  "validation_results": {
+    "syntax": {
+      "valid": true,
+      "execution_time_seconds": 0.161,
+      "error": null,
+      "error_type": null
+    },
+    "oops": {
+      "has_pitfalls": true,
+      "pitfall_count": 4,
+      "execution_time_seconds": 0.132,
+      "pitfalls": [
+        {
+          "code": "P04",
+          "name": "Creating unconnected ontology elements",
+          "description": "Ontology elements (classes, object properties and datatype properties) are created isolated, with no relation to the rest of the ontology.\t",
+          "importance": "Minor",
+          "num_affected": 1,
+          "affected_elements": [
+            "http://example.org/fests#Cl_Entity"
+          ]
+        },
+        {
+          "code": "P13",
+          "name": "Inverse relationships not explicitly declared",
+          "description": "This pitfall appears when any relationship (except for those that are defined as symmetric properties using owl:SymmetricProperty) does not have an inverse relationship (owl:inverseOf) defined within the ontology.\t",
+          "importance": "Minor",
+          "num_affected": 1,
+          "affected_elements": [
+            "http://example.org/fests#invoiceParticipationOf"
+          ]
+        },
+        {
+          "code": "P20",
+          "name": "Misusing ontology annotations",
+          "description": "The contents of some annotation properties are swapped or misused. This pitfall might affect annotation properties related to natural language information (for example, annotations for naming such as rdfs:label or for providing descriptions such as rdfs:comment). Other types of annotation could also be affected as temporal, versioning information, among others.\t",
+          "importance": "Minor",
+          "num_affected": 27,
+          "affected_elements": [
+            "http://example.org/fests#descriptionOfSaleInfo",
+            "http://example.org/fests#displayAttributeOfSaleInfo",
+            "http://example.org/fests#invoiceParticipationByOrganization",
+            "http://example.org/fests#invoiceDetailOfInvoice",
+            "http://example.org/fests#invoiceInvolvedInParticipation",
+            "http://example.org/fests#invoiceLineOfCalculation",
+            "http://example.org/fests#isInformationElementOf",
+            "http://example.org/fests#contactInfoOfSeller",
+            "http://example.org/fests#invoiceOfAmountReification",
+            "http://example.org/fests#invoiceOfInvoiceDetail",
+            "http://example.org/fests#invoiceOfNetPriceCalculation",
+            "http://example.org/fests#itemOfInvoiceItem",
+            "http://example.org/fests#invoiceRoleOfParty",
+            "http://example.org/fests#imageOfSaleInfo",
+            "http://example.org/fests#invoiceItemOfInvoiceDetail",
+            "http://example.org/fests#productOfInvoiceItem",
+            "http://example.org/fests#saleInfoForItem",
+            "http://example.org/fests#invoiceAmountOfReification",
+            "http://example.org/fests#roleTypeOfRole",
+            "http://example.org/fests#listedByMessageListing",
+            "http://example.org/fests#isRequirementTypeOf",
+            "http://example.org/fests#productOfInvoiceLine",
+            "http://example.org/fests#categoryOfSaleInfo",
+            "http://example.org/fests#sellerOfSaleInfo",
+            "http://example.org/fests#stockStatusOfSaleInfo",
+            "http://example.org/fests#hasBusinessProcessAssignment",
+            "http://example.org/fests#addressOfAssignment"
+          ]
+        },
+        {
+          "code": "P22",
+          "name": "Using different naming conventions in the ontology",
+          "description": "The ontology elements are not named following the same convention (for example CamelCase or use of delimiters as \"-\" or \"_\") . Some notions about naming conventions are provided in [2].\t",
+          "importance": "Minor",
+          "num_affected": 1,
+          "affected_elements": [
+            "http://example.org/fests#Cl_InvoiceParticipation",
+            "http://example.org/fests#buyerAddressAssignment"
+          ]
+        }
+      ],
+      "pitfall_codes": [
+        "P04",
+        "P13",
+        "P20",
+        "P22"
+      ],
+      "pitfall_names": [
+        "Creating unconnected ontology elements",
+        "Inverse relationships not explicitly declared",
+        "Misusing ontology annotations",
+        "Using different naming conventions in the ontology"
+      ],
+      "oops_error": false,
+      "error": null
+    },
+    "hermit": {
+      "reasoner": "Hermit",
+      "is_consistent": false,
+      "execution_time_seconds": 1.094,
+      "inconsistent_classes": [],
+      "inconsistent_classes_count": 0,
+      "error": "Java error message is:\nException in thread \"main\" org.semanticweb.HermiT.datatypes.UnsupportedDatatypeException: HermiT supports all and only the datatypes of the OWL 2 datatype map, see \nhttp://www.w3.org/TR/owl2-syntax/#Datatype_Maps. \nThe datatype 'http://www.w3.org/2001/XMLSchema#date' is not part of the OWL 2 datatype map and \nno custom datatype definition is given; \ntherefore, HermiT cannot handle this datatype.\n\tat org.semanticweb.HermiT.datatypes.DatatypeRegistry.getDatatypeHandlerFor(Unknown Source)\n\tat org.semanticweb.HermiT.datatypes.DatatypeRegistry.getDatatypeHandlerFor(Unknown Source)\n\tat org.semanticweb.HermiT.datatypes.DatatypeRegistry.validateDatatypeRestriction(Unknown Source)\n\tat org.semanticweb.HermiT.structural.OWLClausification$DataRangeConverter.visit(Unknown Source)\n\tat uk.ac.manchester.cs.owl.owlapi.OWLDatatypeImpl.accept(OWLDatatypeImpl.java:343)\n\tat org.semanticweb.HermiT.structural.OWLClausification$DataRangeConverter.convertDataRange(Unknown Source)\n\tat org.semanticweb.HermiT.structural.OWLClausification$NormalizedAxiomClausifier.visit(Unknown Source)\n\tat uk.ac.manchester.cs.owl.owlapi.OWLDataAllValuesFromImpl.accept(OWLDataAllValuesFromImpl.java:99)\n\tat org.semanticweb.HermiT.structural.OWLClausification.clausify(Unknown Source)\n\tat org.semanticweb.HermiT.structural.OWLClausification.preprocessAndClausify(Unknown Source)\n\tat org.semanticweb.HermiT.Reasoner.loadOntology(Reasoner.java:117)\n\tat org.semanticweb.HermiT.Reasoner.<init>(Reasoner.java:108)\n\tat org.semanticweb.HermiT.Reasoner.<init>(Reasoner.java:86)\n\tat org.semanticweb.HermiT.cli.CommandLine.main(CommandLine.java:830)\n",
+      "error_type": "reasoning_error"
+    },
+    "pellet": {
+      "reasoner": "Pellet",
+      "is_consistent": false,
+      "execution_time_seconds": 0.655,
+      "inconsistent_classes": [
+        "xml_combined_owl.xml.Cl_Description",
+        "xml_combined_owl.xml.Cl_OrganizationType",
+        "xml_combined_owl.xml.Cl_GrossPrice",
+        "xml_combined_owl.xml.Cl_InvoiceDetailReification",
+        "xml_combined_owl.xml.Cl_Invoice",
+        "xml_combined_owl.xml.Cl_Image",
+        "xml_combined_owl.xml.Cl_SaleInfo",
+        "xml_combined_owl.xml.Cl_StockStatus",
+        "xml_combined_owl.xml.Cl_InvoiceParty",
+        "owl.Nothing",
+        "xml_combined_owl.xml.Cl_Address",
+        "xml_combined_owl.xml.Cl_BuyerAddressAssignment",
+        "xml_combined_owl.xml.Cl_InvoiceAmount",
+        "xml_combined_owl.xml.Cl_InvoiceAssignment",
+        "xml_combined_owl.xml.Cl_Seller",
+        "xml_combined_owl.xml.Cl_ProductCategory",
+        "xml_combined_owl.xml.Cl_ContactInfo",
+        "xml_combined_owl.xml.Cl_OrganizationInvoiceRole",
+        "xml_combined_owl.xml.Cl_InvoiceParticipation"
+      ],
+      "inconsistent_classes_count": 19,
+      "error": null,
+      "error_type": null
+    },
+    "aggregate": {
+      "all_validators_passed": false,
+      "total_execution_time_seconds": 2.042,
+      "validation_breakdown": {
+        "syntax_valid": true,
+        "oops_passed": false,
+        "oops_pitfall_count": 4,
+        "hermit_consistent": false,
+        "pellet_consistent": false
+      },
+      "timing_breakdown_seconds": {
+        "syntax": 0.161,
+        "oops": 0.132,
+        "hermit": 1.094,
+        "pellet": 0.655,
+        "total": 2.042
+      }
+    }
+  },
+  "files_saved": [],
+  "end_time": "2026-04-05T06:27:18.915732",
+  "iteration_count": 0
+}

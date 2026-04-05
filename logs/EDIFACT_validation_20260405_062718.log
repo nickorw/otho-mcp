@@ -1,0 +1,170 @@
+2026-04-05 06:33:53 | INFO     | ============================================================
+2026-04-05 06:33:53 | INFO     | Validation Logger Initialized for EDIFACT
+2026-04-05 06:33:53 | INFO     | Log files: EDIFACT_validation_20260405_062718.log
+2026-04-05 06:33:53 | INFO     | Timestamp: 20260405_062718
+2026-04-05 06:33:53 | INFO     | ============================================================
+2026-04-05 06:33:53 | INFO     | 
+Starting final validation for EDIFACT
+2026-04-05 06:33:53 | DEBUG    | Ontology size: 51507 characters
+2026-04-05 06:33:53 | INFO     | 
+============================================================
+2026-04-05 06:33:53 | INFO     | PILLAR 1: SYNTAX VALIDATION (RDFLib)
+2026-04-05 06:33:53 | INFO     | ============================================================
+2026-04-05 06:33:53 | INFO     | ✓ Syntax validation PASSED (0.038s)
+2026-04-05 06:33:53 | DEBUG    | No syntax errors detected in RDF/Turtle parsing
+2026-04-05 06:33:53 | INFO     | 
+============================================================
+2026-04-05 06:33:53 | INFO     | PILLAR 2: PITFALL DETECTION (OOPS)
+2026-04-05 06:33:53 | INFO     | ============================================================
+2026-04-05 06:33:53 | WARNING  | ⚠ Pitfall check: Found 5 pitfall(s) (0.654s)
+2026-04-05 06:33:53 | WARNING  | Pitfall codes detected: P05, P12, P13, P20, P22
+2026-04-05 06:33:53 | WARNING  | 
+Detailed Pitfall Information:
+2026-04-05 06:33:53 | WARNING  | ------------------------------------------------------------
+2026-04-05 06:33:53 | WARNING  | 
+Pitfall #1: P05
+2026-04-05 06:33:53 | WARNING  |   Name: Defining wrong inverse relationships
+2026-04-05 06:33:53 | WARNING  |   Importance: Critical
+2026-04-05 06:33:53 | WARNING  |   Description: Two relationships are defined as inverse relations when they are not necessarily inverse.	
+2026-04-05 06:33:53 | WARNING  |   Affected Elements: None specified
+2026-04-05 06:33:53 | WARNING  | 
+Pitfall #2: P12
+2026-04-05 06:33:53 | WARNING  |   Name: Equivalent properties not explicitly declared
+2026-04-05 06:33:53 | WARNING  |   Importance: Important
+2026-04-05 06:33:53 | WARNING  |   Description: The ontology lacks information about equivalent properties (owl:equivalentProperty) in the cases of duplicated relationships and/or attributes.	
+2026-04-05 06:33:53 | WARNING  |   Affected Elements: None specified
+2026-04-05 06:33:53 | WARNING  | 
+Pitfall #3: P13
+2026-04-05 06:33:53 | WARNING  |   Name: Inverse relationships not explicitly declared
+2026-04-05 06:33:53 | WARNING  |   Importance: Minor
+2026-04-05 06:33:53 | WARNING  |   Description: This pitfall appears when any relationship (except for those that are defined as symmetric properties using owl:SymmetricProperty) does not have an inverse relationship (owl:inverseOf) defined within the ontology.	
+2026-04-05 06:33:53 | WARNING  |   Affected Elements (2 total):
+2026-04-05 06:33:53 | WARNING  |     - http://example.org/fests#involvesInvoice
+2026-04-05 06:33:53 | WARNING  |     - http://example.org/fests#isInvolvedInInvoiceParticipation
+2026-04-05 06:33:53 | WARNING  | 
+Pitfall #4: P20
+2026-04-05 06:33:53 | WARNING  |   Name: Misusing ontology annotations
+2026-04-05 06:33:53 | WARNING  |   Importance: Minor
+2026-04-05 06:33:53 | WARNING  |   Description: The contents of some annotation properties are swapped or misused. This pitfall might affect annotation properties related to natural language information (for example, annotations for naming such as rdfs:label or for providing descriptions such as rdfs:comment). Other types of annotation could also be affected as temporal, versioning information, among others.	
+2026-04-05 06:33:53 | WARNING  |   Affected Elements (31 total):
+2026-04-05 06:33:53 | WARNING  |     - http://example.org/fests#isInformationProvidedBy
+2026-04-05 06:33:53 | WARNING  |     - http://example.org/fests#isInvoiceIdentifierOf
+2026-04-05 06:33:53 | WARNING  |     - http://example.org/fests#isRoleTypeOf
+2026-04-05 06:33:53 | WARNING  |     - http://example.org/fests#isInvoiceAmountRecordOf
+2026-04-05 06:33:53 | WARNING  |     - http://example.org/fests#isInvoiceDetailOf
+2026-04-05 06:33:53 | WARNING  |     - http://example.org/fests#isInvoiceRecipientOf
+2026-04-05 06:33:53 | WARNING  |     - http://example.org/fests#isTotalAmountOf
+2026-04-05 06:33:53 | WARNING  |     - http://example.org/fests#isServiceOfInvoiceLineEntry
+2026-04-05 06:33:53 | WARNING  |     - http://example.org/fests#isDisplayedItemOf
+2026-04-05 06:33:53 | WARNING  |     - http://example.org/fests#isBusinessProcessAssignmentOf
+2026-04-05 06:33:53 | WARNING  |     ... and 21 more elements
+2026-04-05 06:33:53 | WARNING  | 
+Pitfall #5: P22
+2026-04-05 06:33:53 | WARNING  |   Name: Using different naming conventions in the ontology
+2026-04-05 06:33:53 | WARNING  |   Importance: Minor
+2026-04-05 06:33:53 | WARNING  |   Description: The ontology elements are not named following the same convention (for example CamelCase or use of delimiters as "-" or "_") . Some notions about naming conventions are provided in [2].	
+2026-04-05 06:33:53 | WARNING  |   Affected Elements (2 total):
+2026-04-05 06:33:53 | WARNING  |     - http://example.org/fests#Cl_OrganizationIdentifier
+2026-04-05 06:33:53 | WARNING  |     - http://example.org/fests#isPriceOfInvoiceLine
+2026-04-05 06:33:53 | INFO     | 
+============================================================
+2026-04-05 06:33:53 | INFO     | PILLAR 3: REASONING CONSISTENCY
+2026-04-05 06:33:53 | INFO     | ============================================================
+2026-04-05 06:33:53 | DEBUG    | Checking logical consistency with OWL 2 DL reasoners (Hermit & Pellet)
+2026-04-05 06:33:53 | INFO     | 
+  → Hermit Reasoner
+2026-04-05 06:33:53 | INFO     |   --------------------------------------------------------
+2026-04-05 06:33:53 | ERROR    |   ✗ FAILED - Inconsistencies detected (0.687s)
+2026-04-05 06:33:53 | ERROR    | 
+  Error Details:
+2026-04-05 06:33:53 | ERROR    |     Java error message is:
+2026-04-05 06:33:53 | ERROR    |     Exception in thread "main" java.lang.IllegalArgumentException: Error: In OWL 2 DL, owl:topDataProperty is only allowed to occur in the super property position of SubDataPropertyOf axioms, but the ontology contains an axiom DataPropertyDomain(owl:topDataProperty owl:Thing) that violates this condition.
+2026-04-05 06:33:53 | ERROR    |     	at org.semanticweb.HermiT.structural.OWLNormalization$AxiomVisitor.checkTopDataPropertyUse(Unknown Source)
+2026-04-05 06:33:53 | ERROR    |     	at org.semanticweb.HermiT.structural.OWLNormalization$AxiomVisitor.visit(Unknown Source)
+2026-04-05 06:33:53 | ERROR    |     	at uk.ac.manchester.cs.owl.owlapi.OWLDataPropertyDomainAxiomImpl.accept(OWLDataPropertyDomainAxiomImpl.java:95)
+2026-04-05 06:33:53 | ERROR    |     	at org.semanticweb.HermiT.structural.OWLNormalization.processAxioms(Unknown Source)
+2026-04-05 06:33:53 | ERROR    |     	at org.semanticweb.HermiT.structural.OWLNormalization.processOntology(Unknown Source)
+2026-04-05 06:33:53 | ERROR    |     	at org.semanticweb.HermiT.structural.OWLClausification.preprocessAndClausify(Unknown Source)
+2026-04-05 06:33:53 | ERROR    |     	at org.semanticweb.HermiT.Reasoner.loadOntology(Reasoner.java:117)
+2026-04-05 06:33:53 | ERROR    |     	at org.semanticweb.HermiT.Reasoner.<init>(Reasoner.java:108)
+2026-04-05 06:33:53 | ERROR    |     	at org.semanticweb.HermiT.Reasoner.<init>(Reasoner.java:86)
+2026-04-05 06:33:53 | ERROR    |     	at org.semanticweb.HermiT.cli.CommandLine.main(CommandLine.java:830)
+2026-04-05 06:33:53 | ERROR    |     
+2026-04-05 06:33:53 | INFO     | 
+  → Pellet Reasoner
+2026-04-05 06:33:53 | INFO     |   --------------------------------------------------------
+2026-04-05 06:33:53 | ERROR    |   ✗ FAILED - Inconsistencies detected (0.531s)
+2026-04-05 06:33:53 | ERROR    | 
+  Error Details:
+2026-04-05 06:33:53 | ERROR    |     Java error message is: Apr 05, 2026 6:33:53 AM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature
+2026-04-05 06:33:53 | ERROR    |     WARNING: Unsupported axiom: Ignoring triple with unknown term from OWL namespace: owl:imports @rdf:type owl:OntologyProperty
+2026-04-05 06:33:53 | ERROR    |     Apr 05, 2026 6:33:53 AM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature
+2026-04-05 06:33:53 | ERROR    |     WARNING: Unsupported axiom: Ignoring triple with unknown term from OWL namespace: owl:priorVersion @rdf:type owl:OntologyProperty
+2026-04-05 06:33:53 | ERROR    |     Apr 05, 2026 6:33:53 AM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature
+2026-04-05 06:33:53 | ERROR    |     WARNING: Unsupported axiom: Ignoring triple with unknown term from OWL namespace: owl:versionIRI @rdf:type owl:OntologyProperty
+2026-04-05 06:33:53 | ERROR    |     Apr 05, 2026 6:33:53 AM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature
+2026-04-05 06:33:53 | ERROR    |     WARNING: Unsupported axiom: Ignoring triple with unknown term from OWL namespace: owl:incompatibleWith @rdf:type owl:OntologyProperty
+2026-04-05 06:33:53 | ERROR    |     Apr 05, 2026 6:33:53 AM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature
+2026-04-05 06:33:53 | ERROR    |     WARNING: Unsupported axiom: Ignoring triple with unknown term from OWL namespace: owl:backwardCompatibleWith @rdf:type owl:OntologyProperty
+2026-04-05 06:33:53 | ERROR    |     Apr 05, 2026 6:33:53 AM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature
+2026-04-05 06:33:53 | ERROR    |     WARNING: Unsupported axiom: Ignoring range axiom for AnnotationProperty http://www.w3.org/2002/07/owl#priorVersion
+2026-04-05 06:33:53 | ERROR    |     Apr 05, 2026 6:33:53 AM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature
+2026-04-05 06:33:53 | ERROR    |     WARNING: Unsupported axiom: Ignoring domain axiom for AnnotationProperty http://www.w3.org/2002/07/owl#priorVersion
+2026-04-05 06:33:53 | ERROR    |     Apr 05, 2026 6:33:53 AM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature
+2026-04-05 06:33:53 | ERROR    |     WARNING: Unsupported axiom: Ignoring triple with unknown property from OWL namespace: http://www.w3.org/2002/07/owl @owl:versionIRI http://www.w3.org/2002/07/owl
+2026-04-05 06:33:53 | ERROR    |     Apr 05, 2026 6:33:53 AM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature
+2026-04-05 06:33:53 | ERROR    |     WARNING: Unsupported axiom: Ignoring range axiom for AnnotationProperty http://www.w3.org/2002/07/owl#versionInfo
+2026-04-05 06:33:53 | ERROR    |     Apr 05, 2026 6:33:53 AM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature
+2026-04-05 06:33:53 | ERROR    |     WARNING: Unsupported axiom: Ignoring domain axiom for AnnotationProperty http://www.w3.org/2002/07/owl#versionInfo
+2026-04-05 06:33:53 | ERROR    |     Apr 05, 2026 6:33:53 AM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature
+2026-04-05 06:33:53 | ERROR    |     WARNING: Unsupported axiom: Ignoring domain axiom for AnnotationProperty http://www.w3.org/2000/01/rdf-schema#isDefinedBy
+2026-04-05 06:33:53 | ERROR    |     Apr 05, 2026 6:33:53 AM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature
+2026-04-05 06:33:53 | ERROR    |     WARNING: Unsupported axiom: Ignoring range axiom for AnnotationProperty http://www.w3.org/2000/01/rdf-schema#isDefinedBy
+2026-04-05 06:33:53 | ERROR    |     Apr 05, 2026 6:33:53 AM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature
+2026-04-05 06:33:53 | ERROR    |     WARNING: Unsupported axiom: Ignoring range axiom for AnnotationProperty http://www.w3.org/2000/01/rdf-schema#comment
+2026-04-05 06:33:53 | ERROR    |     Apr 05, 2026 6:33:53 AM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature
+2026-04-05 06:33:53 | ERROR    |     WARNING: Unsupported axiom: Ignoring domain axiom for AnnotationProperty http://www.w3.org/2000/01/rdf-schema#comment
+2026-04-05 06:33:53 | ERROR    |     Apr 05, 2026 6:33:53 AM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature
+2026-04-05 06:33:53 | ERROR    |     WARNING: Unsupported axiom: Ignoring domain axiom for AnnotationProperty http://www.w3.org/2000/01/rdf-schema#seeAlso
+2026-04-05 06:33:53 | ERROR    |     Apr 05, 2026 6:33:53 AM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature
+2026-04-05 06:33:53 | ERROR    |     WARNING: Unsupported axiom: Ignoring range axiom for AnnotationProperty http://www.w3.org/2000/01/rdf-schema#seeAlso
+2026-04-05 06:33:53 | ERROR    |     Apr 05, 2026 6:33:53 AM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature
+2026-04-05 06:33:53 | ERROR    |     WARNING: Unsupported axiom: Ignoring range axiom for AnnotationProperty http://www.w3.org/2002/07/owl#backwardCompatibleWith
+2026-04-05 06:33:53 | ERROR    |     Apr 05, 2026 6:33:53 AM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature
+2026-04-05 06:33:53 | ERROR    |     WARNING: Unsupported axiom: Ignoring domain axiom for AnnotationProperty http://www.w3.org/2002/07/owl#backwardCompatibleWith
+2026-04-05 06:33:53 | ERROR    |     Apr 05, 2026 6:33:53 AM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature
+2026-04-05 06:33:53 | ERROR    |     WARNING: Unsupported axiom: Ignoring range axiom for AnnotationProperty http://www.w3.org/2002/07/owl#deprecated
+2026-04-05 06:33:53 | ERROR    |     Apr 05, 2026 6:33:53 AM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature
+2026-04-05 06:33:53 | ERROR    |     WARNING: Unsupported axiom: Ignoring domain axiom for AnnotationProperty http://www.w3.org/2002/07/owl#deprecated
+2026-04-05 06:33:53 | ERROR    |     Apr 05, 2026 6:33:53 AM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature
+2026-04-05 06:33:53 | ERROR    |     WARNING: Unsupported axiom: Ignoring range axiom for AnnotationProperty http://www.w3.org/2000/01/rdf-schema#label
+2026-04-05 06:33:53 | ERROR    |     Apr 05, 2026 6:33:53 AM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature
+2026-04-05 06:33:53 | ERROR    |     WARNING: Unsupported axiom: Ignoring domain axiom for AnnotationProperty http://www.w3.org/2000/01/rdf-schema#label
+2026-04-05 06:33:53 | ERROR    |     Apr 05, 2026 6:33:53 AM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature
+2026-04-05 06:33:53 | ERROR    |     WARNING: Unsupported axiom: Ignoring triple with unknown property from OWL namespace: http://example.org/fests @owl:versionIRI http://example.org/fests/1.0
+2026-04-05 06:33:53 | ERROR    |     Apr 05, 2026 6:33:53 AM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature
+2026-04-05 06:33:53 | ERROR    |     WARNING: Unsupported axiom: Ignoring range axiom for AnnotationProperty http://www.w3.org/2002/07/owl#incompatibleWith
+2026-04-05 06:33:53 | ERROR    |     Apr 05, 2026 6:33:53 AM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature
+2026-04-05 06:33:53 | ERROR    |     WARNING: Unsupported axiom: Ignoring domain axiom for AnnotationProperty http://www.w3.org/2002/07/owl#incompatibleWith
+2026-04-05 06:33:53 | ERROR    |     ERROR: Ontology is inconsistent, run "pellet explain" to get the reason
+2026-04-05 06:33:53 | ERROR    |     
+2026-04-05 06:33:53 | INFO     | 
+============================================================
+2026-04-05 06:33:53 | INFO     | VALIDATION SUMMARY
+2026-04-05 06:33:53 | INFO     | ============================================================
+2026-04-05 06:33:53 | INFO     | 1. Syntax (RDFLib):    ✓ PASSED (0.038s)
+2026-04-05 06:33:53 | INFO     | 2. OOPS Pitfalls:      ⚠ FAILED (5 pitfalls) (0.654s)
+2026-04-05 06:33:53 | WARNING  |    └─ 5 modeling pitfall(s) detected - check details above
+2026-04-05 06:33:53 | INFO     | 3. Hermit Reasoner:    ✗ FAILED (0.687s)
+2026-04-05 06:33:53 | ERROR    |    └─ Logical inconsistencies found - check inconsistent classes above
+2026-04-05 06:33:53 | INFO     | 4. Pellet Reasoner:    ✗ FAILED (0.531s)
+2026-04-05 06:33:53 | ERROR    |    └─ Logical inconsistencies found - check inconsistent classes above
+2026-04-05 06:33:53 | INFO     | ------------------------------------------------------------
+2026-04-05 06:33:53 | ERROR    | Overall Result:        ❌ VALIDATION FAILED
+2026-04-05 06:33:53 | ERROR    |                        Issues found: 5 pitfalls, Hermit inconsistencies, Pellet inconsistencies
+2026-04-05 06:33:53 | INFO     | ------------------------------------------------------------
+2026-04-05 06:33:53 | INFO     | Total Validation Time: 1.910s
+2026-04-05 06:33:53 | INFO     | Agent Iterations:      0
+2026-04-05 06:33:53 | INFO     | ============================================================
+2026-04-05 06:33:53 | INFO     | 
+✓ Validation JSON log saved: logs/EDIFACT_validation_20260405_062718.json

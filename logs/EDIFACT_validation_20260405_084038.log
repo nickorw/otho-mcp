@@ -1,0 +1,90 @@
+2026-04-05 08:46:05 | INFO     | ============================================================
+2026-04-05 08:46:05 | INFO     | Validation Logger Initialized for EDIFACT
+2026-04-05 08:46:05 | INFO     | Log files: EDIFACT_validation_20260405_084038.log
+2026-04-05 08:46:05 | INFO     | Timestamp: 20260405_084038
+2026-04-05 08:46:05 | INFO     | ============================================================
+2026-04-05 08:46:05 | INFO     | 
+Starting final validation for EDIFACT
+2026-04-05 08:46:05 | DEBUG    | Ontology size: 28549 characters
+2026-04-05 08:46:05 | INFO     | 
+============================================================
+2026-04-05 08:46:05 | INFO     | PILLAR 1: SYNTAX VALIDATION (RDFLib)
+2026-04-05 08:46:05 | INFO     | ============================================================
+2026-04-05 08:46:05 | INFO     | ✓ Syntax validation PASSED (0.025s)
+2026-04-05 08:46:05 | DEBUG    | No syntax errors detected in RDF/Turtle parsing
+2026-04-05 08:46:05 | INFO     | 
+============================================================
+2026-04-05 08:46:05 | INFO     | PILLAR 2: PITFALL DETECTION (OOPS)
+2026-04-05 08:46:05 | INFO     | ============================================================
+2026-04-05 08:46:05 | ERROR    | ✗ Pitfall check FAILED - OOPS error occurred (0.264s)
+2026-04-05 08:46:05 | ERROR    |   OOPS error: OOPS could not analyse the ontology (wrong_execution response)
+2026-04-05 08:46:05 | INFO     | 
+============================================================
+2026-04-05 08:46:05 | INFO     | PILLAR 3: REASONING CONSISTENCY
+2026-04-05 08:46:05 | INFO     | ============================================================
+2026-04-05 08:46:05 | DEBUG    | Checking logical consistency with OWL 2 DL reasoners (Hermit & Pellet)
+2026-04-05 08:46:05 | INFO     | 
+  → Hermit Reasoner
+2026-04-05 08:46:05 | INFO     |   --------------------------------------------------------
+2026-04-05 08:46:05 | ERROR    |   ✗ FAILED - Inconsistencies detected (0.740s)
+2026-04-05 08:46:05 | ERROR    | 
+  Error Details:
+2026-04-05 08:46:05 | ERROR    |     Java error message is:
+2026-04-05 08:46:05 | ERROR    |     Exception in thread "main" org.semanticweb.HermiT.datatypes.UnsupportedDatatypeException: HermiT supports all and only the datatypes of the OWL 2 datatype map, see 
+2026-04-05 08:46:05 | ERROR    |     http://www.w3.org/TR/owl2-syntax/#Datatype_Maps. 
+2026-04-05 08:46:05 | ERROR    |     The datatype 'http://www.w3.org/2001/XMLSchema#date' is not part of the OWL 2 datatype map and 
+2026-04-05 08:46:05 | ERROR    |     no custom datatype definition is given; 
+2026-04-05 08:46:05 | ERROR    |     therefore, HermiT cannot handle this datatype.
+2026-04-05 08:46:05 | ERROR    |     	at org.semanticweb.HermiT.datatypes.DatatypeRegistry.getDatatypeHandlerFor(Unknown Source)
+2026-04-05 08:46:05 | ERROR    |     	at org.semanticweb.HermiT.datatypes.DatatypeRegistry.getDatatypeHandlerFor(Unknown Source)
+2026-04-05 08:46:05 | ERROR    |     	at org.semanticweb.HermiT.datatypes.DatatypeRegistry.validateDatatypeRestriction(Unknown Source)
+2026-04-05 08:46:05 | ERROR    |     	at org.semanticweb.HermiT.structural.OWLClausification$DataRangeConverter.visit(Unknown Source)
+2026-04-05 08:46:05 | ERROR    |     	at uk.ac.manchester.cs.owl.owlapi.OWLDatatypeImpl.accept(OWLDatatypeImpl.java:343)
+2026-04-05 08:46:05 | ERROR    |     	at org.semanticweb.HermiT.structural.OWLClausification$DataRangeConverter.convertDataRange(Unknown Source)
+2026-04-05 08:46:05 | ERROR    |     	at org.semanticweb.HermiT.structural.OWLClausification$NormalizedAxiomClausifier.visit(Unknown Source)
+2026-04-05 08:46:05 | ERROR    |     	at uk.ac.manchester.cs.owl.owlapi.OWLDataAllValuesFromImpl.accept(OWLDataAllValuesFromImpl.java:99)
+2026-04-05 08:46:05 | ERROR    |     	at org.semanticweb.HermiT.structural.OWLClausification.clausify(Unknown Source)
+2026-04-05 08:46:05 | ERROR    |     	at org.semanticweb.HermiT.structural.OWLClausification.preprocessAndClausify(Unknown Source)
+2026-04-05 08:46:05 | ERROR    |     	at org.semanticweb.HermiT.Reasoner.loadOntology(Reasoner.java:117)
+2026-04-05 08:46:05 | ERROR    |     	at org.semanticweb.HermiT.Reasoner.<init>(Reasoner.java:108)
+2026-04-05 08:46:05 | ERROR    |     	at org.semanticweb.HermiT.Reasoner.<init>(Reasoner.java:86)
+2026-04-05 08:46:05 | ERROR    |     	at org.semanticweb.HermiT.cli.CommandLine.main(CommandLine.java:830)
+2026-04-05 08:46:05 | ERROR    |     
+2026-04-05 08:46:05 | INFO     | 
+  → Pellet Reasoner
+2026-04-05 08:46:05 | INFO     |   --------------------------------------------------------
+2026-04-05 08:46:05 | ERROR    |   ✗ FAILED - Inconsistencies detected (0.530s)
+2026-04-05 08:46:05 | ERROR    | 
+  Error Details:
+2026-04-05 08:46:05 | ERROR    |     Java error message is:
+2026-04-05 08:46:05 | ERROR    |     Apr 05, 2026 8:46:05 AM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature
+2026-04-05 08:46:05 | ERROR    |     WARNING: Unsupported axiom: Ignoring equivalentClass axiom because the object is not a class http://example.org/fests#Cl_Invoice owl:equivalentClass bnode(-23118591:19d5d76e000:-7ff5)
+2026-04-05 08:46:05 | ERROR    |     Apr 05, 2026 8:46:05 AM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature
+2026-04-05 08:46:05 | ERROR    |     WARNING: Unsupported axiom: Ignoring equivalentClass axiom because the object is not a class http://example.org/fests#Cl_Invoice owl:equivalentClass bnode(-23118591:19d5d76e000:-7ff3)
+2026-04-05 08:46:05 | ERROR    |     Apr 05, 2026 8:46:05 AM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature
+2026-04-05 08:46:05 | ERROR    |     WARNING: Unsupported axiom: Ignoring equivalentClass axiom because the object is not a class http://example.org/fests#Cl_Invoice owl:equivalentClass bnode(-23118591:19d5d76e000:-7ff4)
+2026-04-05 08:46:05 | ERROR    |     Apr 05, 2026 8:46:05 AM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature
+2026-04-05 08:46:05 | ERROR    |     WARNING: Unsupported axiom: Ignoring triple with unknown property from OWL namespace: http://example.org/fests @owl:versionIRI http://example.org/fests/1.0
+2026-04-05 08:46:05 | ERROR    |     Unknown concept type: bnode(-23118591:19d5d76e000:-7fb9)
+2026-04-05 08:46:05 | ERROR    |     Use -v for detail.
+2026-04-05 08:46:05 | ERROR    |     
+2026-04-05 08:46:05 | INFO     | 
+============================================================
+2026-04-05 08:46:05 | INFO     | VALIDATION SUMMARY
+2026-04-05 08:46:05 | INFO     | ============================================================
+2026-04-05 08:46:05 | INFO     | 1. Syntax (RDFLib):    ✓ PASSED (0.025s)
+2026-04-05 08:46:05 | INFO     | 2. OOPS Pitfalls:      ⚠ FAILED (0 pitfalls) (0.264s)
+2026-04-05 08:46:05 | WARNING  |    └─ 0 modeling pitfall(s) detected - check details above
+2026-04-05 08:46:05 | INFO     | 3. Hermit Reasoner:    ✗ FAILED (0.740s)
+2026-04-05 08:46:05 | ERROR    |    └─ Logical inconsistencies found - check inconsistent classes above
+2026-04-05 08:46:05 | INFO     | 4. Pellet Reasoner:    ✗ FAILED (0.530s)
+2026-04-05 08:46:05 | ERROR    |    └─ Logical inconsistencies found - check inconsistent classes above
+2026-04-05 08:46:05 | INFO     | ------------------------------------------------------------
+2026-04-05 08:46:05 | ERROR    | Overall Result:        ❌ VALIDATION FAILED
+2026-04-05 08:46:05 | ERROR    |                        Issues found: 0 pitfalls, Hermit inconsistencies, Pellet inconsistencies
+2026-04-05 08:46:05 | INFO     | ------------------------------------------------------------
+2026-04-05 08:46:05 | INFO     | Total Validation Time: 1.559s
+2026-04-05 08:46:05 | INFO     | Agent Iterations:      0
+2026-04-05 08:46:05 | INFO     | ============================================================
+2026-04-05 08:46:05 | INFO     | 
+✓ Validation JSON log saved: logs/EDIFACT_validation_20260405_084038.json

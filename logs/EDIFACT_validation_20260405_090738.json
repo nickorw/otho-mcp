@@ -1,0 +1,125 @@
+{
+  "story_id": "EDIFACT",
+  "timestamp": "20260405_090738",
+  "start_time": "2026-04-05T09:14:38.120465",
+  "ontology_size_chars": 53783,
+  "validation_results": {
+    "syntax": {
+      "valid": true,
+      "execution_time_seconds": 0.047,
+      "error": null,
+      "error_type": null
+    },
+    "oops": {
+      "has_pitfalls": true,
+      "pitfall_count": 4,
+      "execution_time_seconds": 0.311,
+      "pitfalls": [
+        {
+          "code": "P05",
+          "name": "Defining wrong inverse relationships",
+          "description": "Two relationships are defined as inverse relations when they are not necessarily inverse.\t",
+          "importance": "Critical",
+          "num_affected": 2,
+          "affected_elements": []
+        },
+        {
+          "code": "P13",
+          "name": "Inverse relationships not explicitly declared",
+          "description": "This pitfall appears when any relationship (except for those that are defined as symmetric properties using owl:SymmetricProperty) does not have an inverse relationship (owl:inverseOf) defined within the ontology.\t",
+          "importance": "Minor",
+          "num_affected": 2,
+          "affected_elements": [
+            "http://example.org/fests#involvesInvoice",
+            "http://example.org/fests#assignsNumber"
+          ]
+        },
+        {
+          "code": "P20",
+          "name": "Misusing ontology annotations",
+          "description": "The contents of some annotation properties are swapped or misused. This pitfall might affect annotation properties related to natural language information (for example, annotations for naming such as rdfs:label or for providing descriptions such as rdfs:comment). Other types of annotation could also be affected as temporal, versioning information, among others.\t",
+          "importance": "Minor",
+          "num_affected": 12,
+          "affected_elements": [
+            "http://example.org/fests#isCheckedByValidityCheck",
+            "http://example.org/fests#isDisplayedInOrgInfoDisplay_Org",
+            "http://example.org/fests#isRequiredForValidityBy",
+            "http://example.org/fests#isTotalAmountOfInvoice",
+            "http://example.org/fests#isNetPriceComponentOf",
+            "http://example.org/fests#isCurrencyOfInvoiceDetails",
+            "http://example.org/fests#isInvoiceOfAmountReification",
+            "http://example.org/fests#isSellerRoleInParticipation",
+            "http://example.org/fests#isBuyerRoleInParticipation",
+            "http://example.org/fests#isDisplayedInOrgInfoDisplay",
+            "http://example.org/fests#isAssessedByFileFormatValidityAssessment_II",
+            "http://example.org/fests#isAssessedByFileFormatValidityAssessment"
+          ]
+        },
+        {
+          "code": "P22",
+          "name": "Using different naming conventions in the ontology",
+          "description": "The ontology elements are not named following the same convention (for example CamelCase or use of delimiters as \"-\" or \"_\") . Some notions about naming conventions are provided in [2].\t",
+          "importance": "Minor",
+          "num_affected": 1,
+          "affected_elements": [
+            "http://example.org/fests#Cl_ProvidedInformation",
+            "http://example.org/fests#isTypeOfOrganization"
+          ]
+        }
+      ],
+      "pitfall_codes": [
+        "P05",
+        "P13",
+        "P20",
+        "P22"
+      ],
+      "pitfall_names": [
+        "Defining wrong inverse relationships",
+        "Inverse relationships not explicitly declared",
+        "Misusing ontology annotations",
+        "Using different naming conventions in the ontology"
+      ],
+      "oops_error": false,
+      "error": null
+    },
+    "hermit": {
+      "reasoner": "Hermit",
+      "is_consistent": false,
+      "execution_time_seconds": 0.675,
+      "inconsistent_classes": [],
+      "inconsistent_classes_count": 0,
+      "error": "Java error message is:\nException in thread \"main\" org.semanticweb.HermiT.datatypes.UnsupportedDatatypeException: HermiT supports all and only the datatypes of the OWL 2 datatype map, see \nhttp://www.w3.org/TR/owl2-syntax/#Datatype_Maps. \nThe datatype 'http://www.w3.org/2001/XMLSchema#date' is not part of the OWL 2 datatype map and \nno custom datatype definition is given; \ntherefore, HermiT cannot handle this datatype.\n\tat org.semanticweb.HermiT.datatypes.DatatypeRegistry.getDatatypeHandlerFor(Unknown Source)\n\tat org.semanticweb.HermiT.datatypes.DatatypeRegistry.getDatatypeHandlerFor(Unknown Source)\n\tat org.semanticweb.HermiT.datatypes.DatatypeRegistry.validateDatatypeRestriction(Unknown Source)\n\tat org.semanticweb.HermiT.structural.OWLClausification$DataRangeConverter.visit(Unknown Source)\n\tat uk.ac.manchester.cs.owl.owlapi.OWLDatatypeImpl.accept(OWLDatatypeImpl.java:343)\n\tat org.semanticweb.HermiT.structural.OWLClausification$DataRangeConverter.convertDataRange(Unknown Source)\n\tat org.semanticweb.HermiT.structural.OWLClausification$NormalizedAxiomClausifier.visit(Unknown Source)\n\tat uk.ac.manchester.cs.owl.owlapi.OWLDataAllValuesFromImpl.accept(OWLDataAllValuesFromImpl.java:99)\n\tat org.semanticweb.HermiT.structural.OWLClausification.clausify(Unknown Source)\n\tat org.semanticweb.HermiT.structural.OWLClausification.preprocessAndClausify(Unknown Source)\n\tat org.semanticweb.HermiT.Reasoner.loadOntology(Reasoner.java:117)\n\tat org.semanticweb.HermiT.Reasoner.<init>(Reasoner.java:108)\n\tat org.semanticweb.HermiT.Reasoner.<init>(Reasoner.java:86)\n\tat org.semanticweb.HermiT.cli.CommandLine.main(CommandLine.java:830)\n",
+      "error_type": "reasoning_error"
+    },
+    "pellet": {
+      "reasoner": "Pellet",
+      "is_consistent": false,
+      "execution_time_seconds": 0.501,
+      "inconsistent_classes": [],
+      "inconsistent_classes_count": 0,
+      "error": "Java error message is: ERROR: Ontology is inconsistent, run \"pellet explain\" to get the reason\n",
+      "error_type": "reasoning_error"
+    },
+    "aggregate": {
+      "all_validators_passed": false,
+      "total_execution_time_seconds": 1.534,
+      "validation_breakdown": {
+        "syntax_valid": true,
+        "oops_passed": false,
+        "oops_pitfall_count": 4,
+        "hermit_consistent": false,
+        "pellet_consistent": false
+      },
+      "timing_breakdown_seconds": {
+        "syntax": 0.047,
+        "oops": 0.311,
+        "hermit": 0.675,
+        "pellet": 0.501,
+        "total": 1.534
+      }
+    }
+  },
+  "files_saved": [],
+  "end_time": "2026-04-05T09:14:38.122039",
+  "iteration_count": 0
+}

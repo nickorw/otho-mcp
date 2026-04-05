@@ -1,0 +1,189 @@
+{
+  "generator_analysis": {
+    "total_runs": 20,
+    "overall": {
+      "success_rate": 100.0,
+      "total_successes": 20,
+      "total_failures": 0,
+      "avg_duration_seconds": 332.13794614076613,
+      "median_duration_seconds": 333.85565888881683,
+      "max_duration_seconds": 389.1360809803009,
+      "min_duration_seconds": 281.1376528739929
+    },
+    "by_story": {
+      "EDIFACT": {
+        "run_count": 20,
+        "success_rate": 100.0,
+        "successes": 20,
+        "failures": 0,
+        "avg_duration_seconds": 332.13794614076613
+      }
+    },
+    "pitfalls_analysis": {
+      "most_common": [],
+      "total_pitfall_occurrences": 0,
+      "unique_pitfalls": 0
+    },
+    "tool_usage": {
+      "total_calls": 0,
+      "by_tool": {}
+    },
+    "temporal_analysis": {
+      "first_10_success_rate": 100.0,
+      "last_10_success_rate": 100.0,
+      "improvement": 0.0
+    }
+  },
+  "validation_analysis": {
+    "total_validations": 20,
+    "overall": {
+      "all_passed_rate": 0.0,
+      "all_passed_count": 0,
+      "syntax_valid_count": 20,
+      "syntax_valid_rate": 100.0,
+      "oops_passed_count": 20,
+      "oops_passed_rate": 100.0,
+      "oops_error_count": 0,
+      "oops_error_rate": 0.0,
+      "oops_no_critical_important_count": 20,
+      "oops_no_critical_important_rate": 100.0,
+      "oops_only_minor_count": 0,
+      "oops_only_minor_rate": 0.0
+    },
+    "by_story": {
+      "EDIFACT": {
+        "validation_count": 20,
+        "all_passed_rate": 0.0,
+        "hermit_consistent_rate": 0.0,
+        "pellet_consistent_rate": 0.0,
+        "oops_passed_rate": 100.0
+      }
+    },
+    "reasoner_analysis": {
+      "hermit_consistent_count": 0,
+      "hermit_consistent_rate": 0.0,
+      "pellet_consistent_count": 0,
+      "pellet_consistent_rate": 0.0,
+      "both_consistent_count": 0,
+      "both_consistent_rate": 0.0,
+      "hermit_error_count": 18,
+      "pellet_error_count": 12,
+      "hermit_error_messages": {
+        "Java error message is:": 18
+      },
+      "pellet_error_messages": {
+        "Java error message is: ERROR: Ontology is inconsistent, run \"pellet explain\" to get the reason\n": 5,
+        "Java error message is: Mar 01, 2026 9:54:19 PM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature\nWARNING: Unsupported axiom: Ignoring equivalentClass axiom because the obj": 1,
+        "Java error message is: Mar 01, 2026 9:59:06 PM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature\nWARNING: Unsupported axiom: Property http://example.org/fests#lineTotal is": 1,
+        "Java error message is: Mar 01, 2026 10:09:19 PM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature\nWARNING: Unsupported axiom: Ignoring equivalentClass axiom because the ob": 1,
+        "Java error message is: Mar 01, 2026 10:32:04 PM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature\nWARNING: Unsupported axiom: Ignoring triple with unknown property from OW": 1,
+        "Java error message is: Mar 01, 2026 10:43:00 PM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature\nWARNING: Unsupported axiom: Ignoring equivalentClass axiom because the ob": 1,
+        "Java error message is: Mar 01, 2026 11:14:10 PM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature\nWARNING: Unsupported axiom: Ignoring triple with unknown property from OW": 1,
+        "Java error message is: Mar 01, 2026 11:35:02 PM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature\nWARNING: Unsupported axiom: Ignoring equivalentClass axiom because the ob": 1
+      },
+      "hermit_inconsistent_classes": [
+        "xml_combined_owl.xml.Cl_Document",
+        "xml_combined_owl.xml.Cl_ItemImage",
+        "xml_combined_owl.xml.Cl_ItemSoldQuantity",
+        "xml_combined_owl.xml.Cl_InvoiceDetail",
+        "xml_combined_owl.xml.Cl_Information",
+        "xml_combined_owl.xml.Cl_InvoiceAmount",
+        "xml_combined_owl.xml.Cl_ItemSKU",
+        "xml_combined_owl.xml.Cl_ItemCategory",
+        "xml_combined_owl.xml.Cl_Invoice",
+        "xml_combined_owl.xml.Cl_ItemPrice",
+        "xml_combined_owl.xml.Cl_ItemName",
+        "xml_combined_owl.xml.Cl_ItemDescription",
+        "owl.Nothing",
+        "xml_combined_owl.xml.Cl_ItemSoldDate",
+        "xml_combined_owl.xml.Cl_InvoiceOrganizationRole",
+        "xml_combined_owl.xml.Cl_InvoiceLine"
+      ],
+      "pellet_inconsistent_classes": [
+        "xml_combined_owl.xml.Cl_ItemImage",
+        "xml_combined_owl.xml.Cl_ItemSoldQuantity",
+        "xml_combined_owl.xml.Cl_GovernmentAgency",
+        "xml_combined_owl.xml.Cl_ItemSKU",
+        "xml_combined_owl.xml.Cl_ItemCategory",
+        "xml_combined_owl.xml.Cl_InvoiceAssignment",
+        "xml_combined_owl.xml.Cl_Role",
+        "xml_combined_owl.xml.Cl_OrganizationInvolvementDisplay",
+        "xml_combined_owl.xml.Cl_OrganizationInvoiceRole",
+        "xml_combined_owl.xml.Cl_Assignment",
+        "xml_combined_owl.xml.Cl_DisplayAttribute",
+        "xml_combined_owl.xml.Cl_InvoiceAmountAssignment",
+        "xml_combined_owl.xml.Cl_InvoiceNumber",
+        "xml_combined_owl.xml.Cl_Customer",
+        "xml_combined_owl.xml.Cl_BuyerAddressAssignment",
+        "xml_combined_owl.xml.Cl_InvoiceDetail",
+        "xml_combined_owl.xml.Cl_Amount",
+        "xml_combined_owl.xml.Cl_InvoiceLine",
+        "xml_combined_owl.xml.Cl_BusinessDocument",
+        "xml_combined_owl.xml.Cl_Person",
+        "xml_combined_owl.xml.Cl_ItemPrice",
+        "xml_combined_owl.xml.Cl_InvoiceItem",
+        "xml_combined_owl.xml.Cl_ItemName",
+        "xml_combined_owl.xml.Cl_ItemDescription",
+        "xml_combined_owl.xml.Cl_RequiredInformation",
+        "xml_combined_owl.xml.Cl_InformationProvision",
+        "xml_combined_owl.xml.Cl_Buyer",
+        "xml_combined_owl.xml.Cl_ItemSoldDate",
+        "xml_combined_owl.xml.Cl_InvoiceReification",
+        "xml_combined_owl.xml.Cl_ProductOrService",
+        "xml_combined_owl.xml.Cl_NonProfit",
+        "xml_combined_owl.xml.Cl_OrganizationInvoiceParticipation",
+        "xml_combined_owl.xml.Cl_Product",
+        "xml_combined_owl.xml.Cl_InvoiceRole",
+        "xml_combined_owl.xml.Cl_InvoicePartyRole",
+        "xml_combined_owl.xml.Cl_InvoiceTransaction",
+        "xml_combined_owl.xml.Cl_Company",
+        "xml_combined_owl.xml.Cl_InvolvedOrganization",
+        "xml_combined_owl.xml.Cl_ItemSoldInInvoice",
+        "xml_combined_owl.xml.Cl_OrganizationInformationDisplayEvent",
+        "xml_combined_owl.xml.Cl_InformationDisplay",
+        "xml_combined_owl.xml.Cl_OrganizationInformationDisplay",
+        "xml_combined_owl.xml.Cl_InvoiceAmountStatement",
+        "owl.Nothing",
+        "xml_combined_owl.xml.Cl_Quantity",
+        "xml_combined_owl.xml.Cl_ProcessAssignment",
+        "xml_combined_owl.xml.Cl_EDIFACTMessageInvoiceListing",
+        "xml_combined_owl.xml.Cl_Address",
+        "xml_combined_owl.xml.Cl_InvoiceOrganizationRole",
+        "xml_combined_owl.xml.Cl_Document",
+        "xml_combined_owl.xml.Cl_InvoiceAmountReification",
+        "xml_combined_owl.xml.Cl_InvoiceParticipation",
+        "xml_combined_owl.xml.Cl_SellerRole",
+        "xml_combined_owl.xml.Cl_InvoiceAmount",
+        "xml_combined_owl.xml.Cl_NetPriceCalculation",
+        "xml_combined_owl.xml.Cl_Organization",
+        "xml_combined_owl.xml.Cl_Price",
+        "xml_combined_owl.xml.Cl_InvoiceListing",
+        "xml_combined_owl.xml.Cl_EDIFACTMessage",
+        "xml_combined_owl.xml.Cl_Currency",
+        "xml_combined_owl.xml.Cl_BusinessProcess",
+        "xml_combined_owl.xml.Cl_ProvidedInformation",
+        "xml_combined_owl.xml.Cl_Invoice",
+        "xml_combined_owl.xml.Cl_Entity",
+        "xml_combined_owl.xml.Cl_Supplier",
+        "xml_combined_owl.xml.Cl_InvoiceSupplierRole",
+        "xml_combined_owl.xml.Cl_EDIFACTInvoiceListing",
+        "xml_combined_owl.xml.Cl_Service",
+        "xml_combined_owl.xml.Cl_InvoiceBuyerRole",
+        "xml_combined_owl.xml.Cl_Information"
+      ]
+    },
+    "oops_analysis": {
+      "most_common_pitfalls": [],
+      "total_pitfall_occurrences": 0,
+      "unique_pitfalls": 0
+    },
+    "timing_analysis": {
+      "hermit_avg_seconds": 0.39285000000000003,
+      "hermit_median_seconds": 0.36250000000000004,
+      "pellet_avg_seconds": 0.6244500000000001,
+      "pellet_median_seconds": 0.6114999999999999,
+      "total_avg_seconds": 1.0173,
+      "total_median_seconds": 0.974
+    }
+  }
+}

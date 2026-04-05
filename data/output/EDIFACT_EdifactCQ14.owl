@@ -1,4 +1,5 @@
 @prefix : <http://example.org/ontology#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
@@ -7,111 +8,95 @@
 # Classes
 #################################################################
 
-:Cl_BusinessProcess a owl:Class ;
-    rdfs:label "Business Process" ;
-    rdfs:comment "A business process, such as procurement, sales, etc." .
+:Cl_BusinessProcess rdf:type owl:Class .
+:Cl_Invoice rdf:type owl:Class .
+:Cl_Document rdf:type owl:Class .
+:Cl_Assignment rdf:type owl:Class . # Reification class for assignment of invoice to business process
 
-:Cl_Invoice a owl:Class ;
-    rdfs:label "Invoice" ;
-    rdfs:comment "An invoice document issued or received in a business process." .
-
-:Cl_Document a owl:Class ;
-    rdfs:label "Document" ;
-    rdfs:comment "A general class for documents." .
-
-:Cl_Invoice rdfs:subClassOf :Cl_Document .
-
-:Cl_InvoiceAssignment a owl:Class ;
-    rdfs:label "Invoice Assignment" ;
-    rdfs:comment "A reification class representing the assignment of an invoice to a business process." .
-
-#################################################################
 # Hierarchies
-#################################################################
+:Cl_Invoice rdfs:subClassOf :Cl_Document .
+:Cl_Assignment rdfs:subClassOf owl:Thing .
 
-:Cl_FinancialDocument a owl:Class ;
-    rdfs:label "Financial Document" ;
-    rdfs:comment "Superclass for all financial documents." .
-
-:Cl_Invoice rdfs:subClassOf :Cl_FinancialDocument .
+# Disjointness
+:Cl_Invoice owl:disjointWith :Cl_BusinessProcess .
+:Cl_BusinessProcess owl:disjointWith :Cl_Assignment .
+:Cl_Invoice owl:disjointWith :Cl_Assignment .
+:Cl_Document owl:disjointWith :Cl_BusinessProcess .
 
 #################################################################
 # Properties
 #################################################################
 
-:assignedInvoice a owl:ObjectProperty ;
-    rdfs:label "assigned invoice" ;
-    rdfs:domain :Cl_InvoiceAssignment ;
-    rdfs:range :Cl_Invoice ;
-    rdfs:comment "The invoice being assigned in the context of the assignment." .
+# Object Properties
+:hasBusinessProcess rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_Assignment ;
+    rdfs:range :Cl_BusinessProcess .
 
-:assignedBusinessProcess a owl:ObjectProperty ;
-    rdfs:label "assigned business process" ;
-    rdfs:domain :Cl_InvoiceAssignment ;
+:hasInvoice rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_Assignment ;
+    rdfs:range :Cl_Invoice .
+
+:assignsInvoiceToBusinessProcess rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_Assignment ;
     rdfs:range :Cl_BusinessProcess ;
-    rdfs:comment "The business process to which the invoice is assigned." .
+    rdfs:subPropertyOf :hasBusinessProcess .
 
-:assignmentDate a owl:DatatypeProperty ;
-    rdfs:label "assignment date" ;
-    rdfs:domain :Cl_InvoiceAssignment ;
-    rdfs:range xsd:date ;
-    rdfs:comment "The date when the invoice was assigned to the business process." .
-
-#################################################################
-# Additional Relations and Restrictions
-#################################################################
-
-:Cl_InvoiceAssignment rdfs:subClassOf [
-    a owl:Restriction ;
-    owl:onProperty :assignedInvoice ;
-    owl:allValuesFrom :Cl_Invoice
-] .
-
-:Cl_InvoiceAssignment rdfs:subClassOf [
-    a owl:Restriction ;
-    owl:onProperty :assignedBusinessProcess ;
-    owl:allValuesFrom :Cl_BusinessProcess
-] .
-
-:Cl_InvoiceAssignment rdfs:subClassOf [
-    a owl:Restriction ;
-    owl:onProperty :assignmentDate ;
-    owl:allValuesFrom xsd:date
-] .
-
-#################################################################
-# Disjointness
-#################################################################
-
-:Cl_BusinessProcess owl:disjointWith :Cl_Invoice .
-:Cl_BusinessProcess owl:disjointWith :Cl_Document .
-:Cl_Invoice owl:disjointWith :Cl_InvoiceAssignment .
-:Cl_BusinessProcess owl:disjointWith :Cl_InvoiceAssignment .
-
-#################################################################
 # Inverse Properties
-#################################################################
-
-:hasInvoiceAssignment a owl:ObjectProperty ;
-    rdfs:domain :Cl_Invoice ;
-    rdfs:range :Cl_InvoiceAssignment ;
-    owl:inverseOf :assignedInvoice ;
-    rdfs:comment "Links an Invoice to its InvoiceAssignment(s)." .
-
-:hasBusinessProcessAssignment a owl:ObjectProperty ;
+:isAssignedToBusinessProcess rdf:type owl:ObjectProperty ;
+    owl:inverseOf :assignsInvoiceToBusinessProcess ;
     rdfs:domain :Cl_BusinessProcess ;
-    rdfs:range :Cl_InvoiceAssignment ;
-    owl:inverseOf :assignedBusinessProcess ;
-    rdfs:comment "Links a BusinessProcess to its InvoiceAssignment(s)." .
+    rdfs:range :Cl_Assignment .
+
+:isAssignmentOfInvoice rdf:type owl:ObjectProperty ;
+    owl:inverseOf :hasInvoice ;
+    rdfs:domain :Cl_Invoice ;
+    rdfs:range :Cl_Assignment .
+
+# Data Properties (for assignment metadata)
+:assignmentDate rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Cl_Assignment ;
+    rdfs:range xsd:dateTime .
+
+:assignmentStatus rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Cl_Assignment ;
+    rdfs:range xsd:string .
 
 #################################################################
-# Equivalent Class (for possible restriction)
+# Restrictions and Axioms
 #################################################################
 
-:Cl_InvoiceAssignment owl:equivalentClass [
-    a owl:Class ;
+# Every Cl_Assignment must be about one Cl_Invoice and one Cl_BusinessProcess
+:Cl_Assignment owl:equivalentClass [
+    rdf:type owl:Class ;
     owl:intersectionOf (
-        [ a owl:Restriction ; owl:onProperty :assignedInvoice ; owl:someValuesFrom :Cl_Invoice ]
-        [ a owl:Restriction ; owl:onProperty :assignedBusinessProcess ; owl:someValuesFrom :Cl_BusinessProcess ]
+        [ rdf:type owl:Restriction ;
+          owl:onProperty :hasInvoice ;
+          owl:allValuesFrom :Cl_Invoice ]
+        [ rdf:type owl:Restriction ;
+          owl:onProperty :hasBusinessProcess ;
+          owl:allValuesFrom :Cl_BusinessProcess ]
     )
 ] .
+
+# General class axiom: Every invoice can be assigned to at least one business process via assignment
+:Cl_Invoice rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :isAssignmentOfInvoice ;
+    owl:someValuesFrom :Cl_Assignment
+] .
+
+# General class axiom: Every business process can have at least one invoice assigned via assignment
+:Cl_BusinessProcess rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :isAssignedToBusinessProcess ;
+    owl:someValuesFrom :Cl_Assignment
+] .
+
+#################################################################
+# Example Query Pattern (not part of ontology, just a note)
+#################################################################
+# To answer: "To which business process can the invoice be assigned?"
+# Query for ?bp where
+#   ?assignment a :Cl_Assignment ;
+#       :hasInvoice <invoiceX> ;
+#       :hasBusinessProcess ?bp .

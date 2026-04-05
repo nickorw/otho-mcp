@@ -1,96 +1,91 @@
-@prefix : <http://example.org/invoice#> .
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix : <http://example.org/ontology#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-# Classes
+### Classes
 
-:Cl_Invoice rdf:type owl:Class .
-:Cl_Item rdf:type owl:Class .
-:Cl_InvoiceLine rdf:type owl:Class .
-:Cl_InvoiceLine rdf:type owl:Class ; rdfs:subClassOf :Cl_InvoiceComponent .
-:Cl_InvoiceComponent rdf:type owl:Class .
-:Cl_Product rdf:type owl:Class ; rdfs:subClassOf :Cl_Item .
-:Cl_Service rdf:type owl:Class ; rdfs:subClassOf :Cl_Item .
+:Cl_Document a owl:Class .
+:Cl_Invoice a owl:Class ; rdfs:subClassOf :Cl_Document .
+:Cl_Item a owl:Class .
+:Cl_Product a owl:Class ; rdfs:subClassOf :Cl_Item .
+:Cl_Service a owl:Class ; rdfs:subClassOf :Cl_Item .
+:Cl_InvoiceLine a owl:Class .   # Pivot class for reification of items on invoice
 
-# Disjointness
+### Class Hierarchies
+
+:Cl_Item rdfs:subClassOf owl:Thing .
+:Cl_InvoiceLine rdfs:subClassOf owl:Thing .
+
+### Disjointness
+
 :Cl_Product owl:disjointWith :Cl_Service .
 
-# Properties
+### Properties
 
-:hasInvoiceLine rdf:type owl:ObjectProperty ;
+# Object Properties
+
+:hasInvoiceLine a owl:ObjectProperty ;
     rdfs:domain :Cl_Invoice ;
     rdfs:range :Cl_InvoiceLine .
 
-:refersToItem rdf:type owl:ObjectProperty ;
+:refersToItem a owl:ObjectProperty ;
     rdfs:domain :Cl_InvoiceLine ;
     rdfs:range :Cl_Item .
 
-:quantity rdf:type owl:DatatypeProperty ;
+:invoiceLineOf a owl:ObjectProperty ;
+    rdfs:domain :Cl_InvoiceLine ;
+    rdfs:range :Cl_Invoice ;
+    owl:inverseOf :hasInvoiceLine .
+
+# Data Properties
+
+:quantity a owl:DatatypeProperty ;
     rdfs:domain :Cl_InvoiceLine ;
     rdfs:range xsd:decimal .
 
-:unitPrice rdf:type owl:DatatypeProperty ;
+:unitPrice a owl:DatatypeProperty ;
     rdfs:domain :Cl_InvoiceLine ;
     rdfs:range xsd:decimal .
 
-:totalLineAmount rdf:type owl:DatatypeProperty ;
+:lineTotal a owl:DatatypeProperty ;
     rdfs:domain :Cl_InvoiceLine ;
     rdfs:range xsd:decimal .
 
-:invoiceNumber rdf:type owl:DatatypeProperty ;
-    rdfs:domain :Cl_Invoice ;
-    rdfs:range xsd:string .
-
-:issueDate rdf:type owl:DatatypeProperty ;
-    rdfs:domain :Cl_Invoice ;
-    rdfs:range xsd:date .
-
-:itemName rdf:type owl:DatatypeProperty ;
+:itemDescription a owl:DatatypeProperty ;
     rdfs:domain :Cl_Item ;
     rdfs:range xsd:string .
 
-# Hierarchy for Invoice Components (if more types in future)
-:Cl_InvoiceLine rdfs:subClassOf :Cl_InvoiceComponent .
+:itemCode a owl:DatatypeProperty ;
+    rdfs:domain :Cl_Item ;
+    rdfs:range xsd:string .
 
-# Equivalent Class for Items Sold in Invoice (for CQ)
-# An item is sold in an invoice if there is an invoice line in that invoice that refers to the item.
+# Restrictions
 
-:Cl_ItemSoldInInvoice rdf:type owl:Class ;
-    owl:equivalentClass [
-        rdf:type owl:Class ;
-        owl:intersectionOf (
-            :Cl_Item
-            [
-                rdf:type owl:Restriction ;
-                owl:onProperty [
-                    owl:inverseOf :refersToItem
-                ] ;
-                owl:someValuesFrom [
-                    rdf:type owl:Restriction ;
-                    owl:onProperty [
-                        owl:inverseOf :hasInvoiceLine
-                    ] ;
-                    owl:someValuesFrom :Cl_Invoice
-                ]
-            ]
-        )
-    ] .
+:Cl_InvoiceLine owl:equivalentClass [
+    rdf:type owl:Class ;
+    owl:intersectionOf (
+        [ rdf:type owl:Restriction ; owl:onProperty :refersToItem ; owl:someValuesFrom :Cl_Item ]
+        [ rdf:type owl:Restriction ; owl:onProperty :quantity ; owl:someValuesFrom xsd:decimal ]
+        [ rdf:type owl:Restriction ; owl:onProperty :unitPrice ; owl:someValuesFrom xsd:decimal ]
+    )
+] .
 
-# General Class Axiom: Every invoice has at least one invoice line
+# General Class Axiom: Invoice has some InvoiceLine
+
 :Cl_Invoice rdfs:subClassOf [
     rdf:type owl:Restriction ;
     owl:onProperty :hasInvoiceLine ;
     owl:someValuesFrom :Cl_InvoiceLine
 ] .
 
-# General Class Axiom: Every invoice line refers to exactly one item
-:Cl_InvoiceLine rdfs:subClassOf [
-    rdf:type owl:Restriction ;
-    owl:onProperty :refersToItem ;
-    owl:allValuesFrom :Cl_Item
-] .
+### Answering the Competency Question
 
-# Disjoint Union (if needed for items)
-:Cl_Item owl:disjointUnionOf ( :Cl_Product :Cl_Service ) .
+# To answer "What items are sold in the invoice?", 
+# traverse from :Cl_Invoice via :hasInvoiceLine to :Cl_InvoiceLine,
+# then via :refersToItem to :Cl_Item (either :Cl_Product or :Cl_Service).
+
+# Example (not requested, but for clarity):
+# ?invoice :hasInvoiceLine ?line .
+# ?line :refersToItem ?item .
+# ?item a :Cl_Item .

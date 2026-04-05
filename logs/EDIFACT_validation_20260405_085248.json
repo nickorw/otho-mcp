@@ -1,0 +1,63 @@
+{
+  "story_id": "EDIFACT",
+  "timestamp": "20260405_085248",
+  "start_time": "2026-04-05T09:00:30.690362",
+  "ontology_size_chars": 57922,
+  "validation_results": {
+    "syntax": {
+      "valid": true,
+      "execution_time_seconds": 0.044,
+      "error": null,
+      "error_type": null
+    },
+    "oops": {
+      "has_pitfalls": false,
+      "pitfall_count": 0,
+      "execution_time_seconds": 0.141,
+      "pitfalls": [],
+      "pitfall_codes": [],
+      "pitfall_names": [],
+      "oops_error": false,
+      "error": null
+    },
+    "hermit": {
+      "reasoner": "Hermit",
+      "is_consistent": true,
+      "execution_time_seconds": 0.753,
+      "inconsistent_classes": [],
+      "inconsistent_classes_count": 0,
+      "error": null,
+      "error_type": null
+    },
+    "pellet": {
+      "reasoner": "Pellet",
+      "is_consistent": true,
+      "execution_time_seconds": 0.486,
+      "inconsistent_classes": [],
+      "inconsistent_classes_count": 0,
+      "error": null,
+      "error_type": null
+    },
+    "aggregate": {
+      "all_validators_passed": true,
+      "total_execution_time_seconds": 1.425,
+      "validation_breakdown": {
+        "syntax_valid": true,
+        "oops_passed": true,
+        "oops_pitfall_count": 0,
+        "hermit_consistent": true,
+        "pellet_consistent": true
+      },
+      "timing_breakdown_seconds": {
+        "syntax": 0.044,
+        "oops": 0.141,
+        "hermit": 0.753,
+        "pellet": 0.486,
+        "total": 1.425
+      }
+    }
+  },
+  "files_saved": [],
+  "end_time": "2026-04-05T09:00:30.691061",
+  "iteration_count": 0
+}

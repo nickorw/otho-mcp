@@ -1,0 +1,111 @@
+{
+  "syntax": {
+    "valid": true,
+    "execution_time_seconds": 0.05510520935058594,
+    "error": null
+  },
+  "oops": {
+    "has_pitfalls": true,
+    "pitfall_count": 2,
+    "execution_time_seconds": 0.33331990242004395,
+    "pitfalls": [
+      {
+        "code": "P04",
+        "name": "Creating unconnected ontology elements",
+        "description": "Ontology elements (classes, object properties and datatype properties) are created isolated, with no relation to the rest of the ontology.\t",
+        "importance": "Minor",
+        "num_affected": 1,
+        "affected_elements": [
+          "http://example.org/fests#Entity"
+        ]
+      },
+      {
+        "code": "P20",
+        "name": "Misusing ontology annotations",
+        "description": "The contents of some annotation properties are swapped or misused. This pitfall might affect annotation properties related to natural language information (for example, annotations for naming such as rdfs:label or for providing descriptions such as rdfs:comment). Other types of annotation could also be affected as temporal, versioning information, among others.\t",
+        "importance": "Minor",
+        "num_affected": 54,
+        "affected_elements": [
+          "http://example.org/fests#isInvoiceItemReferenceOf",
+          "http://example.org/fests#isValidFileFormatSpecificationOf",
+          "http://example.org/fests#isSaleOfItemSaleDisplay",
+          "http://example.org/fests#isInvoiceNetPriceOf",
+          "http://example.org/fests#isOrganizationDescriptionOf",
+          "http://example.org/fests#isFieldValidationOf",
+          "http://example.org/fests#isFieldFormatSpecificationOf",
+          "http://example.org/fests#isDataTypeOfFieldDefinition",
+          "http://example.org/fests#isInvoiceOfRole",
+          "http://example.org/fests#hasDisplayInfoForInvolvement",
+          "http://example.org/fests#isInvoiceIdentifierOf",
+          "http://example.org/fests#isInvoiceItemNetPriceOf",
+          "http://example.org/fests#isInvoiceDetailOf",
+          "http://example.org/fests#isAttributeDisplayedBy",
+          "http://example.org/fests#isDisplayInfoOf",
+          "http://example.org/fests#isInvoiceParticipantOf",
+          "http://example.org/fests#hasLineItemBelonging",
+          "http://example.org/fests#isOrganizationIdentifierOf",
+          "http://example.org/fests#isInvoiceNetPriceCurrencyOf",
+          "http://example.org/fests#isInvoiceReferenceOf",
+          "http://example.org/fests#isOrganizationTypeOf",
+          "http://example.org/fests#isBuyerOfParticipant",
+          "http://example.org/fests#buyerIsAssignedIn",
+          "http://example.org/fests#addressIsAssignedIn",
+          "http://example.org/fests#isPresenceRequirementOf",
+          "http://example.org/fests#isCurrencyUsedBy",
+          "http://example.org/fests#isItemOfItemSaleDisplay",
+          "http://example.org/fests#isInvoiceLineOf",
+          "http://example.org/fests#isContactInformationOf",
+          "http://example.org/fests#isGrossPriceOf",
+          "http://example.org/fests#isFieldConstraintOf",
+          "http://example.org/fests#isRequiredFieldOf",
+          "http://example.org/fests#isInvolvedInInvoice",
+          "http://example.org/fests#isRoleTypeOfRole",
+          "http://example.org/fests#isNetPriceOf",
+          "http://example.org/fests#isRequirementSpecifiedBy",
+          "http://example.org/fests#isOrganizationOfRole",
+          "http://example.org/fests#isInvoiceItemOf",
+          "http://example.org/fests#isDisplayFormatOfItemSaleDisplay",
+          "http://example.org/fests#isBusinessProcessOfAssignment",
+          "http://example.org/fests#isFormatSpecificationOf",
+          "http://example.org/fests#isSellerOfParticipant",
+          "http://example.org/fests#isParticipantOrganizationOf",
+          "http://example.org/fests#isPresenceRequirementOfFieldDefinition",
+          "http://example.org/fests#isLineItemOf",
+          "http://example.org/fests#isValidationRequiredBy",
+          "http://example.org/fests#isInvoiceAmountOf",
+          "http://example.org/fests#isOrganizationRoleOf",
+          "http://example.org/fests#isInvoiceInvolvementOf",
+          "http://example.org/fests#isDataTypeOf",
+          "http://example.org/fests#isRequiredFieldOfFileFormat",
+          "http://example.org/fests#isInvoiceOfAssignment",
+          "http://example.org/fests#isItemReferredBy",
+          "http://example.org/fests#isFieldDefinitionOf"
+        ]
+      }
+    ],
+    "pitfall_codes": [
+      "P04",
+      "P20"
+    ],
+    "oops_error": false,
+    "error": null
+  },
+  "hermit": {
+    "is_consistent": false,
+    "inconsistent_classes": [],
+    "execution_time_seconds": 0.667,
+    "error": "Java error message is:\nException in thread \"main\" org.semanticweb.HermiT.datatypes.UnsupportedDatatypeException: HermiT supports all and only the datatypes of the OWL 2 datatype map, see \nhttp://www.w3.org/TR/owl2-syntax/#Datatype_Maps. \nThe datatype 'http://www.w3.org/2001/XMLSchema#date' is not part of the OWL 2 datatype map and \nno custom datatype definition is given; \ntherefore, HermiT cannot handle this datatype.\n\tat org.semanticweb.HermiT.datatypes.DatatypeRegistry.getDatatypeHandlerFor(Unknown Source)\n\tat org.semanticweb.HermiT.datatypes.DatatypeRegistry.getDatatypeHandlerFor(Unknown Source)\n\tat org.semanticweb.HermiT.datatypes.DatatypeRegistry.validateDatatypeRestriction(Unknown Source)\n\tat org.semanticweb.HermiT.structural.OWLClausification$DataRangeConverter.visit(Unknown Source)\n\tat uk.ac.manchester.cs.owl.owlapi.OWLDatatypeImpl.accept(OWLDatatypeImpl.java:343)\n\tat org.semanticweb.HermiT.structural.OWLClausification$DataRangeConverter.convertDataRange(Unknown Source)\n\tat org.semanticweb.HermiT.structural.OWLClausification$NormalizedAxiomClausifier.visit(Unknown Source)\n\tat uk.ac.manchester.cs.owl.owlapi.OWLDataAllValuesFromImpl.accept(OWLDataAllValuesFromImpl.java:99)\n\tat org.semanticweb.HermiT.structural.OWLClausification.clausify(Unknown Source)\n\tat org.semanticweb.HermiT.structural.OWLClausification.preprocessAndClausify(Unknown Source)\n\tat org.semanticweb.HermiT.Reasoner.loadOntology(Reasoner.java:117)\n\tat org.semanticweb.HermiT.Reasoner.<init>(Reasoner.java:108)\n\tat org.semanticweb.HermiT.Reasoner.<init>(Reasoner.java:86)\n\tat org.semanticweb.HermiT.cli.CommandLine.main(CommandLine.java:830)\n",
+    "reasoner": "Hermit"
+  },
+  "pellet": {
+    "is_consistent": false,
+    "inconsistent_classes": [],
+    "execution_time_seconds": 0.49,
+    "error": "Java error message is: ERROR: Ontology is inconsistent, run \"pellet explain\" to get the reason\n",
+    "reasoner": "Pellet"
+  },
+  "aggregate": {
+    "all_validators_passed": false,
+    "total_execution_time_seconds": 1.157
+  }
+}

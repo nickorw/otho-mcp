@@ -1,73 +1,110 @@
 @prefix : <http://example.org/invoice#> .
-@prefix owl: <http://www.w3.org/2002/07/owl#> .
-@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
 ### Classes
-:Cl_Entity a owl:Class .
 
-:Cl_Organization a owl:Class ;
-    rdfs:subClassOf :Cl_Entity .
-
-:Cl_Invoice a owl:Class ;
-    rdfs:subClassOf :Cl_Entity .
-
-:Cl_InvoiceRole a owl:Class ;
-    rdfs:subClassOf :Cl_Entity .
-
-:Cl_OrganizationInvoiceParticipation a owl:Class ;
-    rdfs:subClassOf :Cl_Entity .
+:Cl_Organization rdf:type owl:Class .
+:Cl_Invoice rdf:type owl:Class .
+:Cl_InvoiceRole rdf:type owl:Class .
+:Cl_OrganizationInvoiceRole rdf:type owl:Class .
 
 ### Hierarchies
-# Cl_Entity is the root class for all entities.
-# Cl_Organization and Cl_Invoice are subclasses.
-# Cl_OrganizationInvoiceParticipation is a reification class (pivot class) for modeling the role of an organization in an invoice.
+
+:Cl_OrganizationInvoiceRole rdfs:subClassOf owl:Thing .
+:Cl_Organization rdfs:subClassOf owl:Thing .
+:Cl_Invoice rdfs:subClassOf owl:Thing .
+:Cl_InvoiceRole rdfs:subClassOf owl:Thing .
+
+### Equivalent Classes, Disjointness, and General Class Axioms
+
+# OrganizationInvoiceRole is a reification class for linking Organization, Invoice, and Role
+:Cl_OrganizationInvoiceRole owl:equivalentClass [
+    rdf:type owl:Class ;
+    owl:intersectionOf (
+        [ rdf:type owl:Restriction ;
+          owl:onProperty :hasOrganization ;
+          owl:someValuesFrom :Cl_Organization
+        ]
+        [ rdf:type owl:Restriction ;
+          owl:onProperty :hasInvoice ;
+          owl:someValuesFrom :Cl_Invoice
+        ]
+        [ rdf:type owl:Restriction ;
+          owl:onProperty :hasInvoiceRole ;
+          owl:someValuesFrom :Cl_InvoiceRole
+        ]
+    )
+] .
 
 ### Properties
 
 # Object Properties
-:hasParticipant a owl:ObjectProperty ;
-    rdfs:domain :Cl_Invoice ;
-    rdfs:range :Cl_OrganizationInvoiceParticipation .
-
-:involvesOrganization a owl:ObjectProperty ;
-    rdfs:domain :Cl_OrganizationInvoiceParticipation ;
+:hasOrganization rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_OrganizationInvoiceRole ;
     rdfs:range :Cl_Organization .
 
-:involvesInvoice a owl:ObjectProperty ;
-    rdfs:domain :Cl_OrganizationInvoiceParticipation ;
+:hasInvoice rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_OrganizationInvoiceRole ;
     rdfs:range :Cl_Invoice .
 
-:hasRole a owl:ObjectProperty ;
-    rdfs:domain :Cl_OrganizationInvoiceParticipation ;
+:hasInvoiceRole rdf:type owl:ObjectProperty ;
+    rdfs:domain :Cl_OrganizationInvoiceRole ;
     rdfs:range :Cl_InvoiceRole .
 
-# Data Properties
-:organizationName a owl:DatatypeProperty ;
+# Inverse Properties
+:isOrganizationInInvoiceRole rdf:type owl:ObjectProperty ;
+    owl:inverseOf :hasOrganization ;
+    rdfs:domain :Cl_Organization ;
+    rdfs:range :Cl_OrganizationInvoiceRole .
+
+:isInvoiceInOrganizationRole rdf:type owl:ObjectProperty ;
+    owl:inverseOf :hasInvoice ;
+    rdfs:domain :Cl_Invoice ;
+    rdfs:range :Cl_OrganizationInvoiceRole .
+
+:isRoleOfOrganizationInInvoice rdf:type owl:ObjectProperty ;
+    owl:inverseOf :hasInvoiceRole ;
+    rdfs:domain :Cl_InvoiceRole ;
+    rdfs:range :Cl_OrganizationInvoiceRole .
+
+### Data Properties
+
+:organizationName rdf:type owl:DatatypeProperty ;
     rdfs:domain :Cl_Organization ;
     rdfs:range xsd:string .
 
-:invoiceNumber a owl:DatatypeProperty ;
+:invoiceNumber rdf:type owl:DatatypeProperty ;
     rdfs:domain :Cl_Invoice ;
     rdfs:range xsd:string .
 
-:roleName a owl:DatatypeProperty ;
+:roleName rdf:type owl:DatatypeProperty ;
     rdfs:domain :Cl_InvoiceRole ;
     rdfs:range xsd:string .
 
-### Example Restriction (Only Cl_OrganizationInvoiceParticipation uses hasRole)
-:Cl_OrganizationInvoiceParticipation owl:equivalentClass [
-    a owl:Restriction ;
-    owl:onProperty :hasRole ;
-    owl:allValuesFrom :Cl_InvoiceRole
-] .
+### Example Individuals (for illustration)
+
+:OrgS rdf:type :Cl_Organization ;
+    :organizationName "Organization S" .
+
+:Invoice123 rdf:type :Cl_Invoice ;
+    :invoiceNumber "INV-123" .
+
+:SupplierRole rdf:type :Cl_InvoiceRole ;
+    :roleName "Supplier" .
+
+:OrgS_Supplier_Invoice123 rdf:type :Cl_OrganizationInvoiceRole ;
+    :hasOrganization :OrgS ;
+    :hasInvoice :Invoice123 ;
+    :hasInvoiceRole :SupplierRole .
 
 ### Disjointness
+
 :Cl_Organization owl:disjointWith :Cl_Invoice .
 :Cl_Organization owl:disjointWith :Cl_InvoiceRole .
 :Cl_Invoice owl:disjointWith :Cl_InvoiceRole .
-
-### Explanation
-# To answer "What role does organization S play in the invoice?", 
-# look for the :Cl_OrganizationInvoiceParticipation instance that links the organization and the invoice, and retrieve its :hasRole property.
+:Cl_OrganizationInvoiceRole owl:disjointWith :Cl_Organization .
+:Cl_OrganizationInvoiceRole owl:disjointWith :Cl_Invoice .
+:Cl_OrganizationInvoiceRole owl:disjointWith :Cl_InvoiceRole .

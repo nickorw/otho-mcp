@@ -6,38 +6,45 @@
 
 ### Classes
 
-:Cl_Person a owl:Class .
-:Cl_Stakeholder a owl:Class .
+:Cl_Entity a owl:Class .
+
+:Cl_Person a owl:Class ;
+    rdfs:subClassOf :Cl_Entity .
+
 :Cl_Buyer a owl:Class ;
-    rdfs:subClassOf :Cl_Person, :Cl_Stakeholder .
-:Cl_Seller a owl:Class ;
-    rdfs:subClassOf :Cl_Person, :Cl_Stakeholder .
-:Cl_Address a owl:Class .
-:Cl_BuyerAddressAssignment a owl:Class . # Pivot/reification class for Buyer-Address association
+    rdfs:subClassOf :Cl_Person .
+
+:Cl_Address a owl:Class ;
+    rdfs:subClassOf :Cl_Entity .
+
+:Cl_BuyerAddressAssignment a owl:Class ;
+    rdfs:subClassOf :Cl_Entity .
 
 ### Disjointness
 
-:Cl_Buyer owl:disjointWith :Cl_Seller .
+:Cl_Buyer owl:disjointWith :Cl_Address .
 
-### Properties
+### Object Properties
 
 :hasBuyer a owl:ObjectProperty ;
     rdfs:domain :Cl_BuyerAddressAssignment ;
-    rdfs:range :Cl_Buyer .
+    rdfs:range :Cl_Buyer ;
+    owl:inverseOf :isBuyerOfAssignment .
 
 :hasAddress a owl:ObjectProperty ;
     rdfs:domain :Cl_BuyerAddressAssignment ;
-    rdfs:range :Cl_Address .
+    rdfs:range :Cl_Address ;
+    owl:inverseOf :isAddressOfAssignment .
 
-:buyerAddressAssignment a owl:ObjectProperty ;
+:isBuyerOfAssignment a owl:ObjectProperty ;
     rdfs:domain :Cl_Buyer ;
-    rdfs:range :Cl_BuyerAddressAssignment ;
-    owl:inverseOf :hasBuyer .
+    rdfs:range :Cl_BuyerAddressAssignment .
 
-:assignedToBuyer a owl:ObjectProperty ;
-    rdfs:domain :Cl_BuyerAddressAssignment ;
-    rdfs:range :Cl_Buyer ;
-    owl:inverseOf :buyerAddressAssignment .
+:isAddressOfAssignment a owl:ObjectProperty ;
+    rdfs:domain :Cl_Address ;
+    rdfs:range :Cl_BuyerAddressAssignment .
+
+### Data Properties
 
 :addressLine a owl:DatatypeProperty ;
     rdfs:domain :Cl_Address ;
@@ -57,16 +64,24 @@
 
 ### Restrictions
 
-:Cl_BuyerAddressAssignment owl:equivalentClass [
-    rdf:type owl:Class ;
-    owl:intersectionOf (
-        [ rdf:type owl:Restriction ; owl:onProperty :hasBuyer ; owl:someValuesFrom :Cl_Buyer ]
-        [ rdf:type owl:Restriction ; owl:onProperty :hasAddress ; owl:someValuesFrom :Cl_Address ]
-    )
-] .
+:Cl_BuyerAddressAssignment
+    owl:equivalentClass [
+        a owl:Class ;
+        owl:intersectionOf (
+            [ a owl:Restriction ;
+              owl:onProperty :hasBuyer ;
+              owl:cardinality "1"^^xsd:nonNegativeInteger ;
+              owl:allValuesFrom :Cl_Buyer
+            ]
+            [ a owl:Restriction ;
+              owl:onProperty :hasAddress ;
+              owl:cardinality "1"^^xsd:nonNegativeInteger ;
+              owl:allValuesFrom :Cl_Address
+            ]
+        )
+    ] .
 
-### Comments
+### Notes
 
-# This ontology allows answering the competency question: "What is the address of the buyer?"
-# by linking a Cl_Buyer to a Cl_Address via the Cl_BuyerAddressAssignment pivot class. This supports extensibility
-# for possible additional properties such as address validity, address type, etc.
+# This ontology answers "What is the address of the buyer?" by using the pivot class Cl_BuyerAddressAssignment
+# to associate each Cl_Buyer with a Cl_Address, allowing for extensibility and precise modeling.

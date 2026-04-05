@@ -1,0 +1,89 @@
+{
+  "syntax": {
+    "valid": true,
+    "execution_time_seconds": 0.04342818260192871,
+    "error": null
+  },
+  "oops": {
+    "has_pitfalls": true,
+    "pitfall_count": 3,
+    "execution_time_seconds": 0.1966848373413086,
+    "pitfalls": [
+      {
+        "code": "P04",
+        "name": "Creating unconnected ontology elements",
+        "description": "Ontology elements (classes, object properties and datatype properties) are created isolated, with no relation to the rest of the ontology.\t",
+        "importance": "Minor",
+        "num_affected": 2,
+        "affected_elements": [
+          "http://example.org/fests#Cl_ContactDetail",
+          "http://example.org/fests#Cl_Stakeholder"
+        ]
+      },
+      {
+        "code": "P20",
+        "name": "Misusing ontology annotations",
+        "description": "The contents of some annotation properties are swapped or misused. This pitfall might affect annotation properties related to natural language information (for example, annotations for naming such as rdfs:label or for providing descriptions such as rdfs:comment). Other types of annotation could also be affected as temporal, versioning information, among others.\t",
+        "importance": "Minor",
+        "num_affected": 19,
+        "affected_elements": [
+          "http://example.org/fests#organizationInvolvedInInvoice",
+          "http://example.org/fests#isAddressOfRelation",
+          "http://example.org/fests#elementRequiredByValidity",
+          "http://example.org/fests#isItemOfLine",
+          "http://example.org/fests#isServiceOfLine",
+          "http://example.org/fests#ruleRequiredByValidity",
+          "http://example.org/fests#productOrServiceOfDetail",
+          "http://example.org/fests#isLineOfInvoice",
+          "http://example.org/fests#businessProcessHasAssignment",
+          "http://example.org/fests#isProductOfLine",
+          "http://example.org/fests#isParticipantOfInvoice",
+          "http://example.org/fests#dataTypeOfRequiredElement",
+          "http://example.org/fests#validityRequirementForFormat",
+          "http://example.org/fests#valueConstraintRequiredByValidity",
+          "http://example.org/fests#unitPriceOfDetail",
+          "http://example.org/fests#dataTypeRequiredByValidity",
+          "http://example.org/fests#organizationContactInfoOf",
+          "http://example.org/fests#roleOfOrganizationRole",
+          "http://example.org/fests#isBuyerOfRelation"
+        ]
+      },
+      {
+        "code": "P22",
+        "name": "Using different naming conventions in the ontology",
+        "description": "The ontology elements are not named following the same convention (for example CamelCase or use of delimiters as \"-\" or \"_\") . Some notions about naming conventions are provided in [2].\t",
+        "importance": "Minor",
+        "num_affected": 1,
+        "affected_elements": [
+          "http://example.org/fests#Cl_OrganizationIdentifier",
+          "http://example.org/fests#hasImage"
+        ]
+      }
+    ],
+    "pitfall_codes": [
+      "P04",
+      "P20",
+      "P22"
+    ],
+    "oops_error": false,
+    "error": null
+  },
+  "hermit": {
+    "is_consistent": false,
+    "inconsistent_classes": [],
+    "execution_time_seconds": 1.269,
+    "error": "Java error message is:\nException in thread \"main\" org.semanticweb.HermiT.datatypes.UnsupportedDatatypeException: HermiT supports all and only the datatypes of the OWL 2 datatype map, see \nhttp://www.w3.org/TR/owl2-syntax/#Datatype_Maps. \nThe datatype 'http://www.w3.org/2001/XMLSchema#date' is not part of the OWL 2 datatype map and \nno custom datatype definition is given; \ntherefore, HermiT cannot handle this datatype.\n\tat org.semanticweb.HermiT.datatypes.DatatypeRegistry.getDatatypeHandlerFor(Unknown Source)\n\tat org.semanticweb.HermiT.datatypes.DatatypeRegistry.getDatatypeHandlerFor(Unknown Source)\n\tat org.semanticweb.HermiT.datatypes.DatatypeRegistry.validateDatatypeRestriction(Unknown Source)\n\tat org.semanticweb.HermiT.structural.OWLClausification$DataRangeConverter.visit(Unknown Source)\n\tat uk.ac.manchester.cs.owl.owlapi.OWLDatatypeImpl.accept(OWLDatatypeImpl.java:343)\n\tat org.semanticweb.HermiT.structural.OWLClausification$DataRangeConverter.convertDataRange(Unknown Source)\n\tat org.semanticweb.HermiT.structural.OWLClausification$NormalizedAxiomClausifier.visit(Unknown Source)\n\tat uk.ac.manchester.cs.owl.owlapi.OWLDataAllValuesFromImpl.accept(OWLDataAllValuesFromImpl.java:99)\n\tat org.semanticweb.HermiT.structural.OWLClausification.clausify(Unknown Source)\n\tat org.semanticweb.HermiT.structural.OWLClausification.preprocessAndClausify(Unknown Source)\n\tat org.semanticweb.HermiT.Reasoner.loadOntology(Reasoner.java:117)\n\tat org.semanticweb.HermiT.Reasoner.<init>(Reasoner.java:108)\n\tat org.semanticweb.HermiT.Reasoner.<init>(Reasoner.java:86)\n\tat org.semanticweb.HermiT.cli.CommandLine.main(CommandLine.java:830)\n",
+    "reasoner": "Hermit"
+  },
+  "pellet": {
+    "is_consistent": false,
+    "inconsistent_classes": [],
+    "execution_time_seconds": 0.597,
+    "error": "Java error message is: ERROR: Ontology is inconsistent, run \"pellet explain\" to get the reason\n",
+    "reasoner": "Pellet"
+  },
+  "aggregate": {
+    "all_validators_passed": false,
+    "total_execution_time_seconds": 1.866
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "story_id": "EDIFACT",
+  "timestamp": "20260405_071828",
+  "start_time": "2026-04-05T07:24:25.486482",
+  "ontology_size_chars": 37216,
+  "validation_results": {
+    "syntax": {
+      "valid": true,
+      "execution_time_seconds": 0.038,
+      "error": null,
+      "error_type": null
+    },
+    "oops": {
+      "has_pitfalls": true,
+      "pitfall_count": 0,
+      "execution_time_seconds": 0.086,
+      "pitfalls": [],
+      "pitfall_codes": [],
+      "pitfall_names": [],
+      "oops_error": true,
+      "error": "OOPS could not analyse the ontology (wrong_execution response)"
+    },
+    "hermit": {
+      "reasoner": "Hermit",
+      "is_consistent": false,
+      "execution_time_seconds": 0.664,
+      "inconsistent_classes": [],
+      "inconsistent_classes_count": 0,
+      "error": "",
+      "error_type": null
+    },
+    "pellet": {
+      "reasoner": "Pellet",
+      "is_consistent": false,
+      "execution_time_seconds": 0.494,
+      "inconsistent_classes": [],
+      "inconsistent_classes_count": 0,
+      "error": "Java error message is: ERROR: Ontology is inconsistent, run \"pellet explain\" to get the reason\n",
+      "error_type": "reasoning_error"
+    },
+    "aggregate": {
+      "all_validators_passed": false,
+      "total_execution_time_seconds": 1.282,
+      "validation_breakdown": {
+        "syntax_valid": true,
+        "oops_passed": false,
+        "oops_pitfall_count": 0,
+        "hermit_consistent": false,
+        "pellet_consistent": false
+      },
+      "timing_breakdown_seconds": {
+        "syntax": 0.038,
+        "oops": 0.086,
+        "hermit": 0.664,
+        "pellet": 0.494,
+        "total": 1.282
+      }
+    }
+  },
+  "files_saved": [],
+  "end_time": "2026-04-05T07:24:25.487366",
+  "iteration_count": 0
+}

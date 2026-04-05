@@ -1,0 +1,81 @@
+{
+  "syntax": {
+    "valid": true,
+    "execution_time_seconds": 0.04789280891418457,
+    "error": null
+  },
+  "oops": {
+    "has_pitfalls": true,
+    "pitfall_count": 3,
+    "execution_time_seconds": 0.14169907569885254,
+    "pitfalls": [
+      {
+        "code": "P04",
+        "name": "Creating unconnected ontology elements",
+        "description": "Ontology elements (classes, object properties and datatype properties) are created isolated, with no relation to the rest of the ontology.\t",
+        "importance": "Minor",
+        "num_affected": 1,
+        "affected_elements": [
+          "http://example.org/fests#Cl_Entity"
+        ]
+      },
+      {
+        "code": "P20",
+        "name": "Misusing ontology annotations",
+        "description": "The contents of some annotation properties are swapped or misused. This pitfall might affect annotation properties related to natural language information (for example, annotations for naming such as rdfs:label or for providing descriptions such as rdfs:comment). Other types of annotation could also be affected as temporal, versioning information, among others.\t",
+        "importance": "Minor",
+        "num_affected": 12,
+        "affected_elements": [
+          "http://example.org/fests#isListedInInvoiceListing",
+          "http://example.org/fests#isItemReferredByInvoiceLine",
+          "http://example.org/fests#isRoleOfInvoiceParticipation",
+          "http://example.org/fests#isProductOfInvoiceLine",
+          "http://example.org/fests#isValidatedByFileFormatValidationSituation",
+          "http://example.org/fests#isItemOfInvoiceLine",
+          "http://example.org/fests#isOrganizationOfInvoiceParticipation",
+          "http://example.org/fests#isInvoiceOfInvoiceAmountReification",
+          "http://example.org/fests#isServiceOfInvoiceLine",
+          "http://example.org/fests#isAssignmentOfBusinessProcess",
+          "http://example.org/fests#isServiceReferredByInvoiceLine",
+          "http://example.org/fests#isProductReferredByInvoiceLine"
+        ]
+      },
+      {
+        "code": "P22",
+        "name": "Using different naming conventions in the ontology",
+        "description": "The ontology elements are not named following the same convention (for example CamelCase or use of delimiters as \"-\" or \"_\") . Some notions about naming conventions are provided in [2].\t",
+        "importance": "Minor",
+        "num_affected": 1,
+        "affected_elements": [
+          "http://example.org/fests#Cl_BuyerParticipation",
+          "http://example.org/fests#hasElement"
+        ]
+      }
+    ],
+    "pitfall_codes": [
+      "P04",
+      "P20",
+      "P22"
+    ],
+    "oops_error": false,
+    "error": null
+  },
+  "hermit": {
+    "is_consistent": false,
+    "inconsistent_classes": [],
+    "execution_time_seconds": 0.67,
+    "error": "Java error message is:\nException in thread \"main\" org.semanticweb.HermiT.datatypes.UnsupportedDatatypeException: HermiT supports all and only the datatypes of the OWL 2 datatype map, see \nhttp://www.w3.org/TR/owl2-syntax/#Datatype_Maps. \nThe datatype 'http://www.w3.org/2001/XMLSchema#date' is not part of the OWL 2 datatype map and \nno custom datatype definition is given; \ntherefore, HermiT cannot handle this datatype.\n\tat org.semanticweb.HermiT.datatypes.DatatypeRegistry.getDatatypeHandlerFor(Unknown Source)\n\tat org.semanticweb.HermiT.datatypes.DatatypeRegistry.getDatatypeHandlerFor(Unknown Source)\n\tat org.semanticweb.HermiT.datatypes.DatatypeRegistry.validateDatatypeRestriction(Unknown Source)\n\tat org.semanticweb.HermiT.structural.OWLClausification$DataRangeConverter.visit(Unknown Source)\n\tat uk.ac.manchester.cs.owl.owlapi.OWLDatatypeImpl.accept(OWLDatatypeImpl.java:343)\n\tat org.semanticweb.HermiT.structural.OWLClausification$DataRangeConverter.convertDataRange(Unknown Source)\n\tat org.semanticweb.HermiT.structural.OWLClausification$NormalizedAxiomClausifier.visit(Unknown Source)\n\tat uk.ac.manchester.cs.owl.owlapi.OWLDataAllValuesFromImpl.accept(OWLDataAllValuesFromImpl.java:99)\n\tat org.semanticweb.HermiT.structural.OWLClausification.clausify(Unknown Source)\n\tat org.semanticweb.HermiT.structural.OWLClausification.preprocessAndClausify(Unknown Source)\n\tat org.semanticweb.HermiT.Reasoner.loadOntology(Reasoner.java:117)\n\tat org.semanticweb.HermiT.Reasoner.<init>(Reasoner.java:108)\n\tat org.semanticweb.HermiT.Reasoner.<init>(Reasoner.java:86)\n\tat org.semanticweb.HermiT.cli.CommandLine.main(CommandLine.java:830)\n",
+    "reasoner": "Hermit"
+  },
+  "pellet": {
+    "is_consistent": false,
+    "inconsistent_classes": [],
+    "execution_time_seconds": 0.52,
+    "error": "Java error message is: Apr 05, 2026 9:07:38 AM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature\nWARNING: Unsupported axiom: Ignoring equivalentClass axiom because the object is not a class http://example.org/fests#Cl_ItemDisplayInformation owl:equivalentClass bnode(68543878:19d5d8a9c35:-7fe0)\nApr 05, 2026 9:07:38 AM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature\nWARNING: Unsupported axiom: Ignoring equivalentClass axiom because the object is not a class http://example.org/fests#Cl_InvoiceIdentifier owl:equivalentClass bnode(68543878:19d5d8a9c35:-7fb1)\nApr 05, 2026 9:07:38 AM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature\nWARNING: Unsupported axiom: Ignoring equivalentClass axiom because the object is not a class http://example.org/fests#Cl_SoldItem owl:equivalentClass bnode(68543878:19d5d8a9c35:-7ff6)\nApr 05, 2026 9:07:38 AM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature\nWARNING: Unsupported axiom: Ignoring equivalentClass axiom because the object is not a class http://example.org/fests#Cl_Invoice owl:equivalentClass bnode(68543878:19d5d8a9c35:-7ff8)\nApr 05, 2026 9:07:38 AM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature\nWARNING: Unsupported axiom: Ignoring equivalentClass axiom because the object is not a class http://example.org/fests#Cl_Invoice owl:equivalentClass bnode(68543878:19d5d8a9c35:-7ff7)\nApr 05, 2026 9:07:38 AM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature\nWARNING: Unsupported axiom: Ignoring equivalentClass axiom because the object is not a class http://example.org/fests#Cl_ProvidedInformation owl:equivalentClass bnode(68543878:19d5d8a9c35:-7fee)\nERROR: Ontology is inconsistent, run \"pellet explain\" to get the reason\n",
+    "reasoner": "Pellet"
+  },
+  "aggregate": {
+    "all_validators_passed": false,
+    "total_execution_time_seconds": 1.19
+  }
+}
