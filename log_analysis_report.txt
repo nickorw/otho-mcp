@@ -34,8 +34,8 @@ OVERALL VALIDATION SUMMARY
 Total Validations: 20
 All Validators Passed: 17 (85.00%)
 Syntax Valid: 20 (100.00%)
-OOPS Passed (No Pitfalls): 20 (100.00%)
-OOPS Passed (No Critical/Important): 20 (100.00%)
+OOPS Passed (No Pitfalls): 19 (95.00%)
+OOPS Passed (No Critical/Important): 19 (95.00%)
 Reasoners Passed (Both Consistent): 17 (85.00%)
 
 REASONER VALIDATION RESULTS
@@ -72,8 +72,8 @@ Total Pitfall Occurrences: 0
 Unique Pitfalls: 0
 
 Severity Breakdown:
-  Runs Passed (No Pitfalls): 20 (100.00%)
-  Runs Passed (No Critical/Important): 20 (100.00%)
+  Runs Passed (No Pitfalls): 19 (95.00%)
+  Runs Passed (No Critical/Important): 19 (95.00%)
   Runs with Only Minor Pitfalls: 0 (0.00%)
 
 Most Common Pitfalls:
@@ -94,7 +94,7 @@ EDIFACT:
   All Passed Rate: 85.00%
   Hermit Consistent Rate: 85.00%
   Pellet Consistent Rate: 85.00%
-  OOPS Passed Rate: 100.00%
+  OOPS Passed Rate: 95.00%
 
 PER-RUN VALIDATION RESULTS
 --------------------------------------------------------------------------------
@@ -102,7 +102,7 @@ Timestamp            |  Syntax  |   OOPS   |  Hermit  |  Pellet
 --------------------------------------------------------------
 20260304_062606      |     ✓    |     ✓    |     ✓    |     ✓   
 20260304_063345      |     ✓    |     ✓    |     ✓    |     ✓   
-20260304_063821      |     ✓    |     ✓    |     x    |     x   
+20260304_063821      |     ✓    |     ?    |     x    |     x
 20260304_070119      |     ✓    |     ✓    |     ✓    |     ✓   
 20260304_071618      |     ✓    |     ✓    |     ✓    |     ✓   
 20260304_071919      |     ✓    |     ✓    |     ✓    |     ✓   
@@ -121,7 +121,7 @@ Timestamp            |  Syntax  |   OOPS   |  Hermit  |  Pellet
 20260304_111526      |     ✓    |     ✓    |     ✓    |     ✓   
 20260304_112519      |     ✓    |     ✓    |     ✓    |     ✓   
 
-Legend: ✓ = passed, x = failed
+Legend: ✓ = passed, x = failed, ? = unable to analyse
 
 ================================================================================
 END OF REPORT
