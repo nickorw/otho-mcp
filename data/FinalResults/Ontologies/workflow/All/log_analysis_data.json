@@ -1,0 +1,171 @@
+{
+  "generator_analysis": {
+    "total_runs": 19,
+    "overall": {
+      "success_rate": 100.0,
+      "total_successes": 19,
+      "total_failures": 0,
+      "avg_duration_seconds": 424.0934351117987,
+      "median_duration_seconds": 427.81721806526184,
+      "max_duration_seconds": 529.8548130989075,
+      "min_duration_seconds": 291.95269298553467
+    },
+    "by_story": {
+      "EDIFACT": {
+        "run_count": 19,
+        "success_rate": 100.0,
+        "successes": 19,
+        "failures": 0,
+        "avg_duration_seconds": 424.0934351117987
+      }
+    },
+    "pitfalls_analysis": {
+      "most_common": [],
+      "total_pitfall_occurrences": 0,
+      "unique_pitfalls": 0
+    },
+    "tool_usage": {
+      "total_calls": 0,
+      "by_tool": {}
+    },
+    "temporal_analysis": {
+      "first_10_success_rate": 100.0,
+      "last_10_success_rate": 100.0,
+      "improvement": 0.0
+    }
+  },
+  "validation_analysis": {
+    "total_validations": 20,
+    "overall": {
+      "all_passed_rate": 5.0,
+      "all_passed_count": 1,
+      "syntax_valid_count": 20,
+      "syntax_valid_rate": 100.0,
+      "oops_passed_count": 1,
+      "oops_passed_rate": 5.0,
+      "oops_error_count": 4,
+      "oops_error_rate": 20.0,
+      "oops_no_critical_important_count": 8,
+      "oops_no_critical_important_rate": 40.0,
+      "oops_only_minor_count": 7,
+      "oops_only_minor_rate": 35.0
+    },
+    "by_story": {
+      "EDIFACT": {
+        "validation_count": 20,
+        "all_passed_rate": 5.0,
+        "hermit_consistent_rate": 5.0,
+        "pellet_consistent_rate": 10.0,
+        "oops_passed_rate": 5.0
+      }
+    },
+    "reasoner_analysis": {
+      "hermit_consistent_count": 1,
+      "hermit_consistent_rate": 5.0,
+      "pellet_consistent_count": 2,
+      "pellet_consistent_rate": 10.0,
+      "both_consistent_count": 1,
+      "both_consistent_rate": 5.0,
+      "hermit_error_count": 17,
+      "pellet_error_count": 14,
+      "hermit_error_messages": {
+        "Java error message is:": 16,
+        "IllegalArgumentException:Error: In OWL 2 DL, owl:topDataProperty is only allowed to occur in the super property position of SubDataPropertyOf axioms, but the ontology contains an axiom DataPropertyDomain(owl:topDataProperty owl:Thing) that violates this condition.": 1
+      },
+      "pellet_error_messages": {
+        "Java error message is: ERROR: Ontology is inconsistent, run \"pellet explain\" to get the reason\n": 9,
+        "Java error message is: Apr 05, 2026 6:33:53 AM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature\nWARNING: Unsupported axiom: Ignoring triple with unknown term from OWL nam": 1,
+        "Java error message is: Apr 05, 2026 6:42:11 AM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature\nWARNING: Unsupported axiom: Property http://example.org/fests#hasTotalNetP": 1,
+        "Java error message is:\nApr 05, 2026 8:46:05 AM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature\nWARNING: Unsupported axiom: Ignoring equivalentClass axiom because the obj": 1,
+        "Java error message is: Apr 05, 2026 8:52:48 AM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature\nWARNING: Unsupported axiom: Ignoring equivalentClass axiom because the obj": 1,
+        "Java error message is: Apr 05, 2026 9:07:38 AM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature\nWARNING: Unsupported axiom: Ignoring equivalentClass axiom because the obj": 1
+      },
+      "hermit_inconsistent_classes": [],
+      "pellet_inconsistent_classes": [
+        "xml_combined_owl.xml.Cl_InvoiceDetail",
+        "xml_combined_owl.xml.Cl_Description",
+        "xml_combined_owl.xml.Cl_InvoiceDetailReification",
+        "xml_combined_owl.xml.Cl_OrganizationInfo_Display",
+        "xml_combined_owl.xml.Cl_InvoiceReification",
+        "xml_combined_owl.xml.Cl_InvoiceAmountAssignment",
+        "xml_combined_owl.xml.Cl_InvoiceParty",
+        "xml_combined_owl.xml.Cl_GrossPrice",
+        "owl.Nothing",
+        "xml_combined_owl.xml.Cl_StockStatus",
+        "xml_combined_owl.xml.Cl_InvoiceAssignment",
+        "xml_combined_owl.xml.Cl_InvoiceParticipation",
+        "xml_combined_owl.xml.Cl_BuyerRole",
+        "xml_combined_owl.xml.Cl_SaleInfo",
+        "xml_combined_owl.xml.Cl_EDIFACTMessage",
+        "xml_combined_owl.xml.Cl_Address",
+        "xml_combined_owl.xml.Cl_Invoice",
+        "xml_combined_owl.xml.Cl_BuyerAddressAssignment",
+        "xml_combined_owl.xml.Cl_Seller",
+        "xml_combined_owl.xml.Cl_Customer",
+        "xml_combined_owl.xml.Cl_Image",
+        "xml_combined_owl.xml.Cl_ContactInfo",
+        "xml_combined_owl.xml.Cl_InvoiceInvolvement",
+        "xml_combined_owl.xml.Cl_Buyer",
+        "xml_combined_owl.xml.Cl_OrganizationType",
+        "xml_combined_owl.xml.Cl_OrganizationInvoiceRole",
+        "xml_combined_owl.xml.Cl_InvoiceRole",
+        "xml_combined_owl.xml.Cl_ProductCategory",
+        "xml_combined_owl.xml.Cl_EDIFACTInvoiceListing",
+        "xml_combined_owl.xml.Cl_SellerRole",
+        "xml_combined_owl.xml.Cl_InvoiceAmount"
+      ]
+    },
+    "oops_analysis": {
+      "most_common_pitfalls": [
+        [
+          "P22",
+          14
+        ],
+        [
+          "P20",
+          13
+        ],
+        [
+          "P13",
+          8
+        ],
+        [
+          "P04",
+          6
+        ],
+        [
+          "P05",
+          6
+        ],
+        [
+          "P19",
+          3
+        ],
+        [
+          "P12",
+          2
+        ],
+        [
+          "P08",
+          2
+        ],
+        [
+          "P10",
+          1
+        ]
+      ],
+      "total_pitfall_occurrences": 55,
+      "unique_pitfalls": 9
+    },
+    "timing_analysis": {
+      "hermit_avg_seconds": 0.7528947368421053,
+      "hermit_median_seconds": 0.687,
+      "pellet_avg_seconds": 0.5807368421052632,
+      "pellet_median_seconds": 0.531,
+      "syntax_avg_seconds": 0.0473,
+      "oops_avg_seconds": 0.23325,
+      "total_avg_seconds": 1.6174210526315789,
+      "total_median_seconds": 1.545
+    }
+  }
+}

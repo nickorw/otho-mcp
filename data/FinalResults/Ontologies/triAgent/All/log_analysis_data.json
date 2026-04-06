@@ -1,0 +1,145 @@
+{
+  "generator_analysis": {
+    "total_runs": 20,
+    "overall": {
+      "success_rate": 100.0,
+      "total_successes": 20,
+      "total_failures": 0,
+      "avg_iterations": 3.05,
+      "median_iterations": 3.0,
+      "max_iterations": 4,
+      "min_iterations": 1,
+      "avg_duration_seconds": 1037.9029348,
+      "median_duration_seconds": 1112.8528975,
+      "max_duration_seconds": 1727.155264,
+      "min_duration_seconds": 362.953665,
+      "avg_messages": 6,
+      "median_messages": 6.0,
+      "avg_tool_calls": 2,
+      "median_tool_calls": 2.0
+    },
+    "by_story": {
+      "EDIFACT": {
+        "run_count": 20,
+        "success_rate": 100.0,
+        "successes": 20,
+        "failures": 0,
+        "avg_iterations": 3.05,
+        "median_iterations": 3.0,
+        "avg_duration_seconds": 1037.9029348
+      }
+    },
+    "pitfalls_analysis": {
+      "most_common": [],
+      "total_pitfall_occurrences": 0,
+      "unique_pitfalls": 0
+    },
+    "tool_usage": {
+      "total_calls": 1580,
+      "by_tool": {
+        "update_scratchpad": 926,
+        "validate_syntax_tool": 209,
+        "check_pitfalls_tool": 208,
+        "ask_edifact_expert": 149,
+        "audit_owl_with_expert": 46,
+        "read_full_context": 21,
+        "save_final_ontology": 20,
+        "read_scratchpad": 1
+      }
+    },
+    "temporal_analysis": {
+      "first_10_success_rate": 100.0,
+      "last_10_success_rate": 100.0,
+      "improvement": 0.0
+    }
+  },
+  "validation_analysis": {
+    "total_validations": 20,
+    "overall": {
+      "all_passed_rate": 45.0,
+      "all_passed_count": 9,
+      "syntax_valid_count": 20,
+      "syntax_valid_rate": 100.0,
+      "oops_passed_count": 13,
+      "oops_passed_rate": 65.0,
+      "oops_no_critical_important_count": 19,
+      "oops_no_critical_important_rate": 95.0,
+      "oops_only_minor_count": 6,
+      "oops_only_minor_rate": 30.0
+    },
+    "by_story": {
+      "EDIFACT": {
+        "validation_count": 20,
+        "all_passed_rate": 45.0,
+        "hermit_consistent_rate": 85.0,
+        "pellet_consistent_rate": 70.0,
+        "oops_passed_rate": 65.0
+      }
+    },
+    "reasoner_analysis": {
+      "hermit_consistent_count": 17,
+      "hermit_consistent_rate": 85.0,
+      "pellet_consistent_count": 14,
+      "pellet_consistent_rate": 70.0,
+      "both_consistent_count": 14,
+      "both_consistent_rate": 70.0,
+      "hermit_error_count": 0,
+      "pellet_error_count": 3,
+      "hermit_error_messages": {},
+      "pellet_error_messages": {
+        "Java error message is:\nUnrecognized term: http://www.w3.org/2002/07/owl#FunctionalProperty\nUse -v for detail.\n": 2,
+        "Java error message is:\nMar 03, 2026 9:39:56 AM org.mindswap.pellet.jena.graph.loader.DefaultGraphLoader addUnsupportedFeature\nWARNING: Unsupported axiom: Unexpected bnode -6126bb49:19cb3b65456:-7ff8 -": 1
+      },
+      "hermit_inconsistent_classes": [
+        "ontology.BuyerRole",
+        "ontology.GLNIdentifier",
+        "ontology.InvoiceMessage",
+        "owl.Nothing",
+        "ontology.SimpleDataElement"
+      ],
+      "pellet_inconsistent_classes": [
+        "ontology.BuyerRole",
+        "ontology.GLNIdentifier",
+        "ontology.InvoiceMessage",
+        "owl.Nothing",
+        "ontology.SimpleDataElement"
+      ]
+    },
+    "oops_analysis": {
+      "most_common_pitfalls": [
+        [
+          "P04",
+          4
+        ],
+        [
+          "P20",
+          2
+        ],
+        [
+          "P22",
+          2
+        ],
+        [
+          "P12",
+          1
+        ],
+        [
+          "P13",
+          1
+        ]
+      ],
+      "total_pitfall_occurrences": 10,
+      "unique_pitfalls": 5
+    },
+    "timing_analysis": {
+      "hermit_avg_seconds": 1.06525,
+      "hermit_median_seconds": 1.0915,
+      "pellet_avg_seconds": 0.852,
+      "pellet_median_seconds": 0.8565,
+      "syntax_avg_seconds": 0.0365,
+      "oops_avg_seconds": 0.10775,
+      "total_avg_seconds": 2.06155,
+      "total_median_seconds": 2.154
+    }
+  }
+}

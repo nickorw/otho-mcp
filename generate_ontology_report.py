@@ -376,7 +376,7 @@ def parse_per_run_validation(folder_path: Path) -> dict[str, dict]:
 def collect_folder_metrics(folder_name: str) -> dict:
     """Collect metrics for all ontologies in a folder, merging parsed + log data."""
     folder_path = ONTOLOGIES_DIR / folder_name
-    owl_files = sorted(folder_path.glob("*.owl"))
+    owl_files = sorted((folder_path / "All").glob("*.owl"))
     log_data = load_log_analysis(folder_path)
 
     va = log_data.get("validation_analysis", {})
