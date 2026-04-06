@@ -37,8 +37,8 @@
   "validation_analysis": {
     "total_validations": 20,
     "overall": {
-      "all_passed_rate": 5.0,
-      "all_passed_count": 1,
+      "all_passed_rate": 0.0,
+      "all_passed_count": 0,
       "syntax_valid_count": 20,
       "syntax_valid_rate": 100.0,
       "oops_passed_count": 1,
@@ -53,19 +53,19 @@
     "by_story": {
       "EDIFACT": {
         "validation_count": 20,
-        "all_passed_rate": 5.0,
-        "hermit_consistent_rate": 5.0,
-        "pellet_consistent_rate": 10.0,
+        "all_passed_rate": 0.0,
+        "hermit_consistent_rate": 0.0,
+        "pellet_consistent_rate": 5.0,
         "oops_passed_rate": 5.0
       }
     },
     "reasoner_analysis": {
-      "hermit_consistent_count": 1,
-      "hermit_consistent_rate": 5.0,
-      "pellet_consistent_count": 2,
-      "pellet_consistent_rate": 10.0,
-      "both_consistent_count": 1,
-      "both_consistent_rate": 5.0,
+      "hermit_consistent_count": 0,
+      "hermit_consistent_rate": 0.0,
+      "pellet_consistent_count": 1,
+      "pellet_consistent_rate": 5.0,
+      "both_consistent_count": 0,
+      "both_consistent_rate": 0.0,
       "hermit_error_count": 17,
       "pellet_error_count": 14,
       "hermit_error_messages": {

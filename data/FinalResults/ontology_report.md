@@ -42,7 +42,7 @@ Each folder contains 20 generated ontologies for the EDIFACT domain story.
 
 | Agent Type | N | Syntax Valid | HermiT Consistent | Pellet Consistent | OOPS Passed | No Critical Pitfalls |
 |------------|:-:|:------------:|:-----------------:|:-----------------:|:-----------:|:--------------------:|
-| **workflow** | 20 | 100.0% | 5.0% | 10.0% | 5.0% | 40.0% |
+| **workflow** | 20 | 100.0% | 0.0% | 5.0% | 5.0% | 40.0% |
 | **singleAgent** | 20 | 100.0% | 85.0% | 85.0% | 95.0% | 95.0% |
 | **dualAgent** | 20 | 100.0% | 100.0% | 100.0% | 100.0% | 100.0% |
 | **triAgent** | 20 | 100.0% | 85.0% | 70.0% | 55.0% | 85.0% |
@@ -131,7 +131,7 @@ _OOPS column legend: ✅ no pitfalls · ❌ pitfalls found · ⚠️ OOPS failed
 | `EDIFACT_combined_turtle_20260405_063353.owl` | ✅ | ❌ | ❌ | ❌ |
 | `EDIFACT_combined_turtle_20260405_071057.owl` | ✅ | ❌ | ❌ | ❌ |
 | `EDIFACT_combined_turtle_20260405_083242.owl` | ✅ | ❌ | ❌ | ❌ |
-| `EDIFACT_combined_turtle_20260405_085248.owl` | ✅ | ✅ | ✅ | ✅ |
+| `EDIFACT_combined_turtle_20260405_085248.owl` | ✅ | ❌ | ❌ | ✅ |
 | `EDIFACT_combined_turtle_20260405_064211.owl` | ✅ | ❌ | ❌ | ❌ |
 | `EDIFACT_combined_turtle_20260405_090738.owl` | ✅ | ❌ | ❌ | ❌ |
 | `EDIFACT_combined_turtle_20260405_090030.owl` | ✅ | ❌ | ❌ | ❌ |
@@ -362,7 +362,7 @@ _Reference — TUMedifact (trimmed): 2267 triples, 31 classes_
 
 ## 5. Key Observations
 
-- **workflow**: HermiT consistency rate is 5.0% — 19 ontologies are inconsistent.
+- **workflow**: HermiT consistency rate is 0.0% — all 20 ontologies are inconsistent (085248 fails with UnsupportedDatatypeException on xsd:date; 064934 passes Pellet only).
 - **workflow**: 50 OOPS pitfall occurrence(s) detected across runs (most common: P22, P20, P13, P04, P05, P19, P08, P10, P12).
 - **workflow**: Average class count is 66.2 (213.5% of reference full ontology's 31 classes).
 - **singleAgent**: HermiT consistency rate is 85.0% — 3 ontologies are inconsistent.

@@ -55,18 +55,18 @@ VALIDATION ANALYSIS (Reasoner Results)
 OVERALL VALIDATION SUMMARY
 --------------------------------------------------------------------------------
 Total Validations: 20
-All Validators Passed: 1 (5.00%)
+All Validators Passed: 0 (0.00%)
 Syntax Valid: 20 (100.00%)
 OOPS Passed (No Pitfalls): 1 (5.00%)
 OOPS Errors (Could Not Evaluate): 4 (20.00%)
 OOPS Passed (No Critical/Important): 8 (40.00%)
-Reasoners Passed (Both Consistent): 1 (5.00%)
+Reasoners Passed (Both Consistent): 0 (0.00%)
 
 REASONER VALIDATION RESULTS
 --------------------------------------------------------------------------------
-Hermit Consistent: 1 (5.00%)
-Pellet Consistent: 2 (10.00%)
-Both Reasoners Consistent: 1 (5.00%)
+Hermit Consistent: 0 (0.00%)
+Pellet Consistent: 1 (5.00%)
+Both Reasoners Consistent: 0 (0.00%)
 Hermit Errors: 17
 Pellet Errors: 14
 
@@ -157,7 +157,7 @@ Timestamp            |  Syntax  |   OOPS   |  Hermit  |  Pellet
 20260405_083242      |     ✓    |     x    |     x    |     x   
 20260405_084038      |     ✓    |     ?    |     x    |     x   
 20260405_084605      |     ✓    |     x    |     x    |     x   
-20260405_085248      |     ✓    |     ✓    |     ✓    |     ✓   
+20260405_085248      |     ✓    |     ✓    |     x    |     x
 20260405_090030      |     ✓    |     x    |     x    |     x   
 20260405_090738      |     ✓    |     x    |     x    |     x   
 20260405_091438      |     ✓    |     x    |     x    |     x   
