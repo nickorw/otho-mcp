@@ -35,12 +35,12 @@
 
 ## 2. Selected Ontologies
 
-| Agent Type | Selected File |
-|------------|---------------|
-| **dualAgent** | `EDIFACT_ontology_20260301_222236.owl` |
-| **singleAgent** | `EDIFACT_ontology_20260304_093001.owl` |
-| **triAgent** | `EDIFACT_ontology_20260303_070100.owl` |
-| **workflow** | `EDIFACT_combined_turtle_20260405_085248.owl` |
+| Label | Agent Type | Selected File |
+|-------|------------|---------------|
+| **D** | **dualAgent** | `EDIFACT_ontology_20260301_222236.owl` |
+| **C** | **singleAgent** | `EDIFACT_ontology_20260304_093001.owl` |
+| **A** | **triAgent** | `EDIFACT_ontology_20260303_070100.owl` |
+| **B** | **workflow** | `EDIFACT_combined_turtle_20260405_085248.owl` |
 
 ---
 
