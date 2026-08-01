@@ -1,0 +1,289 @@
+{
+  "P01": {
+    "code": "P01",
+    "name": "Creating polysemous elements",
+    "importance": "Critical",
+    "description": "An ontology element (class, property) whose identifier has multiple meanings, representing more than one concept.",
+    "how_to_fix": "Split the polysemous element into separate, clearly-named elements — one per concept. Use rdfs:label for human-readable names and rdfs:comment to disambiguate."
+  },
+  "P02": {
+    "code": "P02",
+    "name": "Creating synonyms as classes",
+    "importance": "Minor",
+    "description": "Several classes whose identifiers are synonyms are created and declared as equivalent, generating a redundant hierarchy.",
+    "how_to_fix": "Merge synonym classes into one class and use rdfs:label for alternative names. Remove the redundant equivalent declarations."
+  },
+  "P03": {
+    "code": "P03",
+    "name": "Creating the relationship 'is' instead of using OWL primitives",
+    "importance": "Critical",
+    "description": "A relationship named 'is' is created instead of using rdfs:subClassOf, rdf:type, or owl:sameAs.",
+    "how_to_fix": "Replace the 'is' relationship with the appropriate OWL primitive: rdfs:subClassOf for class hierarchy, rdf:type for instantiation, or owl:sameAs for identity."
+  },
+  "P04": {
+    "code": "P04",
+    "name": "Creating unconnected ontology elements",
+    "importance": "Minor",
+    "description": "Ontology elements (classes or properties) that are isolated with no relationship to the rest of the ontology.",
+    "how_to_fix": "Connect isolated elements via rdfs:subClassOf, domain/range assertions, or remove them if they are unused placeholders."
+  },
+  "P05": {
+    "code": "P05",
+    "name": "Defining wrong inverse relationships",
+    "importance": "Critical",
+    "description": "Two relationships are defined as inverse of each other when they are not semantically inverse.",
+    "how_to_fix": "Verify that if property P holds between A and B, the declared inverse Q holds between B and A in all cases. Remove incorrect owl:inverseOf assertions."
+  },
+  "P06": {
+    "code": "P06",
+    "name": "Including cycles in class hierarchy",
+    "importance": "Critical",
+    "description": "A cycle appears in the class hierarchy: class A has subclass B, while B is a superclass of A (directly or indirectly).",
+    "how_to_fix": "Break the cycle by removing one of the rdfs:subClassOf links. If the classes are truly equivalent, use owl:equivalentClass instead."
+  },
+  "P07": {
+    "code": "P07",
+    "name": "Merging different concepts in the same class",
+    "importance": "Minor",
+    "description": "A single class whose name refers to multiple distinct concepts that should be modelled separately.",
+    "how_to_fix": "Split the class into separate classes, one per concept. Establish the appropriate relationship (hierarchy, association) between them."
+  },
+  "P08": {
+    "code": "P08",
+    "name": "Missing annotations",
+    "importance": "Minor",
+    "description": "Ontology elements lack human-readable annotations such as rdfs:label, rdfs:comment, or similar documentation properties.",
+    "how_to_fix": "Add rdfs:label and rdfs:comment annotations to all classes and properties. Consider adding multilingual labels where appropriate."
+  },
+  "P09": {
+    "code": "P09",
+    "name": "Missing domain information",
+    "importance": "Minor",
+    "description": "Required domain knowledge is not captured in the ontology, making it incomplete for its intended use case.",
+    "how_to_fix": "Identify the missing domain concepts through requirements analysis and add the necessary classes, properties, and axioms."
+  },
+  "P10": {
+    "code": "P10",
+    "name": "Missing disjointness",
+    "importance": "Important",
+    "description": "Classes or properties that should be mutually exclusive lack owl:disjointWith or owl:AllDisjointClasses declarations.",
+    "how_to_fix": "Add owl:disjointWith axioms between classes that cannot share instances. Use owl:AllDisjointClasses for groups of mutually exclusive classes."
+  },
+  "P11": {
+    "code": "P11",
+    "name": "Missing domain or range in properties",
+    "importance": "Important",
+    "description": "Object or datatype properties are defined without specifying their rdfs:domain or rdfs:range.",
+    "how_to_fix": "Add rdfs:domain and rdfs:range declarations to all properties. Ensure they are not overly restrictive (see P18)."
+  },
+  "P12": {
+    "code": "P12",
+    "name": "Equivalent properties not explicitly declared",
+    "importance": "Important",
+    "description": "Two or more properties with identical semantics exist but lack an owl:equivalentProperty declaration.",
+    "how_to_fix": "Either merge duplicate properties into one, or declare owl:equivalentProperty between them if both must be retained for compatibility."
+  },
+  "P13": {
+    "code": "P13",
+    "name": "Inverse relationships not explicitly declared",
+    "importance": "Minor",
+    "description": "Relationships that are inverses of each other are not linked via owl:inverseOf.",
+    "how_to_fix": "Add owl:inverseOf declarations between property pairs that are semantic inverses (e.g., hasParent / hasChild)."
+  },
+  "P14": {
+    "code": "P14",
+    "name": "Misusing owl:allValuesFrom",
+    "importance": "Critical",
+    "description": "A universal restriction (owl:allValuesFrom) is used where an existential restriction (owl:someValuesFrom) is intended.",
+    "how_to_fix": "Replace owl:allValuesFrom with owl:someValuesFrom when the intent is 'there exists at least one' rather than 'all values must be'."
+  },
+  "P15": {
+    "code": "P15",
+    "name": "Using 'some not' in place of 'not some'",
+    "importance": "Critical",
+    "description": "The quantifier and negation are misplaced, changing the logical meaning (existential with negation vs. negated existential).",
+    "how_to_fix": "Review the logical intent: 'some not X' means at least one non-X exists; 'not some X' means no X exists. Correct the axiom to match the intended semantics."
+  },
+  "P16": {
+    "code": "P16",
+    "name": "Using primitive class instead of defined class",
+    "importance": "Critical",
+    "description": "A class has only necessary conditions (primitive) when it should also have sufficient conditions (defined) for automated classification.",
+    "how_to_fix": "Add owl:equivalentClass with the defining conditions to make the class defined, enabling reasoner-based automatic classification."
+  },
+  "P17": {
+    "code": "P17",
+    "name": "Overspecializing the hierarchy",
+    "importance": "Important",
+    "description": "Leaf classes in the hierarchy are defined without any instances, suggesting over-engineering of the class structure.",
+    "how_to_fix": "Remove overly specific leaf classes and represent those distinctions as property values or individuals instead."
+  },
+  "P18": {
+    "code": "P18",
+    "name": "Overspecializing the domain or range",
+    "importance": "Important",
+    "description": "Domain or range definitions are too restrictive, preventing valid usage of the property in broader contexts.",
+    "how_to_fix": "Generalize the domain/range to a higher-level class, or remove explicit domain/range and rely on local restrictions (owl:someValuesFrom) on specific classes."
+  },
+  "P19": {
+    "code": "P19",
+    "name": "Defining multiple domains or ranges in properties",
+    "importance": "Critical",
+    "description": "Multiple rdfs:domain or rdfs:range statements on a property create an implicit intersection, not a union as often intended.",
+    "how_to_fix": "If union is intended, define a single domain/range as owl:unionOf the target classes. If intersection is intended, verify this is correct semantically."
+  },
+  "P20": {
+    "code": "P20",
+    "name": "Misusing ontology annotations",
+    "importance": "Minor",
+    "description": "Annotation property values are swapped or incorrectly used (e.g., description in label field, label in comment field).",
+    "how_to_fix": "Review annotations: rdfs:label for short names, rdfs:comment for longer descriptions, and use appropriate Dublin Core or SKOS properties for other metadata."
+  },
+  "P21": {
+    "code": "P21",
+    "name": "Using a miscellaneous class",
+    "importance": "Minor",
+    "description": "A class is created solely to group non-conforming instances that do not fit elsewhere (e.g., 'Other', 'Miscellaneous').",
+    "how_to_fix": "Remove the catch-all class. Either refine the existing hierarchy to accommodate the instances, or leave them unclassified at the parent level."
+  },
+  "P22": {
+    "code": "P22",
+    "name": "Using different naming conventions in the ontology",
+    "importance": "Minor",
+    "description": "Inconsistent naming conventions are used (e.g., mixing CamelCase, underscores, hyphens across different elements).",
+    "how_to_fix": "Adopt a consistent convention: UpperCamelCase for classes, lowerCamelCase for properties. Refactor existing names to conform."
+  },
+  "P23": {
+    "code": "P23",
+    "name": "Duplicating a datatype already provided by the implementation language",
+    "importance": "Important",
+    "description": "Classes or individuals are created to represent datatypes that already exist in XSD or the OWL datatype map.",
+    "how_to_fix": "Replace the custom datatype class with the appropriate XSD datatype (xsd:string, xsd:integer, xsd:dateTime, etc.) in datatype property ranges."
+  },
+  "P24": {
+    "code": "P24",
+    "name": "Using recursive definitions",
+    "importance": "Important",
+    "description": "An ontology element is used in its own definition (e.g., a class defined in terms of itself).",
+    "how_to_fix": "Break the recursion by introducing an intermediate concept or rephrasing the axiom to avoid self-reference."
+  },
+  "P25": {
+    "code": "P25",
+    "name": "Defining a relationship as inverse to itself",
+    "importance": "Important",
+    "description": "A property is declared as owl:inverseOf itself, which is only valid for symmetric properties.",
+    "how_to_fix": "If the property is symmetric, declare it as owl:SymmetricProperty and remove the self-inverse. Otherwise, define a proper separate inverse property."
+  },
+  "P26": {
+    "code": "P26",
+    "name": "Defining inverse relationships for a symmetric one",
+    "importance": "Important",
+    "description": "A symmetric property (owl:SymmetricProperty) is redundantly given an explicit owl:inverseOf declaration.",
+    "how_to_fix": "Remove the owl:inverseOf declaration — symmetric properties are their own inverse by definition."
+  },
+  "P27": {
+    "code": "P27",
+    "name": "Defining wrong equivalent properties",
+    "importance": "Critical",
+    "description": "Properties declared as owl:equivalentProperty do not actually have the same semantics.",
+    "how_to_fix": "Remove incorrect equivalence declarations. If properties are related but not identical, use rdfs:subPropertyOf instead."
+  },
+  "P28": {
+    "code": "P28",
+    "name": "Defining wrong symmetric relationships",
+    "importance": "Critical",
+    "description": "A non-symmetric relationship is declared as owl:SymmetricProperty (e.g., 'hasParent' declared symmetric).",
+    "how_to_fix": "Remove the owl:SymmetricProperty declaration. Only properties where P(A,B) always implies P(B,A) should be symmetric."
+  },
+  "P29": {
+    "code": "P29",
+    "name": "Defining wrong transitive relationships",
+    "importance": "Critical",
+    "description": "A non-transitive relationship is declared as owl:TransitiveProperty.",
+    "how_to_fix": "Remove the owl:TransitiveProperty declaration. Verify that if P(A,B) and P(B,C) then P(A,C) truly holds in all cases before declaring transitivity."
+  },
+  "P30": {
+    "code": "P30",
+    "name": "Equivalent classes not explicitly declared",
+    "importance": "Important",
+    "description": "Two or more classes with the same intended meaning exist without an owl:equivalentClass declaration.",
+    "how_to_fix": "Either merge the duplicate classes into one, or add owl:equivalentClass if both URIs must be retained for backward compatibility."
+  },
+  "P31": {
+    "code": "P31",
+    "name": "Defining wrong equivalent classes",
+    "importance": "Critical",
+    "description": "Classes declared as owl:equivalentClass do not actually denote the same set of instances.",
+    "how_to_fix": "Remove the incorrect owl:equivalentClass assertion. Use rdfs:subClassOf if one is a specialization of the other."
+  },
+  "P32": {
+    "code": "P32",
+    "name": "Several classes with the same label",
+    "importance": "Minor",
+    "description": "Multiple classes share the same rdfs:label value, making them ambiguous to human readers and tools.",
+    "how_to_fix": "Give each class a unique, descriptive rdfs:label. Use qualifiers or context to distinguish similar concepts."
+  },
+  "P33": {
+    "code": "P33",
+    "name": "Creating a property chain with a single property",
+    "importance": "Minor",
+    "description": "An owl:propertyChainAxiom is defined with only one property in the chain, which is equivalent to rdfs:subPropertyOf.",
+    "how_to_fix": "Replace the property chain with a simple rdfs:subPropertyOf assertion, or add the missing second property to the chain."
+  },
+  "P34": {
+    "code": "P34",
+    "name": "Untyped class",
+    "importance": "Important",
+    "description": "A resource is used as a class (appears as subject of rdfs:subClassOf, etc.) but lacks an explicit rdf:type owl:Class declaration.",
+    "how_to_fix": "Add an explicit 'rdf:type owl:Class' (or rdfs:Class) triple for the resource."
+  },
+  "P35": {
+    "code": "P35",
+    "name": "Untyped property",
+    "importance": "Important",
+    "description": "A resource is used as a property but lacks an explicit rdf:type declaration (owl:ObjectProperty, owl:DatatypeProperty, or rdf:Property).",
+    "how_to_fix": "Add an explicit type declaration: owl:ObjectProperty for object properties, owl:DatatypeProperty for data properties."
+  },
+  "P36": {
+    "code": "P36",
+    "name": "URI contains a file extension",
+    "importance": "Minor",
+    "description": "The ontology URI includes a file extension (.owl, .rdf, .ttl) making it format-dependent and fragile.",
+    "how_to_fix": "Use an extension-free URI for the ontology namespace. Serve different formats via content negotiation at that URI."
+  },
+  "P37": {
+    "code": "P37",
+    "name": "Ontology not available on the Web",
+    "importance": "Critical",
+    "description": "The ontology or its documentation is not accessible at the declared namespace URI.",
+    "how_to_fix": "Publish the ontology at its declared namespace URI with proper content negotiation (RDF for machines, HTML for humans)."
+  },
+  "P38": {
+    "code": "P38",
+    "name": "No OWL ontology declaration",
+    "importance": "Important",
+    "description": "The file lacks an owl:Ontology declaration with metadata (version, imports, annotations).",
+    "how_to_fix": "Add an owl:Ontology declaration with at minimum rdfs:label, owl:versionInfo, and dc:creator metadata."
+  },
+  "P39": {
+    "code": "P39",
+    "name": "Ambiguous namespace",
+    "importance": "Critical",
+    "description": "Neither the ontology URI nor xml:base is declared, making element URIs ambiguous.",
+    "how_to_fix": "Declare an explicit ontology URI and set xml:base (or @base in Turtle) to establish a clear namespace for all local names."
+  },
+  "P40": {
+    "code": "P40",
+    "name": "Namespace hijacking",
+    "importance": "Critical",
+    "description": "Terms from external namespaces are referenced but are not actually defined in those namespaces.",
+    "how_to_fix": "Only reference terms that are actually defined in external ontologies. Import the external ontology (owl:imports) or define the term locally."
+  },
+  "P41": {
+    "code": "P41",
+    "name": "No license declared",
+    "importance": "Important",
+    "description": "The ontology metadata does not include any license information, making reuse rights unclear.",
+    "how_to_fix": "Add a dcterms:license or cc:license annotation to the owl:Ontology declaration pointing to the chosen license URI."
+  }
+}

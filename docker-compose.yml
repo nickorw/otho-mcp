@@ -1,0 +1,17 @@
+services:
+  otho-mcp:
+    image: otho-mcp
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - ${HOST_HOME:-${HOME}}:/host:ro
+    environment:
+      - HOST_HOME=${HOST_HOME:-${HOME}}
+      - REASONER_TIMEOUT=120
+      - HOST_MOUNT_PREFIX=/host
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
