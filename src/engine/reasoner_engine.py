@@ -24,17 +24,32 @@ def _reasoner_worker(rdfxml_path: str, reasoner_type: str, result_file: str):
     start = time.time()
     try:
         from owlready2 import World, sync_reasoner_hermit, sync_reasoner_pellet
+        from owlready2 import OwlReadyInconsistentOntologyError
 
         world = World()
         try:
             onto = world.get_ontology(f"file://{rdfxml_path}").load()
 
-            if reasoner_type == "hermit":
-                sync_reasoner_hermit(onto, infer_property_values=True, debug=0)
-            else:
-                sync_reasoner_pellet(onto, infer_property_values=True, debug=0)
+            try:
+                if reasoner_type == "hermit":
+                    sync_reasoner_hermit(onto, infer_property_values=True, debug=0)
+                else:
+                    sync_reasoner_pellet(onto, infer_property_values=True, debug=0)
+                inconsistent = [str(c) for c in onto.inconsistent_classes()]
+            except OwlReadyInconsistentOntologyError:
+                # A globally inconsistent ontology surfaces as this exception, not
+                # via inconsistent_classes(). This is a valid result, not an error.
+                inconsistent = []
+                result = {
+                    "reasoner": reasoner_type,
+                    "is_consistent": False,
+                    "inconsistent_classes": [],
+                    "execution_time_seconds": round(time.time() - start, 3),
+                    "error": None,
+                }
+                Path(result_file).write_text(json.dumps(result))
+                return
 
-            inconsistent = [str(c) for c in onto.inconsistent_classes()]
             result = {
                 "reasoner": reasoner_type,
                 "is_consistent": len(inconsistent) == 0,

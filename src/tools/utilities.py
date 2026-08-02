@@ -68,9 +68,8 @@ def ontology_metrics(
 def explain_pitfall(pitfall_code: str) -> dict:
     """Look up a detailed explanation for an OOPs pitfall code (e.g. P08, P11)."""
     catalog = _load_catalog()
-    code = pitfall_code.upper().strip()
-    if not code.startswith("P"):
-        code = f"P{code}"
+    digits = "".join(c for c in pitfall_code if c.isdigit())
+    code = f"P{int(digits):02d}" if digits else pitfall_code.upper().strip()
 
     entry = catalog.get(code)
     if not entry:

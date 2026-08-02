@@ -34,12 +34,22 @@ def validate_all(
     finally:
         Path(rdfxml_path).unlink(missing_ok=True)
 
+    reasoning_results = [hermit_result, pellet_result]
+    reasoning_determined = [r for r in reasoning_results if not r.get("error")]
+    reasoning_has_errors = any(r.get("error") for r in reasoning_results)
     reasoning_data = {
-        "results": [hermit_result, pellet_result],
-        "all_consistent": hermit_result["is_consistent"] and pellet_result["is_consistent"],
+        "results": reasoning_results,
+        "all_consistent": bool(reasoning_determined) and all(r["is_consistent"] for r in reasoning_determined),
+        "has_errors": reasoning_has_errors,
     }
 
-    all_pass = syntax_data["valid"] and not oops_data.get("error") and reasoning_data["all_consistent"]
+    all_pass = (
+        syntax_data["valid"]
+        and not oops_data.get("error")
+        and not oops_data.get("has_pitfalls", False)
+        and reasoning_data["all_consistent"]
+        and not reasoning_has_errors
+    )
     elapsed = round(time.time() - start, 3)
 
     md = "\n\n---\n\n".join([
@@ -57,21 +67,29 @@ def validate_all(
 
 
 def _process_file(file_path: Path, checks: list, format: str) -> dict:
-    """Process a single file for batch validation."""
+    """Process a single file for batch validation. Per-file errors are captured,
+    not raised, so one bad file cannot abort the whole batch."""
     file_result = {"file": file_path.name}
-    content = file_path.read_text(encoding="utf-8")
+    try:
+        content = file_path.read_text(encoding="utf-8")
 
-    if "syntax" in checks:
-        file_result["syntax"] = _validate_syntax(content, format=format)
-    if "oops" in checks:
-        file_result["oops"] = run_oops_scan(content, input_format=format)
-    if "reasoning" in checks:
-        rdfxml_path = content_to_rdfxml_file(content, format=format)
-        try:
-            hermit = run_reasoner(rdfxml_path, ReasonerType.HERMIT)
-            file_result["reasoning"] = {"results": [hermit], "all_consistent": hermit["is_consistent"]}
-        finally:
-            Path(rdfxml_path).unlink(missing_ok=True)
+        if "syntax" in checks:
+            file_result["syntax"] = _validate_syntax(content, format=format)
+        if "oops" in checks:
+            file_result["oops"] = run_oops_scan(content, input_format=format)
+        if "reasoning" in checks:
+            rdfxml_path = content_to_rdfxml_file(content, format=format)
+            try:
+                hermit = run_reasoner(rdfxml_path, ReasonerType.HERMIT)
+                file_result["reasoning"] = {
+                    "results": [hermit],
+                    "all_consistent": hermit["is_consistent"] and not hermit.get("error"),
+                    "has_errors": bool(hermit.get("error")),
+                }
+            finally:
+                Path(rdfxml_path).unlink(missing_ok=True)
+    except Exception as e:
+        file_result["error"] = str(e)
 
     return file_result
 
@@ -95,21 +113,60 @@ def validate_batch(
 
     elapsed = round(time.time() - start, 3)
     total = len(results)
-    syntax_valid = sum(1 for r in results if r.get("syntax", {}).get("valid", True))
+
+    def _file_ok(r: dict) -> bool:
+        if r.get("error"):
+            return False
+        if "syntax" in checks and not r.get("syntax", {}).get("valid", False):
+            return False
+        if "oops" in checks:
+            o = r.get("oops", {})
+            if o.get("error") or o.get("has_pitfalls", False):
+                return False
+        if "reasoning" in checks:
+            rr = r.get("reasoning", {})
+            if rr.get("has_errors") or not rr.get("all_consistent", False):
+                return False
+        return True
+
+    syntax_valid = sum(1 for r in results if r.get("syntax", {}).get("valid", False))
+    files_ok = sum(1 for r in results if _file_ok(r))
+    failed = sum(1 for r in results if r.get("error"))
 
     md_lines = [f"## Batch Validation\n\n**{total} files** processed in {elapsed}s\n"]
     md_lines.append("| File | Syntax | OOPs | Reasoning |")
     md_lines.append("|------|--------|------|-----------|")
     for r in results:
-        syn = "✅" if r.get("syntax", {}).get("valid", True) else "❌"
-        oops_ok = "✅" if not r.get("oops", {}).get("has_pitfalls", False) else f"⚠️ {r.get('oops', {}).get('pitfall_count', 0)}"
-        reas = "✅" if r.get("reasoning", {}).get("all_consistent", True) else "❌"
+        if r.get("error"):
+            md_lines.append(f"| {r['file']} | ⚠️ error | ⚠️ error | ⚠️ error |")
+            continue
+        syn = "—" if "syntax" not in checks else ("✅" if r.get("syntax", {}).get("valid", False) else "❌")
+        o = r.get("oops", {})
+        if "oops" not in checks:
+            oops_ok = "—"
+        elif o.get("error"):
+            oops_ok = "⚠️ error"
+        elif o.get("has_pitfalls", False):
+            oops_ok = f"⚠️ {o.get('pitfall_count', 0)}"
+        else:
+            oops_ok = "✅"
+        rr = r.get("reasoning", {})
+        if "reasoning" not in checks:
+            reas = "—"
+        elif rr.get("has_errors"):
+            reas = "⚠️ error"
+        elif rr.get("all_consistent", False):
+            reas = "✅"
+        else:
+            reas = "❌"
         md_lines.append(f"| {r['file']} | {syn} | {oops_ok} | {reas} |")
 
     return {
-        "success": syntax_valid == total,
+        "success": total > 0 and files_ok == total,
         "tool": "validate_batch",
-        "data": {"results": results, "aggregate": {"total": total, "syntax_valid": syntax_valid}},
+        "data": {"results": results, "aggregate": {
+            "total": total, "syntax_valid": syntax_valid, "files_ok": files_ok, "failed": failed,
+        }},
         "markdown_summary": "\n".join(md_lines),
         "execution_time_seconds": elapsed,
     }
@@ -141,7 +198,7 @@ def oops_report(
             elif not result["has_pitfalls"]:
                 summary["no_pitfalls"] += 1
             else:
-                severities = {p["importance"] for p in result["pitfalls"]}
+                severities = {p.get("importance", "") for p in result["pitfalls"]}
                 if severities <= {"Minor"}:
                     summary["minor_only"] += 1
                 else:
@@ -164,7 +221,7 @@ def oops_report(
         md_lines.append("")
 
     return {
-        "success": True,
+        "success": summary["total"] > 0 and summary["failed"] == 0,
         "tool": "oops_report",
         "data": {"summary": summary, "results": file_results},
         "markdown_summary": "\n".join(md_lines),

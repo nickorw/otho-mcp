@@ -58,21 +58,24 @@ def parse_oops_response(xml_text: str) -> dict:
     pitfalls = []
     try:
         root = ET.fromstring(xml_text)
-        ns = {
-            "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
-            "oops": "http://www.oeg-upm.net/oops#",
-        }
+        ns = {"oops": "http://www.oeg-upm.net/oops"}
 
-        for desc in root.findall(".//rdf:Description", ns):
-            code_el = desc.find("oops:hasCode", ns)
-            if code_el is None:
+        for pf in root.findall(".//oops:Pitfall", ns):
+            code_el = pf.find("oops:Code", ns)
+            if code_el is None or not code_el.text:
                 continue
+            affected = [
+                el.text.strip()
+                for el in pf.findall("oops:Affects/oops:AffectedElement", ns)
+                if el.text and el.text.strip()
+            ]
             pitfall = {
-                "code": code_el.text.strip() if code_el.text else "",
-                "name": _get_text(desc, "oops:hasName", ns),
-                "description": _get_text(desc, "oops:hasDescription", ns),
-                "importance": _get_text(desc, "oops:hasImportanceLevel", ns),
-                "affected_elements": int(_get_text(desc, "oops:hasNumberAffectedElements", ns) or "0"),
+                "code": code_el.text.strip(),
+                "name": _get_text(pf, "oops:Name", ns),
+                "description": _get_text(pf, "oops:Description", ns),
+                "importance": _get_text(pf, "oops:Importance", ns),
+                "affected_elements": int(_get_text(pf, "oops:NumberAffectedElements", ns) or "0"),
+                "affected": affected,
             }
             pitfalls.append(pitfall)
     except ET.ParseError:

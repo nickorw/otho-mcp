@@ -42,6 +42,14 @@ def test_explain_pitfall_known():
     assert "P08" in result["data"]["code"]
 
 
+def test_explain_pitfall_single_digit_padding():
+    """P8 / 8 must resolve to P08 (regression: single-digit codes were unreachable)."""
+    for form in ["P8", "8", "p8"]:
+        result = explain_pitfall(pitfall_code=form)
+        assert result["success"] is True
+        assert result["data"]["code"] == "P08"
+
+
 def test_explain_pitfall_unknown():
     result = explain_pitfall(pitfall_code="P99")
     assert result["success"] is False

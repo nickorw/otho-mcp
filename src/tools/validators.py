@@ -75,10 +75,14 @@ def validate_reasoning(
         Path(rdfxml_path).unlink(missing_ok=True)
 
     elapsed = round(time.time() - start, 3)
-    all_consistent = all(r["is_consistent"] for r in results)
-    data = {"results": results, "all_consistent": all_consistent}
+    errored = [r for r in results if r.get("error")]
+    determined = [r for r in results if not r.get("error")]
+    # Consistency verdict is only meaningful over reasoners that actually ran.
+    all_consistent = bool(determined) and all(r["is_consistent"] for r in determined)
+    has_errors = len(errored) > 0
+    data = {"results": results, "all_consistent": all_consistent, "has_errors": has_errors}
     return {
-        "success": all_consistent,
+        "success": all_consistent and not has_errors,
         "tool": "validate_reasoning",
         "data": data,
         "markdown_summary": format_reasoning_result(data),

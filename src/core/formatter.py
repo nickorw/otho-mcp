@@ -8,6 +8,8 @@ def format_syntax_result(data: dict) -> str:
 
 
 def format_oops_result(data: dict) -> str:
+    if data.get("error"):
+        return f"## OOPs Pitfall Scan\n\n⚠️ **Scan failed** — {data['error']}"
     if not data["has_pitfalls"]:
         return "## OOPs Pitfall Scan\n\n✅ **No pitfalls detected.**"
 
@@ -29,8 +31,9 @@ def format_reasoning_result(data: dict) -> str:
         elif r["is_consistent"]:
             lines.append(f"- **{name}:** ✅ Consistent ({r['execution_time_seconds']}s)")
         else:
-            classes = ", ".join(r["inconsistent_classes"][:5])
-            lines.append(f"- **{name}:** ❌ Inconsistent — {classes}")
+            classes = ", ".join(r.get("inconsistent_classes") or [])
+            detail = f" — {classes}" if classes else " (ontology is logically inconsistent)"
+            lines.append(f"- **{name}:** ❌ Inconsistent{detail}")
     return "\n".join(lines)
 
 

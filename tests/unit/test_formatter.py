@@ -29,6 +29,21 @@ def test_format_oops_with_pitfalls():
     assert "Minor" in md or "Important" in md
 
 
+def test_format_oops_no_pitfalls():
+    md = format_oops_result({"has_pitfalls": False, "pitfall_count": 0, "pitfalls": []})
+    assert "✅" in md
+    assert "No pitfalls" in md
+
+
+def test_format_oops_error_not_rendered_as_clean():
+    """A failed scan must NOT render as a green 'no pitfalls' line."""
+    md = format_oops_result({"has_pitfalls": False, "pitfalls": [], "error": "Failed to convert to RDF/XML"})
+    assert "✅" not in md
+    assert "No pitfalls" not in md
+    assert "failed" in md.lower()
+    assert "Failed to convert" in md
+
+
 def test_format_metrics_result():
     data = {
         "axiom_counts": {"triples": 100, "classes": 5, "object_properties": 3, "data_properties": 2, "annotation_properties": 0},
