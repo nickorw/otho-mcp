@@ -15,8 +15,8 @@ Docker Desktop (macOS/Windows) or Docker Engine + Compose (Linux).
 2. Verify it's running:
    ```bash
    curl http://localhost:8000/health   # -> {"status":"ok"}
-3. Add it to your MCP client (see [Client Configuration](#client-configuration)), and done. (see [Using It](#using-it)).
    ```
+3. Add it to your MCP client (see [Client Configuration](#client-configuration)) and [start using it](#using-it).
 
 The MCP endpoint is at `http://localhost:8000/mcp`.
 
@@ -28,7 +28,7 @@ Add the server to your MCP client's configuration. The exact file and format var
 {
   "mcpServers": {
     "otho-mcp": {
-      "type": "streamable-http",
+      "type": "http",
       "url": "http://localhost:8000/mcp"
     }
   }
@@ -60,7 +60,7 @@ New to the tools? Start with **`validate_all`** for a complete check (syntax + p
 | Tool | Description |
 |------|-------------|
 | `validate_syntax` | Validate RDF/OWL syntax using rdflib |
-| `validate_oops` | Detect 22 OOPs modeling anti-patterns with severity levels |
+| `validate_oops` | Detect 21 OOPs modeling anti-patterns with severity levels |
 | `validate_reasoning` | Check logical consistency with HermiT/Pellet reasoners |
 | `validate_all` | Full validation battery (syntax + OOPs + reasoning) |
 | `validate_batch` | Run validators on all ontology files in a folder |
