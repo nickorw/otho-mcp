@@ -60,6 +60,16 @@ def parse_oops_response(xml_text: str) -> dict:
         root = ET.fromstring(xml_text)
         ns = {"oops": "http://www.oeg-upm.net/oops"}
 
+        # Guard against a well-formed but non-OOPS body (e.g. an HTML error page
+        # returned with a 200) being read as a clean "no pitfalls" result.
+        if not root.tag.endswith("OOPSResponse"):
+            return {
+                "has_pitfalls": False,
+                "pitfall_count": 0,
+                "pitfalls": [],
+                "error": f"Unexpected OOPs response root element: {root.tag}",
+            }
+
         for pf in root.findall(".//oops:Pitfall", ns):
             code_el = pf.find("oops:Code", ns)
             if code_el is None or not code_el.text:
@@ -69,17 +79,31 @@ def parse_oops_response(xml_text: str) -> dict:
                 for el in pf.findall("oops:Affects/oops:AffectedElement", ns)
                 if el.text and el.text.strip()
             ]
+            num_text = _get_text(pf, "oops:NumberAffectedElements", ns)
+            try:
+                num_affected = int(num_text)
+            except ValueError:
+                # OOPS normally sends an integer here; fall back to the count
+                # of listed elements rather than crashing the whole scan.
+                num_affected = len(affected)
             pitfall = {
                 "code": code_el.text.strip(),
                 "name": _get_text(pf, "oops:Name", ns),
                 "description": _get_text(pf, "oops:Description", ns),
                 "importance": _get_text(pf, "oops:Importance", ns),
-                "affected_elements": int(_get_text(pf, "oops:NumberAffectedElements", ns) or "0"),
+                "affected_elements": num_affected,
                 "affected": affected,
             }
             pitfalls.append(pitfall)
-    except ET.ParseError:
-        pass
+    except ET.ParseError as e:
+        # A malformed/non-XML response (e.g. an HTML error page from the OOPS
+        # service) must NOT look like a clean "no pitfalls" result.
+        return {
+            "has_pitfalls": False,
+            "pitfall_count": 0,
+            "pitfalls": [],
+            "error": f"Could not parse OOPs response: {e}",
+        }
 
     pitfalls.sort(key=lambda p: IMPORTANCE_ORDER.get(p.get("importance", ""), 99))
 

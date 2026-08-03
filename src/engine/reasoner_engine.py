@@ -96,41 +96,39 @@ def run_reasoner(
     with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
         result_file = f.name
 
-    ctx = multiprocessing.get_context("spawn")
-    proc = ctx.Process(
-        target=_reasoner_worker,
-        args=(rdfxml_path, reasoner_type.value, result_file),
-    )
-    start = time.time()
-    proc.start()
-    proc.join(timeout=timeout)
+    try:
+        ctx = multiprocessing.get_context("spawn")
+        proc = ctx.Process(
+            target=_reasoner_worker,
+            args=(rdfxml_path, reasoner_type.value, result_file),
+        )
+        start = time.time()
+        proc.start()
+        proc.join(timeout=timeout)
 
-    if proc.is_alive():
-        proc.kill()
-        proc.join()
+        if proc.is_alive():
+            proc.kill()
+            proc.join()
+            return {
+                "reasoner": reasoner_type.value,
+                "is_consistent": False,
+                "inconsistent_classes": [],
+                "execution_time_seconds": round(time.time() - start, 3),
+                "error": f"Reasoning timed out after {timeout}s",
+            }
+
+        if Path(result_file).exists():
+            return json.loads(Path(result_file).read_text())
+
         return {
             "reasoner": reasoner_type.value,
             "is_consistent": False,
             "inconsistent_classes": [],
             "execution_time_seconds": round(time.time() - start, 3),
-            "error": f"Reasoning timed out after {timeout}s",
+            "error": "Subprocess completed but produced no result",
         }
-
-    result_path = Path(result_file)
-    if result_path.exists():
-        try:
-            result = json.loads(result_path.read_text())
-            return result
-        finally:
-            result_path.unlink(missing_ok=True)
-
-    return {
-        "reasoner": reasoner_type.value,
-        "is_consistent": False,
-        "inconsistent_classes": [],
-        "execution_time_seconds": round(time.time() - start, 3),
-        "error": "Subprocess completed but produced no result",
-    }
+    finally:
+        Path(result_file).unlink(missing_ok=True)
 
 
 def content_to_rdfxml_file(content: str, format: str = "turtle") -> str:

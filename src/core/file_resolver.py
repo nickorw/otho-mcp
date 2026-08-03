@@ -67,6 +67,8 @@ def resolve_content(
     owl_content: str | None = None,
 ) -> str:
     """Return ontology content from either file_path or inline content."""
+    if file_path and owl_content:
+        raise ValueError("Provide either file_path or owl_content, not both")
     if owl_content:
         return owl_content
     if not file_path:
